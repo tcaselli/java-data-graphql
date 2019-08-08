@@ -96,6 +96,24 @@ public class GQLListLoadConfig {
 		filters.add(new GQLFilterEntry(field, operator, value, fieldFilter));
 	}
 
+	/**
+	 * Get whether this configuration contains paging configuration
+	 *
+	 * @return a boolean
+	 */
+	public boolean isPaged() {
+		return getLimit() > 0 || getOffset() > 0;
+	}
+
+	/**
+	 * Get whether this configuration contains at least an orderBy configuration
+	 *
+	 * @return a boolean
+	 */
+	public boolean isOrdered() {
+		return !getOrderBy().isEmpty();
+	}
+
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// PROTECTED METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-

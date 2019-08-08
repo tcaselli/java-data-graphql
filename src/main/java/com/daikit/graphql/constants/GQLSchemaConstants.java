@@ -19,8 +19,14 @@ import graphql.schema.GraphQLScalarType;
 @SuppressWarnings("javadoc")
 public class GQLSchemaConstants {
 
+	public static final String QUERY_TYPE = "QueryType";
+	public static final String MUTATION_TYPE = "MutationType";
+
 	public static final String INPUT_OBJECT_SUFFIX = "InputType";
 	public static final String OUTPUT_OBJECT_SUFFIX = "OutputType";
+
+	public static final String LOAD_RESULT_SUFFIX = "LoadResult";
+	public static final String DELETE_RESULT_PREFIX = "DeleteResult";
 
 	public static final String QUERY_GET_LIST_PREFIX = "getAll";
 	public static final String QUERY_GET_SINGLE_PREFIX = "get";
@@ -51,6 +57,8 @@ public class GQLSchemaConstants {
 	public static final String FILTER = "filter";
 	public static final String FILTER_OPERATOR = "operator";
 	public static final String FILTER_VALUE = "value";
+
+	public static final String FILTER_FIELDS_PREFIX = "FilterFields";
 
 	public static final String EMBEDDED_TYPE_PREFIX = "type";
 

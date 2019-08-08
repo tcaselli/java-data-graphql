@@ -1,4 +1,4 @@
-package com.daikit.graphql.test.test.data;
+package com.daikit.graphql.test.data;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -67,6 +67,11 @@ public class GQLMetaData {
 			final GQLAttributeScalarMetaData intAttr = new GQLAttributeScalarMetaData("intAttr", GQLScalarTypeEnum.INT);
 			intAttr.setNullable(false);
 			entity1.getAttributes().add(intAttr);
+
+			final GQLAttributeScalarMetaData longAttr = new GQLAttributeScalarMetaData("longAttr",
+					GQLScalarTypeEnum.LONG);
+			longAttr.setNullable(false);
+			entity1.getAttributes().add(longAttr);
 
 			final GQLAttributeScalarMetaData doubleAttr = new GQLAttributeScalarMetaData("doubleAttr",
 					GQLScalarTypeEnum.FLOAT);
@@ -207,6 +212,11 @@ public class GQLMetaData {
 			final GQLAttributeScalarMetaData intAttr = new GQLAttributeScalarMetaData("intAttr", GQLScalarTypeEnum.INT);
 			intAttr.setNullable(false);
 			embeddedEntity1.getAttributes().add(intAttr);
+
+			final GQLAttributeScalarMetaData longAttr = new GQLAttributeScalarMetaData("longAttr",
+					GQLScalarTypeEnum.LONG);
+			longAttr.setNullable(false);
+			embeddedEntity1.getAttributes().add(longAttr);
 
 			final GQLAttributeScalarMetaData doubleAttr = new GQLAttributeScalarMetaData("doubleAttr",
 					GQLScalarTypeEnum.FLOAT);

@@ -1,10 +1,11 @@
-package com.daikit.graphql.test.test.data;
+package com.daikit.graphql.test.data;
 
 /**
  * Class intended to be embedded in an entity model
- * 
+ *
  * @author tcaselli
+ *
  */
-public class EmbeddedData2 {
+public class EmbeddedData3 {
 
 }

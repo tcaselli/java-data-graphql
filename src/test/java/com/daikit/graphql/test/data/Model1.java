@@ -1,4 +1,4 @@
-package com.daikit.graphql.test.test.data;
+package com.daikit.graphql.test.data;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -12,12 +12,13 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Class intended to be embedded in an entity model
+ * Entity model class 1
  *
  * @author tcaselli
  */
-public class EmbeddedData1 {
+public class Model1 extends AbstractModel {
 
+	// Scalars
 	private int intAttr;
 	private long longAttr;
 	private double doubleAttr;
@@ -44,10 +45,21 @@ public class EmbeddedData1 {
 	private List<Enum1> enumList = new ArrayList<>();
 	private Set<Enum1> enumSet = new HashSet<>();
 
+	// Relations
+
+	// Relation many to 1
+	private Model2 model2;
+	// Relation 1 to many
+	private List<Model3> model3s = new ArrayList<>();
+	// Relation many to many
+	private List<Model4> model4s = new ArrayList<>();
+
 	// Embedded data relations
 
-	private EmbeddedData2 data2;
-	private List<EmbeddedData3> data3s = new ArrayList<>();
+	// Single data
+	private EmbeddedData1 embeddedData1;
+	// List of datas
+	private List<EmbeddedData1> embeddedData1s = new ArrayList<>();
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// GETTERS / SETTERS
@@ -59,7 +71,6 @@ public class EmbeddedData1 {
 	public int getIntAttr() {
 		return intAttr;
 	}
-
 	/**
 	 * @param intAttr
 	 *            the intAttr to set
@@ -67,14 +78,12 @@ public class EmbeddedData1 {
 	public void setIntAttr(int intAttr) {
 		this.intAttr = intAttr;
 	}
-
 	/**
 	 * @return the longAttr
 	 */
 	public long getLongAttr() {
 		return longAttr;
 	}
-
 	/**
 	 * @param longAttr
 	 *            the longAttr to set
@@ -82,14 +91,12 @@ public class EmbeddedData1 {
 	public void setLongAttr(long longAttr) {
 		this.longAttr = longAttr;
 	}
-
 	/**
 	 * @return the doubleAttr
 	 */
 	public double getDoubleAttr() {
 		return doubleAttr;
 	}
-
 	/**
 	 * @param doubleAttr
 	 *            the doubleAttr to set
@@ -97,14 +104,12 @@ public class EmbeddedData1 {
 	public void setDoubleAttr(double doubleAttr) {
 		this.doubleAttr = doubleAttr;
 	}
-
 	/**
 	 * @return the stringAttr
 	 */
 	public String getStringAttr() {
 		return stringAttr;
 	}
-
 	/**
 	 * @param stringAttr
 	 *            the stringAttr to set
@@ -112,14 +117,12 @@ public class EmbeddedData1 {
 	public void setStringAttr(String stringAttr) {
 		this.stringAttr = stringAttr;
 	}
-
 	/**
 	 * @return the booleanAttr
 	 */
 	public boolean isBooleanAttr() {
 		return booleanAttr;
 	}
-
 	/**
 	 * @param booleanAttr
 	 *            the booleanAttr to set
@@ -127,14 +130,12 @@ public class EmbeddedData1 {
 	public void setBooleanAttr(boolean booleanAttr) {
 		this.booleanAttr = booleanAttr;
 	}
-
 	/**
 	 * @return the bigIntAttr
 	 */
 	public BigInteger getBigIntAttr() {
 		return bigIntAttr;
 	}
-
 	/**
 	 * @param bigIntAttr
 	 *            the bigIntAttr to set
@@ -142,14 +143,12 @@ public class EmbeddedData1 {
 	public void setBigIntAttr(BigInteger bigIntAttr) {
 		this.bigIntAttr = bigIntAttr;
 	}
-
 	/**
 	 * @return the bigDecimalAttr
 	 */
 	public BigDecimal getBigDecimalAttr() {
 		return bigDecimalAttr;
 	}
-
 	/**
 	 * @param bigDecimalAttr
 	 *            the bigDecimalAttr to set
@@ -157,14 +156,12 @@ public class EmbeddedData1 {
 	public void setBigDecimalAttr(BigDecimal bigDecimalAttr) {
 		this.bigDecimalAttr = bigDecimalAttr;
 	}
-
 	/**
 	 * @return the bytesAttr
 	 */
 	public byte[] getBytesAttr() {
 		return bytesAttr;
 	}
-
 	/**
 	 * @param bytesAttr
 	 *            the bytesAttr to set
@@ -172,14 +169,12 @@ public class EmbeddedData1 {
 	public void setBytesAttr(byte[] bytesAttr) {
 		this.bytesAttr = bytesAttr;
 	}
-
 	/**
 	 * @return the shortAttr
 	 */
 	public short getShortAttr() {
 		return shortAttr;
 	}
-
 	/**
 	 * @param shortAttr
 	 *            the shortAttr to set
@@ -187,14 +182,12 @@ public class EmbeddedData1 {
 	public void setShortAttr(short shortAttr) {
 		this.shortAttr = shortAttr;
 	}
-
 	/**
 	 * @return the charAttr
 	 */
 	public char getCharAttr() {
 		return charAttr;
 	}
-
 	/**
 	 * @param charAttr
 	 *            the charAttr to set
@@ -202,14 +195,12 @@ public class EmbeddedData1 {
 	public void setCharAttr(char charAttr) {
 		this.charAttr = charAttr;
 	}
-
 	/**
 	 * @return the dateAttr
 	 */
 	public Date getDateAttr() {
 		return dateAttr;
 	}
-
 	/**
 	 * @param dateAttr
 	 *            the dateAttr to set
@@ -217,14 +208,12 @@ public class EmbeddedData1 {
 	public void setDateAttr(Date dateAttr) {
 		this.dateAttr = dateAttr;
 	}
-
 	/**
 	 * @return the fileAttr
 	 */
 	public File getFileAttr() {
 		return fileAttr;
 	}
-
 	/**
 	 * @param fileAttr
 	 *            the fileAttr to set
@@ -232,14 +221,12 @@ public class EmbeddedData1 {
 	public void setFileAttr(File fileAttr) {
 		this.fileAttr = fileAttr;
 	}
-
 	/**
 	 * @return the localDateAttr
 	 */
 	public LocalDate getLocalDateAttr() {
 		return localDateAttr;
 	}
-
 	/**
 	 * @param localDateAttr
 	 *            the localDateAttr to set
@@ -247,14 +234,12 @@ public class EmbeddedData1 {
 	public void setLocalDateAttr(LocalDate localDateAttr) {
 		this.localDateAttr = localDateAttr;
 	}
-
 	/**
 	 * @return the localDateTimeAttr
 	 */
 	public LocalDateTime getLocalDateTimeAttr() {
 		return localDateTimeAttr;
 	}
-
 	/**
 	 * @param localDateTimeAttr
 	 *            the localDateTimeAttr to set
@@ -262,44 +247,77 @@ public class EmbeddedData1 {
 	public void setLocalDateTimeAttr(LocalDateTime localDateTimeAttr) {
 		this.localDateTimeAttr = localDateTimeAttr;
 	}
-
 	/**
-	 * @return the data2
+	 * @return the model2
 	 */
-	public EmbeddedData2 getData2() {
-		return data2;
+	public Model2 getModel2() {
+		return model2;
 	}
-
 	/**
-	 * @param data2
-	 *            the data2 to set
+	 * @param model2
+	 *            the model2 to set
 	 */
-	public void setData2(EmbeddedData2 data2) {
-		this.data2 = data2;
+	public void setModel2(Model2 model2) {
+		this.model2 = model2;
 	}
-
 	/**
-	 * @return the data3s
+	 * @return the model3s
 	 */
-	public List<EmbeddedData3> getData3s() {
-		return data3s;
+	public List<Model3> getModel3s() {
+		return model3s;
 	}
-
 	/**
-	 * @param data3s
-	 *            the data3s to set
+	 * @param model3s
+	 *            the model3s to set
 	 */
-	public void setData3s(List<EmbeddedData3> data3s) {
-		this.data3s = data3s;
+	public void setModel3s(List<Model3> model3s) {
+		this.model3s = model3s;
 	}
-
+	/**
+	 * @return the model4s
+	 */
+	public List<Model4> getModel4s() {
+		return model4s;
+	}
+	/**
+	 * @param model4s
+	 *            the model4s to set
+	 */
+	public void setModel4s(List<Model4> model4s) {
+		this.model4s = model4s;
+	}
+	/**
+	 * @return the embeddedData1
+	 */
+	public EmbeddedData1 getEmbeddedData1() {
+		return embeddedData1;
+	}
+	/**
+	 * @param embeddedData1
+	 *            the embeddedData1 to set
+	 */
+	public void setEmbeddedData1(EmbeddedData1 embeddedData1) {
+		this.embeddedData1 = embeddedData1;
+	}
+	/**
+	 * @return the embeddedData1s
+	 */
+	public List<EmbeddedData1> getEmbeddedData1s() {
+		return embeddedData1s;
+	}
+	/**
+	 * @param embeddedData1s
+	 *            the embeddedData1s to set
+	 */
+	public void setEmbeddedData1s(List<EmbeddedData1> embeddedData1s) {
+		this.embeddedData1s = embeddedData1s;
+	}
 	/**
 	 * @return the enumAttr
 	 */
 	public Enum1 getEnumAttr() {
 		return enumAttr;
 	}
-
 	/**
 	 * @param enumAttr
 	 *            the enumAttr to set
@@ -307,14 +325,12 @@ public class EmbeddedData1 {
 	public void setEnumAttr(Enum1 enumAttr) {
 		this.enumAttr = enumAttr;
 	}
-
 	/**
 	 * @return the stringList
 	 */
 	public List<String> getStringList() {
 		return stringList;
 	}
-
 	/**
 	 * @param stringList
 	 *            the stringList to set
@@ -322,14 +338,12 @@ public class EmbeddedData1 {
 	public void setStringList(List<String> stringList) {
 		this.stringList = stringList;
 	}
-
 	/**
 	 * @return the stringSet
 	 */
 	public Set<String> getStringSet() {
 		return stringSet;
 	}
-
 	/**
 	 * @param stringSet
 	 *            the stringSet to set
@@ -337,14 +351,12 @@ public class EmbeddedData1 {
 	public void setStringSet(Set<String> stringSet) {
 		this.stringSet = stringSet;
 	}
-
 	/**
 	 * @return the enumList
 	 */
 	public List<Enum1> getEnumList() {
 		return enumList;
 	}
-
 	/**
 	 * @param enumList
 	 *            the enumList to set
@@ -352,14 +364,12 @@ public class EmbeddedData1 {
 	public void setEnumList(List<Enum1> enumList) {
 		this.enumList = enumList;
 	}
-
 	/**
 	 * @return the enumSet
 	 */
 	public Set<Enum1> getEnumSet() {
 		return enumSet;
 	}
-
 	/**
 	 * @param enumSet
 	 *            the enumSet to set

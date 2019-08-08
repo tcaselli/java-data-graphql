@@ -1,4 +1,4 @@
-package com.daikit.graphql.test.test.data;
+package com.daikit.graphql.test.data;
 
 /**
  * Enumeration

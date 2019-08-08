@@ -24,16 +24,31 @@ public abstract class GQLAbstractSaveDataFetcher extends GQLAbstractDataFetcher<
 	// ABSTRACT METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	protected abstract void runSave(Object model);
+	/**
+	 * Save the entity in persistence layer.
+	 *
+	 * @param entity
+	 *            the entity to be saved
+	 */
+	protected abstract void runSave(Object entity);
 
-	protected abstract Object findOrCreateModel(final String entityName, final Map<String, Object> fieldMap);
+	/**
+	 * Find or create entity and set its field values from given field map
+	 *
+	 * @param entityName
+	 *            the entity class name
+	 * @param fieldMap
+	 *            the {@link Map} of fields to set in entity
+	 * @return the found/created entity
+	 */
+	protected abstract Object findOrCreateEntity(final String entityName, final Map<String, Object> fieldMap);
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	protected Object runSave(final String entityName, final Map<String, Object> fieldMap) {
-		final Object model = findOrCreateModel(entityName, fieldMap);
+		final Object model = findOrCreateEntity(entityName, fieldMap);
 		// Run save
 		runSave(model);
 		return model;

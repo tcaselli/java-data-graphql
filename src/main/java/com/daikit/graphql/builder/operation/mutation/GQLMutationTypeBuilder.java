@@ -68,7 +68,7 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 		logger.debug("START building mutation types...");
 
 		final GraphQLObjectType.Builder builder = GraphQLObjectType.newObject();
-		builder.name("MutationType");
+		builder.name(GQLSchemaConstants.MUTATION_TYPE);
 		builder.description("Mutation type from meta model");
 
 		logger.debug("Build mutation types for entities...");

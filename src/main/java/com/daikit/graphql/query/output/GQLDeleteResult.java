@@ -11,6 +11,30 @@ public class GQLDeleteResult {
 	private String typename;
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+	// CONSTRUCTORS
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+	/**
+	 * Default constructor
+	 */
+	public GQLDeleteResult() {
+		// Nothing done
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param id
+	 *            the id
+	 * @param typename
+	 *            the type name
+	 */
+	public GQLDeleteResult(String id, String typename) {
+		this.id = id;
+		this.typename = typename;
+	}
+
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// GETTERS / SETTERS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 

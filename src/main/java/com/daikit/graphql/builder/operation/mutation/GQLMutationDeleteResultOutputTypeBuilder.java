@@ -10,7 +10,7 @@ import graphql.schema.GraphQLObjectType;
 
 /**
  * GQL delete entity mutation output type
- * 
+ *
  * @author tcaselli
  */
 public class GQLMutationDeleteResultOutputTypeBuilder extends GQLAbstractTypesBuilder {
@@ -47,7 +47,7 @@ public class GQLMutationDeleteResultOutputTypeBuilder extends GQLAbstractTypesBu
 
 	private GraphQLObjectType buildDeleteResultOutputObjectType() {
 		final GraphQLObjectType.Builder builder = GraphQLObjectType.newObject();
-		builder.name("DeleteResult" + GQLSchemaConstants.OUTPUT_OBJECT_SUFFIX);
+		builder.name(GQLSchemaConstants.DELETE_RESULT_PREFIX + GQLSchemaConstants.OUTPUT_OBJECT_SUFFIX);
 		builder.description("Output type for deletion mutation for all entities.");
 
 		final GraphQLFieldDefinition.Builder idFieldBuilder = GraphQLFieldDefinition.newFieldDefinition();

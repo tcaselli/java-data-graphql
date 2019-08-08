@@ -44,7 +44,7 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 
 	protected abstract GQLListLoadResult runGetAll(String entityName, GQLListLoadConfig listLoadConfig);
 
-	protected abstract Object getById(String publicId);
+	protected abstract Object getById(String entityName, String id);
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// METHODS
@@ -169,7 +169,7 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 					value = optionalValueField.isPresent() ? mapValue(optionalValueField.get(), filterArguments) : null;
 				} else {
 					operator = GQLFilterOperatorEnum.EQUAL;
-					value = getById(mapValue(filterField, contextArguments));
+					value = getById(entityName, mapValue(filterField, contextArguments));
 				}
 
 				final GQLDynamicAttributeFilter<?, ?, ?> filter = filters == null ? null : filters.get(name);
