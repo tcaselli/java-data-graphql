@@ -157,7 +157,7 @@ public class GQLSchemaBuilderCache {
 		final GraphQLInputObjectType objectType = getInputEntityTypes().get(entityClass);
 		if (objectType == null) {
 			throw new IllegalArgumentException(
-					Message.format("No input save entity type defined for entity class [{}]", entityClass));
+					Message.format("No input entity type defined for entity class [{}]", entityClass));
 		}
 		return objectType;
 	}

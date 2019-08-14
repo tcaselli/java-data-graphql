@@ -1,0 +1,6 @@
+mutation saveEntity1($id: ID, $dynamicAttribute2: String) {
+  saveEntity1(data: { id: $id, dynamicAttribute2: $dynamicAttribute2 }) {
+    id
+    stringAttr
+  }
+}

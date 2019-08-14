@@ -2,7 +2,7 @@ package com.daikit.graphql.meta.data.method;
 
 import java.util.List;
 
-import com.daikit.graphql.meta.dynamic.method.GQLAbstractCustomMethod;
+import com.daikit.graphql.meta.dynamic.method.abs.GQLAbstractCustomMethod;
 
 /**
  * GraphQL dynamic method returning a {@link List} of entities meta data
@@ -28,20 +28,13 @@ public class GQLMethodListEntityMetaData extends GQLAbstractMethodMetaData {
 	 * Constructor passing name, whether this is a mutation or a query, method
 	 * and return foreign entity type
 	 *
-	 * @param name
-	 *            the name for the method. This name will be used for building
-	 *            GraphQL schema query or mutation for this method
-	 * @param mutation
-	 *            whether this is a mutation (<code>true</code>) or a query
-	 *            (<code>false</code>)
 	 * @param method
 	 *            the {@link GQLAbstractCustomMethod}
 	 * @param foreignClass
 	 *            the foreign entity class for method return type
 	 */
-	public GQLMethodListEntityMetaData(String name, boolean mutation, GQLAbstractCustomMethod<?> method,
-			Class<?> foreignClass) {
-		super(name, mutation, method);
+	public GQLMethodListEntityMetaData(GQLAbstractCustomMethod<?> method, Class<?> foreignClass) {
+		super(method);
 		this.foreignClass = foreignClass;
 	}
 
@@ -62,7 +55,7 @@ public class GQLMethodListEntityMetaData extends GQLAbstractMethodMetaData {
 
 	/**
 	 * Get the foreign entity method return type
-	 * 
+	 *
 	 * @return the foreignClass
 	 */
 	public Class<?> getForeignClass() {
@@ -71,7 +64,7 @@ public class GQLMethodListEntityMetaData extends GQLAbstractMethodMetaData {
 
 	/**
 	 * Set the foreign entity method return type
-	 * 
+	 *
 	 * @param foreignClass
 	 *            the foreignClass to set
 	 */

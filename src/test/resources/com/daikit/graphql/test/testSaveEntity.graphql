@@ -1,0 +1,6 @@
+mutation saveEntity1($id: ID, $intAttr: Int) {
+  saveEntity1(data: { id: $id, intAttr: $intAttr }) {
+    id
+    intAttr
+  }
+}

@@ -2,7 +2,7 @@ package com.daikit.graphql.meta.data.method;
 
 import java.util.List;
 
-import com.daikit.graphql.meta.dynamic.method.GQLAbstractCustomMethod;
+import com.daikit.graphql.meta.dynamic.method.abs.GQLAbstractCustomMethod;
 
 /**
  * GraphQL dynamic method returning a {@link List} of embedded entities meta
@@ -29,20 +29,13 @@ public class GQLMethodListEmbeddedEntityMetaData extends GQLAbstractMethodMetaDa
 	 * Constructor passing name, whether this is a mutation or a query, method
 	 * and return foreign embedded entity type
 	 *
-	 * @param name
-	 *            the name for the method. This name will be used for building
-	 *            GraphQL schema query or mutation for this method
-	 * @param mutation
-	 *            whether this is a mutation (<code>true</code>) or a query
-	 *            (<code>false</code>)
 	 * @param method
 	 *            the {@link GQLAbstractCustomMethod}
 	 * @param foreignClass
 	 *            the foreign embedded entity class for method return type
 	 */
-	public GQLMethodListEmbeddedEntityMetaData(String name, boolean mutation, GQLAbstractCustomMethod<?> method,
-			Class<?> foreignClass) {
-		super(name, mutation, method);
+	public GQLMethodListEmbeddedEntityMetaData(GQLAbstractCustomMethod<?> method, Class<?> foreignClass) {
+		super(method);
 		this.foreignClass = foreignClass;
 	}
 

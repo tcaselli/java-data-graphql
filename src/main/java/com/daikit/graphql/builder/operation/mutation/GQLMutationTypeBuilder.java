@@ -6,13 +6,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
+import com.daikit.graphql.builder.custommethod.GQLCustomMethodBuilder;
 import com.daikit.graphql.builder.operation.GQLAbstractInputOutputTypesBuilder;
-import com.daikit.graphql.builder.operation.GQLMethodBuilder;
 import com.daikit.graphql.constants.GQLSchemaConstants;
-import com.daikit.graphql.datafetcher.GQLMethodDataFetcher;
 import com.daikit.graphql.meta.GQLMetaDataModel;
 import com.daikit.graphql.meta.data.method.GQLAbstractMethodMetaData;
-import com.daikit.graphql.meta.dynamic.method.GQLAbstractCustomMethod;
 import com.daikit.graphql.meta.internal.GQLAbstractEntityMetaDataInfos;
 import com.daikit.graphql.query.output.GQLDeleteResult;
 import com.daikit.graphql.utils.Message;
@@ -57,14 +55,13 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 	 *            the {@link DataFetcher} for create/update
 	 * @param deleteDataFetcher
 	 *            the {@link DataFetcher} for delete
-	 * @param customMethodDataFetchers
-	 *            the {@link GQLMethodDataFetcher} list (related to each
-	 *            {@link GQLAbstractCustomMethod})
+	 * @param customMethodsDataFetcher
+	 *            the {@link DataFetcher} for custom methods
 	 * @return the created {@link GraphQLObjectType}
 	 */
 	public GraphQLObjectType buildMutationType(final GQLMetaDataModel metaDataModel,
 			final DataFetcher<?> saveDataFetcher, final DataFetcher<GQLDeleteResult> deleteDataFetcher,
-			final List<GQLMethodDataFetcher> customMethodDataFetchers) {
+			final DataFetcher<?> customMethodsDataFetcher) {
 		logger.debug("START building mutation types...");
 
 		final GraphQLObjectType.Builder builder = GraphQLObjectType.newObject();
@@ -80,7 +77,7 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 		builder.fields(deleteFieldDefinitions);
 
 		logger.debug("Build mutation types for custom methods...");
-		final Map<GQLAbstractMethodMetaData, GraphQLFieldDefinition> customMethodFieldDefinitions = new GQLMethodBuilder(
+		final Map<GQLAbstractMethodMetaData, GraphQLFieldDefinition> customMethodFieldDefinitions = new GQLCustomMethodBuilder(
 				getCache())
 						.buildMethods(metaDataModel.getCustomMethods().stream()
 								.filter(GQLAbstractMethodMetaData::isMutation).collect(Collectors.toList()));
@@ -95,9 +92,7 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 		deleteFieldDefinitions.forEach(fieldDefinition -> getCache().getCodeRegistryBuilder().dataFetcher(mutationType,
 				fieldDefinition, deleteDataFetcher));
 		customMethodFieldDefinitions.entrySet().forEach(entry -> getCache().getCodeRegistryBuilder()
-				.dataFetcher(mutationType, entry.getValue(), customMethodDataFetchers.stream()
-						.filter(methodDataFetcher -> methodDataFetcher.getMethod().equals(entry.getKey().getMethod()))
-						.findFirst().get()));
+				.dataFetcher(mutationType, entry.getValue(), customMethodsDataFetcher));
 
 		logger.debug("END building mutation types");
 		return mutationType;

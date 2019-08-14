@@ -2,32 +2,37 @@ package com.daikit.graphql.test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.daikit.graphql.builder.GQLSchemaBuilder;
 import com.daikit.graphql.constants.GQLSchemaConstants;
-import com.daikit.graphql.datafetcher.GQLMethodDataFetcher;
 import com.daikit.graphql.datafetcher.GQLPropertyDataFetcher;
+import com.daikit.graphql.datafetcher.abs.GQLCustomMethodDataFetcher;
 import com.daikit.graphql.datafetcher.abs.GQLAbstractDeleteDataFetcher;
+import com.daikit.graphql.datafetcher.abs.GQLAbstractGetByIdDataFetcher;
 import com.daikit.graphql.datafetcher.abs.GQLAbstractGetListDataFetcher;
-import com.daikit.graphql.datafetcher.abs.GQLAbstractGetSingleDataFetcher;
 import com.daikit.graphql.datafetcher.abs.GQLAbstractSaveDataFetcher;
 import com.daikit.graphql.introspection.GQLIntrospection;
 import com.daikit.graphql.meta.GQLMetaDataModel;
-import com.daikit.graphql.meta.dynamic.attribute.GQLDynamicAttributeFilter;
+import com.daikit.graphql.meta.dynamic.attribute.IGQLDynamicAttributeFilter;
+import com.daikit.graphql.meta.dynamic.attribute.IGQLDynamicAttributeSetter;
 import com.daikit.graphql.query.input.GQLListLoadConfig;
 import com.daikit.graphql.query.output.GQLDeleteResult;
 import com.daikit.graphql.query.output.GQLListLoadResult;
 import com.daikit.graphql.test.data.DataModel;
+import com.daikit.graphql.test.data.Entity1;
 import com.daikit.graphql.test.data.GQLMetaData;
 import com.daikit.graphql.test.utils.PropertyUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -43,8 +48,8 @@ import graphql.schema.DataFetcher;
 import graphql.schema.GraphQLSchema;
 
 /**
- * Super class for all tests. It initialize a data model , a graphQL meta model
- * and a graphQL schema
+ * Super class for all tests. It initialize a data entity , a graphQL meta
+ * entity and a graphQL schema
  *
  * @author tcaselli
  *
@@ -78,17 +83,34 @@ public abstract class AbstractTestSuite {
 	 */
 	@Before
 	public void initializeSchema() {
-		logger.info("Initialize test graphQL schema & data model");
+		logger.info("Initialize test graphQL schema & data entity");
 		final GQLMetaDataModel metaDataModel = GQLMetaData.buildMetaDataModel();
 		final GraphQLSchema schema = new GQLSchemaBuilder().buildSchema(metaDataModel, createGetSingleDataFetcher(),
 				createListDataFetcher(Collections.emptyList()), createSaveDataFetchers(), createDeleteDataFetcher(),
-				createPropertyDataFetchers(), createCustomMethodsDataFetchers());
+				createCustomMethodsDataFetcher(), createPropertyDataFetchers());
 		EXECUTOR = GraphQL.newGraphQL(schema).build();
 		resetDataModel();
 	}
 
+	protected String readGraphql(String fileName) {
+		try {
+			final InputStream stream = AbstractTestSuite.class.getResourceAsStream(fileName);
+			return IOUtils.toString(stream, "UTF-8");
+		} catch (final IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	protected ExecutionResult handleErrors(ExecutionResult result) {
+		if (!result.getErrors().isEmpty()) {
+			result.getErrors().forEach(error -> System.err.println(error));
+			Assert.fail("Error(s) happened during graphql execution, see log for details");
+		}
+		return result;
+	}
+
 	/**
-	 * Data model initialization before each test
+	 * Data entity initialization before each test
 	 *
 	 * @throws FileNotFoundException
 	 *             if file not found
@@ -110,20 +132,47 @@ public abstract class AbstractTestSuite {
 		return schemaIntrospection;
 	}
 
+	@SuppressWarnings("unchecked")
+	protected Map<String, Object> toMap(Object object) {
+		return MAPPER.convertValue(object, Map.class);
+	}
+
+	protected <T> T toObject(ExecutionResult executionResult, Class<T> expectedType, String property) {
+		return toObject(executionResult.<Map<String, Object>>getData().get(property), expectedType);
+	}
+
+	protected <T> T toObject(ExecutionResult executionResult, Class<T> expectedType) {
+		return toObject(executionResult.<Map<String, Object>>getData().values().iterator().next(), expectedType);
+	}
+
+	protected <T> T toObject(Object object, Class<T> expectedType) {
+		return MAPPER.convertValue(object, expectedType);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <T> T getResultDataProperty(ExecutionResult executionResult, String path) {
+		final String[] pathFragments = path.split("\\.");
+		Object value = executionResult.<Map<String, Object>>getData().values().iterator().next();
+		for (final String pathFragment : pathFragments) {
+			value = ((Map<String, Object>) value).get(pathFragment);
+		}
+		return (T) value;
+	}
+
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// PRIVATE METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	private Class<?> getClassByName(String entityName) {
 		try {
-			return Class.forName(entityName);
+			return Class.forName(Entity1.class.getPackage().getName() + "." + entityName);
 		} catch (final ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	private DataFetcher<?> createGetSingleDataFetcher() {
-		return new GQLAbstractGetSingleDataFetcher() {
+		return new GQLAbstractGetByIdDataFetcher() {
 
 			@Override
 			protected Object runGet(String entityName, String id) {
@@ -134,7 +183,7 @@ public abstract class AbstractTestSuite {
 	}
 
 	private DataFetcher<GQLListLoadResult> createListDataFetcher(
-			@SuppressWarnings("rawtypes") List<GQLDynamicAttributeFilter> dynamicAttributeFilters) {
+			@SuppressWarnings("rawtypes") List<IGQLDynamicAttributeFilter> dynamicAttributeFilters) {
 		return new GQLAbstractGetListDataFetcher(dynamicAttributeFilters) {
 
 			@Override
@@ -159,48 +208,52 @@ public abstract class AbstractTestSuite {
 			}
 
 			@Override
-			protected Object findOrCreateEntity(String entityName, Map<String, Object> fieldMap) {
+			protected Object findOrCreateEntity(String entityName,
+					Map<String, IGQLDynamicAttributeSetter<Object, Object>> dynamicAttributeSetters,
+					Map<String, Object> fieldValueMap) {
 				final Class<?> entityClass = getClassByName(entityName);
-				// Find or create model
-				final String id = (String) fieldMap.get(GQLSchemaConstants.FIELD_ID);
+				// Find or create entity
+				final String id = (String) fieldValueMap.get(GQLSchemaConstants.FIELD_ID);
 				final Optional<?> existing = StringUtils.isEmpty(id)
 						? Optional.empty()
 						: dataModel.getById(entityClass, id);
-				Object model;
+				Object entity;
 				try {
-					model = existing.isPresent() ? existing.get() : entityClass.newInstance();
+					entity = existing.isPresent() ? existing.get() : entityClass.newInstance();
 				} catch (InstantiationException | IllegalAccessException e) {
 					throw new RuntimeException(e);
 				}
 				// Set properties
-				fieldMap.entrySet().stream().forEach(entry -> {
-					PropertyUtils.setPropertyValue(model, entry.getKey(), entry.getValue());
+				fieldValueMap.entrySet().stream().forEach(entry -> {
+					final IGQLDynamicAttributeSetter<Object, Object> dynamicAttributeSetter = dynamicAttributeSetters
+							.get(entry.getKey());
+					if (dynamicAttributeSetter == null) {
+						PropertyUtils.setPropertyValue(entity, entry.getKey(), entry.getValue());
+					} else {
+						dynamicAttributeSetter.setValue(entity, entry.getValue());
+					}
 				});
-				return model;
+				return entity;
 			}
-
 		};
 	}
 
 	private DataFetcher<GQLDeleteResult> createDeleteDataFetcher() {
 		return new GQLAbstractDeleteDataFetcher() {
-
 			@Override
 			protected void runDelete(String entityName, String id) {
 				dataModel.delete(getClassByName(entityName), id);
 			}
-
 		};
+	}
+
+	private DataFetcher<?> createCustomMethodsDataFetcher() {
+		return new GQLCustomMethodDataFetcher();
 	}
 
 	private List<GQLPropertyDataFetcher<?>> createPropertyDataFetchers() {
 		final List<GQLPropertyDataFetcher<?>> propertyDataFetchers = new ArrayList<>();
 		return propertyDataFetchers;
-	}
-
-	private List<GQLMethodDataFetcher> createCustomMethodsDataFetchers() {
-		final List<GQLMethodDataFetcher> customMethodDataFetchers = new ArrayList<>();
-		return customMethodDataFetchers;
 	}
 
 }

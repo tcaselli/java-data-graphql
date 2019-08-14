@@ -1,7 +1,7 @@
 package com.daikit.graphql.meta.data.method;
 
 import com.daikit.graphql.meta.data.GQLScalarTypeEnum;
-import com.daikit.graphql.meta.dynamic.method.GQLAbstractCustomMethod;
+import com.daikit.graphql.meta.dynamic.method.abs.GQLAbstractCustomMethod;
 
 /**
  * GraphQL dynamic method returning a scalar meta data
@@ -27,21 +27,14 @@ public class GQLMethodScalarMetaData extends GQLAbstractMethodMetaData {
 	 * Constructor passing name, whether this is a mutation or a query, method
 	 * and return type
 	 *
-	 * @param name
-	 *            the name for the method. This name will be used for building
-	 *            GraphQL schema query or mutation for this method
-	 * @param mutation
-	 *            whether this is a mutation (<code>true</code>) or a query
-	 *            (<code>false</code>)
 	 * @param method
 	 *            the {@link GQLAbstractCustomMethod}
 	 * @param scalarType
 	 *            the scalar type for method return type
 	 *            {@link GQLScalarTypeEnum}
 	 */
-	public GQLMethodScalarMetaData(String name, boolean mutation, GQLAbstractCustomMethod<?> method,
-			GQLScalarTypeEnum scalarType) {
-		super(name, mutation, method);
+	public GQLMethodScalarMetaData(GQLAbstractCustomMethod<?> method, GQLScalarTypeEnum scalarType) {
+		super(method);
 		this.scalarType = scalarType;
 	}
 

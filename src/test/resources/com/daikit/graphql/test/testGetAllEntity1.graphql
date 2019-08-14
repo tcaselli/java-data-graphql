@@ -1,0 +1,9 @@
+query getAllEntity1 {
+  getAllEntity1 {
+    data {
+        id
+        intAttr
+        longAttr
+    }
+  }
+}

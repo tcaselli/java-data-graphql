@@ -11,7 +11,7 @@ import graphql.schema.DataFetchingEnvironment;
 /**
  * Abstract super class that may be overridden to provide "delete entity" data
  * fetcher by ID to the schema building. This class is typically to be extended
- * and used in {@link GQLSchemaBuilder} for buildSchema method single data
+ * and used in {@link GQLSchemaBuilder} for buildSchema delete method data
  * fetcher argument
  *
  * @author tcaselli

@@ -9,7 +9,7 @@ import java.util.Objects;
 
 import com.daikit.graphql.enums.GQLFilterOperatorEnum;
 import com.daikit.graphql.enums.GQLOrderByDirectionEnum;
-import com.daikit.graphql.meta.dynamic.attribute.GQLDynamicAttributeFilter;
+import com.daikit.graphql.meta.dynamic.attribute.IGQLDynamicAttributeFilter;
 import com.daikit.graphql.query.output.GQLOrderByEntry;
 
 /**
@@ -89,10 +89,10 @@ public class GQLListLoadConfig {
 	 * @param value
 	 *            the value
 	 * @param fieldFilter
-	 *            the {@link GQLDynamicAttributeFilter}
+	 *            the {@link IGQLDynamicAttributeFilter}
 	 */
 	public void addFilter(final String field, final GQLFilterOperatorEnum operator, final Object value,
-			GQLDynamicAttributeFilter<?, ?, ?> fieldFilter) {
+			IGQLDynamicAttributeFilter<?, ?, ?> fieldFilter) {
 		filters.add(new GQLFilterEntry(field, operator, value, fieldFilter));
 	}
 

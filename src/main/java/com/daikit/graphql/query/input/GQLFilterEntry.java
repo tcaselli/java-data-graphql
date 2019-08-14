@@ -1,7 +1,7 @@
 package com.daikit.graphql.query.input;
 
 import com.daikit.graphql.enums.GQLFilterOperatorEnum;
-import com.daikit.graphql.meta.dynamic.attribute.GQLDynamicAttributeFilter;
+import com.daikit.graphql.meta.dynamic.attribute.IGQLDynamicAttributeFilter;
 
 /**
  * Filter config for {@link GQLListLoadConfig}
@@ -14,7 +14,7 @@ public class GQLFilterEntry {
 	private GQLFilterOperatorEnum operator;
 	private Object value;
 
-	private GQLDynamicAttributeFilter<?, ?, ?> fieldFilter;
+	private IGQLDynamicAttributeFilter<?, ?, ?> fieldFilter;
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -44,11 +44,11 @@ public class GQLFilterEntry {
 	 * @param value
 	 *            the value
 	 * @param fieldFilter
-	 *            the {@link GQLDynamicAttributeFilter} related to the field
+	 *            the {@link IGQLDynamicAttributeFilter} related to the field
 	 *            this entry is applied on
 	 */
 	public GQLFilterEntry(final String field, final GQLFilterOperatorEnum operator, final Object value,
-			GQLDynamicAttributeFilter<?, ?, ?> fieldFilter) {
+			IGQLDynamicAttributeFilter<?, ?, ?> fieldFilter) {
 		this.field = field;
 		this.operator = operator;
 		this.value = value;
@@ -102,7 +102,7 @@ public class GQLFilterEntry {
 	/**
 	 * @return the fieldFilter
 	 */
-	public GQLDynamicAttributeFilter<?, ?, ?> getFieldFilter() {
+	public IGQLDynamicAttributeFilter<?, ?, ?> getFieldFilter() {
 		return fieldFilter;
 	}
 
@@ -110,7 +110,7 @@ public class GQLFilterEntry {
 	 * @param fieldFilter
 	 *            the fieldFilter to set
 	 */
-	public void setFieldFilter(GQLDynamicAttributeFilter<?, ?, ?> fieldFilter) {
+	public void setFieldFilter(IGQLDynamicAttributeFilter<?, ?, ?> fieldFilter) {
 		this.fieldFilter = fieldFilter;
 	}
 }

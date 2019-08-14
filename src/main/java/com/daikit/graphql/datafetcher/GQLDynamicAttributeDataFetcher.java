@@ -1,6 +1,6 @@
 package com.daikit.graphql.datafetcher;
 
-import com.daikit.graphql.meta.dynamic.attribute.GQLDynamicAttributeGetter;
+import com.daikit.graphql.meta.dynamic.attribute.IGQLDynamicAttributeGetter;
 
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.PropertyDataFetcher;
@@ -14,7 +14,7 @@ import graphql.schema.PropertyDataFetcher;
  */
 public class GQLDynamicAttributeDataFetcher extends PropertyDataFetcher<Object> {
 
-	private final GQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter;
+	private final IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter;
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -26,11 +26,11 @@ public class GQLDynamicAttributeDataFetcher extends PropertyDataFetcher<Object> 
 	 * @param propertyName
 	 *            the property name
 	 * @param dynamicAttributeGetter
-	 *            the optional {@link GQLDynamicAttributeGetter} dynamic
+	 *            the optional {@link IGQLDynamicAttributeGetter} dynamic
 	 *            attribute getter
 	 */
 	public GQLDynamicAttributeDataFetcher(final String propertyName,
-			final GQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter) {
+			final IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter) {
 		super(propertyName);
 		this.dynamicAttributeGetter = dynamicAttributeGetter;
 	}
@@ -48,7 +48,7 @@ public class GQLDynamicAttributeDataFetcher extends PropertyDataFetcher<Object> 
 		} else {
 			// The object holding the property
 			final Object source = environment.getSource();
-			ret = ((GQLDynamicAttributeGetter) dynamicAttributeGetter).getValue(source);
+			ret = ((IGQLDynamicAttributeGetter) dynamicAttributeGetter).getValue(source);
 		}
 		return ret;
 	}

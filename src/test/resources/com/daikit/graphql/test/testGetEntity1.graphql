@@ -1,0 +1,8 @@
+query getEntity1($id: ID!) {
+  getEntity1(id: $id) {
+    id
+    intAttr
+    longAttr
+    stringAttr
+  }
+}

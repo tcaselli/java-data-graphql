@@ -1,0 +1,6 @@
+mutation deleteEntity1($id: ID!) {
+  deleteEntity1(id: $id) {
+    id
+    typename
+  }
+}

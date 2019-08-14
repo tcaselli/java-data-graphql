@@ -15,11 +15,11 @@ import com.daikit.graphql.enums.GQLOrderByDirectionEnum;
 import com.daikit.graphql.test.data.EmbeddedData1;
 import com.daikit.graphql.test.data.EmbeddedData2;
 import com.daikit.graphql.test.data.EmbeddedData3;
+import com.daikit.graphql.test.data.Entity1;
+import com.daikit.graphql.test.data.Entity2;
+import com.daikit.graphql.test.data.Entity3;
+import com.daikit.graphql.test.data.Entity4;
 import com.daikit.graphql.test.data.Enum1;
-import com.daikit.graphql.test.data.Model1;
-import com.daikit.graphql.test.data.Model2;
-import com.daikit.graphql.test.data.Model3;
-import com.daikit.graphql.test.data.Model4;
 import com.daikit.graphql.test.introspection.IntrospectionEnum;
 import com.daikit.graphql.test.introspection.IntrospectionFullType;
 import com.daikit.graphql.test.introspection.IntrospectionInputValue;
@@ -38,14 +38,14 @@ import graphql.Scalars;
 public class SchemaBuildTest extends AbstractTestSuite {
 
 	/**
-	 * Test {@link Model1} schema representation
+	 * Test {@link Entity1} schema representation
 	 */
 	@Test
-	public void testModel1() {
-		logger.info("Run testModel1");
+	public void testEntity1() {
+		logger.info("Run testEntity1");
 		final IntrospectionResult introspection = getIntrospection();
-		final IntrospectionFullType fullType = getFullType(introspection, Model1.class);
-		Assert.assertEquals(25, fullType.getFields().size());
+		final IntrospectionFullType fullType = getFullType(introspection, Entity1.class);
+		Assert.assertEquals(27, fullType.getFields().size());
 
 		assertField(fullType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
 		assertField(fullType, "intAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLInt.getName());
@@ -60,7 +60,8 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		assertField(fullType, "charAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLChar.getName());
 		assertField(fullType, "dateAttr", IntrospectionTypeKindEnum.SCALAR, GQLJavaScalars.GraphQLDate.getName());
 		assertField(fullType, "fileAttr", IntrospectionTypeKindEnum.SCALAR, GQLJavaScalars.GraphQLFile.getName());
-		assertField(fullType, "localDateAttr", IntrospectionTypeKindEnum.SCALAR, GQLJavaScalars.GraphQLLocalDate.getName());
+		assertField(fullType, "localDateAttr", IntrospectionTypeKindEnum.SCALAR,
+				GQLJavaScalars.GraphQLLocalDate.getName());
 		assertField(fullType, "localDateTimeAttr", IntrospectionTypeKindEnum.SCALAR,
 				GQLJavaScalars.GraphQLLocalDateTime.getName());
 
@@ -74,40 +75,44 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		assertField(fullType, "enumList", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.ENUM, Enum1.class);
 		assertField(fullType, "enumSet", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.ENUM, Enum1.class);
 
-		assertField(fullType, "model2", IntrospectionTypeKindEnum.OBJECT, Model2.class);
-		assertField(fullType, "model3s", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT, Model3.class);
-		assertField(fullType, "model4s", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT, Model4.class);
+		assertField(fullType, "entity2", IntrospectionTypeKindEnum.OBJECT, Entity2.class);
+		assertField(fullType, "entity3s", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT,
+				Entity3.class);
+		assertField(fullType, "entity4s", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT,
+				Entity4.class);
 
 		assertField(fullType, "embeddedData1", IntrospectionTypeKindEnum.OBJECT, EmbeddedData1.class);
-		assertField(fullType, "embeddedData1s", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT, EmbeddedData1.class);
+		assertField(fullType, "embeddedData1s", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT,
+				EmbeddedData1.class);
 	}
 
 	/**
-	 * Test {@link Model2} schema representation
+	 * Test {@link Entity2} schema representation
 	 */
 	@Test
-	public void testModel2() {
-		logger.info("Run testModel2");
+	public void testEntity2() {
+		logger.info("Run testEntity2");
 		final IntrospectionResult introspection = getIntrospection();
-		final IntrospectionFullType fullType = getFullType(introspection, Model2.class);
+		final IntrospectionFullType fullType = getFullType(introspection, Entity2.class);
 		assertField(fullType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
-		assertField(fullType, "model1s", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT, Model1.class);
+		assertField(fullType, "entity1s", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT,
+				Entity1.class);
 	}
 
 	/**
-	 * Test {@link Model3} schema representation
+	 * Test {@link Entity3} schema representation
 	 */
 	@Test
-	public void testModel3() {
-		logger.info("Run testModel3");
+	public void testEntity3() {
+		logger.info("Run testEntity3");
 		final IntrospectionResult introspection = getIntrospection();
-		final IntrospectionFullType fullType = getFullType(introspection, Model3.class);
+		final IntrospectionFullType fullType = getFullType(introspection, Entity3.class);
 		assertField(fullType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
-		assertField(fullType, "model1", IntrospectionTypeKindEnum.OBJECT, Model1.class);
+		assertField(fullType, "entity1", IntrospectionTypeKindEnum.OBJECT, Entity1.class);
 	}
 
 	/**
-	 * Test {@link Model1} schema representation
+	 * Test {@link Entity1} schema representation
 	 */
 	@Test
 	public void testEmbeddedData1() {
@@ -128,7 +133,8 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		assertField(fullType, "charAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLChar.getName());
 		assertField(fullType, "dateAttr", IntrospectionTypeKindEnum.SCALAR, GQLJavaScalars.GraphQLDate.getName());
 		assertField(fullType, "fileAttr", IntrospectionTypeKindEnum.SCALAR, GQLJavaScalars.GraphQLFile.getName());
-		assertField(fullType, "localDateAttr", IntrospectionTypeKindEnum.SCALAR, GQLJavaScalars.GraphQLLocalDate.getName());
+		assertField(fullType, "localDateAttr", IntrospectionTypeKindEnum.SCALAR,
+				GQLJavaScalars.GraphQLLocalDate.getName());
 		assertField(fullType, "localDateTimeAttr", IntrospectionTypeKindEnum.SCALAR,
 				GQLJavaScalars.GraphQLLocalDateTime.getName());
 
@@ -143,7 +149,8 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		assertField(fullType, "enumSet", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.ENUM, Enum1.class);
 
 		assertField(fullType, "data2", IntrospectionTypeKindEnum.OBJECT, EmbeddedData2.class);
-		assertField(fullType, "data3s", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT, EmbeddedData3.class);
+		assertField(fullType, "data3s", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT,
+				EmbeddedData3.class);
 	}
 
 	/**
@@ -164,15 +171,17 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		// OrderByInputType
 		final IntrospectionFullType orderByInputType = getFullType(introspection, getOrderByInputTypeName());
 		Assert.assertEquals(2, orderByInputType.getInputFields().size());
-		assertInputField(orderByInputType, "field", IntrospectionTypeKindEnum.NON_NULL, IntrospectionTypeKindEnum.SCALAR,
-				Scalars.GraphQLString.getName());
-		assertInputField(orderByInputType, "direction", IntrospectionTypeKindEnum.ENUM, getOrderByDirectionOutputTypeName());
+		assertInputField(orderByInputType, "field", IntrospectionTypeKindEnum.NON_NULL,
+				IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
+		assertInputField(orderByInputType, "direction", IntrospectionTypeKindEnum.ENUM,
+				getOrderByDirectionOutputTypeName());
 
 		// OrderByOutputType
 		final IntrospectionFullType orderByOutputType = getFullType(introspection, getOrderByOutputTypeName());
 		Assert.assertEquals(2, orderByOutputType.getFields().size());
 		assertField(orderByOutputType, "field", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
-		assertField(orderByOutputType, "direction", IntrospectionTypeKindEnum.ENUM, getOrderByDirectionOutputTypeName());
+		assertField(orderByOutputType, "direction", IntrospectionTypeKindEnum.ENUM,
+				getOrderByDirectionOutputTypeName());
 
 		// PagingInputType
 		final IntrospectionFullType pagingInputType = getFullType(introspection, getPagingInputTypeName());
@@ -189,111 +198,122 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	}
 
 	/**
-	 * Test all expected internal model related types are present
+	 * Test all expected internal entity related types are present
 	 */
 	@Test
-	public void testInternalModelRelatedTypes() {
-		logger.info("Run testInternalModelRelatedTypes");
+	public void testInternalEntityRelatedTypes() {
+		logger.info("Run testInternalEntityRelatedTypes");
 		final IntrospectionResult introspection = getIntrospection();
 
-		// Model1InputType
-		final IntrospectionFullType model1InputType = getFullType(introspection,
-				Model1.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
-		Assert.assertEquals(25, model1InputType.getInputFields().size());
+		// Entity1InputType
+		final IntrospectionFullType entity1InputType = getFullType(introspection,
+				Entity1.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
+		Assert.assertEquals(27, entity1InputType.getInputFields().size());
 
-		assertInputField(model1InputType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
-		assertInputField(model1InputType, "intAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLInt.getName());
-		assertInputField(model1InputType, "longAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLLong.getName());
-		assertInputField(model1InputType, "doubleAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLFloat.getName());
-		assertInputField(model1InputType, "stringAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
-		assertInputField(model1InputType, "booleanAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLBoolean.getName());
-		assertInputField(model1InputType, "bigIntAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLBigInteger.getName());
-		assertInputField(model1InputType, "bigDecimalAttr", IntrospectionTypeKindEnum.SCALAR,
+		assertInputField(entity1InputType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
+		assertInputField(entity1InputType, "intAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLInt.getName());
+		assertInputField(entity1InputType, "longAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLLong.getName());
+		assertInputField(entity1InputType, "doubleAttr", IntrospectionTypeKindEnum.SCALAR,
+				Scalars.GraphQLFloat.getName());
+		assertInputField(entity1InputType, "stringAttr", IntrospectionTypeKindEnum.SCALAR,
+				Scalars.GraphQLString.getName());
+		assertInputField(entity1InputType, "booleanAttr", IntrospectionTypeKindEnum.SCALAR,
+				Scalars.GraphQLBoolean.getName());
+		assertInputField(entity1InputType, "bigIntAttr", IntrospectionTypeKindEnum.SCALAR,
+				Scalars.GraphQLBigInteger.getName());
+		assertInputField(entity1InputType, "bigDecimalAttr", IntrospectionTypeKindEnum.SCALAR,
 				Scalars.GraphQLBigDecimal.getName());
-		assertInputField(model1InputType, "bytesAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLByte.getName());
-		assertInputField(model1InputType, "shortAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLShort.getName());
-		assertInputField(model1InputType, "charAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLChar.getName());
-		assertInputField(model1InputType, "dateAttr", IntrospectionTypeKindEnum.SCALAR, GQLJavaScalars.GraphQLDate.getName());
-		assertInputField(model1InputType, "fileAttr", IntrospectionTypeKindEnum.SCALAR, GQLJavaScalars.GraphQLFile.getName());
-		assertInputField(model1InputType, "localDateAttr", IntrospectionTypeKindEnum.SCALAR,
+		assertInputField(entity1InputType, "bytesAttr", IntrospectionTypeKindEnum.SCALAR,
+				Scalars.GraphQLByte.getName());
+		assertInputField(entity1InputType, "shortAttr", IntrospectionTypeKindEnum.SCALAR,
+				Scalars.GraphQLShort.getName());
+		assertInputField(entity1InputType, "charAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLChar.getName());
+		assertInputField(entity1InputType, "dateAttr", IntrospectionTypeKindEnum.SCALAR,
+				GQLJavaScalars.GraphQLDate.getName());
+		assertInputField(entity1InputType, "fileAttr", IntrospectionTypeKindEnum.SCALAR,
+				GQLJavaScalars.GraphQLFile.getName());
+		assertInputField(entity1InputType, "localDateAttr", IntrospectionTypeKindEnum.SCALAR,
 				GQLJavaScalars.GraphQLLocalDate.getName());
-		assertInputField(model1InputType, "localDateTimeAttr", IntrospectionTypeKindEnum.SCALAR,
+		assertInputField(entity1InputType, "localDateTimeAttr", IntrospectionTypeKindEnum.SCALAR,
 				GQLJavaScalars.GraphQLLocalDateTime.getName());
 
-		assertInputField(model1InputType, "stringList", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.SCALAR,
-				Scalars.GraphQLString.getName());
-		assertInputField(model1InputType, "stringSet", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.SCALAR,
-				Scalars.GraphQLString.getName());
+		assertInputField(entity1InputType, "stringList", IntrospectionTypeKindEnum.LIST,
+				IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
+		assertInputField(entity1InputType, "stringSet", IntrospectionTypeKindEnum.LIST,
+				IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
 
-		assertInputField(model1InputType, "stringList", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.SCALAR,
-				Scalars.GraphQLString.getName());
-		assertInputField(model1InputType, "stringSet", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.SCALAR,
-				Scalars.GraphQLString.getName());
+		assertInputField(entity1InputType, "stringList", IntrospectionTypeKindEnum.LIST,
+				IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
+		assertInputField(entity1InputType, "stringSet", IntrospectionTypeKindEnum.LIST,
+				IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
 
-		assertInputField(model1InputType, "enumAttr", IntrospectionTypeKindEnum.ENUM, Enum1.class.getSimpleName());
+		assertInputField(entity1InputType, "enumAttr", IntrospectionTypeKindEnum.ENUM, Enum1.class.getSimpleName());
 
-		assertInputField(model1InputType, "enumList", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.ENUM, Enum1.class);
-		assertInputField(model1InputType, "enumSet", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.ENUM, Enum1.class);
+		assertInputField(entity1InputType, "enumList", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.ENUM,
+				Enum1.class);
+		assertInputField(entity1InputType, "enumSet", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.ENUM,
+				Enum1.class);
 
-		assertInputField(model1InputType, "model2" + GQLSchemaConstants.ID_SUFFIX, IntrospectionTypeKindEnum.SCALAR,
+		assertInputField(entity1InputType, "entity2" + GQLSchemaConstants.ID_SUFFIX, IntrospectionTypeKindEnum.SCALAR,
 				Scalars.GraphQLID.getName());
-		assertInputField(model1InputType, "model3" + GQLSchemaConstants.IDS_SUFFIX, IntrospectionTypeKindEnum.LIST,
+		assertInputField(entity1InputType, "entity3" + GQLSchemaConstants.IDS_SUFFIX, IntrospectionTypeKindEnum.LIST,
 				IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
-		assertInputField(model1InputType, "model4" + GQLSchemaConstants.IDS_SUFFIX, IntrospectionTypeKindEnum.LIST,
+		assertInputField(entity1InputType, "entity4" + GQLSchemaConstants.IDS_SUFFIX, IntrospectionTypeKindEnum.LIST,
 				IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
 
-		assertInputField(model1InputType, "embeddedData1", IntrospectionTypeKindEnum.INPUT_OBJECT,
+		assertInputField(entity1InputType, "embeddedData1", IntrospectionTypeKindEnum.INPUT_OBJECT,
 				EmbeddedData1.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
-		assertInputField(model1InputType, "embeddedData1s", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.INPUT_OBJECT,
+		assertInputField(entity1InputType, "embeddedData1s", IntrospectionTypeKindEnum.LIST,
+				IntrospectionTypeKindEnum.INPUT_OBJECT,
 				EmbeddedData1.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
 
-		// Model1LoadResult
-		final IntrospectionFullType model1LoadResult = getFullType(introspection,
-				Model1.class.getSimpleName() + GQLSchemaConstants.LOAD_RESULT_SUFFIX);
-		Assert.assertEquals(3, model1LoadResult.getFields().size());
+		// Entity1LoadResult
+		final IntrospectionFullType entity1LoadResult = getFullType(introspection,
+				Entity1.class.getSimpleName() + GQLSchemaConstants.LOAD_RESULT_SUFFIX);
+		Assert.assertEquals(3, entity1LoadResult.getFields().size());
 
-		assertField(model1LoadResult, "data", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT,
-				Model1.class.getSimpleName());
-		assertField(model1LoadResult, "orderBy", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT,
+		assertField(entity1LoadResult, "data", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT,
+				Entity1.class.getSimpleName());
+		assertField(entity1LoadResult, "orderBy", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT,
 				getOrderByOutputTypeName());
-		assertField(model1LoadResult, "paging", IntrospectionTypeKindEnum.OBJECT, getPagingOutputTypeName());
+		assertField(entity1LoadResult, "paging", IntrospectionTypeKindEnum.OBJECT, getPagingOutputTypeName());
 
-		// Model2InputType
-		final IntrospectionFullType model2InputType = getFullType(introspection,
-				Model2.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
-		Assert.assertEquals(2, model2InputType.getInputFields().size());
+		// Entity2InputType
+		final IntrospectionFullType entity2InputType = getFullType(introspection,
+				Entity2.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
+		Assert.assertEquals(2, entity2InputType.getInputFields().size());
 
-		assertInputField(model2InputType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
-		assertInputField(model2InputType, "model1" + GQLSchemaConstants.IDS_SUFFIX, IntrospectionTypeKindEnum.LIST,
+		assertInputField(entity2InputType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
+		assertInputField(entity2InputType, "entity1" + GQLSchemaConstants.IDS_SUFFIX, IntrospectionTypeKindEnum.LIST,
 				IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
 
-		// Model2LoadResult
-		final IntrospectionFullType model2LoadResult = getFullType(introspection,
-				Model2.class.getSimpleName() + GQLSchemaConstants.LOAD_RESULT_SUFFIX);
-		Assert.assertEquals(3, model2LoadResult.getFields().size());
+		// Entity2LoadResult
+		final IntrospectionFullType entity2LoadResult = getFullType(introspection,
+				Entity2.class.getSimpleName() + GQLSchemaConstants.LOAD_RESULT_SUFFIX);
+		Assert.assertEquals(3, entity2LoadResult.getFields().size());
 
-		assertField(model2LoadResult, "data", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT,
-				Model2.class.getSimpleName());
-		assertField(model2LoadResult, "orderBy", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT,
+		assertField(entity2LoadResult, "data", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT,
+				Entity2.class.getSimpleName());
+		assertField(entity2LoadResult, "orderBy", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT,
 				getOrderByOutputTypeName());
-		assertField(model2LoadResult, "paging", IntrospectionTypeKindEnum.OBJECT, getPagingOutputTypeName());
+		assertField(entity2LoadResult, "paging", IntrospectionTypeKindEnum.OBJECT, getPagingOutputTypeName());
 
-		// Model3InputType
-		final IntrospectionFullType model3InputType = getFullType(introspection,
-				Model3.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
-		Assert.assertEquals(2, model3InputType.getInputFields().size());
+		// Entity3InputType
+		final IntrospectionFullType entity3InputType = getFullType(introspection,
+				Entity3.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
+		Assert.assertEquals(2, entity3InputType.getInputFields().size());
 
-		assertInputField(model3InputType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
-		assertInputField(model3InputType, "model1" + GQLSchemaConstants.ID_SUFFIX, IntrospectionTypeKindEnum.SCALAR,
+		assertInputField(entity3InputType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
+		assertInputField(entity3InputType, "entity1" + GQLSchemaConstants.ID_SUFFIX, IntrospectionTypeKindEnum.SCALAR,
 				Scalars.GraphQLID.getName());
 
-		// Model4InputType
-		final IntrospectionFullType model4InputType = getFullType(introspection,
-				Model4.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
-		Assert.assertEquals(2, model4InputType.getInputFields().size());
+		// Entity4InputType
+		final IntrospectionFullType entity4InputType = getFullType(introspection,
+				Entity4.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
+		Assert.assertEquals(2, entity4InputType.getInputFields().size());
 
-		assertInputField(model4InputType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
-		assertInputField(model4InputType, "model1" + GQLSchemaConstants.IDS_SUFFIX, IntrospectionTypeKindEnum.LIST,
+		assertInputField(entity4InputType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
+		assertInputField(entity4InputType, "entity1" + GQLSchemaConstants.IDS_SUFFIX, IntrospectionTypeKindEnum.LIST,
 				IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
 	}
 
@@ -305,31 +325,35 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		final IntrospectionResult introspection = getIntrospection();
 		// QueryType
 		final IntrospectionFullType queryType = getFullType(introspection, GQLSchemaConstants.QUERY_TYPE);
-		Assert.assertEquals(8, queryType.getFields().size());
-
+		// 10 = 4 entities * 2 queries + 2 custom method queries
+		Assert.assertEquals(10, queryType.getFields().size());
 		// - check all queries are available
 		final List<String> queryNames = new ArrayList<>();
-		Arrays.asList(Model1.class, Model2.class, Model3.class, Model4.class).stream().forEach(clazz -> {
+		Arrays.asList(Entity1.class, Entity2.class, Entity3.class, Entity4.class).stream().forEach(clazz -> {
 			queryNames.add(GQLSchemaConstants.QUERY_GET_SINGLE_PREFIX + clazz.getSimpleName());
 			queryNames.add(GQLSchemaConstants.QUERY_GET_LIST_PREFIX + clazz.getSimpleName());
 		});
-		queryType.getFields().forEach(field -> Assert.assertTrue(queryNames.contains(field.getName())));
+		queryNames.forEach(queryName -> Assert.assertTrue(queryType.getFields().stream()
+				.map(IntrospectionTypeField::getName).collect(Collectors.toList()).contains(queryName)));
 
 		// - check one 'getSingle' query (other ones are built the same way)
-		final IntrospectionTypeField getModel1 = assertField(queryType, queryNames.get(0), IntrospectionTypeKindEnum.OBJECT,
-				Model1.class);
-		Assert.assertEquals(1, getModel1.getArgs().size());
-		assertArg(getModel1, "id", IntrospectionTypeKindEnum.NON_NULL, IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
+		final IntrospectionTypeField getEntity1 = assertField(queryType, queryNames.get(0),
+				IntrospectionTypeKindEnum.OBJECT, Entity1.class);
+		Assert.assertEquals(1, getEntity1.getArgs().size());
+		assertArg(getEntity1, "id", IntrospectionTypeKindEnum.NON_NULL, IntrospectionTypeKindEnum.SCALAR,
+				Scalars.GraphQLID.getName());
 
 		// - check one 'getAll' query (other ones are built the same way)
-		final IntrospectionTypeField getAllModel1 = assertField(queryType, queryNames.get(1), IntrospectionTypeKindEnum.OBJECT,
-				Model1.class.getSimpleName() + GQLSchemaConstants.LOAD_RESULT_SUFFIX);
-		Assert.assertEquals(3, getAllModel1.getArgs().size());
-		assertArg(getAllModel1, GQLSchemaConstants.FILTER, IntrospectionTypeKindEnum.INPUT_OBJECT,
-				GQLSchemaConstants.FILTER_FIELDS_PREFIX + Model1.class.getSimpleName());
-		assertArg(getAllModel1, GQLSchemaConstants.PAGING, IntrospectionTypeKindEnum.INPUT_OBJECT, getPagingInputTypeName());
-		assertArg(getAllModel1, GQLSchemaConstants.ORDER_BY, IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.INPUT_OBJECT,
-				getOrderByInputTypeName());
+		final IntrospectionTypeField getAllEntity1 = assertField(queryType, queryNames.get(1),
+				IntrospectionTypeKindEnum.OBJECT,
+				Entity1.class.getSimpleName() + GQLSchemaConstants.LOAD_RESULT_SUFFIX);
+		Assert.assertEquals(3, getAllEntity1.getArgs().size());
+		assertArg(getAllEntity1, GQLSchemaConstants.FILTER, IntrospectionTypeKindEnum.INPUT_OBJECT,
+				GQLSchemaConstants.FILTER_FIELDS_PREFIX + Entity1.class.getSimpleName());
+		assertArg(getAllEntity1, GQLSchemaConstants.PAGING, IntrospectionTypeKindEnum.INPUT_OBJECT,
+				getPagingInputTypeName());
+		assertArg(getAllEntity1, GQLSchemaConstants.ORDER_BY, IntrospectionTypeKindEnum.LIST,
+				IntrospectionTypeKindEnum.INPUT_OBJECT, getOrderByInputTypeName());
 	}
 
 	/**
@@ -340,29 +364,59 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		final IntrospectionResult introspection = getIntrospection();
 		// MutationType
 		final IntrospectionFullType mutationType = getFullType(introspection, GQLSchemaConstants.MUTATION_TYPE);
-		Assert.assertEquals(8, mutationType.getFields().size());
+		Assert.assertEquals(9, mutationType.getFields().size());
 
 		// - check all mutations are available
 		final List<String> mutationNames = new ArrayList<>();
-		Arrays.asList(Model1.class, Model2.class, Model3.class, Model4.class).stream().forEach(clazz -> {
+		Arrays.asList(Entity1.class, Entity2.class, Entity3.class, Entity4.class).stream().forEach(clazz -> {
 			mutationNames.add(GQLSchemaConstants.MUTATION_SAVE_PREFIX + clazz.getSimpleName());
 			mutationNames.add(GQLSchemaConstants.MUTATION_DELETE_PREFIX + clazz.getSimpleName());
 		});
-		mutationType.getFields().forEach(field -> Assert.assertTrue(mutationNames.contains(field.getName())));
+		mutationNames.forEach(mutationName -> Assert.assertTrue(mutationType.getFields().stream()
+				.map(IntrospectionTypeField::getName).collect(Collectors.toList()).contains(mutationName)));
 
 		// - check one 'save' mutation (other ones are built the same way)
-		final IntrospectionTypeField saveModel1 = assertField(mutationType, mutationNames.get(0), IntrospectionTypeKindEnum.OBJECT,
-				Model1.class);
-		Assert.assertEquals(1, saveModel1.getArgs().size());
-		assertArg(saveModel1, "data", IntrospectionTypeKindEnum.NON_NULL, IntrospectionTypeKindEnum.INPUT_OBJECT,
-				Model1.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
+		final IntrospectionTypeField saveEntity1 = assertField(mutationType, mutationNames.get(0),
+				IntrospectionTypeKindEnum.OBJECT, Entity1.class);
+		Assert.assertEquals(1, saveEntity1.getArgs().size());
+		assertArg(saveEntity1, "data", IntrospectionTypeKindEnum.NON_NULL, IntrospectionTypeKindEnum.INPUT_OBJECT,
+				Entity1.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
 
 		// - check one 'delete' mutation (other ones are built the same way)
-		final IntrospectionTypeField deleteModel1 = assertField(mutationType, mutationNames.get(1), IntrospectionTypeKindEnum.OBJECT,
+		final IntrospectionTypeField deleteEntity1 = assertField(mutationType, mutationNames.get(1),
+				IntrospectionTypeKindEnum.OBJECT,
 				GQLSchemaConstants.DELETE_RESULT_PREFIX + GQLSchemaConstants.OUTPUT_OBJECT_SUFFIX);
-		Assert.assertEquals(1, deleteModel1.getArgs().size());
-		assertArg(deleteModel1, "id", IntrospectionTypeKindEnum.NON_NULL, IntrospectionTypeKindEnum.SCALAR,
+		Assert.assertEquals(1, deleteEntity1.getArgs().size());
+		assertArg(deleteEntity1, "id", IntrospectionTypeKindEnum.NON_NULL, IntrospectionTypeKindEnum.SCALAR,
 				Scalars.GraphQLID.getName());
+	}
+
+	/**
+	 * Test all custom method queries are present
+	 */
+	@Test
+	public void testCustomMethodTypes() {
+		final IntrospectionResult introspection = getIntrospection();
+		final IntrospectionFullType queryType = getFullType(introspection, GQLSchemaConstants.QUERY_TYPE);
+
+		// - check all custom method queries are available
+		final List<String> queryNames = Arrays.asList("customMethodQuery1", "customMethodQuery2");
+		queryNames.forEach(queryName -> Assert.assertTrue(queryType.getFields().stream()
+				.map(IntrospectionTypeField::getName).collect(Collectors.toList()).contains(queryName)));
+
+		// - check custom method 'customMethod1'
+		final IntrospectionTypeField customMethod1 = assertField(queryType, queryNames.get(0),
+				IntrospectionTypeKindEnum.OBJECT, Entity1.class);
+		Assert.assertEquals(1, customMethod1.getArgs().size());
+		assertArg(customMethod1, "arg1", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
+
+		// - check custom method 'customMethod2'
+		final IntrospectionTypeField customMethod2 = assertField(queryType, queryNames.get(1),
+				IntrospectionTypeKindEnum.OBJECT, Entity1.class);
+		Assert.assertEquals(2, customMethod2.getArgs().size());
+		assertArg(customMethod2, "arg1", IntrospectionTypeKindEnum.INPUT_OBJECT,
+				EmbeddedData1.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
+		assertArg(customMethod2, "arg2", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -414,8 +468,8 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	// Enumerations
 
 	private void assertEnum(IntrospectionFullType fullType, String name, boolean deprecated) {
-		final List<IntrospectionEnum> introEnums = fullType.getEnumValues().stream().filter(en -> name.equals(en.getName()))
-				.collect(Collectors.toList());
+		final List<IntrospectionEnum> introEnums = fullType.getEnumValues().stream()
+				.filter(en -> name.equals(en.getName())).collect(Collectors.toList());
 		Assert.assertEquals(1, introEnums.size());
 		Assert.assertEquals(deprecated, introEnums.get(0).isDeprecated());
 	}
@@ -429,26 +483,26 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		return typeField.get(0);
 	}
 
-	private IntrospectionTypeField assertField(IntrospectionFullType fullType, String fieldName, IntrospectionTypeKindEnum kind,
-			Class<?> typeClass) {
+	private IntrospectionTypeField assertField(IntrospectionFullType fullType, String fieldName,
+			IntrospectionTypeKindEnum kind, Class<?> typeClass) {
 		return assertField(fullType, fieldName, kind, typeClass.getSimpleName());
 	}
 
-	private IntrospectionTypeField assertField(IntrospectionFullType fullType, String fieldName, IntrospectionTypeKindEnum kind,
-			String typeName) {
+	private IntrospectionTypeField assertField(IntrospectionFullType fullType, String fieldName,
+			IntrospectionTypeKindEnum kind, String typeName) {
 		final IntrospectionTypeField field = getField(fullType, fieldName);
 		Assert.assertEquals(kind, field.getType().getKind());
 		Assert.assertEquals(typeName, field.getType().getName());
 		return field;
 	}
 
-	private IntrospectionTypeField assertField(IntrospectionFullType fullType, String fieldName, IntrospectionTypeKindEnum kind,
-			IntrospectionTypeKindEnum ofKind, Class<?> typeClass) {
+	private IntrospectionTypeField assertField(IntrospectionFullType fullType, String fieldName,
+			IntrospectionTypeKindEnum kind, IntrospectionTypeKindEnum ofKind, Class<?> typeClass) {
 		return assertField(fullType, fieldName, kind, ofKind, typeClass.getSimpleName());
 	}
 
-	private IntrospectionTypeField assertField(IntrospectionFullType fullType, String fieldName, IntrospectionTypeKindEnum kind,
-			IntrospectionTypeKindEnum ofKind, String typeName) {
+	private IntrospectionTypeField assertField(IntrospectionFullType fullType, String fieldName,
+			IntrospectionTypeKindEnum kind, IntrospectionTypeKindEnum ofKind, String typeName) {
 		final IntrospectionTypeField field = getField(fullType, fieldName);
 		Assert.assertEquals(kind, field.getType().getKind());
 		Assert.assertEquals(ofKind, field.getType().getOfType().getKind());
@@ -472,21 +526,21 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	// typeClass.getSimpleName());
 	// }
 
-	private IntrospectionInputValue assertInputField(IntrospectionFullType fullType, String fieldName, IntrospectionTypeKindEnum kind,
-			String typeName) {
+	private IntrospectionInputValue assertInputField(IntrospectionFullType fullType, String fieldName,
+			IntrospectionTypeKindEnum kind, String typeName) {
 		final IntrospectionInputValue field = getInputField(fullType, fieldName);
 		Assert.assertEquals(kind, field.getType().getKind());
 		Assert.assertEquals(typeName, field.getType().getName());
 		return field;
 	}
 
-	private IntrospectionInputValue assertInputField(IntrospectionFullType fullType, String fieldName, IntrospectionTypeKindEnum kind,
-			IntrospectionTypeKindEnum ofKind, Class<?> typeClass) {
+	private IntrospectionInputValue assertInputField(IntrospectionFullType fullType, String fieldName,
+			IntrospectionTypeKindEnum kind, IntrospectionTypeKindEnum ofKind, Class<?> typeClass) {
 		return assertInputField(fullType, fieldName, kind, ofKind, typeClass.getSimpleName());
 	}
 
-	private IntrospectionInputValue assertInputField(IntrospectionFullType fullType, String fieldName, IntrospectionTypeKindEnum kind,
-			IntrospectionTypeKindEnum ofKind, String typeName) {
+	private IntrospectionInputValue assertInputField(IntrospectionFullType fullType, String fieldName,
+			IntrospectionTypeKindEnum kind, IntrospectionTypeKindEnum ofKind, String typeName) {
 		final IntrospectionInputValue field = getInputField(fullType, fieldName);
 		Assert.assertEquals(kind, field.getType().getKind());
 		Assert.assertEquals(ofKind, field.getType().getOfType().getKind());
@@ -497,8 +551,8 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	// Args
 
 	private IntrospectionInputValue getArg(IntrospectionTypeField field, String argName) {
-		final List<IntrospectionInputValue> typeArg = field.getArgs().stream().filter(arg -> argName.equals(arg.getName()))
-				.collect(Collectors.toList());
+		final List<IntrospectionInputValue> typeArg = field.getArgs().stream()
+				.filter(arg -> argName.equals(arg.getName())).collect(Collectors.toList());
 		Assert.assertEquals(1, typeArg.size());
 		return typeArg.get(0);
 	}
@@ -509,7 +563,8 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	// return assertArg(field, argName, kind, typeClass.getSimpleName());
 	// }
 
-	private IntrospectionInputValue assertArg(IntrospectionTypeField field, String argName, IntrospectionTypeKindEnum kind, String typeName) {
+	private IntrospectionInputValue assertArg(IntrospectionTypeField field, String argName,
+			IntrospectionTypeKindEnum kind, String typeName) {
 		final IntrospectionInputValue arg = getArg(field, argName);
 		Assert.assertEquals(kind, arg.getType().getKind());
 		Assert.assertEquals(typeName, arg.getType().getName());
@@ -523,8 +578,8 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	// typeClass.getSimpleName());
 	// }
 
-	private IntrospectionInputValue assertArg(IntrospectionTypeField fullType, String argName, IntrospectionTypeKindEnum kind,
-			IntrospectionTypeKindEnum ofKind, String typeName) {
+	private IntrospectionInputValue assertArg(IntrospectionTypeField fullType, String argName,
+			IntrospectionTypeKindEnum kind, IntrospectionTypeKindEnum ofKind, String typeName) {
 		final IntrospectionInputValue arg = getArg(fullType, argName);
 		Assert.assertEquals(kind, arg.getType().getKind());
 		Assert.assertEquals(ofKind, arg.getType().getOfType().getKind());

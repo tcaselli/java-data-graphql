@@ -13,7 +13,7 @@ import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.datafetcher.GQLAbstractDataFetcher;
 import com.daikit.graphql.enums.GQLFilterOperatorEnum;
 import com.daikit.graphql.enums.GQLOrderByDirectionEnum;
-import com.daikit.graphql.meta.dynamic.attribute.GQLDynamicAttributeFilter;
+import com.daikit.graphql.meta.dynamic.attribute.IGQLDynamicAttributeFilter;
 import com.daikit.graphql.query.input.GQLListLoadConfig;
 import com.daikit.graphql.query.output.GQLListLoadResult;
 
@@ -28,7 +28,7 @@ import graphql.schema.DataFetchingEnvironment;
 /**
  * Abstract super class that may be overridden to provide "get list" fetcher to
  * the schema building. This class is typically to be extended and used in
- * {@link GQLSchemaBuilder} for buildSchema method "get list" data fetcher
+ * {@link GQLSchemaBuilder} for buildSchema "get list" method data fetcher
  * argument
  *
  * @author tcaselli
@@ -36,7 +36,7 @@ import graphql.schema.DataFetchingEnvironment;
 public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetcher<GQLListLoadResult> {
 
 	@SuppressWarnings("rawtypes")
-	private final Map<String, Map<String, GQLDynamicAttributeFilter>> dynamicAttributeFiltersMap = new HashMap<>();
+	private final Map<String, Map<String, IGQLDynamicAttributeFilter>> dynamicAttributeFiltersMap = new HashMap<>();
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// ABSTRACT METHODS
@@ -64,14 +64,14 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 	 *
 	 * @param dynamicAttributeFilters
 	 *            the collection of all registered
-	 *            {@link GQLDynamicAttributeFilter}
+	 *            {@link IGQLDynamicAttributeFilter}
 	 */
 	@SuppressWarnings("rawtypes")
-	public GQLAbstractGetListDataFetcher(final Collection<GQLDynamicAttributeFilter> dynamicAttributeFilters) {
-		final Map<String, List<GQLDynamicAttributeFilter>> map = dynamicAttributeFilters.stream()
-				.collect(Collectors.groupingBy(filter -> filter.getInputType().getSimpleName()));
+	public GQLAbstractGetListDataFetcher(final Collection<IGQLDynamicAttributeFilter> dynamicAttributeFilters) {
+		final Map<String, List<IGQLDynamicAttributeFilter>> map = dynamicAttributeFilters.stream()
+				.collect(Collectors.groupingBy(filter -> filter.getEntityType().getSimpleName()));
 		map.entrySet().forEach(entry -> dynamicAttributeFiltersMap.put(entry.getKey(), entry.getValue().stream()
-				.collect(Collectors.toMap(GQLDynamicAttributeFilter::getPropertyName, Function.identity()))));
+				.collect(Collectors.toMap(IGQLDynamicAttributeFilter::getName, Function.identity()))));
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -90,7 +90,7 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 		final String entityName = getEntityName(GQLSchemaConstants.QUERY_GET_LIST_PREFIX, queryField.getName());
 
 		@SuppressWarnings("rawtypes")
-		final Map<String, GQLDynamicAttributeFilter> filters = dynamicAttributeFiltersMap.get(entityName);
+		final Map<String, IGQLDynamicAttributeFilter> filters = dynamicAttributeFiltersMap.get(entityName);
 
 		// Handle paging if needed
 		final Optional<Argument> pagingConfig = queryField.getArguments().stream()
@@ -172,7 +172,7 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 					value = getById(entityName, mapValue(filterField, contextArguments));
 				}
 
-				final GQLDynamicAttributeFilter<?, ?, ?> filter = filters == null ? null : filters.get(name);
+				final IGQLDynamicAttributeFilter<?, ?, ?> filter = filters == null ? null : filters.get(name);
 
 				listLoadConfig.addFilter(filter == null ? name : filter.getFilteredPropertyQueryPath(), operator, value,
 						filter);

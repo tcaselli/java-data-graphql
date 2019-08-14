@@ -7,11 +7,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
+import com.daikit.graphql.builder.custommethod.GQLCustomMethodBuilder;
 import com.daikit.graphql.builder.operation.GQLAbstractInputOutputTypesBuilder;
-import com.daikit.graphql.builder.operation.GQLMethodBuilder;
 import com.daikit.graphql.builder.utils.GQLBuilderUtils;
 import com.daikit.graphql.constants.GQLSchemaConstants;
-import com.daikit.graphql.datafetcher.GQLMethodDataFetcher;
 import com.daikit.graphql.meta.GQLMetaDataModel;
 import com.daikit.graphql.meta.data.attribute.GQLAbstractAttributeMetaData;
 import com.daikit.graphql.meta.data.attribute.GQLAttributeEmbeddedEntityMetaData;
@@ -24,7 +23,6 @@ import com.daikit.graphql.meta.data.attribute.GQLAttributeListScalarMetaData;
 import com.daikit.graphql.meta.data.attribute.GQLAttributeScalarMetaData;
 import com.daikit.graphql.meta.data.entity.GQLAbstractEntityMetaData;
 import com.daikit.graphql.meta.data.method.GQLAbstractMethodMetaData;
-import com.daikit.graphql.meta.dynamic.method.GQLAbstractCustomMethod;
 import com.daikit.graphql.meta.internal.GQLAbstractEntityMetaDataInfos;
 import com.daikit.graphql.query.output.GQLListLoadResult;
 import com.daikit.graphql.utils.Assert;
@@ -69,45 +67,44 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 	 *
 	 * @param metaDataModel
 	 *            the {@link GQLMetaDataModel}
-	 * @param getSingleDataFetcher
-	 *            the {@link DataFetcher} for getSingle methods
+	 * @param getByIdDataFetcher
+	 *            the {@link DataFetcher} for getById methods
 	 * @param listDataFetcher
 	 *            the {@link DataFetcher} for getAll methods
-	 * @param customMethodDataFetchers
-	 *            the {@link Map} of {@link GQLAbstractCustomMethod} related
-	 *            {@link GQLMethodDataFetcher}
+	 * @param customMethodsDataFetcher
+	 *            the {@link DataFetcher} for custom methods
 	 * @return the created {@link GraphQLObjectType}
 	 */
 	public GraphQLObjectType buildQueryType(final GQLMetaDataModel metaDataModel,
-			final DataFetcher<?> getSingleDataFetcher, final DataFetcher<GQLListLoadResult> listDataFetcher,
-			final List<GQLMethodDataFetcher> customMethodDataFetchers) {
+			final DataFetcher<?> getByIdDataFetcher, final DataFetcher<GQLListLoadResult> listDataFetcher,
+			final DataFetcher<?> customMethodsDataFetcher) {
 		logger.debug("START building query types...");
 
 		final GraphQLObjectType.Builder builder = GraphQLObjectType.newObject();
 		builder.name(GQLSchemaConstants.QUERY_TYPE);
 		builder.description("Query type from meta model");
 
-		final List<GraphQLFieldDefinition> getSingleFieldDefinitions = new ArrayList<>();
+		final List<GraphQLFieldDefinition> getByIdFieldDefinitions = new ArrayList<>();
 		final List<GraphQLFieldDefinition> getAllFieldDefinitions = new ArrayList<>();
 
 		logger.debug("Build query types for interfaces...");
 
 		metaDataModel.getNonEmbeddedInterfaces().forEach(infos -> {
-			getSingleFieldDefinitions.add(buildGetSingleQueryFieldDefinitions(infos, true));
+			getByIdFieldDefinitions.add(buildGetSingleQueryFieldDefinitions(infos, true));
 			getAllFieldDefinitions.add(buildGetAllQueryFieldDefinitions(infos, true));
 		});
 
 		logger.debug("Build query types for entities...");
 		metaDataModel.getNonEmbeddedConcretes().forEach(infos -> {
-			getSingleFieldDefinitions.add(buildGetSingleQueryFieldDefinitions(infos, false));
+			getByIdFieldDefinitions.add(buildGetSingleQueryFieldDefinitions(infos, false));
 			getAllFieldDefinitions.add(buildGetAllQueryFieldDefinitions(infos, false));
 		});
 
-		builder.fields(getSingleFieldDefinitions);
+		builder.fields(getByIdFieldDefinitions);
 		builder.fields(getAllFieldDefinitions);
 
 		logger.debug("Build query types for custom methods...");
-		final Map<GQLAbstractMethodMetaData, GraphQLFieldDefinition> customMethodFieldDefinitions = new GQLMethodBuilder(
+		final Map<GQLAbstractMethodMetaData, GraphQLFieldDefinition> customMethodFieldDefinitions = new GQLCustomMethodBuilder(
 				getCache())
 						.buildMethods(metaDataModel.getCustomMethods().stream()
 								.filter(customMethod -> !customMethod.isMutation()).collect(Collectors.toList()));
@@ -115,11 +112,11 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 
 		final GraphQLObjectType queryType = builder.build();
 
-		if (!getSingleFieldDefinitions.isEmpty()) {
-			Assert.assertNotNull(getSingleDataFetcher,
-					"If there is at least one entity with an ID property defined then 'getSingleDataFetcher' must be non null");
-			getSingleFieldDefinitions.forEach(fieldDefinition -> getCache().getCodeRegistryBuilder()
-					.dataFetcher(queryType, fieldDefinition, getSingleDataFetcher));
+		if (!getByIdFieldDefinitions.isEmpty()) {
+			Assert.assertNotNull(getByIdDataFetcher,
+					"If there is at least one entity with an ID property defined then 'getByIdDataFetcher' must be non null");
+			getByIdFieldDefinitions.forEach(fieldDefinition -> getCache().getCodeRegistryBuilder()
+					.dataFetcher(queryType, fieldDefinition, getByIdDataFetcher));
 		}
 
 		if (!getAllFieldDefinitions.isEmpty()) {
@@ -129,14 +126,8 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 					fieldDefinition, listDataFetcher));
 		}
 
-		if (!customMethodFieldDefinitions.isEmpty()) {
-			Assert.assertNotNull(customMethodDataFetchers,
-					"If there is at least one custom method defined then 'customMethodDataFetchers' must be non null");
-			customMethodFieldDefinitions.entrySet().forEach(entry -> getCache().getCodeRegistryBuilder()
-					.dataFetcher(queryType, entry.getValue(), customMethodDataFetchers.stream().filter(
-							methodDataFetcher -> methodDataFetcher.getMethod().equals(entry.getKey().getMethod()))
-							.findFirst().get()));
-		}
+		customMethodFieldDefinitions.entrySet().forEach(entry -> getCache().getCodeRegistryBuilder()
+				.dataFetcher(queryType, entry.getValue(), customMethodsDataFetcher));
 
 		logger.debug("END building query types");
 		return queryType;
@@ -149,7 +140,7 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 	private GraphQLFieldDefinition buildGetSingleQueryFieldDefinitions(final GQLAbstractEntityMetaDataInfos infos,
 			final boolean isInterface) {
 		logger.debug(
-				Message.format("Build 'getSingle' query type for " + (isInterface ? "interface" : "entity") + " [{}]",
+				Message.format("Build 'getById' query type for " + (isInterface ? "interface" : "entity") + " [{}]",
 						infos.getEntity().getName()));
 		// Query for single entity
 		final GraphQLFieldDefinition.Builder builder = GraphQLFieldDefinition.newFieldDefinition();

@@ -29,18 +29,18 @@ import com.daikit.graphql.query.output.GQLPaging;
 import com.daikit.graphql.test.utils.PropertyUtils;
 
 /**
- * A data model for tests
+ * A data entity for tests
  *
  * @author tcaselli
  */
 public class DataModel {
 
-	private final List<Model1> model1s = new ArrayList<>();
-	private final List<Model2> model2s = new ArrayList<>();
-	private final List<Model3> model3s = new ArrayList<>();
-	private final List<Model4> model4s = new ArrayList<>();
+	private final List<Entity1> entity1s = new ArrayList<>();
+	private final List<Entity2> entity2s = new ArrayList<>();
+	private final List<Entity3> entity3s = new ArrayList<>();
+	private final List<Entity4> entity4s = new ArrayList<>();
 
-	private final Map<Class<?>, List<? extends AbstractModel>> database = new HashMap<>();
+	private final Map<Class<?>, List<? extends AbstractEntity>> database = new HashMap<>();
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -56,51 +56,51 @@ public class DataModel {
 	 */
 	public DataModel() throws FileNotFoundException, IOException {
 
-		database.put(Model1.class, model1s);
-		database.put(Model2.class, model2s);
-		database.put(Model3.class, model3s);
-		database.put(Model4.class, model4s);
+		database.put(Entity1.class, entity1s);
+		database.put(Entity2.class, entity2s);
+		database.put(Entity3.class, entity3s);
+		database.put(Entity4.class, entity4s);
 
 		final File file = new File(getClass().getClassLoader().getResource("data/file.txt").getFile());
 		final byte[] fileBytes = IOUtils.toByteArray(new FileInputStream(file));
 
 		for (int i = 0; i < 5; i++) {
-			final Model1 model = new Model1();
-			model.setId(Integer.valueOf(i).toString());
-			model.setIntAttr(i);
-			model.setLongAttr(Integer.valueOf(i).longValue());
-			model.setDoubleAttr(Integer.valueOf(i).doubleValue());
-			model.setStringAttr("stringAttr_" + i);
-			model.setBooleanAttr(true);
-			model.setBigIntAttr(BigInteger.valueOf(Integer.valueOf(i).longValue()));
-			model.setBigDecimalAttr(BigDecimal.valueOf(Integer.valueOf(i).doubleValue()));
-			model.setBytesAttr(fileBytes);
-			model.setShortAttr(Integer.valueOf(i).shortValue());
-			model.setCharAttr(Integer.valueOf(i).toString().charAt(0));
-			model.setDateAttr(new Date());
-			model.setFileAttr(file);
-			model.setLocalDateAttr(LocalDate.now());
-			model.setLocalDateTimeAttr(LocalDateTime.now());
-			model.setEnumAttr(Enum1.VAL2);
-			model1s.add(model);
+			final Entity1 entity = new Entity1();
+			entity.setId(Integer.valueOf(i).toString());
+			entity.setIntAttr(i);
+			entity.setLongAttr(Integer.valueOf(i).longValue());
+			entity.setDoubleAttr(Integer.valueOf(i).doubleValue());
+			entity.setStringAttr("stringAttr_" + i);
+			entity.setBooleanAttr(true);
+			entity.setBigIntAttr(BigInteger.valueOf(Integer.valueOf(i).longValue()));
+			entity.setBigDecimalAttr(BigDecimal.valueOf(Integer.valueOf(i).doubleValue()));
+			entity.setBytesAttr(fileBytes);
+			entity.setShortAttr(Integer.valueOf(i).shortValue());
+			entity.setCharAttr(Integer.valueOf(i).toString().charAt(0));
+			entity.setDateAttr(new Date());
+			entity.setFileAttr(file);
+			entity.setLocalDateAttr(LocalDate.now());
+			entity.setLocalDateTimeAttr(LocalDateTime.now());
+			entity.setEnumAttr(Enum1.VAL2);
+			entity1s.add(entity);
 		}
 
 		for (int i = 0; i < 5; i++) {
-			final Model2 model = new Model2();
-			model.setId(Integer.valueOf(i).toString());
-			model2s.add(model);
+			final Entity2 entity = new Entity2();
+			entity.setId(Integer.valueOf(i).toString());
+			entity2s.add(entity);
 		}
 
 		for (int i = 0; i < 5; i++) {
-			final Model3 model = new Model3();
-			model.setId(Integer.valueOf(i).toString());
-			model3s.add(model);
+			final Entity3 entity = new Entity3();
+			entity.setId(Integer.valueOf(i).toString());
+			entity3s.add(entity);
 		}
 
 		for (int i = 0; i < 5; i++) {
-			final Model4 model = new Model4();
-			model.setId(Integer.valueOf(i).toString());
-			model4s.add(model);
+			final Entity4 entity = new Entity4();
+			entity.setId(Integer.valueOf(i).toString());
+			entity4s.add(entity);
 		}
 
 		final List<EmbeddedData1> embeddedData1s = new ArrayList<>();
@@ -135,23 +135,23 @@ public class DataModel {
 		}
 
 		for (int i = 0; i < 5; i++) {
-			final Model1 model1 = model1s.get(i);
-			final Model2 model2 = model2s.get(i);
+			final Entity1 entity1 = entity1s.get(i);
+			final Entity2 entity2 = entity2s.get(i);
 
-			model1.setModel2(model2);
-			model2.getModel1s().add(model1);
+			entity1.setEntity2(entity2);
+			entity2.getEntity1s().add(entity1);
 
 			if (i == 0) {
-				model1.getModel3s().addAll(model3s);
-				model3s.forEach(model3 -> model3.setModel1(model1));
+				entity1.getEntity3s().addAll(entity3s);
+				entity3s.forEach(entity3 -> entity3.setEntity1(entity1));
 			}
 
-			model1.getModel4s().addAll(model4s);
-			model4s.forEach(model4 -> model4.getModel1s().add(model1));
+			entity1.getEntity4s().addAll(entity4s);
+			entity4s.forEach(entity4 -> entity4.getEntity1s().add(entity1));
 
-			model1.setEmbeddedData1(embeddedData1s.get(i));
+			entity1.setEmbeddedData1(embeddedData1s.get(i));
 
-			model1.getEmbeddedData1s().addAll(embeddedData1s);
+			entity1.getEmbeddedData1s().addAll(embeddedData1s);
 		}
 	}
 
@@ -160,29 +160,29 @@ public class DataModel {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Get model by ID
+	 * Get entity by ID
 	 *
-	 * @param modelClass
-	 *            the model class
+	 * @param entityClass
+	 *            the entity class
 	 * @param id
 	 *            the ID
-	 * @return an {@link Optional} model
+	 * @return an {@link Optional} entity
 	 */
-	public Optional<?> getById(Class<?> modelClass, String id) {
-		return database.get(modelClass).stream().filter(item -> item.getId().equals(id)).findFirst();
+	public Optional<?> getById(Class<?> entityClass, String id) {
+		return database.get(entityClass).stream().filter(item -> item.getId().equals(id)).findFirst();
 	}
 
 	/**
-	 * Get all models
+	 * Get all entitys
 	 *
-	 * @param modelClass
-	 *            the model class
+	 * @param entityClass
+	 *            the entity class
 	 * @param listLoadConfig
 	 *            the {@link GQLListLoadConfig}
 	 * @return a {@link GQLListLoadResult}
 	 */
-	public GQLListLoadResult getAll(Class<?> modelClass, GQLListLoadConfig listLoadConfig) {
-		final List<?> all = database.get(modelClass);
+	public GQLListLoadResult getAll(Class<?> entityClass, GQLListLoadConfig listLoadConfig) {
+		final List<?> all = database.get(entityClass);
 		final Stream<?> stream = all.stream();
 		if (listLoadConfig.getOffset() > 0) {
 			stream.skip(listLoadConfig.getOffset());
@@ -221,39 +221,39 @@ public class DataModel {
 	}
 
 	/**
-	 * Save model
+	 * Save entity
 	 *
-	 * @param model
-	 *            the model to be saved
+	 * @param entity
+	 *            the entity to be saved
 	 */
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void save(Object model) {
-		final List<?> all = database.get(model.getClass());
-		Assert.notNull(all, "Unkonwn model class " + model.getClass().getName());
-		final String modelId = ((AbstractModel) model).getId();
-		if (StringUtils.isEmpty(modelId)) {
-			final Optional<Integer> maxId = all.stream().map(item -> Integer.valueOf(((AbstractModel) item).getId()))
+	public void save(Object entity) {
+		final List<?> all = database.get(entity.getClass());
+		Assert.notNull(all, "Unkonwn entity class " + entity.getClass().getName());
+		final String entityId = ((AbstractEntity) entity).getId();
+		if (StringUtils.isEmpty(entityId)) {
+			final Optional<Integer> maxId = all.stream().map(item -> Integer.valueOf(((AbstractEntity) item).getId()))
 					.max(Comparator.naturalOrder());
-			((AbstractModel) model).setId(maxId.isPresent() ? Integer.valueOf(maxId.get() + 1).toString() : "0");
-			((List) all).add(model);
+			((AbstractEntity) entity).setId(maxId.isPresent() ? Integer.valueOf(maxId.get() + 1).toString() : "0");
+			((List) all).add(entity);
 		} else {
-			Assert.isTrue(all.contains(model), "Model to be updated (id != null) does not exist yet.");
+			Assert.isTrue(all.contains(entity), "Entity to be updated (id != null) does not exist yet.");
 			// nothing do do then ..
 		}
 	}
 
 	/**
-	 * Delete model by ID
+	 * Delete entity by ID
 	 *
-	 * @param modelClass
-	 *            the model class
+	 * @param entityClass
+	 *            the entity class
 	 * @param id
-	 *            the ID of the model
+	 *            the ID of the entity
 	 */
-	public void delete(Class<?> modelClass, String id) {
-		final Object model = getById(modelClass, id);
-		if (model != null) {
-			database.get(modelClass).remove(model);
+	public void delete(Class<?> entityClass, String id) {
+		final Optional<?> optionalEntity = getById(entityClass, id);
+		if (optionalEntity.isPresent()) {
+			database.get(entityClass).remove(optionalEntity.get());
 		}
 	}
 
@@ -262,31 +262,31 @@ public class DataModel {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * @return the model1s
+	 * @return the entity1s
 	 */
-	public List<Model1> getModel1s() {
-		return model1s;
+	public List<Entity1> getEntity1s() {
+		return entity1s;
 	}
 
 	/**
-	 * @return the model2s
+	 * @return the entity2s
 	 */
-	public List<Model2> getModel2s() {
-		return model2s;
+	public List<Entity2> getEntity2s() {
+		return entity2s;
 	}
 
 	/**
-	 * @return the model3s
+	 * @return the entity3s
 	 */
-	public List<Model3> getModel3s() {
-		return model3s;
+	public List<Entity3> getEntity3s() {
+		return entity3s;
 	}
 
 	/**
-	 * @return the model4s
+	 * @return the entity4s
 	 */
-	public List<Model4> getModel4s() {
-		return model4s;
+	public List<Entity4> getEntity4s() {
+		return entity4s;
 	}
 
 }

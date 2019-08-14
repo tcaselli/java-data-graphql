@@ -1,11 +1,13 @@
 package com.daikit.graphql.meta.data.method;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.daikit.generics.utils.GenericsUtils;
 import com.daikit.graphql.meta.data.GQLAbstractMetaData;
 import com.daikit.graphql.meta.data.method.argument.GQLAbstractMethodArgumentMetaData;
-import com.daikit.graphql.meta.dynamic.method.GQLAbstractCustomMethod;
+import com.daikit.graphql.meta.dynamic.method.abs.GQLAbstractCustomMethod;
 
 /**
  * Dynamic method meta data
@@ -14,9 +16,6 @@ import com.daikit.graphql.meta.dynamic.method.GQLAbstractCustomMethod;
  */
 public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 
-	private String name;
-	// true for mutation , false for query
-	private boolean mutation = false;
 	private GQLAbstractCustomMethod<?> method;
 	private List<GQLAbstractMethodArgumentMetaData> arguments = new ArrayList<>();
 
@@ -35,18 +34,10 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 	 * Constructor passing name, whether this is a mutation or a query, and
 	 * method
 	 *
-	 * @param name
-	 *            the name for the method. This name will be used for building
-	 *            GraphQL schema query or mutation for this method
-	 * @param mutation
-	 *            whether this is a mutation (<code>true</code>) or a query
-	 *            (<code>false</code>)
 	 * @param method
 	 *            the {@link GQLAbstractCustomMethod}
 	 */
-	public GQLAbstractMethodMetaData(String name, boolean mutation, GQLAbstractCustomMethod<?> method) {
-		this.name = name;
-		this.mutation = mutation;
+	public GQLAbstractMethodMetaData(GQLAbstractCustomMethod<?> method) {
 		this.method = method;
 	}
 
@@ -56,12 +47,8 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 
 	@Override
 	protected void appendToString(final StringBuilder stringBuilder) {
-		stringBuilder.append(name);
+		stringBuilder.append(getName());
 	}
-
-	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-	// GETTERS / SETTERS
-	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
 	 * Get the name for the method. This name will be used for building GraphQL
@@ -70,19 +57,41 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return getMethod() == null ? null : getMethod().getMethodName();
 	}
 
 	/**
-	 * Set the name for the method. This name will be used for building GraphQL
-	 * schema query or mutation for this method.
+	 * Get whether this is a mutation (<code>true</code>) or a query
+	 * (<code>false</code>)
 	 *
-	 * @param name
-	 *            the name to set
+	 * @return the mutation
 	 */
-	public void setName(final String name) {
-		this.name = name;
+	public boolean isMutation() {
+		return getMethod() == null ? false : getMethod().isMutation();
 	}
+
+	/**
+	 * Utility method to retrieve embedded method return type
+	 *
+	 * @return a {@link Type}
+	 */
+	protected Type getMethodReturnType() {
+		return GenericsUtils.getTypeArguments(method.getClass()).get(0);
+	}
+
+	/**
+	 * Add argument {@link GQLAbstractMethodArgumentMetaData}
+	 * 
+	 * @param argument
+	 *            the argument
+	 */
+	public void addArgument(GQLAbstractMethodArgumentMetaData argument) {
+		getArguments().add(argument);
+	}
+
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+	// GETTERS / SETTERS
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
 	 * Get the method {@link GQLAbstractCustomMethod}
@@ -94,18 +103,14 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 	}
 
 	/**
-	 * Set the method {@link GQLAbstractCustomMethod}
-	 *
 	 * @param method
 	 *            the method to set
 	 */
-	public void setMethod(final GQLAbstractCustomMethod<?> method) {
+	public void setMethod(GQLAbstractCustomMethod<?> method) {
 		this.method = method;
 	}
 
 	/**
-	 * Get method arguments list
-	 *
 	 * @return the arguments
 	 */
 	public List<GQLAbstractMethodArgumentMetaData> getArguments() {
@@ -113,34 +118,11 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 	}
 
 	/**
-	 * Set method arguments list
-	 *
 	 * @param arguments
 	 *            the arguments to set
 	 */
-	public void setArguments(final List<GQLAbstractMethodArgumentMetaData> arguments) {
+	public void setArguments(List<GQLAbstractMethodArgumentMetaData> arguments) {
 		this.arguments = arguments;
-	}
-
-	/**
-	 * Get whether this is a mutation (<code>true</code>) or a query
-	 * (<code>false</code>)
-	 *
-	 * @return the mutation
-	 */
-	public boolean isMutation() {
-		return mutation;
-	}
-
-	/**
-	 * Set whether this is a mutation (<code>true</code>) or a query
-	 * (<code>false</code>)
-	 * 
-	 * @param mutation
-	 *            the mutation to set
-	 */
-	public void setMutation(final boolean mutation) {
-		this.mutation = mutation;
 	}
 
 }

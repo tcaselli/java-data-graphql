@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Class intended to be embedded in an entity model
+ * Class intended to be embedded in an entity entity
  *
  * @author tcaselli
  */

@@ -1,8 +1,8 @@
 package com.daikit.graphql.meta.data.attribute;
 
 import com.daikit.graphql.meta.data.GQLAbstractMetaData;
-import com.daikit.graphql.meta.dynamic.attribute.GQLDynamicAttributeGetter;
-import com.daikit.graphql.meta.dynamic.attribute.GQLDynamicAttributeSetter;
+import com.daikit.graphql.meta.dynamic.attribute.IGQLDynamicAttributeGetter;
+import com.daikit.graphql.meta.dynamic.attribute.IGQLDynamicAttributeSetter;
 
 /**
  * Abstract super class for GraphQL entity/data attribute meta data
@@ -17,8 +17,8 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	private boolean nullable = true;
 	private boolean filterable = false;
 
-	private GQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter;
-	private GQLDynamicAttributeSetter<?, ?> dynamicAttributeSetter;
+	private IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter;
+	private IGQLDynamicAttributeSetter<?, ?> dynamicAttributeSetter;
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -57,10 +57,30 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	 * Get whether this attribute is dynamic, which means that either a
 	 * dynamicAttributeGetter or a dynamicAttributeSetter (or both) is/are set.
 	 *
-	 * @return the dynamic
+	 * @return a boolean
 	 */
 	public boolean isDynamic() {
 		return dynamicAttributeGetter != null || dynamicAttributeSetter != null;
+	}
+
+	/**
+	 * Get whether this attribute is a dynamic attribute setter, which means
+	 * that a dynamicAttributeSetter is set
+	 * 
+	 * @return a boolean
+	 */
+	public boolean isDynamicAttributeSetter() {
+		return dynamicAttributeSetter != null;
+	}
+
+	/**
+	 * Get whether this attribute is a dynamic attribute getter, which means
+	 * that a dynamicAttributeGetter is set
+	 * 
+	 * @return a boolean
+	 */
+	public boolean isDynamicAttributeGetter() {
+		return dynamicAttributeGetter != null;
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -175,13 +195,13 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	 * If this attribute is dynamic then this method returns the getter for
 	 * computing the attribute value. (An attribute is dynamic if there is no
 	 * related property in holding entity, if you provide a
-	 * {@link GQLDynamicAttributeGetter} then if this attribute is set in schema
-	 * queries for retrieving this attribute parent entity then this getter will
-	 * be called with this attribute value as parameter.)
+	 * {@link IGQLDynamicAttributeGetter} then if this attribute is set in
+	 * schema queries for retrieving this attribute parent entity then this
+	 * getter will be called with this attribute value as parameter.)
 	 *
 	 * @return the dynamicAttributeGetter
 	 */
-	public GQLDynamicAttributeGetter<?, ?> getDynamicAttributeGetter() {
+	public IGQLDynamicAttributeGetter<?, ?> getDynamicAttributeGetter() {
 		return dynamicAttributeGetter;
 	}
 
@@ -189,14 +209,14 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	 * If this attribute is dynamic then this method sets the getter for
 	 * computing the attribute value. (An attribute is dynamic if there is no
 	 * related property in holding entity, if you provide a
-	 * {@link GQLDynamicAttributeGetter} then if this attribute is set in schema
-	 * queries for retrieving this attribute parent entity then this getter will
-	 * be called with this attribute value as parameter.)
+	 * {@link IGQLDynamicAttributeGetter} then if this attribute is set in
+	 * schema queries for retrieving this attribute parent entity then this
+	 * getter will be called with this attribute value as parameter.)
 	 *
 	 * @param dynamicAttributeGetter
 	 *            the dynamicAttributeGetter to set
 	 */
-	public void setDynamicAttributeGetter(final GQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter) {
+	public void setDynamicAttributeGetter(final IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter) {
 		this.dynamicAttributeGetter = dynamicAttributeGetter;
 	}
 
@@ -204,13 +224,13 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	 * If this attribute is dynamic then this method returns the setter for
 	 * storing the attribute value. (An attribute is dynamic if there is no
 	 * related property in holding entity, if you provide a
-	 * {@link GQLDynamicAttributeSetter} then if this attribute is set in schema
-	 * mutations for saving this attribute parent entity then this setter will
-	 * be called with this attribute value as parameter.)
+	 * {@link IGQLDynamicAttributeSetter} then if this attribute is set in
+	 * schema mutations for saving this attribute parent entity then this setter
+	 * will be called with this attribute value as parameter.)
 	 *
 	 * @return the dynamicAttributeSetter
 	 */
-	public GQLDynamicAttributeSetter<?, ?> getDynamicAttributeSetter() {
+	public IGQLDynamicAttributeSetter<?, ?> getDynamicAttributeSetter() {
 		return dynamicAttributeSetter;
 	}
 
@@ -218,14 +238,14 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	 * If this attribute is dynamic then this method sets the setter for storing
 	 * the attribute value. (An attribute is dynamic if there is no related
 	 * property in holding entity, if you provide a
-	 * {@link GQLDynamicAttributeSetter} then if this attribute is set in schema
-	 * mutations for saving this attribute parent entity then this setter will
-	 * be called with this attribute value as parameter.)
+	 * {@link IGQLDynamicAttributeSetter} then if this attribute is set in
+	 * schema mutations for saving this attribute parent entity then this setter
+	 * will be called with this attribute value as parameter.)
 	 *
 	 * @param dynamicAttributeSetter
 	 *            the dynamicAttributeSetter to set
 	 */
-	public void setDynamicAttributeSetter(final GQLDynamicAttributeSetter<?, ?> dynamicAttributeSetter) {
+	public void setDynamicAttributeSetter(final IGQLDynamicAttributeSetter<?, ?> dynamicAttributeSetter) {
 		this.dynamicAttributeSetter = dynamicAttributeSetter;
 	}
 

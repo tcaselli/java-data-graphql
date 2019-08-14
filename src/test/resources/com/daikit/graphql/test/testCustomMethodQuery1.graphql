@@ -1,0 +1,9 @@
+query customMethodQuery1($arg1: String) {
+  customMethodQuery1(arg1: $arg1) {
+    intAttr
+    stringAttr
+    embeddedData1 {
+      stringAttr
+    }
+  }
+}

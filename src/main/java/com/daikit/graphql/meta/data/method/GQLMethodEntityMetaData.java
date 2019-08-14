@@ -1,6 +1,6 @@
 package com.daikit.graphql.meta.data.method;
 
-import com.daikit.graphql.meta.dynamic.method.GQLAbstractCustomMethod;
+import com.daikit.graphql.meta.dynamic.method.abs.GQLAbstractCustomMethod;
 
 /**
  * GraphQL dynamic method returning an embedded entity meta data
@@ -26,20 +26,13 @@ public class GQLMethodEntityMetaData extends GQLAbstractMethodMetaData {
 	 * Constructor passing name, whether this is a mutation or a query, method
 	 * and return type
 	 *
-	 * @param name
-	 *            the name for the method. This name will be used for building
-	 *            GraphQL schema query or mutation for this method
-	 * @param mutation
-	 *            whether this is a mutation (<code>true</code>) or a query
-	 *            (<code>false</code>)
 	 * @param method
 	 *            the {@link GQLAbstractCustomMethod}
 	 * @param entityClass
 	 *            the entity class for method return type
 	 */
-	public GQLMethodEntityMetaData(String name, boolean mutation, GQLAbstractCustomMethod<?> method,
-			Class<?> entityClass) {
-		super(name, mutation, method);
+	public GQLMethodEntityMetaData(GQLAbstractCustomMethod<?> method, Class<?> entityClass) {
+		super(method);
 		this.entityClass = entityClass;
 	}
 

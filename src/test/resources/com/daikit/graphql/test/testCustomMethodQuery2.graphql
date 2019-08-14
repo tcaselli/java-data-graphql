@@ -1,0 +1,10 @@
+query customMethodQuery2($arg1: EmbeddedData1InputType, $arg2: String) {
+  customMethodQuery2(arg1: $arg1, arg2: $arg2) {
+    intAttr
+    stringAttr
+    embeddedData1 {
+      intAttr
+      stringAttr
+    }
+  }
+}

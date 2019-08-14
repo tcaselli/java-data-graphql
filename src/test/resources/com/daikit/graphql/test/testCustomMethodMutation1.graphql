@@ -1,0 +1,5 @@
+mutation customMethodMutation1($arg1: String) {
+  customMethodMutation1(arg1: $arg1) {
+    stringAttr
+  }
+}

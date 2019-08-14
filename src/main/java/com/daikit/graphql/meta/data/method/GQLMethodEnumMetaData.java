@@ -1,6 +1,6 @@
 package com.daikit.graphql.meta.data.method;
 
-import com.daikit.graphql.meta.dynamic.method.GQLAbstractCustomMethod;
+import com.daikit.graphql.meta.dynamic.method.abs.GQLAbstractCustomMethod;
 
 /**
  * GraphQL dynamic method returning an entity meta data
@@ -26,20 +26,13 @@ public class GQLMethodEnumMetaData extends GQLAbstractMethodMetaData {
 	 * Constructor passing name, whether this is a mutation or a query, method
 	 * and return type
 	 *
-	 * @param name
-	 *            the name for the method. This name will be used for building
-	 *            GraphQL schema query or mutation for this method
-	 * @param mutation
-	 *            whether this is a mutation (<code>true</code>) or a query
-	 *            (<code>false</code>)
 	 * @param method
 	 *            the {@link GQLAbstractCustomMethod}
 	 * @param enumClass
 	 *            the enumeration class for method return type
 	 */
-	public GQLMethodEnumMetaData(String name, boolean mutation, GQLAbstractCustomMethod<?> method,
-			Class<? extends Enum<?>> enumClass) {
-		super(name, mutation, method);
+	public GQLMethodEnumMetaData(GQLAbstractCustomMethod<?> method, Class<? extends Enum<?>> enumClass) {
+		super(method);
 		this.enumClass = enumClass;
 	}
 
@@ -59,7 +52,7 @@ public class GQLMethodEnumMetaData extends GQLAbstractMethodMetaData {
 
 	/**
 	 * Get the method enumeration return type
-	 * 
+	 *
 	 * @return the enumClass
 	 */
 	public Class<? extends Enum<?>> getEnumClass() {
@@ -68,7 +61,7 @@ public class GQLMethodEnumMetaData extends GQLAbstractMethodMetaData {
 
 	/**
 	 * Set the method enumeration return type
-	 * 
+	 *
 	 * @param enumClass
 	 *            the enumClass to set
 	 */
