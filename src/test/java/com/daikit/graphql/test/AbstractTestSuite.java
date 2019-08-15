@@ -51,7 +51,7 @@ import graphql.schema.GraphQLSchema;
  * Super class for all tests. It initialize a data entity , a graphQL meta
  * entity and a graphQL schema
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  *
  */
 public abstract class AbstractTestSuite {

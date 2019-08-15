@@ -38,7 +38,7 @@ import graphql.schema.GraphQLType;
 /**
  * Graph QL schema initializer from data meta model
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLSchemaBuilder {
 

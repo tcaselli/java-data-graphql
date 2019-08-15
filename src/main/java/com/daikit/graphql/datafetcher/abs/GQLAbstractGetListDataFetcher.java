@@ -31,7 +31,7 @@ import graphql.schema.DataFetchingEnvironment;
  * {@link GQLSchemaBuilder} for buildSchema "get list" method data fetcher
  * argument
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetcher<GQLListLoadResult> {
 

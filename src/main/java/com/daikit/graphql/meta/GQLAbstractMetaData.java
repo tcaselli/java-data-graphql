@@ -3,7 +3,7 @@ package com.daikit.graphql.meta;
 /**
  * Abstract super class for all GQL meta data
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public abstract class GQLAbstractMetaData {
 

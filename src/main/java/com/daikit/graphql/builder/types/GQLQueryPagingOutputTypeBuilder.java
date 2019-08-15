@@ -12,7 +12,7 @@ import graphql.schema.GraphQLObjectType;
 /**
  * GQL Query paging output type builder
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLQueryPagingOutputTypeBuilder extends GQLAbstractTypesBuilder {
 

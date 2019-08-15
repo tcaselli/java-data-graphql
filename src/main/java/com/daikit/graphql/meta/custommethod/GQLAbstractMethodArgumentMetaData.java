@@ -5,7 +5,7 @@ import com.daikit.graphql.meta.GQLAbstractMetaData;
 /**
  * Abstract super class for method arguments
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public abstract class GQLAbstractMethodArgumentMetaData extends GQLAbstractMetaData {
 
@@ -49,7 +49,7 @@ public abstract class GQLAbstractMethodArgumentMetaData extends GQLAbstractMetaD
 	/**
 	 * Get the name for the method. This name will be used for building GraphQL
 	 * schema query or mutation for this method
-	 * 
+	 *
 	 * @return the name
 	 */
 	public String getName() {
@@ -59,12 +59,14 @@ public abstract class GQLAbstractMethodArgumentMetaData extends GQLAbstractMetaD
 	/**
 	 * Set the name for the method. This name will be used for building GraphQL
 	 * schema query or mutation for this method
-	 * 
+	 *
 	 * @param name
 	 *            the name to set
+	 * @return this instance
 	 */
-	public void setName(final String name) {
+	public GQLAbstractMethodArgumentMetaData setName(final String name) {
 		this.name = name;
+		return this;
 	}
 
 }

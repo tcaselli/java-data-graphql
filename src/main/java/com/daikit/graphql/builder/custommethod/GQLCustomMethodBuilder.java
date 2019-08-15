@@ -10,18 +10,14 @@ import com.daikit.graphql.builder.GQLAbstractSchemaSubBuilder;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.meta.custommethod.GQLAbstractMethodArgumentMetaData;
 import com.daikit.graphql.meta.custommethod.GQLAbstractMethodMetaData;
-import com.daikit.graphql.meta.custommethod.GQLMethodArgumentEmbeddedEntityMetaData;
 import com.daikit.graphql.meta.custommethod.GQLMethodArgumentEntityMetaData;
 import com.daikit.graphql.meta.custommethod.GQLMethodArgumentEnumMetaData;
-import com.daikit.graphql.meta.custommethod.GQLMethodArgumentListEmbeddedEntityMetaData;
 import com.daikit.graphql.meta.custommethod.GQLMethodArgumentListEntityMetaData;
 import com.daikit.graphql.meta.custommethod.GQLMethodArgumentListEnumMetaData;
 import com.daikit.graphql.meta.custommethod.GQLMethodArgumentListScalarMetaData;
 import com.daikit.graphql.meta.custommethod.GQLMethodArgumentScalarMetaData;
-import com.daikit.graphql.meta.custommethod.GQLMethodEmbeddedEntityMetaData;
 import com.daikit.graphql.meta.custommethod.GQLMethodEntityMetaData;
 import com.daikit.graphql.meta.custommethod.GQLMethodEnumMetaData;
-import com.daikit.graphql.meta.custommethod.GQLMethodListEmbeddedEntityMetaData;
 import com.daikit.graphql.meta.custommethod.GQLMethodListEntityMetaData;
 import com.daikit.graphql.meta.custommethod.GQLMethodListEnumMetaData;
 import com.daikit.graphql.meta.custommethod.GQLMethodListScalarMetaData;
@@ -37,7 +33,7 @@ import graphql.schema.GraphQLOutputType;
 /**
  * Query methods builder
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLCustomMethodBuilder extends GQLAbstractSchemaSubBuilder {
 
@@ -119,11 +115,6 @@ public class GQLCustomMethodBuilder extends GQLAbstractSchemaSubBuilder {
 		} else if (dynamicMethod instanceof GQLMethodListScalarMetaData) {
 			outputType = new GraphQLList(
 					getCache().getScalarType(((GQLMethodScalarMetaData) dynamicMethod).getScalarType()));
-		} else if (dynamicMethod instanceof GQLMethodEmbeddedEntityMetaData) {
-			outputType = getCache().getEntityType(((GQLMethodEmbeddedEntityMetaData) dynamicMethod).getEntityClass());
-		} else if (dynamicMethod instanceof GQLMethodListEmbeddedEntityMetaData) {
-			outputType = new GraphQLList(
-					getCache().getEntityType(((GQLMethodListEmbeddedEntityMetaData) dynamicMethod).getForeignClass()));
 		} else {
 			throw new IllegalArgumentException(
 					Message.format("Dynamic method output type not handled for [{}]", dynamicMethod));
@@ -156,16 +147,10 @@ public class GQLCustomMethodBuilder extends GQLAbstractSchemaSubBuilder {
 					getCache().getEnumType(((GQLMethodArgumentListEnumMetaData) argumentMetaData).getEnumClass()));
 		} else if (argumentMetaData instanceof GQLMethodArgumentListEntityMetaData) {
 			argumentType = new GraphQLList(getCache()
-					.getEntityType(((GQLMethodArgumentListEntityMetaData) argumentMetaData).getForeignClass()));
+					.getInputEntityType(((GQLMethodArgumentListEntityMetaData) argumentMetaData).getForeignClass()));
 		} else if (argumentMetaData instanceof GQLMethodArgumentListScalarMetaData) {
 			argumentType = new GraphQLList(
 					getCache().getScalarType(((GQLMethodArgumentListScalarMetaData) argumentMetaData).getScalarType()));
-		} else if (argumentMetaData instanceof GQLMethodArgumentEmbeddedEntityMetaData) {
-			argumentType = getCache()
-					.getInputEntityType(((GQLMethodArgumentEmbeddedEntityMetaData) argumentMetaData).getEntityClass());
-		} else if (argumentMetaData instanceof GQLMethodArgumentListEmbeddedEntityMetaData) {
-			argumentType = new GraphQLList(getCache()
-					.getEntityType(((GQLMethodArgumentListEmbeddedEntityMetaData) argumentMetaData).getForeignClass()));
 		} else {
 			throw new IllegalArgumentException(
 					Message.format("Dynamic method argument type not handled for [{}]", argumentMetaData));

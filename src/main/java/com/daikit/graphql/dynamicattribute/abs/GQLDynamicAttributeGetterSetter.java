@@ -6,7 +6,7 @@ import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
 /**
  * Dynamic attribute getter & setter
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  * @param <ENTITY_TYPE>
  *            the input object value holding type
  * @param <ATTRIBUTE_TYPE>

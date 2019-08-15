@@ -5,7 +5,7 @@ import graphql.schema.PropertyDataFetcher;
 /**
  * GraphQL property data fetcher
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  * @param <PROPERTY_TYPE>
  *            the property type
  */

@@ -15,7 +15,7 @@ import com.daikit.graphql.enums.GQLOrderByDirectionEnum;
 /**
  * List load config for "get list" method
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLListLoadConfig {
 

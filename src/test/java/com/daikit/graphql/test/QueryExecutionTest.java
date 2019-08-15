@@ -1,7 +1,10 @@
 package com.daikit.graphql.test;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,6 +12,7 @@ import org.junit.Test;
 import com.daikit.graphql.test.data.EmbeddedData1;
 import com.daikit.graphql.test.data.Entity1;
 import com.daikit.graphql.test.data.Entity1ListLoadResult;
+import com.daikit.graphql.test.data.Enum1;
 
 import graphql.ExecutionInput;
 import graphql.ExecutionResult;
@@ -16,7 +20,7 @@ import graphql.ExecutionResult;
 /**
  * Tests verifying queries are ran correctly
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 @SuppressWarnings("javadoc")
 public class QueryExecutionTest extends AbstractTestSuite {
@@ -72,6 +76,41 @@ public class QueryExecutionTest extends AbstractTestSuite {
 		Assert.assertEquals("stringAttr", resultData.getStringAttr());
 		Assert.assertEquals(2, resultData.getEmbeddedData1().getIntAttr());
 		Assert.assertEquals("testString", resultData.getEmbeddedData1().getStringAttr());
+	}
+
+	@Test
+	public void testCustomMethodQuery3() {
+		final String query = readGraphql("testCustomMethodQuery3.graphql");
+		final Enum1 enumArg = Enum1.VAL2;
+		final List<String> stringList = Arrays.asList("string1", "string2");
+		final List<Enum1> enumList = Arrays.asList(Enum1.VAL1, Enum1.VAL2);
+		final EmbeddedData1 data1 = new EmbeddedData1();
+		data1.setStringAttr("data1");
+		final EmbeddedData1 data2 = new EmbeddedData1();
+		data2.setStringAttr("data2");
+		final List<EmbeddedData1> dataList = Arrays.asList(data1, data2);
+		final ExecutionResult result = handleErrors(EXECUTOR
+				.execute(ExecutionInput.newExecutionInput().query(query).variables(new HashMap<String, Object>() {
+					private static final long serialVersionUID = 1L;
+					{
+						put("arg1", enumArg);
+						put("arg2", stringList);
+						put("arg3", enumList);
+						put("arg4", dataList.stream().map(data -> toMap(data)).collect(Collectors.toList()));
+						put("arg5", null);
+					}
+				}).build()));
+		final Entity1 resultData = toObject(result, Entity1.class);
+		Assert.assertEquals(enumArg, resultData.getEnumAttr());
+		Assert.assertEquals(stringList, resultData.getStringList());
+		Assert.assertEquals(enumList, resultData.getEnumList());
+		Assert.assertEquals(dataList.size(), resultData.getEmbeddedData1s().size());
+		Assert.assertNull(resultData.getStringAttr());
+		dataList.forEach(
+				data -> Assert.assertTrue("dataList argument does not contain data[" + data.getStringAttr() + "]",
+						resultData.getEmbeddedData1s().stream()
+								.filter(resData -> data.getStringAttr().equals(resData.getStringAttr())).findFirst()
+								.isPresent()));
 	}
 
 	@Test

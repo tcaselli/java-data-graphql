@@ -13,7 +13,7 @@ import graphql.schema.DataFetchingEnvironment;
  * in {@link GQLSchemaBuilder} for buildSchema "getById" method data fetcher
  * argument
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  *
  */
 public abstract class GQLAbstractGetByIdDataFetcher extends GQLAbstractDataFetcher<Object> {

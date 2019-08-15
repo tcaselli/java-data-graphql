@@ -3,7 +3,7 @@ package com.daikit.graphql.exception;
 /**
  * Exception that are thrown from GraphQL module.
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLException extends RuntimeException {
 

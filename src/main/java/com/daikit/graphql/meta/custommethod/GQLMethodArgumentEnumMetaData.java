@@ -3,7 +3,7 @@ package com.daikit.graphql.meta.custommethod;
 /**
  * GraphQL dynamic method argument entity meta data
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLMethodArgumentEnumMetaData extends GQLAbstractMethodArgumentMetaData {
 
@@ -64,9 +64,11 @@ public class GQLMethodArgumentEnumMetaData extends GQLAbstractMethodArgumentMeta
 	 *
 	 * @param enumClass
 	 *            the enumClass to set
+	 * @return this instance
 	 */
-	public void setEnumClass(final Class<? extends Enum<?>> enumClass) {
+	public GQLMethodArgumentEnumMetaData setEnumClass(final Class<? extends Enum<?>> enumClass) {
 		this.enumClass = enumClass;
+		return this;
 	}
 
 }

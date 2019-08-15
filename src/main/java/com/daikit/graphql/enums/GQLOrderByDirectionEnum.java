@@ -3,7 +3,7 @@ package com.daikit.graphql.enums;
 /**
  * Order by direction
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public enum GQLOrderByDirectionEnum {
 

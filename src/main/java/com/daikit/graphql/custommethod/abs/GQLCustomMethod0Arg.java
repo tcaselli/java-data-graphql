@@ -9,7 +9,7 @@ import com.daikit.graphql.custommethod.IGQLCustomMethod0Arg;
 /**
  * Custom method that will be added to GQL Schema. Method has one argument.
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  * @param <OUTPUT_TYPE>
  *            the output type
  */

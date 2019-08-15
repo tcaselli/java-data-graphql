@@ -6,7 +6,7 @@ import com.daikit.graphql.enums.GQLScalarTypeEnum;
 /**
  * GraphQL dynamic method returning a scalar meta data
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLMethodScalarMetaData extends GQLAbstractMethodMetaData {
 
@@ -66,9 +66,11 @@ public class GQLMethodScalarMetaData extends GQLAbstractMethodMetaData {
 	 *
 	 * @param scalarType
 	 *            the scalarType to set
+	 * @return this instance
 	 */
-	public void setScalarType(final GQLScalarTypeEnum scalarType) {
+	public GQLMethodScalarMetaData setScalarType(final GQLScalarTypeEnum scalarType) {
 		this.scalarType = scalarType;
+		return this;
 	}
 
 }

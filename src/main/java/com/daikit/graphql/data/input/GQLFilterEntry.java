@@ -6,7 +6,7 @@ import com.daikit.graphql.enums.GQLFilterOperatorEnum;
 /**
  * Filter config for {@link GQLListLoadConfig}
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLFilterEntry {
 

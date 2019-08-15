@@ -23,7 +23,7 @@ import graphql.schema.GraphQLType;
 /**
  * Builder for filter operators
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLQueryFilterOperatorsInputTypeBuilder extends GQLAbstractTypesBuilder {
 

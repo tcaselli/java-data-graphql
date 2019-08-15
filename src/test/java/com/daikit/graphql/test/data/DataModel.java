@@ -31,7 +31,7 @@ import com.daikit.graphql.test.utils.PropertyUtils;
 /**
  * A data entity for tests
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class DataModel {
 

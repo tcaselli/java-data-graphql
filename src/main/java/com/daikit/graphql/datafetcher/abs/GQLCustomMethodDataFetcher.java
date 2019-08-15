@@ -28,7 +28,7 @@ import graphql.schema.DataFetchingEnvironment;
  * used in {@link GQLSchemaBuilder} for buildSchema custom method data fetcher
  * argument
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  *
  */
 public class GQLCustomMethodDataFetcher extends GQLAbstractDataFetcher<Object> {

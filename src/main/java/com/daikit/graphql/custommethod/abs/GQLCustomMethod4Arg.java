@@ -5,11 +5,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.daikit.generics.utils.GenericsUtils;
+import com.daikit.graphql.custommethod.IGQLCustomMethod4Arg;
 
 /**
  * Custom method that will be added to GQL Schema. Method has one argument.
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  * @param <OUTPUT_TYPE>
  *            the output type
  * @param <ARGUMENT_1_TYPE>
@@ -23,7 +24,9 @@ import com.daikit.generics.utils.GenericsUtils;
  */
 public abstract class GQLCustomMethod4Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE, ARGUMENT_2_TYPE, ARGUMENT_3_TYPE, ARGUMENT_4_TYPE>
 		extends
-			GQLAbstractCustomMethod<OUTPUT_TYPE> {
+			GQLAbstractCustomMethod<OUTPUT_TYPE>
+		implements
+			IGQLCustomMethod4Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE, ARGUMENT_2_TYPE, ARGUMENT_3_TYPE, ARGUMENT_4_TYPE> {
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS

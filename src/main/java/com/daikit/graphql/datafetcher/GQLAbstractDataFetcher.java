@@ -14,7 +14,7 @@ import graphql.schema.DataFetcher;
 /**
  * Abstract super class for all data fetchers
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  * @param <FETCHED_DATA_TYPE>
  *            the fetched data type
  */

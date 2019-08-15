@@ -5,7 +5,7 @@ import com.daikit.graphql.enums.GQLOrderByDirectionEnum;
 /**
  * Order by
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLOrderByEntry {
 

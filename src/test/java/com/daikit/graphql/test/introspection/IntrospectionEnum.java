@@ -3,7 +3,7 @@ package com.daikit.graphql.test.introspection;
 /**
  * Introspection enumeration
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class IntrospectionEnum {
 

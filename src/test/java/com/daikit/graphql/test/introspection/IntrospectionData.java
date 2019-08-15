@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Introspection data
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class IntrospectionData {
 

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Introspection full type
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class IntrospectionFullType {
 

@@ -14,7 +14,7 @@ import graphql.schema.GraphQLScalarType;
 /**
  * Schema constants
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 @SuppressWarnings("javadoc")
 public class GQLSchemaConstants {

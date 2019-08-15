@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Introspection schema
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class IntrospectionSchema {
 

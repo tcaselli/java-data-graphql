@@ -3,7 +3,7 @@ package com.daikit.graphql.meta.attribute;
 /**
  * GraphQL attribute enum meta data
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLAttributeEnumMetaData extends GQLAbstractAttributeMetaData {
 
@@ -64,9 +64,11 @@ public class GQLAttributeEnumMetaData extends GQLAbstractAttributeMetaData {
 	 *
 	 * @param enumClass
 	 *            the enumClass to set
+	 * @return this instance
 	 */
-	public void setEnumClass(final Class<? extends Enum<?>> enumClass) {
+	public GQLAttributeEnumMetaData setEnumClass(final Class<? extends Enum<?>> enumClass) {
 		this.enumClass = enumClass;
+		return this;
 	}
 
 }

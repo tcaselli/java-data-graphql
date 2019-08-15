@@ -3,7 +3,7 @@ package com.daikit.graphql.test.data;
 /**
  * Enumeration
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public enum Enum1 {
 	/**

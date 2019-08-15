@@ -3,7 +3,7 @@ package com.daikit.graphql.test.data;
 /**
  * Abstract super class for all test entitys
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class AbstractEntity {
 

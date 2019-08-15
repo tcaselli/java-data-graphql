@@ -13,15 +13,13 @@ import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.datafetcher.GQLDynamicAttributeDataFetcher;
 import com.daikit.graphql.datafetcher.GQLPropertyDataFetcher;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
-import com.daikit.graphql.meta.attribute.GQLAttributeEmbeddedEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEnumMetaData;
-import com.daikit.graphql.meta.attribute.GQLAttributeListEmbeddedEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeListEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeListEnumMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeListScalarMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeScalarMetaData;
-import com.daikit.graphql.meta.entity.GQLAbstractEntityMetaData;
+import com.daikit.graphql.meta.entity.GQLEntityMetaData;
 import com.daikit.graphql.utils.Message;
 
 import graphql.Scalars;
@@ -34,7 +32,7 @@ import graphql.schema.GraphQLTypeReference;
 /**
  * Abstract super class for schema types builders
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLAbstractTypesBuilder extends GQLAbstractSchemaSubBuilder {
 
@@ -57,7 +55,7 @@ public class GQLAbstractTypesBuilder extends GQLAbstractSchemaSubBuilder {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	protected Map<GQLAbstractAttributeMetaData, GraphQLFieldDefinition> buildEntityFieldDefinitions(
-			final GQLAbstractEntityMetaData entity) {
+			final GQLEntityMetaData entity) {
 		logger.debug(Message.format("Build field definitions for entity/interface [{}]", entity.getName()));
 		final Map<GQLAbstractAttributeMetaData, GraphQLFieldDefinition> fieldDefinitions = entity.getAttributes()
 				.stream().filter(attribute -> attribute.isReadable()).collect(LinkedHashMap::new,
@@ -133,12 +131,6 @@ public class GQLAbstractTypesBuilder extends GQLAbstractSchemaSubBuilder {
 		} else if (attribute instanceof GQLAttributeListScalarMetaData) {
 			fieldDefinition = buildFieldDefinition(attribute, new GraphQLList(
 					getCache().getScalarType(((GQLAttributeListScalarMetaData) attribute).getScalarType())));
-		} else if (attribute instanceof GQLAttributeEmbeddedEntityMetaData) {
-			fieldDefinition = buildFieldDefinition(attribute, new GraphQLTypeReference(
-					getCache().getEntityTypeName(((GQLAttributeEmbeddedEntityMetaData) attribute).getEntityClass())));
-		} else if (attribute instanceof GQLAttributeListEmbeddedEntityMetaData) {
-			fieldDefinition = buildFieldDefinition(attribute, new GraphQLList(new GraphQLTypeReference(getCache()
-					.getEntityTypeName(((GQLAttributeListEmbeddedEntityMetaData) attribute).getForeignClass()))));
 		} else {
 			throw new IllegalArgumentException(
 					Message.format("Attribute could not be mapped to GraphQL [{}]", attribute));

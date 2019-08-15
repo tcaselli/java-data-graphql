@@ -3,12 +3,13 @@ package com.daikit.graphql.meta.attribute;
 /**
  * GraphQL list attribute meta data
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLAttributeListEntityMetaData extends GQLAbstractAttributeMetaData {
 
 	private Class<?> foreignClass;
 	private boolean cascadeSave = false;
+	private boolean embedded = false;
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -66,9 +67,11 @@ public class GQLAttributeListEntityMetaData extends GQLAbstractAttributeMetaData
 	 *
 	 * @param foreignClass
 	 *            the foreignClass to set
+	 * @return this instance
 	 */
-	public void setForeignClass(final Class<?> foreignClass) {
+	public GQLAttributeListEntityMetaData setForeignClass(final Class<?> foreignClass) {
 		this.foreignClass = foreignClass;
+		return this;
 	}
 
 	/**
@@ -87,9 +90,28 @@ public class GQLAttributeListEntityMetaData extends GQLAbstractAttributeMetaData
 	 *
 	 * @param cascadeSave
 	 *            the cascadeSave to set
+	 * @return this instance
 	 */
-	public void setCascadeSave(final boolean cascadeSave) {
+	public GQLAttributeListEntityMetaData setCascadeSave(final boolean cascadeSave) {
 		this.cascadeSave = cascadeSave;
+		return this;
+	}
+
+	/**
+	 * @return the embedded
+	 */
+	public boolean isEmbedded() {
+		return embedded;
+	}
+
+	/**
+	 * @param embedded
+	 *            the embedded to set
+	 * @return this instance
+	 */
+	public GQLAttributeListEntityMetaData setEmbedded(boolean embedded) {
+		this.embedded = embedded;
+		return this;
 	}
 
 }

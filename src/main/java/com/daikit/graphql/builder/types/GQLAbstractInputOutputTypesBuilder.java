@@ -18,7 +18,7 @@ import graphql.schema.GraphQLNonNull;
  * Abstract input/output types builder , super class for mutation and query
  * types builders
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLAbstractInputOutputTypesBuilder extends GQLAbstractSchemaSubBuilder {
 

@@ -27,7 +27,7 @@ import graphql.schema.GraphQLTypeReference;
 /**
  * Type builder for entities
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLEntityTypesBuilder extends GQLAbstractTypesBuilder {
 
@@ -92,13 +92,13 @@ public class GQLEntityTypesBuilder extends GQLAbstractTypesBuilder {
 		final List<GraphQLFieldDefinition> fieldDefinitions = new ArrayList<>();
 
 		GraphQLFieldDefinition idFieldDefinition = null;
-		if (!infos.isEmbedded()) {
+		if (!infos.getEntity().isEmbedded()) {
 			idFieldDefinition = buildIdFieldDefinition();
 			fieldDefinitions.add(idFieldDefinition);
 		}
 
 		// Add fields from interface
-		if (!infos.isEmbedded()) {
+		if (!infos.getEntity().isEmbedded()) {
 			infos.getSuperInterfaces().forEach(superInterface -> {
 				final GraphQLInterfaceType interfaceType = getCache().getInterfaceTypes()
 						.get(superInterface.getEntity().getEntityClass());

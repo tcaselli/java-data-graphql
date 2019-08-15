@@ -8,7 +8,7 @@ import com.daikit.graphql.enums.GQLScalarTypeEnum;
 /**
  * GraphQL dynamic method returning a {@link List} of entities meta data
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLMethodListScalarMetaData extends GQLAbstractMethodMetaData {
 
@@ -68,9 +68,11 @@ public class GQLMethodListScalarMetaData extends GQLAbstractMethodMetaData {
 	 *
 	 * @param scalarType
 	 *            the scalarType to set
+	 * @return this instance
 	 */
-	public void setScalarType(final GQLScalarTypeEnum scalarType) {
+	public GQLMethodListScalarMetaData setScalarType(final GQLScalarTypeEnum scalarType) {
 		this.scalarType = scalarType;
+		return this;
 	}
 
 }

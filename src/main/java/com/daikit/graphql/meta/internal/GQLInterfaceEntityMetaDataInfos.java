@@ -3,14 +3,13 @@ package com.daikit.graphql.meta.internal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.daikit.graphql.meta.entity.GQLAbstractEntityMetaData;
 import com.daikit.graphql.meta.entity.GQLEntityMetaData;
 
 /**
  * Meta data computed informations for abstract (non embedded)
  * {@link GQLEntityMetaData}
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLInterfaceEntityMetaDataInfos extends GQLAbstractEntityMetaDataInfos {
 
@@ -27,7 +26,7 @@ public class GQLInterfaceEntityMetaDataInfos extends GQLAbstractEntityMetaDataIn
 	 * @param entity
 	 *            the {@link GQLEntityMetaData}
 	 */
-	public GQLInterfaceEntityMetaDataInfos(final GQLAbstractEntityMetaData entity) {
+	public GQLInterfaceEntityMetaDataInfos(final GQLEntityMetaData entity) {
 		super(entity);
 	}
 

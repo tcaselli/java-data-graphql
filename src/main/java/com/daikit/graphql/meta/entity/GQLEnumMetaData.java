@@ -3,7 +3,7 @@ package com.daikit.graphql.meta.entity;
 /**
  * GraphQL Enumeration meta data
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLEnumMetaData {
 
@@ -65,9 +65,11 @@ public class GQLEnumMetaData {
 	 *
 	 * @param enumClass
 	 *            the enumClass to set
+	 * @return this instance
 	 */
-	public void setEnumClass(final Class<? extends Enum<?>> enumClass) {
+	public GQLEnumMetaData setEnumClass(final Class<? extends Enum<?>> enumClass) {
 		this.enumClass = enumClass;
+		return this;
 	}
 
 	/**
@@ -86,9 +88,11 @@ public class GQLEnumMetaData {
 	 *
 	 * @param name
 	 *            the name to set
+	 * @return this instance
 	 */
-	public void setName(final String name) {
+	public GQLEnumMetaData setName(final String name) {
 		this.name = name;
+		return this;
 	}
 
 }

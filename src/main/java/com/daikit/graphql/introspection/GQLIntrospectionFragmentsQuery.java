@@ -3,7 +3,7 @@ package com.daikit.graphql.introspection;
 /**
  * Introspection fragments query
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public interface GQLIntrospectionFragmentsQuery {
 

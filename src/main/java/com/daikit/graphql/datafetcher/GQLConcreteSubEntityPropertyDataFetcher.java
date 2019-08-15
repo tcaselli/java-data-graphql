@@ -7,7 +7,7 @@ import graphql.schema.DataFetchingEnvironment;
  * Concrete sub entity data fetcher for a property referencing its abstract
  * super class
  * 
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLConcreteSubEntityPropertyDataFetcher implements DataFetcher<Object> {
 

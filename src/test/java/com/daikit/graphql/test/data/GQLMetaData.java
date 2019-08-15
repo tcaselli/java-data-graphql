@@ -2,9 +2,11 @@ package com.daikit.graphql.test.data;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import com.daikit.graphql.custommethod.abs.GQLCustomMethod1Arg;
 import com.daikit.graphql.custommethod.abs.GQLCustomMethod2Arg;
+import com.daikit.graphql.custommethod.abs.GQLCustomMethod5Arg;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeGetter;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
 import com.daikit.graphql.dynamicattribute.abs.GQLDynamicAttributeGetter;
@@ -12,27 +14,27 @@ import com.daikit.graphql.dynamicattribute.abs.GQLDynamicAttributeSetter;
 import com.daikit.graphql.enums.GQLScalarTypeEnum;
 import com.daikit.graphql.meta.GQLMetaDataModel;
 import com.daikit.graphql.meta.GQLMetaDataModelBuilder;
-import com.daikit.graphql.meta.attribute.GQLAttributeEmbeddedEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEnumMetaData;
-import com.daikit.graphql.meta.attribute.GQLAttributeListEmbeddedEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeListEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeListEnumMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeListScalarMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeScalarMetaData;
 import com.daikit.graphql.meta.custommethod.GQLAbstractMethodMetaData;
-import com.daikit.graphql.meta.custommethod.GQLMethodArgumentEmbeddedEntityMetaData;
+import com.daikit.graphql.meta.custommethod.GQLMethodArgumentEntityMetaData;
+import com.daikit.graphql.meta.custommethod.GQLMethodArgumentEnumMetaData;
+import com.daikit.graphql.meta.custommethod.GQLMethodArgumentListEntityMetaData;
+import com.daikit.graphql.meta.custommethod.GQLMethodArgumentListEnumMetaData;
+import com.daikit.graphql.meta.custommethod.GQLMethodArgumentListScalarMetaData;
 import com.daikit.graphql.meta.custommethod.GQLMethodArgumentScalarMetaData;
 import com.daikit.graphql.meta.custommethod.GQLMethodEntityMetaData;
-import com.daikit.graphql.meta.entity.GQLAbstractEntityMetaData;
-import com.daikit.graphql.meta.entity.GQLEmbeddedEntityMetaData;
 import com.daikit.graphql.meta.entity.GQLEntityMetaData;
 import com.daikit.graphql.meta.entity.GQLEnumMetaData;
 
 /**
  * Meta data for building test schema
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLMetaData {
 
@@ -47,7 +49,7 @@ public class GQLMetaData {
 
 	private static class GQLTestMetaDataModelBuilder {
 
-		private final Collection<GQLAbstractEntityMetaData> entityMetaDatas = new ArrayList<>();
+		private final Collection<GQLEntityMetaData> entityMetaDatas = new ArrayList<>();
 		private final Collection<GQLEnumMetaData> enumMetaDatas = new ArrayList<>();
 		private final Collection<GQLAbstractMethodMetaData> methodMetaDatas = new ArrayList<>();
 
@@ -66,6 +68,7 @@ public class GQLMetaData {
 			methodMetaDatas.add(buildCustomMethodQuery1());
 			methodMetaDatas.add(buildCustomMethodQuery2());
 			methodMetaDatas.add(buildCustomMethodMutation1());
+			methodMetaDatas.add(buildCustomMethodQuery3());
 
 			return new GQLMetaDataModelBuilder().build(enumMetaDatas, entityMetaDatas, methodMetaDatas);
 		}
@@ -73,32 +76,14 @@ public class GQLMetaData {
 		private GQLEntityMetaData buildEntity1() {
 			final GQLEntityMetaData entity = new GQLEntityMetaData(Entity1.class.getSimpleName(), Entity1.class,
 					AbstractEntity.class);
-
-			final GQLAttributeScalarMetaData idAttr = new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID);
-			idAttr.setNullable(false);
-			entity.addAttribute(idAttr);
-
-			final GQLAttributeScalarMetaData intAttr = new GQLAttributeScalarMetaData("intAttr", GQLScalarTypeEnum.INT);
-			intAttr.setNullable(false);
-			entity.addAttribute(intAttr);
-
-			final GQLAttributeScalarMetaData longAttr = new GQLAttributeScalarMetaData("longAttr",
-					GQLScalarTypeEnum.LONG);
-			longAttr.setNullable(false);
-			entity.addAttribute(longAttr);
-
-			final GQLAttributeScalarMetaData doubleAttr = new GQLAttributeScalarMetaData("doubleAttr",
-					GQLScalarTypeEnum.FLOAT);
-			doubleAttr.setNullable(false);
-			entity.addAttribute(doubleAttr);
-
+			entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullable(false));
+			entity.addAttribute(new GQLAttributeScalarMetaData("intAttr", GQLScalarTypeEnum.INT).setNullable(false));
+			entity.addAttribute(new GQLAttributeScalarMetaData("longAttr", GQLScalarTypeEnum.LONG).setNullable(false));
+			entity.addAttribute(
+					new GQLAttributeScalarMetaData("doubleAttr", GQLScalarTypeEnum.FLOAT).setNullable(false));
 			entity.addAttribute(new GQLAttributeScalarMetaData("stringAttr", GQLScalarTypeEnum.STRING));
-
-			final GQLAttributeScalarMetaData booleanAttr = new GQLAttributeScalarMetaData("booleanAttr",
-					GQLScalarTypeEnum.BOOLEAN);
-			booleanAttr.setNullable(false);
-			entity.addAttribute(booleanAttr);
-
+			entity.addAttribute(
+					new GQLAttributeScalarMetaData("booleanAttr", GQLScalarTypeEnum.BOOLEAN).setNullable(false));
 			entity.addAttribute(new GQLAttributeScalarMetaData("bigIntAttr", GQLScalarTypeEnum.BIG_INTEGER));
 			entity.addAttribute(new GQLAttributeScalarMetaData("bigDecimalAttr", GQLScalarTypeEnum.BIG_DECIMAL));
 			entity.addAttribute(new GQLAttributeScalarMetaData("bytesAttr", GQLScalarTypeEnum.BYTE));
@@ -121,8 +106,9 @@ public class GQLMetaData {
 			entity.addAttribute(new GQLAttributeEntityMetaData("entity2", Entity2.class));
 			entity.addAttribute(new GQLAttributeListEntityMetaData("entity3s", Entity3.class));
 			entity.addAttribute(new GQLAttributeListEntityMetaData("entity4s", Entity4.class));
-			entity.addAttribute(new GQLAttributeEmbeddedEntityMetaData("embeddedData1", EmbeddedData1.class));
-			entity.addAttribute(new GQLAttributeListEmbeddedEntityMetaData("embeddedData1s", EmbeddedData1.class));
+			entity.addAttribute(new GQLAttributeEntityMetaData("embeddedData1", EmbeddedData1.class).setEmbedded(true));
+			entity.addAttribute(
+					new GQLAttributeListEntityMetaData("embeddedData1s", EmbeddedData1.class).setEmbedded(true));
 
 			final IGQLDynamicAttributeGetter<Entity1, String> dynamicAttributeGetter = new GQLDynamicAttributeGetter<Entity1, String>(
 					"dynamicAttribute1") {
@@ -195,31 +181,17 @@ public class GQLMetaData {
 			return entity4;
 		}
 
-		private GQLEmbeddedEntityMetaData buildEmbeddedData1() {
-			final GQLEmbeddedEntityMetaData entity = new GQLEmbeddedEntityMetaData(EmbeddedData1.class.getSimpleName(),
-					EmbeddedData1.class);
+		private GQLEntityMetaData buildEmbeddedData1() {
+			final GQLEntityMetaData entity = new GQLEntityMetaData(EmbeddedData1.class.getSimpleName(),
+					EmbeddedData1.class).setEmbedded(true);
 
-			final GQLAttributeScalarMetaData intAttr = new GQLAttributeScalarMetaData("intAttr", GQLScalarTypeEnum.INT);
-			intAttr.setNullable(false);
-			entity.addAttribute(intAttr);
-
-			final GQLAttributeScalarMetaData longAttr = new GQLAttributeScalarMetaData("longAttr",
-					GQLScalarTypeEnum.LONG);
-			longAttr.setNullable(false);
-			entity.addAttribute(longAttr);
-
-			final GQLAttributeScalarMetaData doubleAttr = new GQLAttributeScalarMetaData("doubleAttr",
-					GQLScalarTypeEnum.FLOAT);
-			doubleAttr.setNullable(false);
-			entity.addAttribute(doubleAttr);
-
+			entity.addAttribute(new GQLAttributeScalarMetaData("intAttr", GQLScalarTypeEnum.INT).setNullable(false));
+			entity.addAttribute(new GQLAttributeScalarMetaData("longAttr", GQLScalarTypeEnum.LONG).setNullable(false));
+			entity.addAttribute(
+					new GQLAttributeScalarMetaData("doubleAttr", GQLScalarTypeEnum.FLOAT).setNullable(false));
 			entity.addAttribute(new GQLAttributeScalarMetaData("stringAttr", GQLScalarTypeEnum.STRING));
-
-			final GQLAttributeScalarMetaData booleanAttr = new GQLAttributeScalarMetaData("booleanAttr",
-					GQLScalarTypeEnum.BOOLEAN);
-			booleanAttr.setNullable(false);
-			entity.addAttribute(booleanAttr);
-
+			entity.addAttribute(
+					new GQLAttributeScalarMetaData("booleanAttr", GQLScalarTypeEnum.BOOLEAN).setNullable(false));
 			entity.addAttribute(new GQLAttributeScalarMetaData("bigIntAttr", GQLScalarTypeEnum.BIG_INTEGER));
 			entity.addAttribute(new GQLAttributeScalarMetaData("bigDecimalAttr", GQLScalarTypeEnum.BIG_DECIMAL));
 			entity.addAttribute(new GQLAttributeScalarMetaData("bytesAttr", GQLScalarTypeEnum.BYTE));
@@ -239,18 +211,18 @@ public class GQLMetaData {
 			entity.addAttribute(new GQLAttributeEnumMetaData("enumAttr", Enum1.class));
 			entity.addAttribute(new GQLAttributeListEnumMetaData("enumList", Enum1.class));
 			entity.addAttribute(new GQLAttributeListEnumMetaData("enumSet", Enum1.class));
-			entity.addAttribute(new GQLAttributeEmbeddedEntityMetaData("data2", EmbeddedData2.class));
-			entity.addAttribute(new GQLAttributeListEmbeddedEntityMetaData("data3s", EmbeddedData3.class));
+			entity.addAttribute(new GQLAttributeEntityMetaData("data2", EmbeddedData2.class).setEmbedded(true));
+			entity.addAttribute(new GQLAttributeListEntityMetaData("data3s", EmbeddedData3.class).setEmbedded(true));
 
 			return entity;
 		}
 
-		private GQLEmbeddedEntityMetaData buildEmbeddedData2() {
-			return new GQLEmbeddedEntityMetaData(EmbeddedData2.class.getSimpleName(), EmbeddedData2.class);
+		private GQLEntityMetaData buildEmbeddedData2() {
+			return new GQLEntityMetaData(EmbeddedData2.class.getSimpleName(), EmbeddedData2.class).setEmbedded(true);
 		}
 
-		private GQLEmbeddedEntityMetaData buildEmbeddedData3() {
-			return new GQLEmbeddedEntityMetaData(EmbeddedData3.class.getSimpleName(), EmbeddedData3.class);
+		private GQLEntityMetaData buildEmbeddedData3() {
+			return new GQLEntityMetaData(EmbeddedData3.class.getSimpleName(), EmbeddedData3.class).setEmbedded(true);
 		}
 
 		private GQLEnumMetaData buildEnumMetaData() {
@@ -288,9 +260,33 @@ public class GQLMetaData {
 				}
 			};
 			final GQLAbstractMethodMetaData metaData = new GQLMethodEntityMetaData(method, Entity1.class);
-			metaData.addArgument(
-					new GQLMethodArgumentEmbeddedEntityMetaData(method.getArgName(0), EmbeddedData1.class));
+			metaData.addArgument(new GQLMethodArgumentEntityMetaData(method.getArgName(0), EmbeddedData1.class));
 			metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgName(1), GQLScalarTypeEnum.STRING));
+			return metaData;
+		}
+
+		private GQLAbstractMethodMetaData buildCustomMethodQuery3() {
+			final GQLCustomMethod5Arg<Entity1, Enum1, List<String>, List<Enum1>, List<EmbeddedData1>, String> method = new GQLCustomMethod5Arg<Entity1, Enum1, List<String>, List<Enum1>, List<EmbeddedData1>, String>(
+					"customMethodQuery3", false, "arg1", "arg2", "arg3", "arg4", "arg5") {
+				@Override
+				public Entity1 apply(Enum1 arg1, List<String> arg2, List<Enum1> arg3, List<EmbeddedData1> arg4,
+						String arg5) {
+					final Entity1 result = new Entity1();
+					result.setEnumAttr(arg1);
+					result.setStringList(arg2);
+					result.setEnumList(arg3);
+					result.setEmbeddedData1s(arg4);
+					result.setStringAttr(arg5);
+					return result;
+				}
+			};
+			final GQLAbstractMethodMetaData metaData = new GQLMethodEntityMetaData(method, Entity1.class);
+			metaData.addArgument(new GQLMethodArgumentEnumMetaData(method.getArgName(0), Enum1.class));
+			metaData.addArgument(
+					new GQLMethodArgumentListScalarMetaData(method.getArgName(1), GQLScalarTypeEnum.STRING));
+			metaData.addArgument(new GQLMethodArgumentListEnumMetaData(method.getArgName(2), Enum1.class));
+			metaData.addArgument(new GQLMethodArgumentListEntityMetaData(method.getArgName(3), EmbeddedData1.class));
+			metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgName(4), GQLScalarTypeEnum.STRING));
 			return metaData;
 		}
 

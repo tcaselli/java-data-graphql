@@ -32,7 +32,7 @@ import graphql.Scalars;
 /**
  * Test verifying schema is built correctly
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  *
  */
 public class SchemaBuildTest extends AbstractTestSuite {
@@ -326,7 +326,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		// QueryType
 		final IntrospectionFullType queryType = getFullType(introspection, GQLSchemaConstants.QUERY_TYPE);
 		// 10 = 4 entities * 2 queries + 2 custom method queries
-		Assert.assertEquals(10, queryType.getFields().size());
+		Assert.assertEquals(11, queryType.getFields().size());
 		// - check all queries are available
 		final List<String> queryNames = new ArrayList<>();
 		Arrays.asList(Entity1.class, Entity2.class, Entity3.class, Entity4.class).stream().forEach(clazz -> {

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Entity entity class 2
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class Entity2 extends AbstractEntity {
 

@@ -2,7 +2,7 @@ package com.daikit.graphql.test.introspection;
 /**
  * Introspection input value
  * 
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class IntrospectionInputValue {
 	private String name;

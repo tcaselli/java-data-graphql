@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * GraphQL list load result wrapper
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLListLoadResult {
 

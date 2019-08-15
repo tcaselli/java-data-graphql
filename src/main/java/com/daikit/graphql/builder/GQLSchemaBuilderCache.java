@@ -21,7 +21,7 @@ import graphql.schema.GraphQLScalarType;
 /**
  * Schema builder cache shared by all schema fragment builders
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLSchemaBuilderCache {
 

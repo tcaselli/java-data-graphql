@@ -23,7 +23,7 @@ import graphql.schema.GraphQLObjectType;
 /**
  * Type builder for mutations
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 
@@ -69,9 +69,11 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 
 		logger.debug("Build mutation types for entities...");
 		final List<GraphQLFieldDefinition> saveFieldDefinitions = metaDataModel.getNonEmbeddedConcretes().stream()
-				.map(infos -> buildSaveMutationFieldDefinition(infos)).collect(Collectors.toList());
+				.filter(infos -> infos.getEntity().isSaveable()).map(infos -> buildSaveMutationFieldDefinition(infos))
+				.collect(Collectors.toList());
 		builder.fields(saveFieldDefinitions);
 		final List<GraphQLFieldDefinition> deleteFieldDefinitions = metaDataModel.getNonEmbeddedConcretes().stream()
+				.filter(infos -> infos.getEntity().isDeletable())
 				.map(infos -> buildDeleteMutationFieldDefinition(infos)).collect(Collectors.toList());
 		builder.fields(deleteFieldDefinitions);
 

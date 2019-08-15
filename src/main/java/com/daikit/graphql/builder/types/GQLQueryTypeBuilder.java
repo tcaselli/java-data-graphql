@@ -13,16 +13,14 @@ import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.data.output.GQLListLoadResult;
 import com.daikit.graphql.meta.GQLMetaDataModel;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
-import com.daikit.graphql.meta.attribute.GQLAttributeEmbeddedEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEnumMetaData;
-import com.daikit.graphql.meta.attribute.GQLAttributeListEmbeddedEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeListEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeListEnumMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeListScalarMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeScalarMetaData;
 import com.daikit.graphql.meta.custommethod.GQLAbstractMethodMetaData;
-import com.daikit.graphql.meta.entity.GQLAbstractEntityMetaData;
+import com.daikit.graphql.meta.entity.GQLEntityMetaData;
 import com.daikit.graphql.meta.internal.GQLAbstractEntityMetaDataInfos;
 import com.daikit.graphql.utils.Assert;
 import com.daikit.graphql.utils.Message;
@@ -39,7 +37,7 @@ import graphql.schema.GraphQLObjectType;
 /**
  * Type builder for queries
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 
@@ -87,17 +85,18 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 		final List<GraphQLFieldDefinition> getAllFieldDefinitions = new ArrayList<>();
 
 		logger.debug("Build query types for interfaces...");
-
-		metaDataModel.getNonEmbeddedInterfaces().forEach(infos -> {
-			getByIdFieldDefinitions.add(buildGetSingleQueryFieldDefinitions(infos, true));
-			getAllFieldDefinitions.add(buildGetAllQueryFieldDefinitions(infos, true));
-		});
+		metaDataModel.getNonEmbeddedInterfaces().stream().filter(infos -> infos.getEntity().isReadable())
+				.forEach(infos -> {
+					getByIdFieldDefinitions.add(buildGetSingleQueryFieldDefinitions(infos, true));
+					getAllFieldDefinitions.add(buildGetAllQueryFieldDefinitions(infos, true));
+				});
 
 		logger.debug("Build query types for entities...");
-		metaDataModel.getNonEmbeddedConcretes().forEach(infos -> {
-			getByIdFieldDefinitions.add(buildGetSingleQueryFieldDefinitions(infos, false));
-			getAllFieldDefinitions.add(buildGetAllQueryFieldDefinitions(infos, false));
-		});
+		metaDataModel.getNonEmbeddedConcretes().stream().filter(infos -> infos.getEntity().isReadable())
+				.forEach(infos -> {
+					getByIdFieldDefinitions.add(buildGetSingleQueryFieldDefinitions(infos, false));
+					getAllFieldDefinitions.add(buildGetAllQueryFieldDefinitions(infos, false));
+				});
 
 		builder.fields(getByIdFieldDefinitions);
 		builder.fields(getAllFieldDefinitions);
@@ -233,7 +232,7 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 		return builder.build();
 	}
 
-	private List<GraphQLInputObjectField> buildQueryFilterInputObjectFields(final GQLAbstractEntityMetaData entity) {
+	private List<GraphQLInputObjectField> buildQueryFilterInputObjectFields(final GQLEntityMetaData entity) {
 		return entity.getAttributes().stream().filter(attribute -> attribute.isFilterable())
 				.map(attribute -> buildQueryFilterInputObjectField(attribute)).filter(Objects::nonNull)
 				.collect(Collectors.toList());
@@ -252,20 +251,20 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 			field = buildInputField(name, description, getCache().getInputEnumFilterOperators()
 					.get(((GQLAttributeEnumMetaData) attribute).getEnumClass()));
 		} else if (attribute instanceof GQLAttributeEntityMetaData) {
-			field = buildInputField(name + GQLSchemaConstants.ID_SUFFIX, "Filter [id] of [" + attribute.getName() + "]",
-					Scalars.GraphQLID); // TODO add operator
+			if (((GQLAttributeEntityMetaData) attribute).isEmbedded()) {
+
+			} else {
+				field = buildInputField(name + GQLSchemaConstants.ID_SUFFIX,
+						"Filter [id] of [" + attribute.getName() + "]", Scalars.GraphQLID);
+				// TODO add operator
+			}
 		} else if (attribute instanceof GQLAttributeListEnumMetaData) {
 			field = buildInputField(name, description,
-					new GraphQLList(getCache().getEnumType(((GQLAttributeListEnumMetaData) attribute).getEnumClass()))); // TODO
-																															// add
-																															// operator
+					new GraphQLList(getCache().getEnumType(((GQLAttributeListEnumMetaData) attribute).getEnumClass())));
+			// TODO add operator
 		} else if (attribute instanceof GQLAttributeListEntityMetaData) {
 			// Not handled
 		} else if (attribute instanceof GQLAttributeListScalarMetaData) {
-			// Not handled
-		} else if (attribute instanceof GQLAttributeEmbeddedEntityMetaData) {
-			// Not handled
-		} else if (attribute instanceof GQLAttributeListEmbeddedEntityMetaData) {
 			// Not handled
 		} else {
 			throw new IllegalArgumentException(

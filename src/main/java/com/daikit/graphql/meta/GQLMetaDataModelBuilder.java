@@ -8,8 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.daikit.graphql.meta.custommethod.GQLAbstractMethodMetaData;
-import com.daikit.graphql.meta.entity.GQLAbstractEntityMetaData;
-import com.daikit.graphql.meta.entity.GQLEmbeddedEntityMetaData;
+import com.daikit.graphql.meta.entity.GQLEntityMetaData;
 import com.daikit.graphql.meta.entity.GQLEnumMetaData;
 import com.daikit.graphql.meta.internal.GQLAbstractEntityMetaDataInfos;
 import com.daikit.graphql.meta.internal.GQLConcreteEntityMetaDataInfos;
@@ -18,7 +17,7 @@ import com.daikit.graphql.meta.internal.GQLInterfaceEntityMetaDataInfos;
 /**
  * Builder for {@link GQLMetaDataModel}
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLMetaDataModelBuilder {
 
@@ -32,15 +31,14 @@ public class GQLMetaDataModelBuilder {
 	 * @param enumMetaDatas
 	 *            the collection of all registered {@link GQLEnumMetaData}
 	 * @param entityMetaDatas
-	 *            the collection of all registered
-	 *            {@link GQLAbstractEntityMetaData}
+	 *            the collection of all registered {@link GQLEntityMetaData}
 	 * @param methodMetaDatas
 	 *            the collection of all registered
 	 *            {@link GQLAbstractMethodMetaData}
 	 * @return the created {@link GQLMetaDataModel}
 	 */
 	public GQLMetaDataModel build(final Collection<GQLEnumMetaData> enumMetaDatas,
-			final Collection<GQLAbstractEntityMetaData> entityMetaDatas,
+			final Collection<GQLEntityMetaData> entityMetaDatas,
 			final Collection<GQLAbstractMethodMetaData> methodMetaDatas) {
 		final Comparator<GQLEnumMetaData> enumComparator = new Comparator<GQLEnumMetaData>() {
 			@Override
@@ -63,7 +61,7 @@ public class GQLMetaDataModelBuilder {
 		Collections.sort(metaDataModel.getEnums(), enumComparator);
 
 		// Create GQLEntityMetaDataInfos
-		for (final GQLAbstractEntityMetaData entityMetaData : entityMetaDatas) {
+		for (final GQLEntityMetaData entityMetaData : entityMetaDatas) {
 			GQLAbstractEntityMetaDataInfos infos;
 			if (entityMetaData.isConcrete()) {
 				infos = new GQLConcreteEntityMetaDataInfos(entityMetaData);
@@ -72,7 +70,6 @@ public class GQLMetaDataModelBuilder {
 				infos = new GQLInterfaceEntityMetaDataInfos(entityMetaData);
 				metaDataModel.getAllInterfaces().add((GQLInterfaceEntityMetaDataInfos) infos);
 			}
-			infos.setEmbedded(entityMetaData instanceof GQLEmbeddedEntityMetaData);
 		}
 
 		// Sort them

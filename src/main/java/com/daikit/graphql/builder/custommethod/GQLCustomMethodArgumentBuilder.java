@@ -6,7 +6,7 @@ import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 /**
  * Query/Mutation method argument builder
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLCustomMethodArgumentBuilder extends GQLAbstractSchemaSubBuilder {
 

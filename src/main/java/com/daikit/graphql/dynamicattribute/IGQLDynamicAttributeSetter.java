@@ -3,7 +3,7 @@ package com.daikit.graphql.dynamicattribute;
 /**
  * Interface for dynamic attribute setters
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  *
  * @param <ENTITY_TYPE>
  *            the type of the entity this dynamic attribute is registered on

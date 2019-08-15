@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.daikit.graphql.data.output.GQLDeleteResult;
+import com.daikit.graphql.test.data.EmbeddedData1;
 import com.daikit.graphql.test.data.Entity1;
 
 import graphql.ExecutionInput;
@@ -14,8 +15,8 @@ import graphql.ExecutionResult;
 
 /**
  * Tests verifying mutations are ran correctly
- *
- * @author tcaselli
+ * 
+ * @author Thibaut Caselli
  */
 @SuppressWarnings("javadoc")
 public class MutationExecutionTest extends AbstractTestSuite {
@@ -36,6 +37,8 @@ public class MutationExecutionTest extends AbstractTestSuite {
 
 	@Test
 	public void testSaveEntity() {
+		final EmbeddedData1 data1 = new EmbeddedData1();
+		data1.setStringAttr("data1");
 		final String id = "3";
 		final Entity1 entity1 = getEntity(id);
 		Assert.assertNotNull(entity1);
@@ -47,12 +50,15 @@ public class MutationExecutionTest extends AbstractTestSuite {
 					{
 						put("id", id);
 						put("intAttr", 150);
+						put("embeddedData1", data1);
 					}
 				}).build()));
 		final Entity1 entity1Bis = toObject(result, Entity1.class);
 		Assert.assertEquals(150, entity1Bis.getIntAttr());
+		Assert.assertEquals("data1", entity1Bis.getEmbeddedData1().getStringAttr());
 		final Entity1 entity1Ter = getEntity(id);
 		Assert.assertEquals(150, entity1Ter.getIntAttr());
+		Assert.assertEquals("data1", entity1Ter.getEmbeddedData1().getStringAttr());
 	}
 
 	@Test

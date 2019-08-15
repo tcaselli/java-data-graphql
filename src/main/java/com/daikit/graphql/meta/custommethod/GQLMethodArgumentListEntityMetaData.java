@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * GraphQL dynamic method argument {@link List} of entities meta data
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLMethodArgumentListEntityMetaData extends GQLAbstractMethodArgumentMetaData {
 
@@ -66,9 +66,11 @@ public class GQLMethodArgumentListEntityMetaData extends GQLAbstractMethodArgume
 	 *
 	 * @param foreignClass
 	 *            the foreignClass to set
+	 * @return this instance
 	 */
-	public void setForeignClass(final Class<?> foreignClass) {
+	public GQLMethodArgumentListEntityMetaData setForeignClass(final Class<?> foreignClass) {
 		this.foreignClass = foreignClass;
+		return this;
 	}
 
 }

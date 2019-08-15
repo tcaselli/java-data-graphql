@@ -12,7 +12,7 @@ import graphql.schema.GraphQLObjectType;
 /**
  * GQL query order by output type builder
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLQueryOrderByOutputTypeBuilder extends GQLAbstractTypesBuilder {
 

@@ -5,7 +5,7 @@ import com.daikit.graphql.custommethod.abs.GQLAbstractCustomMethod;
 /**
  * GraphQL dynamic method returning an embedded entity meta data
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLMethodEntityMetaData extends GQLAbstractMethodMetaData {
 
@@ -61,9 +61,11 @@ public class GQLMethodEntityMetaData extends GQLAbstractMethodMetaData {
 	/**
 	 * @param entityClass
 	 *            the entityClass to set
+	 * @return this instance
 	 */
-	public void setEntityClass(final Class<?> entityClass) {
+	public GQLMethodEntityMetaData setEntityClass(final Class<?> entityClass) {
 		this.entityClass = entityClass;
+		return this;
 	}
 
 }

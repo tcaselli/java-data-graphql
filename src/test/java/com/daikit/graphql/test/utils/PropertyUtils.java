@@ -12,7 +12,7 @@ import com.daikit.graphql.utils.Message;
 /**
  * Utility class for setting and getting values from/in object properties
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class PropertyUtils {
 

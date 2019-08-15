@@ -3,7 +3,7 @@ package com.daikit.graphql.data.output;
 /**
  * Result for delete method
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLDeleteResult {
 

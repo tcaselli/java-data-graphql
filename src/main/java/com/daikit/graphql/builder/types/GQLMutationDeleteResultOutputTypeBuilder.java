@@ -10,7 +10,7 @@ import graphql.schema.GraphQLObjectType;
 /**
  * GQL delete entity mutation output type
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLMutationDeleteResultOutputTypeBuilder extends GQLAbstractTypesBuilder {
 

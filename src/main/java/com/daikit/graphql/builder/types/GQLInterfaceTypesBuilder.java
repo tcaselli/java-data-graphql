@@ -23,7 +23,7 @@ import graphql.schema.TypeResolver;
 /**
  * Type builder for entity abstract super classes
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLInterfaceTypesBuilder extends GQLAbstractTypesBuilder {
 
@@ -85,7 +85,7 @@ public class GQLInterfaceTypesBuilder extends GQLAbstractTypesBuilder {
 
 		// Add id Field
 		GraphQLFieldDefinition idFieldDefinition = null;
-		if (!infos.isEmbedded()) {
+		if (!infos.getEntity().isEmbedded()) {
 			idFieldDefinition = buildIdFieldDefinition();
 			fieldDefinitions.add(idFieldDefinition);
 		}

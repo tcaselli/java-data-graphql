@@ -7,7 +7,7 @@ import com.daikit.graphql.custommethod.abs.GQLAbstractCustomMethod;
 /**
  * GraphQL dynamic method returning a {@link List} of entities meta data
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLMethodListEntityMetaData extends GQLAbstractMethodMetaData {
 
@@ -67,9 +67,11 @@ public class GQLMethodListEntityMetaData extends GQLAbstractMethodMetaData {
 	 *
 	 * @param foreignClass
 	 *            the foreignClass to set
+	 * @return this instance
 	 */
-	public void setForeignClass(final Class<?> foreignClass) {
+	public GQLMethodListEntityMetaData setForeignClass(final Class<?> foreignClass) {
 		this.foreignClass = foreignClass;
+		return this;
 	}
 
 }

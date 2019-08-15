@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Introspection type field
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class IntrospectionTypeField {
 

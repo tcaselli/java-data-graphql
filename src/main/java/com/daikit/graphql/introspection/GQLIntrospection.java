@@ -9,7 +9,7 @@ import graphql.introspection.IntrospectionQuery;
 /**
  * Introspection methods
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLIntrospection {
 

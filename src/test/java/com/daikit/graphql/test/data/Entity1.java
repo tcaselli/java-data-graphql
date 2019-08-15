@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * Entity entity class 1
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class Entity1 extends AbstractEntity {
 

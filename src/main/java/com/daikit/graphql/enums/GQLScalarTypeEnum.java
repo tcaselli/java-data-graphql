@@ -3,7 +3,7 @@ package com.daikit.graphql.enums;
 /**
  * GraphQL Scalar types
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 @SuppressWarnings("javadoc")
 public enum GQLScalarTypeEnum {

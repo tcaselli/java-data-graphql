@@ -7,7 +7,7 @@ import com.daikit.graphql.meta.GQLMetaDataModel;
 /**
  * Entity and Interface reference map builder
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLReferencesBuilder extends GQLAbstractSchemaSubBuilder {
 

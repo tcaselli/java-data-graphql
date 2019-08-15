@@ -28,7 +28,7 @@ import graphql.language.VariableReference;
 /**
  * GraphQL data fetcher utility class
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public abstract class GQLDataFetcherUtils {
 

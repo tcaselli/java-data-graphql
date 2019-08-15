@@ -16,10 +16,8 @@ import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.meta.GQLMetaDataModel;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
-import com.daikit.graphql.meta.attribute.GQLAttributeEmbeddedEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEnumMetaData;
-import com.daikit.graphql.meta.attribute.GQLAttributeListEmbeddedEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeListEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeListEnumMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeListScalarMetaData;
@@ -39,7 +37,7 @@ import graphql.schema.GraphQLObjectType;
 /**
  * Type builder for entities in save inputs
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuilder {
 
@@ -112,7 +110,7 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 			GraphQLInputObjectType inputObjectType = getCache().getInputEntityTypes()
 					.get(infos.getEntity().getEntityClass());
 			if (inputObjectType == null) {
-				if (!infos.isEmbedded() || infos.isEmbedded() && infos.isConcrete()) {
+				if (!infos.getEntity().isEmbedded() || infos.getEntity().isEmbedded() && infos.isConcrete()) {
 					// Build for concrete embedded or for non embedded
 					inputObjectType = buildInputEntity(infos);
 				} else {
@@ -138,8 +136,8 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 			} else {
 				final GraphQLInputObjectType.Builder builder = GraphQLInputObjectType.newInputObject();
 				builder.name(infos.getEntity().getName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
-				builder.description("Object input type for " + (infos.isEmbedded() ? "embedded " : "") + "entity ["
-						+ infos.getEntity().getName() + "]");
+				builder.description("Object input type for " + (infos.getEntity().isEmbedded() ? "embedded " : "")
+						+ "entity [" + infos.getEntity().getName() + "]");
 				// set interface
 				final List<GraphQLInputObjectField> fields = new ArrayList<>();
 				// Add id input field if existing
@@ -180,54 +178,57 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 				inputFields.add(buildInputField(name, description,
 						getCache().getEnumType(((GQLAttributeEnumMetaData) attribute).getEnumClass())));
 			} else if (attribute instanceof GQLAttributeEntityMetaData) {
-				inputFields.add(buildInputField(name + GQLSchemaConstants.ID_SUFFIX,
-						"Input field [id] of [" + attribute.getName() + "]" + getDescriptionNullableSuffix(attribute),
-						Scalars.GraphQLID));
+				if (((GQLAttributeEntityMetaData) attribute).isEmbedded()) {
+					final GraphQLInputObjectType existingInputEntityType = getOrBuildAndRegisterInputEntity(
+							((GQLAttributeEntityMetaData) attribute).getEntityClass());
+					inputFields.add(buildInputField(name, "Input field [object-embedded] [" + attribute.getName() + "]"
+							+ getDescriptionNullableSuffix(attribute), existingInputEntityType));
+				} else {
+					inputFields.add(buildInputField(name + GQLSchemaConstants.ID_SUFFIX, "Input field [id] of ["
+							+ attribute.getName() + "]" + getDescriptionNullableSuffix(attribute), Scalars.GraphQLID));
+				}
 			} else if (attribute instanceof GQLAttributeListEnumMetaData) {
 				inputFields.add(buildInputField(name, description, new GraphQLList(
 						getCache().getEnumType(((GQLAttributeListEnumMetaData) attribute).getEnumClass()))));
 			} else if (attribute instanceof GQLAttributeListEntityMetaData) {
-				// If the attribute accepts cascade create/update
-				if (((GQLAttributeListEntityMetaData) attribute).isCascadeSave()) {
-					final GraphQLInputType foreignInputType = getCache().getInputEntityTypes()
-							.get(((GQLAttributeListEntityMetaData) attribute).getForeignClass());
-					if (foreignInputType == null) {
-						logger.debug(Message.format("Input save entity field attribute [{}] build deferred",
-								attribute.getName()));
-						lazyEntities.computeIfAbsent(infos, k -> new HashSet<>())
-								.add(((GQLAttributeListEntityMetaData) attribute).getForeignClass());
-					} else {
-						inputFields.add(buildInputField(
-								name.endsWith(GQLSchemaConstants.PLURAL_SUFFIX)
-										? name
-										: name + GQLSchemaConstants.PLURAL_SUFFIX,
-								"Input field [Array] of [" + attribute.getName() + "]"
-										+ getDescriptionNullableSuffix(attribute),
-								new GraphQLList(foreignInputType)));
+				if (((GQLAttributeListEntityMetaData) attribute).isEmbedded()) {
+					final GraphQLInputObjectType existingInputEntityType = getOrBuildAndRegisterInputEntity(
+							((GQLAttributeListEntityMetaData) attribute).getForeignClass());
+					inputFields.add(buildInputField(name,
+							"Input field [object-embedded] [" + attribute.getName() + "]"
+									+ getDescriptionNullableSuffix(attribute),
+							new GraphQLList(existingInputEntityType)));
+				} else {
+					// If the attribute accepts cascade create/update
+					if (((GQLAttributeListEntityMetaData) attribute).isCascadeSave()) {
+						final GraphQLInputType foreignInputType = getCache().getInputEntityTypes()
+								.get(((GQLAttributeListEntityMetaData) attribute).getForeignClass());
+						if (foreignInputType == null) {
+							logger.debug(Message.format("Input save entity field attribute [{}] build deferred",
+									attribute.getName()));
+							lazyEntities.computeIfAbsent(infos, k -> new HashSet<>())
+									.add(((GQLAttributeListEntityMetaData) attribute).getForeignClass());
+						} else {
+							inputFields.add(buildInputField(
+									name.endsWith(GQLSchemaConstants.PLURAL_SUFFIX)
+											? name
+											: name + GQLSchemaConstants.PLURAL_SUFFIX,
+									"Input field [Array] of [" + attribute.getName() + "]"
+											+ getDescriptionNullableSuffix(attribute),
+									new GraphQLList(foreignInputType)));
+						}
 					}
+					inputFields.add(buildInputField(
+							(name.endsWith(GQLSchemaConstants.PLURAL_SUFFIX)
+									? name.substring(0, name.length() - 1)
+									: name) + GQLSchemaConstants.IDS_SUFFIX,
+							"Input field [Array] of [id] of [" + attribute.getName() + "]"
+									+ getDescriptionNullableSuffix(attribute),
+							new GraphQLList(Scalars.GraphQLID)));
 				}
-				inputFields.add(buildInputField(
-						(name.endsWith(GQLSchemaConstants.PLURAL_SUFFIX) ? name.substring(0, name.length() - 1) : name)
-								+ GQLSchemaConstants.IDS_SUFFIX,
-						"Input field [Array] of [id] of [" + attribute.getName() + "]"
-								+ getDescriptionNullableSuffix(attribute),
-						new GraphQLList(Scalars.GraphQLID)));
 			} else if (attribute instanceof GQLAttributeListScalarMetaData) {
 				inputFields.add(buildInputField(name, description, new GraphQLList(
 						getCache().getScalarType(((GQLAttributeListScalarMetaData) attribute).getScalarType()))));
-			} else if (attribute instanceof GQLAttributeEmbeddedEntityMetaData) {
-				final GraphQLInputObjectType existingInputEntityType = getOrBuildAndRegisterInputEntity(
-						((GQLAttributeEmbeddedEntityMetaData) attribute).getEntityClass());
-				inputFields.add(buildInputField(name, "Input field [object-embedded] [" + attribute.getName() + "]"
-						+ getDescriptionNullableSuffix(attribute), existingInputEntityType));
-			} else if (attribute instanceof GQLAttributeListEmbeddedEntityMetaData) {
-				final GraphQLInputObjectType existingInputEntityType = getOrBuildAndRegisterInputEntity(
-						((GQLAttributeListEmbeddedEntityMetaData) attribute).getForeignClass());
-				inputFields
-						.add(buildInputField(name,
-								"Input field [object-embedded] [" + attribute.getName() + "]"
-										+ getDescriptionNullableSuffix(attribute),
-								new GraphQLList(existingInputEntityType)));
 			} else {
 				throw new IllegalArgumentException(
 						Message.format("Attribute could not be mapped to GraphQL [{}]", attribute));

@@ -13,7 +13,7 @@ import graphql.schema.GraphQLNonNull;
 /**
  * GQL query order by input type builder
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLQueryOrderByInputTypeBuilder extends GQLAbstractTypesBuilder {
 

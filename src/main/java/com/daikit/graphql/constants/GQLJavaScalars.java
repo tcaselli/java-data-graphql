@@ -21,7 +21,7 @@ import graphql.schema.GraphQLScalarType;
 /**
  * Custom scalar special for java
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLJavaScalars {
 

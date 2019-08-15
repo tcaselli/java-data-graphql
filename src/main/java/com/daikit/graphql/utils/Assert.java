@@ -6,7 +6,7 @@ import graphql.AssertException;
 /**
  * Assert utility methods
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class Assert {
 

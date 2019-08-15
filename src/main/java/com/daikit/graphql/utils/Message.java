@@ -5,7 +5,7 @@ import org.slf4j.helpers.MessageFormatter;
 /**
  * Message utility class
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class Message {
 

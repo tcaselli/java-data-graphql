@@ -11,7 +11,7 @@ import com.daikit.graphql.custommethod.IGQLAbstractCustomMethod;
 /**
  * Custom method that will be added to GQL Schema.
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  * @param <OUTPUT_TYPE>
  *            the output type
  */

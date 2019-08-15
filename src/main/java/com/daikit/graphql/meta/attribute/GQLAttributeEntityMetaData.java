@@ -3,11 +3,12 @@ package com.daikit.graphql.meta.attribute;
 /**
  * GraphQL attribute entity meta data
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLAttributeEntityMetaData extends GQLAbstractAttributeMetaData {
 
 	private Class<?> entityClass;
+	private boolean embedded;
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -60,9 +61,28 @@ public class GQLAttributeEntityMetaData extends GQLAbstractAttributeMetaData {
 	/**
 	 * @param entityClass
 	 *            the entityClass to set
+	 * @return this instance
 	 */
-	public void setEntityClass(final Class<?> entityClass) {
+	public GQLAttributeEntityMetaData setEntityClass(final Class<?> entityClass) {
 		this.entityClass = entityClass;
+		return this;
+	}
+
+	/**
+	 * @return the embedded
+	 */
+	public boolean isEmbedded() {
+		return embedded;
+	}
+
+	/**
+	 * @param embedded
+	 *            the embedded to set
+	 * @return this instance
+	 */
+	public GQLAttributeEntityMetaData setEmbedded(boolean embedded) {
+		this.embedded = embedded;
+		return this;
 	}
 
 }

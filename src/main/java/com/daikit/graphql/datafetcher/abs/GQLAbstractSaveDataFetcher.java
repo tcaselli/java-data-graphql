@@ -22,7 +22,7 @@ import graphql.schema.DataFetchingEnvironment;
  * used in {@link GQLSchemaBuilder} for buildSchema method "save entity" data
  * fetcher argument
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public abstract class GQLAbstractSaveDataFetcher extends GQLAbstractDataFetcher<Object> {
 

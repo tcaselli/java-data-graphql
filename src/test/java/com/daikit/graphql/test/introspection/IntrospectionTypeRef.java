@@ -3,7 +3,7 @@ package com.daikit.graphql.test.introspection;
 /**
  * Introspection type reference
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class IntrospectionTypeRef {
 	private IntrospectionTypeKindEnum kind;

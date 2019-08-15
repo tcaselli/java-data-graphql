@@ -3,22 +3,19 @@ package com.daikit.graphql.meta.internal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.daikit.graphql.meta.entity.GQLAbstractEntityMetaData;
 import com.daikit.graphql.meta.entity.GQLEntityMetaData;
 
 /**
  * Meta data computed informations for {@link GQLEntityMetaData}
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public abstract class GQLAbstractEntityMetaDataInfos {
 
-	private final GQLAbstractEntityMetaData entity;
+	private final GQLEntityMetaData entity;
 	private GQLAbstractEntityMetaDataInfos superEntity;
 	// Super interfaces recursively
 	private final List<GQLAbstractEntityMetaDataInfos> superInterfaces = new ArrayList<>();
-
-	private boolean embedded;
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -30,7 +27,7 @@ public abstract class GQLAbstractEntityMetaDataInfos {
 	 * @param entity
 	 *            the GQLAbstractEntityMetaData
 	 */
-	public GQLAbstractEntityMetaDataInfos(final GQLAbstractEntityMetaData entity) {
+	public GQLAbstractEntityMetaDataInfos(final GQLEntityMetaData entity) {
 		this.entity = entity;
 	}
 
@@ -52,7 +49,7 @@ public abstract class GQLAbstractEntityMetaDataInfos {
 	/**
 	 * @return the entity
 	 */
-	public GQLAbstractEntityMetaData getEntity() {
+	public GQLEntityMetaData getEntity() {
 		return entity;
 	}
 
@@ -76,21 +73,6 @@ public abstract class GQLAbstractEntityMetaDataInfos {
 	 */
 	public List<GQLAbstractEntityMetaDataInfos> getSuperInterfaces() {
 		return superInterfaces;
-	}
-
-	/**
-	 * @return the embedded
-	 */
-	public boolean isEmbedded() {
-		return embedded;
-	}
-
-	/**
-	 * @param embedded
-	 *            the embedded to set
-	 */
-	public void setEmbedded(final boolean embedded) {
-		this.embedded = embedded;
 	}
 
 }

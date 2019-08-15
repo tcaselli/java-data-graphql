@@ -9,7 +9,7 @@ import com.daikit.graphql.data.output.GQLPaging;
 /**
  * List load result for {@link Entity1}
  * 
- * @author tcaselli
+ * @author Thibaut Caselli
  *
  */
 public class Entity1ListLoadResult {

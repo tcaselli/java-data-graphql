@@ -3,7 +3,7 @@ package com.daikit.graphql.data.output;
 /**
  * Paging meta informations for output
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLPaging {
 

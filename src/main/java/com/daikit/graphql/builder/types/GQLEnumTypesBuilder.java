@@ -13,7 +13,7 @@ import graphql.schema.GraphQLEnumType;
 /**
  * Type builder for enumerations
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLEnumTypesBuilder extends GQLAbstractSchemaSubBuilder {
 

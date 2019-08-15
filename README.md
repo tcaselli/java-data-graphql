@@ -44,8 +44,11 @@ Supported types :
 
 ```java
 // Scalar types
-int, long, double, short, char, boolean, Integer, Long, Double, Short, Character, Boolean, String, BigInteger, BigDecimal, byte[], File, Date, LocalDate, LocalDateTime
-// List of scalar. You can have other types of collection (like Set) in your entities, but GraphQL will serialize them as JSON array anyway, if you want to handle specific collections deserialization you can do it in your data fetchers.
+int, long, double, short, char, boolean, Integer, Long, Double, Short, Character, Boolean, String, 
+BigInteger, BigDecimal, byte[], File, Date, LocalDate, LocalDateTime
+// List of scalar. You can have other types of collection (like Set) in your entities, 
+// but GraphQL will serialize them as JSON array anyway, if you want to handle specific
+// collections deserialization you can do it in your data fetchers.
 List<Integer>, List<Long> ...
 // Enumerations
 CustomEnum, List<CustomEnum>
@@ -109,7 +112,9 @@ For each of these custom methods you will need to create a custom method object.
 ```java
 // Example of query method returning an Entity
 final GQLCustomMethod1Arg<Entity1, String> method = new GQLCustomMethod1Arg<Entity1, String>(
-    "customMethodQuery", false) { // "customMethodQuery" = method name, false = "this is a query not a mutation"
+    "customMethodQuery", false) { 
+    // "customMethodQuery" = method name
+    // false = "this is a query not a mutation"
     @Override
     public Entity1 apply() {
         // Do something and return an Entity1
@@ -124,7 +129,10 @@ final GQLAbstractMethodMetaData metaData = new GQLMethodEntityMetaData(method, E
 ```java
 // Example of mutation method returning an Integer and taking 1 argument
 final GQLCustomMethod1Arg<Integer, String> method = new GQLCustomMethod1Arg<Integer, String>(
-    "customMethodMutation", true, "arg1") { // "customMethodMutation" = method name, true = "this is mutation", "arg1" = argument name within the schema
+    "customMethodMutation", true, "arg1") { 
+    // "customMethodMutation" = method name
+    // true = "this is mutation"
+    // "arg1" = argument name within the schema
     @Override
     public Integer apply(String arg1) {
         // Do something and return an Integer
@@ -139,8 +147,13 @@ metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgName(0), G
 -> For 2 argument methods, implement IGQLCustomMethod2Arg or extend default implementation GQLCustomMethod2Arg
 ```java
 // Example of mutation method returning a Date and taking 2 arguments
-final GQLCustomMethod2Arg<Date, String, EmbeddedEntity1> method = new GQLCustomMethod2Arg<Date, String, EmbeddedEntity1>(
-    "customMethodMutation", true, "arg1", "arg2") { // "customMethodMutation" = method name, true = "this is mutation", "arg1" = argument 1 name within the schema, "arg2" = argument 2 name within the schema
+final GQLCustomMethod2Arg<Date, String, EmbeddedEntity1> method = 
+    new GQLCustomMethod2Arg<Date, String, EmbeddedEntity1>(
+    "customMethodMutation", true, "arg1", "arg2") { 
+        // "customMethodMutation" = method name
+        // true = "this is mutation"
+        // "arg1" = argument 1 name within the schema
+        // "arg2" = argument 2 name within the schema
     @Override
     public Date apply(String arg1, EmbeddedEntity1 arg2) {
         // Do something and return a Date
@@ -148,7 +161,8 @@ final GQLCustomMethod2Arg<Date, String, EmbeddedEntity1> method = new GQLCustomM
     }
 };
 // The method meta data to be registered in meta model for schema building
-final GQLAbstractMethodMetaData metaData = new GQLMethodScalarMetaData(method, Entity1.class, GQLScalarTypeEnum.DATE);
+final GQLAbstractMethodMetaData metaData = new GQLMethodScalarMetaData(
+    method, Entity1.class, GQLScalarTypeEnum.DATE);
 metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgName(0), GQLScalarTypeEnum.STRING));
 metaData.addArgument(new GQLMethodArgumentEmbeddedEntityMetaData(method.getArgName(1), EmbeddedEntity1.class));
 ```
@@ -159,10 +173,12 @@ metaData.addArgument(new GQLMethodArgumentEmbeddedEntityMetaData(method.getArgNa
 
 A dynamic attribute is an entity virtual property available in the schema but not in the entity itself. This attribute can be read and/or written thanks to methods you have to implement.
 
--> For a readable dynamic attribute, implement IGQLDynamicAttributeGetter or extend default implementation GQLDynamicAttributeGetter
+-> For a **readable** dynamic attribute, implement IGQLDynamicAttributeGetter or extend default implementation GQLDynamicAttributeGetter
 ```java
 // Example of dynamic attribute getter registered on Entity1 and returning a computed String
-final IGQLDynamicAttributeGetter<Entity1, String> dynamicAttributeGetter = new GQLDynamicAttributeGetter<Entity1, String>("dynamicAttribute") { // "dynamicAttribute" = attribute name within the schema
+final IGQLDynamicAttributeGetter<Entity1, String> dynamicAttributeGetter = 
+    new GQLDynamicAttributeGetter<Entity1, String>("dynamicAttribute") { 
+    // "dynamicAttribute" = attribute name within the schema
     @Override
     public String getValue(Entity1 source) {
         // Compute dynamic attribute String value and return it
@@ -171,14 +187,17 @@ final IGQLDynamicAttributeGetter<Entity1, String> dynamicAttributeGetter = new G
 };
 // Register the attribute in the entity meta data
 final GQLEntityMetaData metaData = new GQLEntityMetaData("Entity1", Entity1.class, AbstractEntity.class);
-final GQLAttributeScalarMetaData attribute = new GQLAttributeScalarMetaData(dynamicAttributeGetter.getName(), GQLScalarTypeEnum.STRING);
+final GQLAttributeScalarMetaData attribute = new GQLAttributeScalarMetaData(
+    dynamicAttributeGetter.getName(), GQLScalarTypeEnum.STRING);
 attribute.setDynamicAttributeGetter(dynamicAttributeGetter);
 metaData.addAttribute(attribute);
 ```
 
--> For a writable dynamic attribute, implement IGQLDynamicAttributeSetter or extend default implementation GQLDynamicAttributeSetter
+-> For a **writable** dynamic attribute, implement IGQLDynamicAttributeSetter or extend default implementation GQLDynamicAttributeSetter
 ```java
-final IGQLDynamicAttributeSetter<Entity1, EmbeddedEntity1> dynamicAttributeSetter = new GQLDynamicAttributeSetter<Entity1, EmbeddedEntity1>("dynamicAttribute2") {
+final IGQLDynamicAttributeSetter<Entity1, EmbeddedEntity1> dynamicAttributeSetter = 
+    new GQLDynamicAttributeSetter<Entity1, EmbeddedEntity1>("dynamicAttribute") { 
+    // "dynamicAttribute" = attribute name within the schema
     @Override
     public void setValue(Entity1 source, EmbeddedEntity1 valueToSet) {
         source.setStringAttr(valueToSet);
@@ -186,12 +205,13 @@ final IGQLDynamicAttributeSetter<Entity1, EmbeddedEntity1> dynamicAttributeSette
 };
 // Register the attribute in the entity meta data
 final GQLEntityMetaData metaData = new GQLEntityMetaData("Entity1", Entity1.class, AbstractEntity.class);
-final GQLAttributeEmbeddedEntityMetaData attribute = new GQLAttributeEmbeddedEntityMetaData(dynamicAttributeSetter.getName(), EmbeddedEntity1.class);
+final GQLAttributeEmbeddedEntityMetaData attribute = new GQLAttributeEmbeddedEntityMetaData(
+    dynamicAttributeSetter.getName(), EmbeddedEntity1.class);
 attribute.setDynamicAttributeSetter(dynamicAttributeSetter);
 metaData.addAttribute(attribute);
 ```
 
--> For a readable an writable attribute, implement IGQLDynamicAttributeGetter and IGQLDynamicAttributeSetter or extend default implementation GQLDynamicAttributeGetterSetter
+-> For a **readable** an **writable** attribute, implement IGQLDynamicAttributeGetter and IGQLDynamicAttributeSetter or extend default implementation GQLDynamicAttributeGetterSetter
 
 ### Accessibility on entities & fields for CRUD operations
 

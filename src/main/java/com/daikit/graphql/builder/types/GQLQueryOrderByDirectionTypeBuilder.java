@@ -13,7 +13,7 @@ import graphql.schema.GraphQLEnumType;
 /**
  * GQL query order by direction type builder
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLQueryOrderByDirectionTypeBuilder extends GQLAbstractTypesBuilder {
 

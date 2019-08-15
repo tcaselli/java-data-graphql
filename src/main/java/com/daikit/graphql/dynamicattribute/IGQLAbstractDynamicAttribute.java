@@ -6,7 +6,7 @@ import com.daikit.graphql.dynamicattribute.abs.GQLAbstractDynamicAttribute;
 /**
  * Abstract super interface for dynamic attributes
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  *
  * @param <ENTITY_TYPE>
  *            the type of the entity this dynamic attribute is registered on

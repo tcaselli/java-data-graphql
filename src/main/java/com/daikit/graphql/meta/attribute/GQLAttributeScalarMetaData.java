@@ -5,7 +5,7 @@ import com.daikit.graphql.enums.GQLScalarTypeEnum;
 /**
  * GraphQL Scalar attribute meta data
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLAttributeScalarMetaData extends GQLAbstractAttributeMetaData {
 
@@ -66,9 +66,11 @@ public class GQLAttributeScalarMetaData extends GQLAbstractAttributeMetaData {
 	 *
 	 * @param scalarType
 	 *            the scalarType to set
+	 * @return this instance
 	 */
-	public void setScalarType(final GQLScalarTypeEnum scalarType) {
+	public GQLAttributeScalarMetaData setScalarType(final GQLScalarTypeEnum scalarType) {
 		this.scalarType = scalarType;
+		return this;
 	}
 
 }

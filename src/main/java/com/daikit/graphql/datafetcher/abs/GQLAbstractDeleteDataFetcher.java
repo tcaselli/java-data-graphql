@@ -14,7 +14,7 @@ import graphql.schema.DataFetchingEnvironment;
  * and used in {@link GQLSchemaBuilder} for buildSchema delete method data
  * fetcher argument
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  *
  */
 public abstract class GQLAbstractDeleteDataFetcher extends GQLAbstractDataFetcher<GQLDeleteResult> {

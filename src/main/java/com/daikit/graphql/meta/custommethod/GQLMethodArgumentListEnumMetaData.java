@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * GraphQL dynamic method argument {@link List} of entities meta data
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLMethodArgumentListEnumMetaData extends GQLAbstractMethodArgumentMetaData {
 
@@ -66,9 +66,11 @@ public class GQLMethodArgumentListEnumMetaData extends GQLAbstractMethodArgument
 	 *
 	 * @param enumClass
 	 *            the enumClass to set
+	 * @return this instance
 	 */
-	public void setEnumClass(final Class<?> enumClass) {
+	public GQLMethodArgumentListEnumMetaData setEnumClass(final Class<?> enumClass) {
 		this.enumClass = enumClass;
+		return this;
 	}
 
 }

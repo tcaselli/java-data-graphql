@@ -18,7 +18,7 @@ import graphql.ExecutionResult;
 /**
  * Test suite for schema building
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class SchemaIntrospectionOutputerTest extends AbstractTestSuite {
 

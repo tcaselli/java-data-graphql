@@ -3,7 +3,7 @@ package com.daikit.graphql.test.data;
 /**
  * Entity entity class 3
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class Entity3 extends AbstractEntity {
 

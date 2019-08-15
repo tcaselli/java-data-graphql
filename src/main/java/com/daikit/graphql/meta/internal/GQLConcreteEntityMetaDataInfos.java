@@ -1,12 +1,11 @@
 package com.daikit.graphql.meta.internal;
 
-import com.daikit.graphql.meta.entity.GQLAbstractEntityMetaData;
 import com.daikit.graphql.meta.entity.GQLEntityMetaData;
 
 /**
  * Meta data computed informations for concrete {@link GQLEntityMetaData}
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLConcreteEntityMetaDataInfos extends GQLAbstractEntityMetaDataInfos {
 
@@ -20,7 +19,7 @@ public class GQLConcreteEntityMetaDataInfos extends GQLAbstractEntityMetaDataInf
 	 * @param entity
 	 *            the {@link GQLEntityMetaData}
 	 */
-	public GQLConcreteEntityMetaDataInfos(final GQLAbstractEntityMetaData entity) {
+	public GQLConcreteEntityMetaDataInfos(final GQLEntityMetaData entity) {
 		super(entity);
 	}
 

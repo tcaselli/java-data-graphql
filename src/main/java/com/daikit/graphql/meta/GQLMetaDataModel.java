@@ -15,7 +15,7 @@ import com.daikit.graphql.meta.internal.GQLInterfaceEntityMetaDataInfos;
 /**
  * Class holding meta data model
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLMetaDataModel {
 
@@ -53,28 +53,28 @@ public class GQLMetaDataModel {
 	 * @return the interfaces
 	 */
 	public List<GQLInterfaceEntityMetaDataInfos> getNonEmbeddedInterfaces() {
-		return interfaces.stream().filter(infos -> !infos.isEmbedded()).collect(Collectors.toList());
+		return interfaces.stream().filter(infos -> !infos.getEntity().isEmbedded()).collect(Collectors.toList());
 	}
 
 	/**
 	 * @return the concretes
 	 */
 	public List<GQLConcreteEntityMetaDataInfos> getNonEmbeddedConcretes() {
-		return concretes.stream().filter(infos -> !infos.isEmbedded()).collect(Collectors.toList());
+		return concretes.stream().filter(infos -> !infos.getEntity().isEmbedded()).collect(Collectors.toList());
 	}
 
 	/**
 	 * @return the embeddedInterfaces
 	 */
 	public List<GQLInterfaceEntityMetaDataInfos> getEmbeddedInterfaces() {
-		return interfaces.stream().filter(infos -> infos.isEmbedded()).collect(Collectors.toList());
+		return interfaces.stream().filter(infos -> infos.getEntity().isEmbedded()).collect(Collectors.toList());
 	}
 
 	/**
 	 * @return the embeddedConcretes
 	 */
 	public List<GQLConcreteEntityMetaDataInfos> getEmbeddedConcretes() {
-		return concretes.stream().filter(infos -> infos.isEmbedded()).collect(Collectors.toList());
+		return concretes.stream().filter(infos -> infos.getEntity().isEmbedded()).collect(Collectors.toList());
 	}
 
 	/**

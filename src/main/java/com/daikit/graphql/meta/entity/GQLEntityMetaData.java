@@ -1,15 +1,30 @@
 package com.daikit.graphql.meta.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.daikit.graphql.meta.GQLAbstractMetaData;
+import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
+
 /**
- * GraphQL entity meta data. This entity corresponds to a persistence layer
- * model object.
+ * Abstract super class for all entity meta datas (concrete, abstract, embedded
+ * and abstract embedded)
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
-public class GQLEntityMetaData extends GQLAbstractEntityMetaData {
+public class GQLEntityMetaData extends GQLAbstractMetaData {
 
 	private boolean readable = true;
 	private boolean saveable = true;
+	private boolean deletable = true;
+
+	private boolean embedded = false;
+	private boolean concrete = true;
+
+	private String name;
+	private Class<?> superEntityClass;
+	private Class<?> entityClass;
+	private List<GQLAbstractAttributeMetaData> attributes = new ArrayList<>();
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -34,7 +49,8 @@ public class GQLEntityMetaData extends GQLAbstractEntityMetaData {
 	 *            the entity class
 	 */
 	public GQLEntityMetaData(String name, Class<?> entityClass) {
-		super(name, entityClass);
+		this.name = name;
+		this.entityClass = entityClass;
 	}
 
 	/**
@@ -52,7 +68,9 @@ public class GQLEntityMetaData extends GQLAbstractEntityMetaData {
 	 *            <code>true</code>.
 	 */
 	public GQLEntityMetaData(String name, Class<?> entityClass, boolean concrete) {
-		super(name, entityClass, concrete);
+		this.name = name;
+		this.entityClass = entityClass;
+		this.concrete = concrete;
 	}
 
 	/**
@@ -70,7 +88,9 @@ public class GQLEntityMetaData extends GQLAbstractEntityMetaData {
 	 *            the super entity class
 	 */
 	public GQLEntityMetaData(String name, Class<?> entityClass, Class<?> superEntityClass) {
-		super(name, entityClass, superEntityClass);
+		this.name = name;
+		this.entityClass = entityClass;
+		this.superEntityClass = superEntityClass;
 	}
 
 	/**
@@ -91,7 +111,10 @@ public class GQLEntityMetaData extends GQLAbstractEntityMetaData {
 	 *            <code>true</code>.
 	 */
 	public GQLEntityMetaData(String name, Class<?> entityClass, Class<?> superEntityClass, boolean concrete) {
-		super(name, entityClass, superEntityClass, concrete);
+		this.name = name;
+		this.entityClass = entityClass;
+		this.superEntityClass = superEntityClass;
+		this.concrete = concrete;
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -100,8 +123,23 @@ public class GQLEntityMetaData extends GQLAbstractEntityMetaData {
 
 	@Override
 	protected void appendToString(final StringBuilder stringBuilder) {
-		stringBuilder.append(readable ? "[R]" : "").append(saveable ? "[S]" : "");
-		super.appendToString(stringBuilder);
+		stringBuilder.append(concrete ? "" : "[ABS]");
+		stringBuilder.append("[").append(entityClass == null ? "" : entityClass.getSimpleName());
+		stringBuilder.append(superEntityClass == null ? "" : " EXTENDS " + superEntityClass.getSimpleName())
+				.append("]");
+		stringBuilder.append("[ATTR=").append(attributes.size()).append("])");
+	}
+
+	/**
+	 * Add given attribute if non null
+	 *
+	 * @param attribute
+	 *            the {@link GQLAbstractAttributeMetaData} to be added
+	 */
+	public void addAttribute(final GQLAbstractAttributeMetaData attribute) {
+		if (attribute != null) {
+			attributes.add(attribute);
+		}
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -109,9 +147,116 @@ public class GQLEntityMetaData extends GQLAbstractEntityMetaData {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Get whether this entity can be retrieved in queries. Default is
-	 * <code>true</code>.
+	 * Get whether the entity is a concrete class (<code>true</code>) or
+	 * abstract class (<code>false</code>). Default is <code>true</code>.
 	 *
+	 * @return the concrete
+	 */
+	public boolean isConcrete() {
+		return concrete;
+	}
+
+	/**
+	 * Set whether the entity is a concrete class (<code>true</code>) or
+	 * abstract class (<code>false</code>). Default is <code>true</code>.
+	 *
+	 * @param concrete
+	 *            the concrete to set
+	 * @return this instance
+	 */
+	public GQLEntityMetaData setConcrete(final boolean concrete) {
+		this.concrete = concrete;
+		return this;
+	}
+
+	/**
+	 * Set the name for the entity. This name will be used for building GraphQL
+	 * schema : queries, mutations, descriptions etc.
+	 *
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * Get the name for the entity. This name will be used for building GraphQL
+	 * schema : queries, mutations, descriptions etc.
+	 *
+	 * @param name
+	 *            the name to set
+	 * @return this instance
+	 */
+	public GQLEntityMetaData setName(final String name) {
+		this.name = name;
+		return this;
+	}
+
+	/**
+	 * Get the super class for the entity.
+	 *
+	 * @return the superEntityClass
+	 */
+	public Class<?> getSuperEntityClass() {
+		return superEntityClass;
+	}
+
+	/**
+	 * Set the super class for the entity. You shouldn't set this property if
+	 * super class is {@link Object}.
+	 *
+	 * @param superEntityClass
+	 *            the superEntityClass to set
+	 * @return this instance
+	 */
+	public GQLEntityMetaData setSuperEntityClass(final Class<?> superEntityClass) {
+		this.superEntityClass = superEntityClass;
+		return this;
+	}
+
+	/**
+	 * Get the entity class.
+	 *
+	 * @return the entityClass
+	 */
+	public Class<?> getEntityClass() {
+		return entityClass;
+	}
+
+	/**
+	 * Set the entity class
+	 *
+	 * @param entityClass
+	 *            the entityClass to set
+	 * @return this instance
+	 */
+	public GQLEntityMetaData setEntityClass(final Class<?> entityClass) {
+		this.entityClass = entityClass;
+		return this;
+	}
+
+	/**
+	 * Get attributes of the entity
+	 *
+	 * @return the attributes
+	 */
+	public List<GQLAbstractAttributeMetaData> getAttributes() {
+		return attributes;
+	}
+
+	/**
+	 * Set the entity attributes
+	 *
+	 * @param attributes
+	 *            the attributes to set
+	 * @return this instance
+	 */
+	public GQLEntityMetaData setAttributes(final List<GQLAbstractAttributeMetaData> attributes) {
+		this.attributes = attributes;
+		return this;
+	}
+
+	/**
 	 * @return the readable
 	 */
 	public boolean isReadable() {
@@ -119,20 +264,33 @@ public class GQLEntityMetaData extends GQLAbstractEntityMetaData {
 	}
 
 	/**
-	 * Set whether queries will be available in schema for retrieving this
-	 * entity. Default is <code>true</code>.
-	 *
 	 * @param readable
 	 *            the readable to set
+	 * @return this instance
 	 */
-	public void setReadable(final boolean readable) {
+	public GQLEntityMetaData setReadable(boolean readable) {
 		this.readable = readable;
+		return this;
 	}
 
 	/**
-	 * Get whether a save mutation will be available in schema for this entity.
-	 * Default is <code>true</code>.
-	 *
+	 * @return the deletable
+	 */
+	public boolean isDeletable() {
+		return deletable;
+	}
+
+	/**
+	 * @param deletable
+	 *            the deletable to set
+	 * @return this instance
+	 */
+	public GQLEntityMetaData setDeletable(boolean deletable) {
+		this.deletable = deletable;
+		return this;
+	}
+
+	/**
 	 * @return the saveable
 	 */
 	public boolean isSaveable() {
@@ -140,14 +298,29 @@ public class GQLEntityMetaData extends GQLAbstractEntityMetaData {
 	}
 
 	/**
-	 * Set whether a save mutation will be available in schema for this entity.
-	 * Default is <code>true</code>.
-	 *
 	 * @param saveable
 	 *            the saveable to set
+	 * @return this instance
 	 */
-	public void setSaveable(final boolean saveable) {
+	public GQLEntityMetaData setSaveable(boolean saveable) {
 		this.saveable = saveable;
+		return this;
 	}
 
+	/**
+	 * @return the embedded
+	 */
+	public boolean isEmbedded() {
+		return embedded;
+	}
+
+	/**
+	 * @param embedded
+	 *            the embedded to set
+	 * @return this instance
+	 */
+	public GQLEntityMetaData setEmbedded(boolean embedded) {
+		this.embedded = embedded;
+		return this;
+	}
 }

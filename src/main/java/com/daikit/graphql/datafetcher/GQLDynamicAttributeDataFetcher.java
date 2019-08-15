@@ -10,7 +10,7 @@ import graphql.schema.PropertyDataFetcher;
  * be used for any field definition, this one is overriding default behavior for
  * dynamic attributes.
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLDynamicAttributeDataFetcher extends PropertyDataFetcher<Object> {
 

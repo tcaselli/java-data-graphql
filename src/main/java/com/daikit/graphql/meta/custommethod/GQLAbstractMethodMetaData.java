@@ -11,7 +11,7 @@ import com.daikit.graphql.meta.GQLAbstractMetaData;
 /**
  * Dynamic method meta data
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 
@@ -80,7 +80,7 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 
 	/**
 	 * Add argument {@link GQLAbstractMethodArgumentMetaData}
-	 * 
+	 *
 	 * @param argument
 	 *            the argument
 	 */
@@ -104,9 +104,11 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 	/**
 	 * @param method
 	 *            the method to set
+	 * @return this instance
 	 */
-	public void setMethod(GQLAbstractCustomMethod<?> method) {
+	public GQLAbstractMethodMetaData setMethod(GQLAbstractCustomMethod<?> method) {
 		this.method = method;
+		return this;
 	}
 
 	/**
@@ -119,9 +121,11 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 	/**
 	 * @param arguments
 	 *            the arguments to set
+	 * @return this instance
 	 */
-	public void setArguments(List<GQLAbstractMethodArgumentMetaData> arguments) {
+	public GQLAbstractMethodMetaData setArguments(List<GQLAbstractMethodArgumentMetaData> arguments) {
 		this.arguments = arguments;
+		return this;
 	}
 
 }

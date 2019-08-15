@@ -14,7 +14,7 @@ import graphql.schema.GraphQLTypeReference;
 /**
  * Utility class for GraphQL builders
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLBuilderUtils {
 

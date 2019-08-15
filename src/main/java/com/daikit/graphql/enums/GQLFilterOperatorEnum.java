@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Filter operator
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 @SuppressWarnings("javadoc")
 public enum GQLFilterOperatorEnum {

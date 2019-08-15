@@ -7,7 +7,7 @@ import com.daikit.graphql.meta.GQLAbstractMetaData;
 /**
  * Abstract super class for GraphQL entity/data attribute meta data
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 
@@ -66,7 +66,7 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	/**
 	 * Get whether this attribute is a dynamic attribute setter, which means
 	 * that a dynamicAttributeSetter is set
-	 * 
+	 *
 	 * @return a boolean
 	 */
 	public boolean isDynamicAttributeSetter() {
@@ -76,7 +76,7 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	/**
 	 * Get whether this attribute is a dynamic attribute getter, which means
 	 * that a dynamicAttributeGetter is set
-	 * 
+	 *
 	 * @return a boolean
 	 */
 	public boolean isDynamicAttributeGetter() {
@@ -103,9 +103,11 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	 *
 	 * @param name
 	 *            the name to set
+	 * @return this instance
 	 */
-	public void setName(final String name) {
+	public GQLAbstractAttributeMetaData setName(final String name) {
 		this.name = name;
+		return this;
 	}
 
 	/**
@@ -122,9 +124,11 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	 *
 	 * @param nullable
 	 *            the nullable to set
+	 * @return this instance
 	 */
-	public void setNullable(final boolean nullable) {
+	public GQLAbstractAttributeMetaData setNullable(final boolean nullable) {
 		this.nullable = nullable;
+		return this;
 	}
 
 	/**
@@ -143,9 +147,11 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	 *
 	 * @param readable
 	 *            the readable to set
+	 * @return this instance
 	 */
-	public void setReadable(final boolean readable) {
+	public GQLAbstractAttributeMetaData setReadable(final boolean readable) {
 		this.readable = readable;
+		return this;
 	}
 
 	/**
@@ -164,9 +170,11 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	 *
 	 * @param saveable
 	 *            the saveable to set
+	 * @return this instance
 	 */
-	public void setSaveable(final boolean saveable) {
+	public GQLAbstractAttributeMetaData setSaveable(final boolean saveable) {
 		this.saveable = saveable;
+		return this;
 	}
 
 	/**
@@ -186,9 +194,11 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	 *
 	 * @param filterable
 	 *            the filterable to set
+	 * @return this instance
 	 */
-	public void setFilterable(final boolean filterable) {
+	public GQLAbstractAttributeMetaData setFilterable(final boolean filterable) {
 		this.filterable = filterable;
+		return this;
 	}
 
 	/**
@@ -215,9 +225,12 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	 *
 	 * @param dynamicAttributeGetter
 	 *            the dynamicAttributeGetter to set
+	 * @return this instance
 	 */
-	public void setDynamicAttributeGetter(final IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter) {
+	public GQLAbstractAttributeMetaData setDynamicAttributeGetter(
+			final IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter) {
 		this.dynamicAttributeGetter = dynamicAttributeGetter;
+		return this;
 	}
 
 	/**
@@ -244,9 +257,12 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	 *
 	 * @param dynamicAttributeSetter
 	 *            the dynamicAttributeSetter to set
+	 * @return this instance
 	 */
-	public void setDynamicAttributeSetter(final IGQLDynamicAttributeSetter<?, ?> dynamicAttributeSetter) {
+	public GQLAbstractAttributeMetaData setDynamicAttributeSetter(
+			final IGQLDynamicAttributeSetter<?, ?> dynamicAttributeSetter) {
 		this.dynamicAttributeSetter = dynamicAttributeSetter;
+		return this;
 	}
 
 }

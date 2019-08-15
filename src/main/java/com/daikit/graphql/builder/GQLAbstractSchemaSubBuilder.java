@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Abstract super class for all schema fragment builders
  *
- * @author tcaselli
+ * @author Thibaut Caselli
  */
 public class GQLAbstractSchemaSubBuilder {
 
