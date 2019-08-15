@@ -6,7 +6,7 @@ import java.util.HashMap;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.daikit.graphql.query.output.GQLDeleteResult;
+import com.daikit.graphql.data.output.GQLDeleteResult;
 import com.daikit.graphql.test.data.Entity1;
 
 import graphql.ExecutionInput;

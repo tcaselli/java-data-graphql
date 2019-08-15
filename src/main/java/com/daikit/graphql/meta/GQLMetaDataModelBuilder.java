@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.daikit.graphql.meta.data.entity.GQLAbstractEntityMetaData;
-import com.daikit.graphql.meta.data.entity.GQLEmbeddedEntityMetaData;
-import com.daikit.graphql.meta.data.entity.GQLEnumMetaData;
-import com.daikit.graphql.meta.data.method.GQLAbstractMethodMetaData;
+import com.daikit.graphql.meta.custommethod.GQLAbstractMethodMetaData;
+import com.daikit.graphql.meta.entity.GQLAbstractEntityMetaData;
+import com.daikit.graphql.meta.entity.GQLEmbeddedEntityMetaData;
+import com.daikit.graphql.meta.entity.GQLEnumMetaData;
 import com.daikit.graphql.meta.internal.GQLAbstractEntityMetaDataInfos;
 import com.daikit.graphql.meta.internal.GQLConcreteEntityMetaDataInfos;
 import com.daikit.graphql.meta.internal.GQLInterfaceEntityMetaDataInfos;

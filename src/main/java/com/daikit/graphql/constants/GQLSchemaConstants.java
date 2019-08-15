@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.daikit.graphql.enums.GQLOrderByDirectionEnum;
-import com.daikit.graphql.meta.data.GQLScalarTypeEnum;
+import com.daikit.graphql.enums.GQLScalarTypeEnum;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLScalarType;

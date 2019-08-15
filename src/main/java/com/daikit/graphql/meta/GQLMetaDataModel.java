@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.daikit.graphql.meta.data.entity.GQLEnumMetaData;
-import com.daikit.graphql.meta.data.method.GQLAbstractMethodMetaData;
-import com.daikit.graphql.meta.dynamic.attribute.IGQLDynamicAttributeSetter;
+import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
+import com.daikit.graphql.meta.custommethod.GQLAbstractMethodMetaData;
+import com.daikit.graphql.meta.entity.GQLEnumMetaData;
 import com.daikit.graphql.meta.internal.GQLAbstractEntityMetaDataInfos;
 import com.daikit.graphql.meta.internal.GQLConcreteEntityMetaDataInfos;
 import com.daikit.graphql.meta.internal.GQLInterfaceEntityMetaDataInfos;

@@ -2,8 +2,8 @@ package com.daikit.graphql.datafetcher.abs;
 
 import com.daikit.graphql.builder.GQLSchemaBuilder;
 import com.daikit.graphql.constants.GQLSchemaConstants;
+import com.daikit.graphql.data.output.GQLDeleteResult;
 import com.daikit.graphql.datafetcher.GQLAbstractDataFetcher;
-import com.daikit.graphql.query.output.GQLDeleteResult;
 
 import graphql.language.Field;
 import graphql.schema.DataFetchingEnvironment;

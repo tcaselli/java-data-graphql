@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.daikit.graphql.constants.GQLSchemaConstants;
-import com.daikit.graphql.meta.data.GQLScalarTypeEnum;
+import com.daikit.graphql.enums.GQLScalarTypeEnum;
 import com.daikit.graphql.utils.Message;
 
 import graphql.schema.GraphQLCodeRegistry;

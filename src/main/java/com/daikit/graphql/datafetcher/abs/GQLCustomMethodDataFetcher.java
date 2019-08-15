@@ -7,15 +7,14 @@ import java.util.Map;
 
 import com.daikit.generics.utils.GenericsUtils;
 import com.daikit.graphql.builder.GQLSchemaBuilder;
-import com.daikit.graphql.constants.GQLUtils;
+import com.daikit.graphql.custommethod.IGQLAbstractCustomMethod;
+import com.daikit.graphql.custommethod.IGQLCustomMethod0Arg;
+import com.daikit.graphql.custommethod.IGQLCustomMethod1Arg;
+import com.daikit.graphql.custommethod.IGQLCustomMethod2Arg;
+import com.daikit.graphql.custommethod.IGQLCustomMethod3Arg;
+import com.daikit.graphql.custommethod.IGQLCustomMethod4Arg;
+import com.daikit.graphql.custommethod.IGQLCustomMethod5Arg;
 import com.daikit.graphql.datafetcher.GQLAbstractDataFetcher;
-import com.daikit.graphql.meta.dynamic.method.IGQLAbstractCustomMethod;
-import com.daikit.graphql.meta.dynamic.method.IGQLCustomMethod0Arg;
-import com.daikit.graphql.meta.dynamic.method.IGQLCustomMethod1Arg;
-import com.daikit.graphql.meta.dynamic.method.IGQLCustomMethod2Arg;
-import com.daikit.graphql.meta.dynamic.method.IGQLCustomMethod3Arg;
-import com.daikit.graphql.meta.dynamic.method.IGQLCustomMethod4Arg;
-import com.daikit.graphql.meta.dynamic.method.IGQLCustomMethod5Arg;
 import com.daikit.graphql.utils.Message;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -88,7 +87,7 @@ public class GQLCustomMethodDataFetcher extends GQLAbstractDataFetcher<Object> {
 	protected <T> T getArgumentValue(DataFetchingEnvironment environment, IGQLAbstractCustomMethod<?> method,
 			int argumentPosition) {
 		final Field queryField = environment.getField();
-		final String argumentName = GQLUtils.mapDynamicMethodArgumentName(method.getArgNames().get(argumentPosition));
+		final String argumentName = mapDynamicMethodArgumentName(method.getArgNames().get(argumentPosition));
 		final Object argumentGraphQLValue = getArgumentValue(queryField, argumentName, environment.getArguments());
 		final Type expectedType = method.getArgumentTypes().get(argumentPosition);
 		Object mappedValue = argumentGraphQLValue;
@@ -97,6 +96,19 @@ public class GQLCustomMethodDataFetcher extends GQLAbstractDataFetcher<Object> {
 			mappedValue = convertValue((Map<String, Object>) mappedValue, expectedClass, argumentPosition);
 		}
 		return (T) mappedValue;
+	}
+
+	/**
+	 * Map dynamic method argument name
+	 *
+	 * @param name
+	 *            the method argument name
+	 * @return the mapped argument name
+	 */
+	protected String mapDynamicMethodArgumentName(final String name) {
+		return name.startsWith(IGQLAbstractCustomMethod.ID_PREFIX)
+				? name.substring(IGQLAbstractCustomMethod.ID_PREFIX.length())
+				: name;
 	}
 
 	/**

@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 import com.daikit.graphql.builder.GQLAbstractSchemaSubBuilder;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.meta.GQLMetaDataModel;
-import com.daikit.graphql.meta.data.entity.GQLEnumMetaData;
+import com.daikit.graphql.meta.entity.GQLEnumMetaData;
 import com.daikit.graphql.utils.Message;
 
 import graphql.schema.GraphQLEnumType;

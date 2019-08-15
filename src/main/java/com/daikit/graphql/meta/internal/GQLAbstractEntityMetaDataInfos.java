@@ -3,8 +3,8 @@ package com.daikit.graphql.meta.internal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.daikit.graphql.meta.data.entity.GQLAbstractEntityMetaData;
-import com.daikit.graphql.meta.data.entity.GQLEntityMetaData;
+import com.daikit.graphql.meta.entity.GQLAbstractEntityMetaData;
+import com.daikit.graphql.meta.entity.GQLEntityMetaData;
 
 /**
  * Meta data computed informations for {@link GQLEntityMetaData}

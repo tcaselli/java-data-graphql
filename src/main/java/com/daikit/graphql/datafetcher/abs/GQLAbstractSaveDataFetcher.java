@@ -8,7 +8,7 @@ import java.util.Map;
 import com.daikit.graphql.builder.GQLSchemaBuilder;
 import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.datafetcher.GQLAbstractDataFetcher;
-import com.daikit.graphql.meta.dynamic.attribute.IGQLDynamicAttributeSetter;
+import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
 import com.daikit.graphql.utils.Message;
 
 import graphql.GraphQLException;

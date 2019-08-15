@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.daikit.graphql.builder.GQLBuilderUtils;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
-import com.daikit.graphql.builder.utils.GQLBuilderUtils;
 import com.daikit.graphql.datafetcher.GQLPropertyDataFetcher;
 import com.daikit.graphql.meta.GQLMetaDataModel;
-import com.daikit.graphql.meta.data.attribute.GQLAbstractAttributeMetaData;
+import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
 import com.daikit.graphql.meta.internal.GQLAbstractEntityMetaDataInfos;
 import com.daikit.graphql.meta.internal.GQLInterfaceEntityMetaDataInfos;
 import com.daikit.graphql.utils.Message;

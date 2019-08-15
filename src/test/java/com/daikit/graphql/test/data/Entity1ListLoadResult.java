@@ -3,8 +3,8 @@ package com.daikit.graphql.test.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.daikit.graphql.query.output.GQLOrderByEntry;
-import com.daikit.graphql.query.output.GQLPaging;
+import com.daikit.graphql.data.output.GQLOrderByEntry;
+import com.daikit.graphql.data.output.GQLPaging;
 
 /**
  * List load result for {@link Entity1}

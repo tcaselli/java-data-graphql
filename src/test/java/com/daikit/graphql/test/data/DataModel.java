@@ -22,10 +22,10 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
+import com.daikit.graphql.data.input.GQLListLoadConfig;
+import com.daikit.graphql.data.output.GQLListLoadResult;
+import com.daikit.graphql.data.output.GQLPaging;
 import com.daikit.graphql.enums.GQLOrderByDirectionEnum;
-import com.daikit.graphql.query.input.GQLListLoadConfig;
-import com.daikit.graphql.query.output.GQLListLoadResult;
-import com.daikit.graphql.query.output.GQLPaging;
 import com.daikit.graphql.test.utils.PropertyUtils;
 
 /**

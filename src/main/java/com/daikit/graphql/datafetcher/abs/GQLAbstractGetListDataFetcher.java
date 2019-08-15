@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 
 import com.daikit.graphql.builder.GQLSchemaBuilder;
 import com.daikit.graphql.constants.GQLSchemaConstants;
+import com.daikit.graphql.data.input.GQLListLoadConfig;
+import com.daikit.graphql.data.output.GQLListLoadResult;
 import com.daikit.graphql.datafetcher.GQLAbstractDataFetcher;
+import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeFilter;
 import com.daikit.graphql.enums.GQLFilterOperatorEnum;
 import com.daikit.graphql.enums.GQLOrderByDirectionEnum;
-import com.daikit.graphql.meta.dynamic.attribute.IGQLDynamicAttributeFilter;
-import com.daikit.graphql.query.input.GQLListLoadConfig;
-import com.daikit.graphql.query.output.GQLListLoadResult;
 
 import graphql.language.Argument;
 import graphql.language.ArrayValue;

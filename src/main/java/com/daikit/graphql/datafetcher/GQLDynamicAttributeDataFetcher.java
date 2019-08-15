@@ -1,6 +1,6 @@
 package com.daikit.graphql.datafetcher;
 
-import com.daikit.graphql.meta.dynamic.attribute.IGQLDynamicAttributeGetter;
+import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeGetter;
 
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.PropertyDataFetcher;
