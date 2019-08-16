@@ -1,5 +1,5 @@
-mutation saveEntity1($id: ID, $intAttr: Int) {
-  saveEntity1(data: { id: $id, intAttr: $intAttr }) {
+mutation saveEntity1($id: ID, $intAttr: Int, $embeddedData1: EmbeddedData1InputType) {
+  saveEntity1(data: { id: $id, intAttr: $intAttr, embeddedData1: $embeddedData1}) {
     id
     intAttr
     embeddedData1 {

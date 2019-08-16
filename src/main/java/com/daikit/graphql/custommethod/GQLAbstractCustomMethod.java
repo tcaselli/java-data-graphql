@@ -1,4 +1,4 @@
-package com.daikit.graphql.custommethod.abs;
+package com.daikit.graphql.custommethod;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.daikit.generics.utils.GenericsUtils;
-import com.daikit.graphql.custommethod.IGQLAbstractCustomMethod;
 
 /**
  * Custom method that will be added to GQL Schema.

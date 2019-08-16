@@ -1,4 +1,4 @@
-package com.daikit.graphql.datafetcher.abs;
+package com.daikit.graphql.datafetcher;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -14,7 +14,6 @@ import com.daikit.graphql.custommethod.IGQLCustomMethod2Arg;
 import com.daikit.graphql.custommethod.IGQLCustomMethod3Arg;
 import com.daikit.graphql.custommethod.IGQLCustomMethod4Arg;
 import com.daikit.graphql.custommethod.IGQLCustomMethod5Arg;
-import com.daikit.graphql.datafetcher.GQLAbstractDataFetcher;
 import com.daikit.graphql.utils.Message;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

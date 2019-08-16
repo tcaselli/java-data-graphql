@@ -1,7 +1,4 @@
-package com.daikit.graphql.dynamicattribute.abs;
-
-import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeGetter;
-import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
+package com.daikit.graphql.dynamicattribute;
 
 /**
  * Dynamic attribute getter & setter

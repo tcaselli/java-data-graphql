@@ -26,7 +26,7 @@ import com.daikit.graphql.data.input.GQLListLoadConfig;
 import com.daikit.graphql.data.output.GQLListLoadResult;
 import com.daikit.graphql.data.output.GQLPaging;
 import com.daikit.graphql.enums.GQLOrderByDirectionEnum;
-import com.daikit.graphql.test.utils.PropertyUtils;
+import com.daikit.graphql.utils.GQLPropertyUtils;
 
 /**
  * A data entity for tests
@@ -195,8 +195,8 @@ public class DataModel {
 				@SuppressWarnings({"rawtypes", "unchecked"})
 				@Override
 				public int compare(Object o1, Object o2) {
-					final Object prop1 = PropertyUtils.getPropertyValue(o1, orderBy.getField());
-					final Object prop2 = PropertyUtils.getPropertyValue(o2, orderBy.getField());
+					final Object prop1 = GQLPropertyUtils.getPropertyValue(o1, orderBy.getField());
+					final Object prop2 = GQLPropertyUtils.getPropertyValue(o2, orderBy.getField());
 					int comparison;
 					if (prop1 instanceof Comparable) {
 						comparison = prop1 == null ? prop2 == null ? 0 : -1 : ((Comparable) prop1).compareTo(prop2);

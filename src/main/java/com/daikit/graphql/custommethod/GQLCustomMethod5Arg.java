@@ -1,11 +1,10 @@
-package com.daikit.graphql.custommethod.abs;
+package com.daikit.graphql.custommethod;
 
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.daikit.generics.utils.GenericsUtils;
-import com.daikit.graphql.custommethod.IGQLCustomMethod2Arg;
 
 /**
  * Custom method that will be added to GQL Schema. Method has one argument.
@@ -17,12 +16,18 @@ import com.daikit.graphql.custommethod.IGQLCustomMethod2Arg;
  *            first argument type
  * @param <ARGUMENT_2_TYPE>
  *            second argument type
+ * @param <ARGUMENT_3_TYPE>
+ *            third argument type
+ * @param <ARGUMENT_4_TYPE>
+ *            fourth argument type
+ * @param <ARGUMENT_5_TYPE>
+ *            fifth argument type
  */
-public abstract class GQLCustomMethod2Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE, ARGUMENT_2_TYPE>
+public abstract class GQLCustomMethod5Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE, ARGUMENT_2_TYPE, ARGUMENT_3_TYPE, ARGUMENT_4_TYPE, ARGUMENT_5_TYPE>
 		extends
 			GQLAbstractCustomMethod<OUTPUT_TYPE>
 		implements
-			IGQLCustomMethod2Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE, ARGUMENT_2_TYPE> {
+			IGQLCustomMethod5Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE, ARGUMENT_2_TYPE, ARGUMENT_3_TYPE, ARGUMENT_4_TYPE, ARGUMENT_5_TYPE> {
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -31,7 +36,7 @@ public abstract class GQLCustomMethod2Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE, ARGUMENT
 	/**
 	 * Default constructor
 	 */
-	public GQLCustomMethod2Arg() {
+	public GQLCustomMethod5Arg() {
 		// Nothing done
 	}
 
@@ -47,9 +52,16 @@ public abstract class GQLCustomMethod2Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE, ARGUMENT
 	 *            first argument name
 	 * @param arg2Name
 	 *            second argument name
+	 * @param arg3Name
+	 *            third argument name
+	 * @param arg4Name
+	 *            fourth argument name
+	 * @param arg5Name
+	 *            fifth argument name
 	 */
-	public GQLCustomMethod2Arg(String methodName, boolean mutation, String arg1Name, String arg2Name) {
-		super(methodName, mutation, arg1Name, arg2Name);
+	public GQLCustomMethod5Arg(String methodName, boolean mutation, String arg1Name, String arg2Name, String arg3Name,
+			String arg4Name, String arg5Name) {
+		super(methodName, mutation, arg1Name, arg2Name, arg3Name, arg4Name, arg5Name);
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -63,7 +75,7 @@ public abstract class GQLCustomMethod2Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE, ARGUMENT
 	 */
 	@Override
 	public List<Type> getArgumentTypes() {
-		return GenericsUtils.getTypeArguments(getClass(), GQLCustomMethod2Arg.class).stream().skip(1)
+		return GenericsUtils.getTypeArguments(getClass(), GQLCustomMethod5Arg.class).stream().skip(1)
 				.collect(Collectors.toList());
 	}
 

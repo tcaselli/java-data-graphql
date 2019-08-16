@@ -1,11 +1,10 @@
-package com.daikit.graphql.custommethod.abs;
+package com.daikit.graphql.custommethod;
 
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.daikit.generics.utils.GenericsUtils;
-import com.daikit.graphql.custommethod.IGQLCustomMethod1Arg;
 
 /**
  * Custom method that will be added to GQL Schema. Method has one argument.
@@ -15,10 +14,18 @@ import com.daikit.graphql.custommethod.IGQLCustomMethod1Arg;
  *            the output type
  * @param <ARGUMENT_1_TYPE>
  *            first argument type
+ * @param <ARGUMENT_2_TYPE>
+ *            second argument type
+ * @param <ARGUMENT_3_TYPE>
+ *            third argument type
+ * @param <ARGUMENT_4_TYPE>
+ *            fourth argument type
  */
-public abstract class GQLCustomMethod1Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE> extends GQLAbstractCustomMethod<OUTPUT_TYPE>
+public abstract class GQLCustomMethod4Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE, ARGUMENT_2_TYPE, ARGUMENT_3_TYPE, ARGUMENT_4_TYPE>
+		extends
+			GQLAbstractCustomMethod<OUTPUT_TYPE>
 		implements
-			IGQLCustomMethod1Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE> {
+			IGQLCustomMethod4Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE, ARGUMENT_2_TYPE, ARGUMENT_3_TYPE, ARGUMENT_4_TYPE> {
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -27,7 +34,7 @@ public abstract class GQLCustomMethod1Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE> extends 
 	/**
 	 * Default constructor
 	 */
-	public GQLCustomMethod1Arg() {
+	public GQLCustomMethod4Arg() {
 		// Nothing done
 	}
 
@@ -39,11 +46,18 @@ public abstract class GQLCustomMethod1Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE> extends 
 	 * @param mutation
 	 *            whether this method is a mutation (return true) or a query
 	 *            (return false)
-	 * @param argName
-	 *            argument name
+	 * @param arg1Name
+	 *            first argument name
+	 * @param arg2Name
+	 *            second argument name
+	 * @param arg3Name
+	 *            third argument name
+	 * @param arg4Name
+	 *            fourth argument name
 	 */
-	public GQLCustomMethod1Arg(String methodName, boolean mutation, String argName) {
-		super(methodName, mutation, argName);
+	public GQLCustomMethod4Arg(String methodName, boolean mutation, String arg1Name, String arg2Name, String arg3Name,
+			String arg4Name) {
+		super(methodName, mutation, arg1Name, arg2Name, arg3Name, arg4Name);
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -57,7 +71,7 @@ public abstract class GQLCustomMethod1Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE> extends 
 	 */
 	@Override
 	public List<Type> getArgumentTypes() {
-		return GenericsUtils.getTypeArguments(getClass(), GQLCustomMethod1Arg.class).stream().skip(1)
+		return GenericsUtils.getTypeArguments(getClass(), GQLCustomMethod4Arg.class).stream().skip(1)
 				.collect(Collectors.toList());
 	}
 

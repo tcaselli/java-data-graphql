@@ -1,8 +1,7 @@
-package com.daikit.graphql.datafetcher.abs;
+package com.daikit.graphql.datafetcher;
 
 import com.daikit.graphql.builder.GQLSchemaBuilder;
 import com.daikit.graphql.constants.GQLSchemaConstants;
-import com.daikit.graphql.datafetcher.GQLAbstractDataFetcher;
 
 import graphql.language.Field;
 import graphql.schema.DataFetchingEnvironment;
@@ -22,7 +21,7 @@ public abstract class GQLAbstractGetByIdDataFetcher extends GQLAbstractDataFetch
 	// ABSTRACT METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	protected abstract Object runGet(String entityName, String id);
+	protected abstract Object getById(String entityName, String id);
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// METHODS
@@ -36,7 +35,7 @@ public abstract class GQLAbstractGetByIdDataFetcher extends GQLAbstractDataFetch
 				queryField.getArguments().stream()
 						.filter(argument -> GQLSchemaConstants.FIELD_ID.equals(argument.getName())).findFirst().get(),
 				environment.getArguments());
-		return runGet(entityName, id);
+		return getById(entityName, id);
 	}
 
 }

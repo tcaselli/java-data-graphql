@@ -1,9 +1,8 @@
-package com.daikit.graphql.datafetcher.abs;
+package com.daikit.graphql.datafetcher;
 
 import com.daikit.graphql.builder.GQLSchemaBuilder;
 import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.data.output.GQLDeleteResult;
-import com.daikit.graphql.datafetcher.GQLAbstractDataFetcher;
 
 import graphql.language.Field;
 import graphql.schema.DataFetchingEnvironment;
@@ -23,7 +22,7 @@ public abstract class GQLAbstractDeleteDataFetcher extends GQLAbstractDataFetche
 	// ABSTRACT METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	protected abstract void runDelete(String entityName, String id);
+	protected abstract void delete(String entityName, String id);
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// METHODS
@@ -35,7 +34,7 @@ public abstract class GQLAbstractDeleteDataFetcher extends GQLAbstractDataFetche
 		final String entityName = getEntityName(GQLSchemaConstants.MUTATION_DELETE_PREFIX, queryField.getName());
 		final String id = (String) getArgumentValue(queryField, GQLSchemaConstants.FIELD_ID,
 				environment.getArguments());
-		runDelete(entityName, id);
+		delete(entityName, id);
 		final GQLDeleteResult result = new GQLDeleteResult();
 		result.setId(id);
 		result.setTypename(entityName);

@@ -1,7 +1,7 @@
 package com.daikit.graphql.test.data;
 
 /**
- * Entity entity class 3
+ * Entity class 3
  *
  * @author Thibaut Caselli
  */

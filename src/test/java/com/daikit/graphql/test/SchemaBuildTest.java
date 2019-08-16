@@ -3,6 +3,7 @@ package com.daikit.graphql.test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +20,10 @@ import com.daikit.graphql.test.data.Entity1;
 import com.daikit.graphql.test.data.Entity2;
 import com.daikit.graphql.test.data.Entity3;
 import com.daikit.graphql.test.data.Entity4;
+import com.daikit.graphql.test.data.Entity5;
+import com.daikit.graphql.test.data.Entity6;
+import com.daikit.graphql.test.data.Entity7;
+import com.daikit.graphql.test.data.Entity8;
 import com.daikit.graphql.test.data.Enum1;
 import com.daikit.graphql.test.introspection.IntrospectionEnum;
 import com.daikit.graphql.test.introspection.IntrospectionFullType;
@@ -26,6 +31,7 @@ import com.daikit.graphql.test.introspection.IntrospectionInputValue;
 import com.daikit.graphql.test.introspection.IntrospectionResult;
 import com.daikit.graphql.test.introspection.IntrospectionTypeField;
 import com.daikit.graphql.test.introspection.IntrospectionTypeKindEnum;
+import com.daikit.graphql.utils.Message;
 
 import graphql.Scalars;
 
@@ -325,8 +331,6 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		final IntrospectionResult introspection = getIntrospection();
 		// QueryType
 		final IntrospectionFullType queryType = getFullType(introspection, GQLSchemaConstants.QUERY_TYPE);
-		// 10 = 4 entities * 2 queries + 2 custom method queries
-		Assert.assertEquals(11, queryType.getFields().size());
 		// - check all queries are available
 		final List<String> queryNames = new ArrayList<>();
 		Arrays.asList(Entity1.class, Entity2.class, Entity3.class, Entity4.class).stream().forEach(clazz -> {
@@ -349,7 +353,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 				Entity1.class.getSimpleName() + GQLSchemaConstants.LOAD_RESULT_SUFFIX);
 		Assert.assertEquals(3, getAllEntity1.getArgs().size());
 		assertArg(getAllEntity1, GQLSchemaConstants.FILTER, IntrospectionTypeKindEnum.INPUT_OBJECT,
-				GQLSchemaConstants.FILTER_FIELDS_PREFIX + Entity1.class.getSimpleName());
+				Entity1.class.getSimpleName() + GQLSchemaConstants.FILTER_SUFFIX);
 		assertArg(getAllEntity1, GQLSchemaConstants.PAGING, IntrospectionTypeKindEnum.INPUT_OBJECT,
 				getPagingInputTypeName());
 		assertArg(getAllEntity1, GQLSchemaConstants.ORDER_BY, IntrospectionTypeKindEnum.LIST,
@@ -364,7 +368,6 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		final IntrospectionResult introspection = getIntrospection();
 		// MutationType
 		final IntrospectionFullType mutationType = getFullType(introspection, GQLSchemaConstants.MUTATION_TYPE);
-		Assert.assertEquals(9, mutationType.getFields().size());
 
 		// - check all mutations are available
 		final List<String> mutationNames = new ArrayList<>();
@@ -417,6 +420,66 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		assertArg(customMethod2, "arg1", IntrospectionTypeKindEnum.INPUT_OBJECT,
 				EmbeddedData1.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
 		assertArg(customMethod2, "arg2", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
+	}
+
+	/**
+	 * Test CRUD configuration on methods
+	 */
+	@Test
+	public void testMethodCRUDConfig() {
+		final IntrospectionResult introspection = getIntrospection();
+		final IntrospectionFullType queryType = getFullType(introspection, GQLSchemaConstants.QUERY_TYPE);
+		final IntrospectionFullType mutationType = getFullType(introspection, GQLSchemaConstants.MUTATION_TYPE);
+		final String getByIdMethodName = GQLSchemaConstants.QUERY_GET_SINGLE_PREFIX + Entity6.class.getSimpleName();
+		final String getAllMethodName = GQLSchemaConstants.QUERY_GET_LIST_PREFIX + Entity6.class.getSimpleName();
+		final String saveMethodName = GQLSchemaConstants.MUTATION_SAVE_PREFIX + Entity7.class.getSimpleName();
+		final String deleteMethodName = GQLSchemaConstants.MUTATION_DELETE_PREFIX + Entity8.class.getSimpleName();
+		final Optional<IntrospectionTypeField> optionalGetByIdMethod = getOptionalField(queryType, getByIdMethodName);
+		final Optional<IntrospectionTypeField> optionalGetAllMethod = getOptionalField(queryType, getAllMethodName);
+		final Optional<IntrospectionTypeField> optionalSaveMethod = getOptionalField(mutationType, saveMethodName);
+		final Optional<IntrospectionTypeField> optionalDeleteMethod = getOptionalField(mutationType, deleteMethodName);
+		Assert.assertFalse(Message.format("There shouldn't be a [{}] method.", getByIdMethodName),
+				optionalGetByIdMethod.isPresent());
+		Assert.assertFalse(Message.format("There shouldn't be a [{}] method.", getAllMethodName),
+				optionalGetAllMethod.isPresent());
+		Assert.assertFalse(Message.format("There shouldn't be a [{}] method.", saveMethodName),
+				optionalSaveMethod.isPresent());
+		Assert.assertFalse(Message.format("There shouldn't be a [{}] method.", deleteMethodName),
+				optionalDeleteMethod.isPresent());
+	}
+
+	/**
+	 * Test CRUD configuration on fields
+	 */
+	@Test
+	public void testFieldCRUDConfig() {
+		final IntrospectionResult introspection = getIntrospection();
+		final String entityInputTypeName = Entity5.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX;
+		final IntrospectionFullType entityInputType = getFullType(introspection, entityInputTypeName);
+		final String entity5TypeName = Entity5.class.getSimpleName();
+		final IntrospectionFullType entityType = getFullType(introspection, entity5TypeName);
+		// Check field attr1 is not readable
+		final Optional<IntrospectionTypeField> attr1Field = getOptionalField(entityType, "attr1");
+		Assert.assertFalse(
+				Message.format("There shouldn't be a readable field [{}] in [{}].", "typeField", entity5TypeName),
+				attr1Field.isPresent());
+		// Check field attr2 is not saveable
+		final Optional<IntrospectionInputValue> attr2InputField = getOptionalInputField(entityInputType, "attr2");
+		Assert.assertFalse(
+				Message.format("There shouldn't be a not saveable field [{}] in [{}].", "attr2", entityInputTypeName),
+				attr2InputField.isPresent());
+		// Check field attr3 is not nullable
+		// It is not set as not null in schema since it is mandatory for
+		// creation but not necessarily for update
+		assertInputField(entityInputType, "attr3", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
+		// Check field attr4 is not filterable
+		final String entityFilterTypeName = Entity5.class.getSimpleName() + GQLSchemaConstants.FILTER_SUFFIX;
+		final IntrospectionFullType entityFilterInputType = getFullType(introspection, entityFilterTypeName);
+		final Optional<IntrospectionInputValue> attr4IinputField = getOptionalInputField(entityFilterInputType,
+				"attr4");
+		Assert.assertFalse(
+				Message.format("There shouldn't be a filterable field [{}] in [{}].", "attr4", entityFilterTypeName),
+				attr4IinputField.isPresent());
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -476,6 +539,10 @@ public class SchemaBuildTest extends AbstractTestSuite {
 
 	// Fields
 
+	private Optional<IntrospectionTypeField> getOptionalField(IntrospectionFullType fullType, String fieldName) {
+		return fullType.getFields().stream().filter(field -> fieldName.equals(field.getName())).findAny();
+	}
+
 	private IntrospectionTypeField getField(IntrospectionFullType fullType, String fieldName) {
 		final List<IntrospectionTypeField> typeField = fullType.getFields().stream()
 				.filter(field -> fieldName.equals(field.getName())).collect(Collectors.toList());
@@ -511,6 +578,10 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	}
 
 	// InputFields
+
+	private Optional<IntrospectionInputValue> getOptionalInputField(IntrospectionFullType fullType, String fieldName) {
+		return fullType.getInputFields().stream().filter(field -> fieldName.equals(field.getName())).findAny();
+	}
 
 	private IntrospectionInputValue getInputField(IntrospectionFullType fullType, String fieldName) {
 		final List<IntrospectionInputValue> typeField = fullType.getInputFields().stream()

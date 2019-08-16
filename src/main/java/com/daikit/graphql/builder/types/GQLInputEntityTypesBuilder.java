@@ -295,8 +295,7 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 					throw new IllegalArgumentException(
 							Message.format("Impossible to generate input types for [{}]. Maybe because of a loop ?",
 									lazyEntities.entrySet().stream()
-											.map(entry -> entry.getKey().getEntity().getEntityClass().getSimpleName()
-													+ " (fields=["
+											.map(entry -> entry.getKey().getEntity().getName() + " (fields=["
 													+ entry.getValue().stream().map(clazz -> clazz.getSimpleName())
 															.collect(Collectors.joining(", "))
 													+ "])")

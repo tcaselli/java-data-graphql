@@ -15,7 +15,7 @@ import graphql.ExecutionResult;
 
 /**
  * Tests verifying mutations are ran correctly
- * 
+ *
  * @author Thibaut Caselli
  */
 @SuppressWarnings("javadoc")
@@ -50,7 +50,7 @@ public class MutationExecutionTest extends AbstractTestSuite {
 					{
 						put("id", id);
 						put("intAttr", 150);
-						put("embeddedData1", data1);
+						put("embeddedData1", toMap(data1));
 					}
 				}).build()));
 		final Entity1 entity1Bis = toObject(result, Entity1.class);

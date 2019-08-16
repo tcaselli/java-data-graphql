@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.daikit.generics.utils.GenericsUtils;
-import com.daikit.graphql.custommethod.abs.GQLAbstractCustomMethod;
+import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
 import com.daikit.graphql.meta.GQLAbstractMetaData;
 
 /**

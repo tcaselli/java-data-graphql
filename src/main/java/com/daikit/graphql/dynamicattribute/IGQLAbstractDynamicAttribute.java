@@ -1,7 +1,6 @@
 package com.daikit.graphql.dynamicattribute;
 
 import com.daikit.generics.utils.GenericsUtils;
-import com.daikit.graphql.dynamicattribute.abs.GQLAbstractDynamicAttribute;
 
 /**
  * Abstract super interface for dynamic attributes
@@ -20,19 +19,6 @@ public interface IGQLAbstractDynamicAttribute<ENTITY_TYPE, ATTRIBUTE_TYPE> {
 	 *         GraphQL schema : queries, mutations, descriptions etc.
 	 */
 	String getName();
-
-	/**
-	 * Get the name of the entity holding this attribute in the GQL schema. By
-	 * default this is the simple name of the entity class taken from class
-	 * generics.
-	 *
-	 * @return the entity name
-	 */
-	default String getEntityName() {
-		return GenericsUtils
-				.getRawClass(GenericsUtils.getTypeArguments(getClass(), GQLAbstractDynamicAttribute.class).get(0))
-				.getSimpleName();
-	}
 
 	/**
 	 * @return the type of the entity this dynamic attribute is registered on.

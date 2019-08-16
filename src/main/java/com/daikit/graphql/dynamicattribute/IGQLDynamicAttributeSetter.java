@@ -24,4 +24,13 @@ public interface IGQLDynamicAttributeSetter<ENTITY_TYPE, ATTRIBUTE_TYPE>
 	 */
 	void setValue(ENTITY_TYPE source, ATTRIBUTE_TYPE valueToSet);
 
+	/**
+	 * Get the name of the entity holding this attribute in the GQL schema. By
+	 * default this is the simple name of the entity class taken from class
+	 * generics.
+	 *
+	 * @return the entity name
+	 */
+	String getEntityName();
+
 }

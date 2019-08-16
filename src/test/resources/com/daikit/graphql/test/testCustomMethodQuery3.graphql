@@ -6,5 +6,6 @@ query customMethodQuery3($arg1: Enum1, $arg2: [String], $arg3: [Enum1], $arg4: [
     embeddedData1s {
       stringAttr
     }
+    stringAttr
   }
 }

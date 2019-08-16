@@ -25,9 +25,9 @@ import com.daikit.graphql.builder.types.GQLQueryTypeBuilder;
 import com.daikit.graphql.builder.types.GQLReferencesBuilder;
 import com.daikit.graphql.data.output.GQLDeleteResult;
 import com.daikit.graphql.data.output.GQLListLoadResult;
+import com.daikit.graphql.datafetcher.GQLAbstractSaveDataFetcher;
+import com.daikit.graphql.datafetcher.GQLCustomMethodDataFetcher;
 import com.daikit.graphql.datafetcher.GQLPropertyDataFetcher;
-import com.daikit.graphql.datafetcher.abs.GQLCustomMethodDataFetcher;
-import com.daikit.graphql.datafetcher.abs.GQLAbstractSaveDataFetcher;
 import com.daikit.graphql.meta.GQLMetaDataModel;
 
 import graphql.schema.DataFetcher;

@@ -1,4 +1,4 @@
-package com.daikit.graphql.datafetcher.abs;
+package com.daikit.graphql.datafetcher;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.daikit.graphql.builder.GQLSchemaBuilder;
 import com.daikit.graphql.constants.GQLSchemaConstants;
-import com.daikit.graphql.datafetcher.GQLAbstractDataFetcher;
+import com.daikit.graphql.dynamicattribute.GQLDynamicAttributeSetter;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
 import com.daikit.graphql.utils.Message;
 
@@ -26,6 +26,7 @@ import graphql.schema.DataFetchingEnvironment;
  */
 public abstract class GQLAbstractSaveDataFetcher extends GQLAbstractDataFetcher<Object> {
 
+	// Map (key=entityName,value=Map(key=fieldName,value=dynAttrSetter))
 	private final Map<String, Map<String, IGQLDynamicAttributeSetter<Object, Object>>> dynamicAttributeSetters = new HashMap<>();
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -38,10 +39,10 @@ public abstract class GQLAbstractSaveDataFetcher extends GQLAbstractDataFetcher<
 	 * @param entity
 	 *            the entity to be saved
 	 */
-	protected abstract void runSave(Object entity);
+	protected abstract void save(Object entity);
 
 	/**
-	 * Find or create entity and set its field values from given field map
+	 * Find or create entity and set its field values from given field map.
 	 *
 	 * @param entityName
 	 *            the entity class name
@@ -49,7 +50,7 @@ public abstract class GQLAbstractSaveDataFetcher extends GQLAbstractDataFetcher<
 	 *            the {@link Map} of fields values to set in entity
 	 * @return the found/created entity
 	 */
-	protected abstract Object findOrCreateEntity(final String entityName,
+	protected abstract Object getOrCreateAndSetProperties(final String entityName,
 			final Map<String, IGQLDynamicAttributeSetter<Object, Object>> dynamicAttributeSetters,
 			final Map<String, Object> fieldValueMap);
 
@@ -60,9 +61,9 @@ public abstract class GQLAbstractSaveDataFetcher extends GQLAbstractDataFetcher<
 	protected Object runSave(final String entityName,
 			final Map<String, IGQLDynamicAttributeSetter<Object, Object>> dynamicAttributeSetters,
 			final Map<String, Object> fieldValueMap) {
-		final Object model = findOrCreateEntity(entityName, dynamicAttributeSetters, fieldValueMap);
+		final Object model = getOrCreateAndSetProperties(entityName, dynamicAttributeSetters, fieldValueMap);
 		// Run save
-		runSave(model);
+		save(model);
 		return model;
 	}
 
@@ -76,10 +77,7 @@ public abstract class GQLAbstractSaveDataFetcher extends GQLAbstractDataFetcher<
 		final Map<String, Object> arguments = getArgumentsForContext(environment.getArguments(),
 				GQLSchemaConstants.INPUT_DATA);
 		final Map<String, Object> fieldValueMap = convertObjectValue(objectValue, arguments);
-		final Map<String, IGQLDynamicAttributeSetter<Object, Object>> dynamicAttributeSetters = this.dynamicAttributeSetters
-				.get(entityName);
-		return runSave(entityName, dynamicAttributeSetters == null ? Collections.emptyMap() : dynamicAttributeSetters,
-				fieldValueMap);
+		return runSave(entityName, getDynamicAttributeSetters(entityName), fieldValueMap);
 	}
 
 	/**
@@ -103,6 +101,20 @@ public abstract class GQLAbstractSaveDataFetcher extends GQLAbstractDataFetcher<
 			map.put(dynamicAttributeSetter.getName(),
 					(IGQLDynamicAttributeSetter<Object, Object>) dynamicAttributeSetter);
 		});
+	}
+
+	/**
+	 * Get {@link GQLDynamicAttributeSetter} map for entity with given name
+	 *
+	 * @param entityName
+	 *            the entity name
+	 * @return a {@link Map}
+	 *         (key=fieldName,value={@link IGQLDynamicAttributeSetter})
+	 */
+	protected Map<String, IGQLDynamicAttributeSetter<Object, Object>> getDynamicAttributeSetters(String entityName) {
+		final Map<String, IGQLDynamicAttributeSetter<Object, Object>> dynamicAttributeSetters = this.dynamicAttributeSetters
+				.get(entityName);
+		return dynamicAttributeSetters == null ? Collections.emptyMap() : dynamicAttributeSetters;
 	}
 
 }

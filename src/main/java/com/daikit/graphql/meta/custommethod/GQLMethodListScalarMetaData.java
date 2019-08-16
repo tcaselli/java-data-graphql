@@ -2,7 +2,7 @@ package com.daikit.graphql.meta.custommethod;
 
 import java.util.List;
 
-import com.daikit.graphql.custommethod.abs.GQLAbstractCustomMethod;
+import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
 import com.daikit.graphql.enums.GQLScalarTypeEnum;
 
 /**

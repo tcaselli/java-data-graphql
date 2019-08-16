@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Entity entity class 1
+ * Entity class 1
  *
  * @author Thibaut Caselli
  */

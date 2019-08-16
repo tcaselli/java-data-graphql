@@ -1,6 +1,4 @@
-package com.daikit.graphql.dynamicattribute.abs;
-
-import com.daikit.graphql.dynamicattribute.IGQLAbstractDynamicAttribute;
+package com.daikit.graphql.dynamicattribute;
 
 /**
  * Abstract super class for {@link GQLDynamicAttributeGetter} ,

@@ -1,6 +1,6 @@
 package com.daikit.graphql.meta.custommethod;
 
-import com.daikit.graphql.custommethod.abs.GQLAbstractCustomMethod;
+import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
 
 /**
  * GraphQL dynamic method returning an embedded entity meta data

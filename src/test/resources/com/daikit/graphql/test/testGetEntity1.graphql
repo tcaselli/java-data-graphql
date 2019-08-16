@@ -4,5 +4,8 @@ query getEntity1($id: ID!) {
     intAttr
     longAttr
     stringAttr
+    embeddedData1 {
+      stringAttr
+    }
   }
 }

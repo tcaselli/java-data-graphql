@@ -222,7 +222,7 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 
 	private GraphQLInputObjectType buildQueryFilterFieldsObjectType(final GQLAbstractEntityMetaDataInfos infos) {
 		final GraphQLInputObjectType.Builder builder = GraphQLInputObjectType.newInputObject();
-		builder.name(GQLSchemaConstants.FILTER_FIELDS_PREFIX + infos.getEntity().getName());
+		builder.name(infos.getEntity().getName() + GQLSchemaConstants.FILTER_SUFFIX);
 		builder.description("Query filter fields object type for entity [" + infos.getEntity().getName() + "]");
 		final List<GraphQLInputObjectField> objectFields = new ArrayList<>();
 		// Add fields
@@ -245,14 +245,19 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 		final String description = "Filter [" + attribute.getName() + "]";
 		// Set attribute type
 		if (attribute instanceof GQLAttributeScalarMetaData) {
-			field = buildInputField(name, description, getCache().getInputScalarFilterOperators()
-					.get(((GQLAttributeScalarMetaData) attribute).getScalarType()));
+			final GraphQLInputObjectType scalarType = getCache().getInputScalarFilterOperators()
+					.get(((GQLAttributeScalarMetaData) attribute).getScalarType());
+			if (scalarType == null) {
+				// Not handled
+			} else {
+				field = buildInputField(name, description, scalarType);
+			}
 		} else if (attribute instanceof GQLAttributeEnumMetaData) {
 			field = buildInputField(name, description, getCache().getInputEnumFilterOperators()
 					.get(((GQLAttributeEnumMetaData) attribute).getEnumClass()));
 		} else if (attribute instanceof GQLAttributeEntityMetaData) {
 			if (((GQLAttributeEntityMetaData) attribute).isEmbedded()) {
-
+				// Not handled
 			} else {
 				field = buildInputField(name + GQLSchemaConstants.ID_SUFFIX,
 						"Filter [id] of [" + attribute.getName() + "]", Scalars.GraphQLID);

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Entity entity class 2
+ * Entity class 2
  *
  * @author Thibaut Caselli
  */

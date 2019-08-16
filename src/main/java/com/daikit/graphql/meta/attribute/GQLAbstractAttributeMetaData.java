@@ -15,7 +15,7 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	private boolean readable = true;
 	private boolean saveable = true;
 	private boolean nullable = true;
-	private boolean filterable = false;
+	private boolean filterable = true;
 
 	private IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter;
 	private IGQLDynamicAttributeSetter<?, ?> dynamicAttributeSetter;

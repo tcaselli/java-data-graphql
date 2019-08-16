@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.daikit.graphql.custommethod.abs.GQLCustomMethod1Arg;
-import com.daikit.graphql.custommethod.abs.GQLCustomMethod2Arg;
-import com.daikit.graphql.custommethod.abs.GQLCustomMethod5Arg;
+import com.daikit.graphql.custommethod.GQLCustomMethod1Arg;
+import com.daikit.graphql.custommethod.GQLCustomMethod2Arg;
+import com.daikit.graphql.custommethod.GQLCustomMethod5Arg;
+import com.daikit.graphql.dynamicattribute.GQLDynamicAttributeGetter;
+import com.daikit.graphql.dynamicattribute.GQLDynamicAttributeSetter;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeGetter;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
-import com.daikit.graphql.dynamicattribute.abs.GQLDynamicAttributeGetter;
-import com.daikit.graphql.dynamicattribute.abs.GQLDynamicAttributeSetter;
 import com.daikit.graphql.enums.GQLScalarTypeEnum;
 import com.daikit.graphql.meta.GQLMetaDataModel;
 import com.daikit.graphql.meta.GQLMetaDataModelBuilder;
@@ -58,6 +58,10 @@ public class GQLMetaData {
 			entityMetaDatas.add(buildEntity2());
 			entityMetaDatas.add(buildEntity3());
 			entityMetaDatas.add(buildEntity4());
+			entityMetaDatas.add(buildEntity5());
+			entityMetaDatas.add(buildEntity6());
+			entityMetaDatas.add(buildEntity7());
+			entityMetaDatas.add(buildEntity8());
 
 			entityMetaDatas.add(buildEmbeddedData1());
 			entityMetaDatas.add(buildEmbeddedData2());
@@ -128,6 +132,10 @@ public class GQLMetaData {
 				public void setValue(Entity1 source, String valueToSet) {
 					source.setStringAttr(valueToSet);
 				}
+				@Override
+				public String getEntityName() {
+					return Entity1.class.getSimpleName();
+				}
 			};
 			final GQLAttributeScalarMetaData dynamicAttrSetterAttribute = new GQLAttributeScalarMetaData(
 					dynamicAttributeSetter.getName(), GQLScalarTypeEnum.STRING);
@@ -138,27 +146,59 @@ public class GQLMetaData {
 		}
 
 		private GQLEntityMetaData buildEntity2() {
-			final GQLEntityMetaData entity2 = new GQLEntityMetaData(Entity2.class.getSimpleName(), Entity2.class,
+			final GQLEntityMetaData entity = new GQLEntityMetaData(Entity2.class.getSimpleName(), Entity2.class,
 					AbstractEntity.class);
-			entity2.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullable(false));
-			entity2.addAttribute(new GQLAttributeListEntityMetaData("entity1s", Entity1.class));
-			return entity2;
+			entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullable(false));
+			entity.addAttribute(new GQLAttributeListEntityMetaData("entity1s", Entity1.class));
+			return entity;
 		}
 
 		private GQLEntityMetaData buildEntity3() {
-			final GQLEntityMetaData entity3 = new GQLEntityMetaData(Entity3.class.getSimpleName(), Entity3.class,
+			final GQLEntityMetaData entity = new GQLEntityMetaData(Entity3.class.getSimpleName(), Entity3.class,
 					AbstractEntity.class);
-			entity3.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullable(false));
-			entity3.addAttribute(new GQLAttributeEntityMetaData("entity1", Entity1.class));
-			return entity3;
+			entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullable(false));
+			entity.addAttribute(new GQLAttributeEntityMetaData("entity1", Entity1.class));
+			return entity;
 		}
 
 		private GQLEntityMetaData buildEntity4() {
-			final GQLEntityMetaData entity4 = new GQLEntityMetaData(Entity4.class.getSimpleName(), Entity4.class,
+			final GQLEntityMetaData entity = new GQLEntityMetaData(Entity4.class.getSimpleName(), Entity4.class,
 					AbstractEntity.class);
-			entity4.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullable(false));
-			entity4.addAttribute(new GQLAttributeListEntityMetaData("entity1s", Entity1.class));
-			return entity4;
+			entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullable(false));
+			entity.addAttribute(new GQLAttributeListEntityMetaData("entity1s", Entity1.class));
+			return entity;
+		}
+
+		private GQLEntityMetaData buildEntity5() {
+			final GQLEntityMetaData entity = new GQLEntityMetaData(Entity5.class.getSimpleName(), Entity5.class,
+					AbstractEntity.class);
+			entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullable(false));
+			entity.addAttribute(new GQLAttributeScalarMetaData("attr1", GQLScalarTypeEnum.STRING).setReadable(false));
+			entity.addAttribute(new GQLAttributeScalarMetaData("attr2", GQLScalarTypeEnum.STRING).setSaveable(false));
+			entity.addAttribute(new GQLAttributeScalarMetaData("attr3", GQLScalarTypeEnum.STRING).setNullable(false));
+			entity.addAttribute(new GQLAttributeScalarMetaData("attr4", GQLScalarTypeEnum.STRING).setFilterable(false));
+			return entity;
+		}
+
+		private GQLEntityMetaData buildEntity6() {
+			final GQLEntityMetaData entity = new GQLEntityMetaData(Entity6.class.getSimpleName(), Entity6.class,
+					AbstractEntity.class).setReadable(false);
+			entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullable(false));
+			return entity;
+		}
+
+		private GQLEntityMetaData buildEntity7() {
+			final GQLEntityMetaData entity = new GQLEntityMetaData(Entity7.class.getSimpleName(), Entity7.class,
+					AbstractEntity.class).setSaveable(false);
+			entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullable(false));
+			return entity;
+		}
+
+		private GQLEntityMetaData buildEntity8() {
+			final GQLEntityMetaData entity = new GQLEntityMetaData(Entity8.class.getSimpleName(), Entity8.class,
+					AbstractEntity.class).setDeletable(false);
+			entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullable(false));
+			return entity;
 		}
 
 		private GQLEntityMetaData buildEmbeddedData1() {
@@ -256,7 +296,9 @@ public class GQLMetaData {
 					result.setStringList(arg2);
 					result.setEnumList(arg3);
 					result.setEmbeddedData1s(arg4);
-					result.setStringAttr(arg5);
+					if (arg5 == null) {
+						result.setStringAttr("NULLVALUE");
+					}
 					return result;
 				}
 			};

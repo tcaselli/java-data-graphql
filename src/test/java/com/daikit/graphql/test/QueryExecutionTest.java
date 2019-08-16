@@ -105,7 +105,7 @@ public class QueryExecutionTest extends AbstractTestSuite {
 		Assert.assertEquals(stringList, resultData.getStringList());
 		Assert.assertEquals(enumList, resultData.getEnumList());
 		Assert.assertEquals(dataList.size(), resultData.getEmbeddedData1s().size());
-		Assert.assertNull(resultData.getStringAttr());
+		Assert.assertEquals("NULLVALUE", resultData.getStringAttr());
 		dataList.forEach(
 				data -> Assert.assertTrue("dataList argument does not contain data[" + data.getStringAttr() + "]",
 						resultData.getEmbeddedData1s().stream()

@@ -1,6 +1,6 @@
 package com.daikit.graphql.meta.custommethod;
 
-import com.daikit.graphql.custommethod.abs.GQLAbstractCustomMethod;
+import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
 import com.daikit.graphql.enums.GQLScalarTypeEnum;
 
 /**

@@ -1,11 +1,10 @@
-package com.daikit.graphql.custommethod.abs;
+package com.daikit.graphql.custommethod;
 
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.daikit.generics.utils.GenericsUtils;
-import com.daikit.graphql.custommethod.IGQLCustomMethod3Arg;
 
 /**
  * Custom method that will be added to GQL Schema. Method has one argument.

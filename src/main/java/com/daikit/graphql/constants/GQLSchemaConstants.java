@@ -58,7 +58,7 @@ public class GQLSchemaConstants {
 	public static final String FILTER_OPERATOR = "operator";
 	public static final String FILTER_VALUE = "value";
 
-	public static final String FILTER_FIELDS_PREFIX = "FilterFields";
+	public static final String FILTER_SUFFIX = "Filter";
 
 	public static final String EMBEDDED_TYPE_PREFIX = "type";
 

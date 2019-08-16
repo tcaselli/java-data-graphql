@@ -1,4 +1,4 @@
-package com.daikit.graphql.datafetcher.abs;
+package com.daikit.graphql.datafetcher;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,7 +12,6 @@ import com.daikit.graphql.builder.GQLSchemaBuilder;
 import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.data.input.GQLListLoadConfig;
 import com.daikit.graphql.data.output.GQLListLoadResult;
-import com.daikit.graphql.datafetcher.GQLAbstractDataFetcher;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeFilter;
 import com.daikit.graphql.enums.GQLFilterOperatorEnum;
 import com.daikit.graphql.enums.GQLOrderByDirectionEnum;
@@ -42,7 +41,7 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 	// ABSTRACT METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	protected abstract GQLListLoadResult runGetAll(String entityName, GQLListLoadConfig listLoadConfig);
+	protected abstract GQLListLoadResult getAll(String entityName, GQLListLoadConfig listLoadConfig);
 
 	protected abstract Object getById(String entityName, String id);
 
@@ -179,7 +178,7 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 			}
 		}
 
-		return runGetAll(entityName, listLoadConfig);
+		return getAll(entityName, listLoadConfig);
 	}
 
 	/**
