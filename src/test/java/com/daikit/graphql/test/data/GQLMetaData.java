@@ -140,44 +140,24 @@ public class GQLMetaData {
 		private GQLEntityMetaData buildEntity2() {
 			final GQLEntityMetaData entity2 = new GQLEntityMetaData(Entity2.class.getSimpleName(), Entity2.class,
 					AbstractEntity.class);
-
-			final GQLAttributeScalarMetaData idAttr = new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID);
-			idAttr.setNullable(false);
-			entity2.addAttribute(idAttr);
-
-			final GQLAttributeListEntityMetaData entity1s = new GQLAttributeListEntityMetaData("entity1s",
-					Entity1.class);
-			entity2.addAttribute(entity1s);
-
+			entity2.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullable(false));
+			entity2.addAttribute(new GQLAttributeListEntityMetaData("entity1s", Entity1.class));
 			return entity2;
 		}
 
 		private GQLEntityMetaData buildEntity3() {
 			final GQLEntityMetaData entity3 = new GQLEntityMetaData(Entity3.class.getSimpleName(), Entity3.class,
 					AbstractEntity.class);
-
-			final GQLAttributeScalarMetaData idAttr = new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID);
-			idAttr.setNullable(false);
-			entity3.addAttribute(idAttr);
-
-			final GQLAttributeEntityMetaData entity1 = new GQLAttributeEntityMetaData("entity1", Entity1.class);
-			entity3.addAttribute(entity1);
-
+			entity3.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullable(false));
+			entity3.addAttribute(new GQLAttributeEntityMetaData("entity1", Entity1.class));
 			return entity3;
 		}
 
 		private GQLEntityMetaData buildEntity4() {
 			final GQLEntityMetaData entity4 = new GQLEntityMetaData(Entity4.class.getSimpleName(), Entity4.class,
 					AbstractEntity.class);
-
-			final GQLAttributeScalarMetaData idAttr = new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID);
-			idAttr.setNullable(false);
-			entity4.addAttribute(idAttr);
-
-			final GQLAttributeListEntityMetaData entity1s = new GQLAttributeListEntityMetaData("entity1s",
-					Entity1.class);
-			entity4.addAttribute(entity1s);
-
+			entity4.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullable(false));
+			entity4.addAttribute(new GQLAttributeListEntityMetaData("entity1s", Entity1.class));
 			return entity4;
 		}
 

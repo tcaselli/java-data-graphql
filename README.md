@@ -54,7 +54,10 @@ List<Integer>, List<Long> ...
 CustomEnum, List<CustomEnum>
 // Relations 1To1, 1ToMany, ManyTo1, ManyToMany between entities
 OtherEntity, List<OtherEntity>
-// Relations 1To1, 1ToMany between an entity and an embedded entity (embedded = persisted as part of the entity, embedded entities may have all types of attributes including relations to other embedded entities but no relation to entities)
+// Relations 1To1, 1ToMany between an entity and an embedded entity 
+// (embedded = persisted as part of the entity, embedded entities may have all 
+// types of attributes including relations to other embedded entities but 
+// no relation to entities)
 EmbeddedEntity, List<EmbeddedEntity>
 ```
 
@@ -140,8 +143,10 @@ final GQLCustomMethod1Arg<Integer, String> method = new GQLCustomMethod1Arg<Inte
     }
 };
 // The method meta data to be registered in meta model for schema building
-final GQLAbstractMethodMetaData metaData = new GQLMethodScalarMetaData(method, Entity1.class, GQLScalarTypeEnum.INT);
-metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgName(0), GQLScalarTypeEnum.STRING));
+final GQLAbstractMethodMetaData metaData = new GQLMethodScalarMetaData(
+    method, Entity1.class, GQLScalarTypeEnum.INT);
+metaData.addArgument(new GQLMethodArgumentScalarMetaData(
+    method.getArgName(0), GQLScalarTypeEnum.STRING));
 ```
 
 -> For 2 argument methods, implement IGQLCustomMethod2Arg or extend default implementation GQLCustomMethod2Arg
@@ -163,8 +168,10 @@ final GQLCustomMethod2Arg<Date, String, EmbeddedEntity1> method =
 // The method meta data to be registered in meta model for schema building
 final GQLAbstractMethodMetaData metaData = new GQLMethodScalarMetaData(
     method, Entity1.class, GQLScalarTypeEnum.DATE);
-metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgName(0), GQLScalarTypeEnum.STRING));
-metaData.addArgument(new GQLMethodArgumentEmbeddedEntityMetaData(method.getArgName(1), EmbeddedEntity1.class));
+metaData.addArgument(new GQLMethodArgumentScalarMetaData(
+    method.getArgName(0), GQLScalarTypeEnum.STRING));
+metaData.addArgument(new GQLMethodArgumentEmbeddedEntityMetaData(
+    method.getArgName(1), EmbeddedEntity1.class));
 ```
 
 -> Etc... You can register methods with up to 5 arguments.
@@ -186,7 +193,8 @@ final IGQLDynamicAttributeGetter<Entity1, String> dynamicAttributeGetter =
     }
 };
 // Register the attribute in the entity meta data
-final GQLEntityMetaData metaData = new GQLEntityMetaData("Entity1", Entity1.class, AbstractEntity.class);
+final GQLEntityMetaData metaData = new GQLEntityMetaData(
+    "Entity1", Entity1.class, AbstractEntity.class);
 final GQLAttributeScalarMetaData attribute = new GQLAttributeScalarMetaData(
     dynamicAttributeGetter.getName(), GQLScalarTypeEnum.STRING);
 attribute.setDynamicAttributeGetter(dynamicAttributeGetter);
@@ -204,7 +212,8 @@ final IGQLDynamicAttributeSetter<Entity1, EmbeddedEntity1> dynamicAttributeSette
     }
 };
 // Register the attribute in the entity meta data
-final GQLEntityMetaData metaData = new GQLEntityMetaData("Entity1", Entity1.class, AbstractEntity.class);
+final GQLEntityMetaData metaData = new GQLEntityMetaData(
+    "Entity1", Entity1.class, AbstractEntity.class);
 final GQLAttributeEmbeddedEntityMetaData attribute = new GQLAttributeEmbeddedEntityMetaData(
     dynamicAttributeSetter.getName(), EmbeddedEntity1.class);
 attribute.setDynamicAttributeSetter(dynamicAttributeSetter);
@@ -214,6 +223,37 @@ metaData.addAttribute(attribute);
 -> For a **readable** an **writable** attribute, implement IGQLDynamicAttributeGetter and IGQLDynamicAttributeSetter or extend default implementation GQLDynamicAttributeGetterSetter
 
 ### Accessibility on entities & fields for CRUD operations
+
+As stated before, this library is generating a schema with methods giving the possibility to execute CRUD operations on entities (getById, getAll, save, delete).  
+By default all registered entities will have these 4 methods generated, but you can customize these methods generation in the meta model.
+
+```java
+final GQLEntityMetaData metaData = new GQLEntityMetaData(
+    "Entity1", Entity1.class, AbstractEntity.class);
+// This will prevent "delete method" generation for this entity
+metaData.setDeletable(false);
+// This will prevent "getById" and "getAll methods" generation for this entity
+metaData.setReadable(false);
+// This will prevent "save method" generation for this entity
+metaData.setSaveable(false);
+```
+
+You can also configure the possibility to read, write, nullify and filter on entity attributes. By default all entity attributes are readable, writeable, nullable, and filterable.
+
+```java
+// Example with a scalar attribute
+final GQLAttributeScalarMetaData attribute = new GQLAttributeScalarMetaData("attributeName", GQLScalarTypeEnum.STRING);
+// This will prevent generation of this attribute in schema type for this entity
+attribute.setReadable(false);
+// This will prevent generation of this attribute in schema input type 
+// for this entity save method
+attribute.setSaveable(false);
+// This will make the field "Not nullable" during save operation.
+// This configuration is ignored if the field is not saveable.
+attribute.setNullable(false);
+// This will disable filtering feature on this field in "getAll" method
+attribute.setFilterable(false);
+```
 
 ## Where can I get the latest release?
 
