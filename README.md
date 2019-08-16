@@ -218,8 +218,7 @@ IGQLDynamicAttributeGetter<Entity1, String> dynamicAttributeGetter =
     }
 };
 // Register the attribute in the entity meta data
-GQLEntityMetaData metaData = new GQLEntityMetaData(
-    "Entity1", Entity1.class, AbstractEntity.class);
+GQLEntityMetaData metaData = new GQLEntityMetaData("Entity1", Entity1.class, AbstractEntity.class);
 GQLAttributeScalarMetaData attribute = new GQLAttributeScalarMetaData(
     dynamicAttributeGetter.getName(), GQLScalarTypeEnum.STRING);
 attribute.setDynamicAttributeGetter(dynamicAttributeGetter);
@@ -237,8 +236,7 @@ IGQLDynamicAttributeSetter<Entity1, EmbeddedEntity1> dynamicAttributeSetter =
     }
 };
 // Register the attribute in the entity meta data
-GQLEntityMetaData metaData = new GQLEntityMetaData(
-    "Entity1", Entity1.class, AbstractEntity.class);
+GQLEntityMetaData metaData = new GQLEntityMetaData("Entity1", Entity1.class, AbstractEntity.class);
 GQLAttributeEmbeddedEntityMetaData attribute = new GQLAttributeEmbeddedEntityMetaData(
     dynamicAttributeSetter.getName(), EmbeddedEntity1.class);
 attribute.setDynamicAttributeSetter(dynamicAttributeSetter);
@@ -253,8 +251,7 @@ As stated before, this library is generating a schema with methods giving the po
 By default all registered entities will have these 4 methods generated, but you can customize these methods generation in the meta model.
 
 ```java
-GQLEntityMetaData metaData = new GQLEntityMetaData(
-    "Entity1", Entity1.class, AbstractEntity.class);
+GQLEntityMetaData metaData = new GQLEntityMetaData("Entity1", Entity1.class, AbstractEntity.class);
 // This will prevent "delete method" generation for this entity
 metaData.setDeletable(false);
 // This will prevent "getById" and "getAll methods" generation for this entity
@@ -311,8 +308,7 @@ private DataFetcher<?> createGetByIdDataFetcher() {
 // The list of dynamic attribute filters for beeing able to filter 
 // on dynamic attributes. This is an advanced topic, you can start 
 // with an empty list here.
-List<IGQLDynamicAttributeFilter> dynamicAttributeFilters = 
-    Collections.emptyList();
+List<IGQLDynamicAttributeFilter> dynamicAttributeFilters = Collections.emptyList();
 private DataFetcher<GQLListLoadResult> createListDataFetcher() {
     return new GQLAbstractGetListDataFetcher(dynamicAttributeFilters) {
         @Override
