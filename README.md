@@ -180,10 +180,10 @@ metaData.addArgument(new GQLMethodArgumentScalarMetaData(
 GQLCustomMethod2Arg<Date, String, EmbeddedEntity1> method = 
     new GQLCustomMethod2Arg<Date, String, EmbeddedEntity1>(
     "customMethodMutation", true, "arg1", "arg2") { 
-        // "customMethodMutation" = method name
-        // true = "this is mutation"
-        // "arg1" = argument 1 name within the generated schema
-        // "arg2" = argument 2 name within the generated schema
+    // "customMethodMutation" = method name
+    // true = "this is mutation"
+    // "arg1" = argument 1 name within the generated schema
+    // "arg2" = argument 2 name within the generated schema
     @Override
     public Date apply(String arg1, EmbeddedEntity1 arg2) {
         // Do something and return a Date
@@ -314,22 +314,22 @@ private DataFetcher<?> createGetByIdDataFetcher() {
 List<IGQLDynamicAttributeFilter> dynamicAttributeFilters = 
     Collections.emptyList();
 private DataFetcher<GQLListLoadResult> createListDataFetcher() {
-		return new GQLAbstractGetListDataFetcher(dynamicAttributeFilters) {
-			@Override
-			protected GQLListLoadResult getAll(
-                String entityName, GQLListLoadConfig listLoadConfig) {
-                // Build the GQLListLoadResult
-                return result;
-			}
-			@Override
-			protected Object getById(String entityName, String id) {
-				// Get the entity by ID from your persistence layer here
-                // This is the same method than the one in getById DataFetcher
-                // It is used to retrieve entity filters by ID
-                return entity;
-			}
-		};
-	}
+    return new GQLAbstractGetListDataFetcher(dynamicAttributeFilters) {
+        @Override
+        protected GQLListLoadResult getAll(
+            String entityName, GQLListLoadConfig listLoadConfig) {
+            // Build the GQLListLoadResult
+            return result;
+        }
+        @Override
+        protected Object getById(String entityName, String id) {
+            // Get the entity by ID from your persistence layer here
+            // This is the same method than the one in getById DataFetcher
+            // It is used to retrieve entity filters by ID
+            return entity;
+        }
+    };
+}
 ```
 
 -> Create the unique DataFetcher for all entities "save" methods.
@@ -357,8 +357,7 @@ private DataFetcher<?> createSaveDataFetchers() {
             final String id = (String) fieldValueMap.get(GQLSchemaConstants.FIELD_ID);
             final Optional<?> existing = StringUtils.isEmpty(id) ?
                 Optional.empty() : persistence.getById(entityClass, id);
-            Object entity = existing.isPresent() ? 
-                existing.get() : entityClass.newInstance();
+            Object entity = existing.isPresent() ? existing.get() : entityClass.newInstance();
             // Set properties
             fieldValueMap.entrySet().stream().forEach(entry -> {
                 final IGQLDynamicAttributeSetter<Object, Object> 
