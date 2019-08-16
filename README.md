@@ -10,14 +10,14 @@ Java-data-graphql is a layer above the great [graphql-java](https://github.com/g
 * handle dynamic attributes on any entity.
 * add custom methods (queries or mutations) to enrich your schema.
 * deal with paging, sorting, filtering on queries.
-* easily create "data fetchers" for linking this library to the persistence layer of your choice. [pookie](#metamodel)
+* easily create "data fetchers" for linking this library to the persistence layer of your choice.
 
 This library is well tested and used in several projects already. The real advantage of using this library over using graphql-java directly is that you do not define a graphql schema by yourself which can be a painful task, but you rather define a set of entities, custom methods etc and the graphQL schema is generated for you.  
 
 ### <a id="generate-schema"></a>Generate the schema
 
-In order to generate a schema there is 1 entry point : the ```com.daikit.graphql.builder.GQLSchemaBuilder``` class with its #buildSchema method.  
-This method is waiting for a [meta model](#meta-model) and [data fetchers](#data-fetchers).
+In order to generate a schema there is 1 entry point : the ```com.daikit.graphql.builder.GQLSchemaBuilder``` class with its buildSchema(...) method.  
+This method is waiting for a [meta model](#the-meta-model) and [data fetchers](#data-fetchers).
 
 ```java
 GQLMetaDataModel metaDataModel = GQLMetaData.buildMetaDataModel();
@@ -55,15 +55,15 @@ ExecutionResult result = executor.execute(
 );
 ```
 
-### <a id="meta-model"></a>The meta model
+### The meta model
 
-The meta model ```com.daikit.graphql.meta.GQLMetaDataModel``` is the base of the schema generation. It is in the meta model that you can define all you entities (top level or embedded, abstract or concrete), enumerations and custom methods.  
-The meta model can be written by hand in java or parsed from a json/yaml definition file or generated out of your code (for example using JPA meta model and spring components as a basis).  
+The meta model ```com.daikit.graphql.meta.GQLMetaDataModel``` is the base of the schema generation. It is in this meta model that you will define all your entities (top level or embedded, abstract or concrete), enumerations and custom methods.  
+The meta model can be written by hand in java or parsed from a json/yaml definition file or generated out of your domain layer code (for example using JPA meta model and spring components as a basis).  
 See next sections for details on how to define these things and create this meta model.
 
 ### Serializable property types for building meta model
 
-Your entities have properties. You can make them available in your schema if they typed with one of the supported types (if you have other types of properties you can add custom scalar types or custom code in data fetcher to wrap these types to any of the supported types).
+Your entities have properties. You can make them available in your schema if they are typed with one of the supported types (if you have other types of properties you can add custom scalar types or custom code in data fetcher to wrap these types to any of the supported types).
 
 Supported types :
 
@@ -129,12 +129,12 @@ metaData.addAttribute(new GQLAttributeListEmbeddedEntityMetaData("embeddedEntity
 
 ### Defining embedded entities in meta model
 
-In order to define an entity you have to register a ```com.daikit.graphql.meta.entity.GQLEmbeddedEntityMetaData```  in the meta model. You would then do exactly the same than when you register an entity (see previous chapter) excepted that you cannot register an attribute with a relation to a non embedded entity.
+In order to define an entity you have to register a ```com.daikit.graphql.meta.entity.GQLEmbeddedEntityMetaData```  in the meta model. You would then do exactly the same than when you register an entity (see previous chapter) excepted that in an embedded entity you cannot register an attribute with a relation to a non embedded entity.
 
 ### Defining custom methods in meta model
 
 This library will generate CRUD method on entities and make them available in the schema. If you need to have other methods available in the schema you can define custom methods. A custom method can either be a query or a mutation.  
-For each of these custom methods you will need to create a custom method object. This object will be a different type depending on the number of arguments of your method.
+For each of these custom methods you will need to create a custom method object. This object will be of a different type depending on the number of arguments of your method.
 
 -> For 0 argument methods, implement IGQLCustomMethod0Arg or extend default implementation GQLCustomMethod0Arg
 ```java
@@ -254,7 +254,7 @@ By default all registered entities will have these 4 methods generated, but you 
 GQLEntityMetaData metaData = new GQLEntityMetaData("Entity1", Entity1.class, AbstractEntity.class);
 // This will prevent "delete method" generation for this entity
 metaData.setDeletable(false);
-// This will prevent "getById" and "getAll methods" generation for this entity
+// This will prevent "getById method" and "getAll method" generation for this entity
 metaData.setReadable(false);
 // This will prevent "save method" generation for this entity
 metaData.setSaveable(false);
@@ -277,14 +277,14 @@ attribute.setNullable(false);
 // This will disable filtering feature on this attribute in "getAll" method
 attribute.setFilterable(false);
 ```
-### <a id="data-fetchers"></a>Data fetchers
+### Data fetchers
 
-Data fetchers ```graphql.schema.DataFetcher<?>``` are objects that will give provide the glue between graphQL and your persistence layer. you will have to provide a data fetcher for :
+Data fetchers ```graphql.schema.DataFetcher<?>``` are objects that will make the glue between graphQL and your persistence layer. You will have to provide a data fetcher for :
 * 'getById' methods for retrieving a single entity by its ID
 * 'getAll' methods for retrieving list of entities (with paging, filtering, sorting if needed)
 * 'save' methods for creation & update of entities
 * 'delete' methods dor deleting a single entity by its ID
-* and 1 for each custom method that you define
+* and 1 for each custom method that you want to define
   
 You have an abstract class to extend for each of these data fetchers.  
 See below examples explaining how to create these data fetchers , then you can use them for [generating the schema](#generate-schema)
