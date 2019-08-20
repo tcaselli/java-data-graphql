@@ -25,8 +25,7 @@ public interface IGQLAbstractDynamicAttribute<ENTITY_TYPE, ATTRIBUTE_TYPE> {
 	 *         By default it is taken from class generics.
 	 */
 	default Class<?> getEntityType() {
-		return GenericsUtils
-				.getRawClass(GenericsUtils.getTypeArguments(getClass(), IGQLAbstractDynamicAttribute.class).get(0));
+		return GenericsUtils.getTypeClassArguments(getClass(), IGQLAbstractDynamicAttribute.class).get(0);
 	}
 
 	/**
@@ -34,8 +33,7 @@ public interface IGQLAbstractDynamicAttribute<ENTITY_TYPE, ATTRIBUTE_TYPE> {
 	 *         class generics.
 	 */
 	default Class<?> getAttributeType() {
-		return GenericsUtils
-				.getRawClass(GenericsUtils.getTypeArguments(getClass(), IGQLAbstractDynamicAttribute.class).get(1));
+		return GenericsUtils.getTypeClassArguments(getClass(), IGQLAbstractDynamicAttribute.class).get(1);
 	}
 
 }

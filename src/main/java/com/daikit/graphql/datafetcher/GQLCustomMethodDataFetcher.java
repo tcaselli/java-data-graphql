@@ -93,7 +93,7 @@ public class GQLCustomMethodDataFetcher extends GQLAbstractDataFetcher<Object> {
 		final Type expectedType = method.getArgumentTypes().get(argumentPosition);
 		Object mappedValue = argumentGraphQLValue;
 		if (mappedValue != null && mappedValue instanceof Map) {
-			final Class<?> expectedClass = GenericsUtils.getRawClass(expectedType);
+			final Class<?> expectedClass = GenericsUtils.getTypeClass(expectedType);
 			mappedValue = convertValue((Map<String, Object>) mappedValue, expectedClass, argumentPosition);
 		}
 		return (T) mappedValue;
