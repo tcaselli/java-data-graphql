@@ -62,9 +62,7 @@ public class GQLCustomMethodBuilder extends GQLAbstractSchemaSubBuilder {
 	 * @param methods
 	 *            the list of {@link GQLAbstractMethodMetaData} to build query
 	 *            fields from
-	 * @param dynamicMethodDataFetcherCreator
-	 *            the {@link GQLMethodDataFetcher} creator for dynamic methods
-	 * @return a {@link Map} of (key={@linkGQLAbstractMethodMetaData }, value=
+	 * @return a {@link Map} of (key={@link GQLAbstractMethodMetaData}, value=
 	 *         {@link GraphQLFieldDefinition}]
 	 */
 	public Map<GQLAbstractMethodMetaData, GraphQLFieldDefinition> buildMethods(

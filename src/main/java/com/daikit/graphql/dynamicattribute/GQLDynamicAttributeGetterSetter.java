@@ -1,7 +1,7 @@
 package com.daikit.graphql.dynamicattribute;
 
 /**
- * Dynamic attribute getter & setter
+ * Dynamic attribute getter and setter
  *
  * @author Thibaut Caselli
  * @param <ENTITY_TYPE>

@@ -18,6 +18,8 @@ public class GQLIntrospection {
 	 *
 	 * @param executor
 	 *            the executor {@link Consumer}
+	 * @param <X>
+	 *            the return type
 	 * @return an {@link ExecutionResult}
 	 */
 	public static <X> X getAllTypes(final Function<String, X> executor) {
@@ -29,6 +31,8 @@ public class GQLIntrospection {
 	 *
 	 * @param executor
 	 *            the executor {@link Consumer}
+	 * @param <X>
+	 *            the return type
 	 * @return an {@link ExecutionResult}
 	 */
 	public static <X> X getFragments(final Function<String, X> executor) {

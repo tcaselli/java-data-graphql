@@ -29,7 +29,7 @@ public class GQLListLoadConfig {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Set paging limit & offset
+	 * Set paging limit and offset
 	 *
 	 * @param limit
 	 *            the paging limit

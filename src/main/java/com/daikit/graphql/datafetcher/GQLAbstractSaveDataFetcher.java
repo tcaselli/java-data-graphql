@@ -46,6 +46,9 @@ public abstract class GQLAbstractSaveDataFetcher extends GQLAbstractDataFetcher<
 	 *
 	 * @param entityName
 	 *            the entity class name
+	 * @param dynamicAttributeSetters
+	 *            a {@link Map} of {@link IGQLDynamicAttributeSetter} (keys are
+	 *            property names)
 	 * @param fieldValueMap
 	 *            the {@link Map} of fields values to set in entity
 	 * @return the found/created entity
@@ -58,7 +61,7 @@ public abstract class GQLAbstractSaveDataFetcher extends GQLAbstractDataFetcher<
 	// METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	protected Object runSave(final String entityName,
+	protected Object save(final String entityName,
 			final Map<String, IGQLDynamicAttributeSetter<Object, Object>> dynamicAttributeSetters,
 			final Map<String, Object> fieldValueMap) {
 		final Object model = getOrCreateAndSetProperties(entityName, dynamicAttributeSetters, fieldValueMap);
@@ -77,7 +80,7 @@ public abstract class GQLAbstractSaveDataFetcher extends GQLAbstractDataFetcher<
 		final Map<String, Object> arguments = getArgumentsForContext(environment.getArguments(),
 				GQLSchemaConstants.INPUT_DATA);
 		final Map<String, Object> fieldValueMap = convertObjectValue(objectValue, arguments);
-		return runSave(entityName, getDynamicAttributeSetters(entityName), fieldValueMap);
+		return save(entityName, getDynamicAttributeSetters(entityName), fieldValueMap);
 	}
 
 	/**

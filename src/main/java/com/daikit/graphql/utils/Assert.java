@@ -19,6 +19,8 @@ public class Assert {
 	 *            the message in case of error
 	 * @param args
 	 *            arguments for the message
+	 * @param <T>
+	 *            the object type
 	 * @return the input object
 	 */
 	public static <T> T assertNotNull(T object, String format, Object... args) {
@@ -37,6 +39,8 @@ public class Assert {
 	 *            the message in case of error
 	 * @param args
 	 *            arguments for the message
+	 * @param <T>
+	 *            the object type
 	 * @return the input object
 	 */
 	public static <T> T assertNotNullWithNPE(T object, String format, Object... args) {
@@ -51,6 +55,8 @@ public class Assert {
 	 *
 	 * @param object
 	 *            the object to be tested
+	 * @param <T>
+	 *            the object type
 	 * @return the input object
 	 */
 	public static <T> T assertNotNull(T object) {
@@ -69,6 +75,8 @@ public class Assert {
 	 *            the message in case of error
 	 * @param args
 	 *            arguments for the message
+	 * @param <T>
+	 *            the object type
 	 */
 	public static <T> void assertNull(T object, String format, Object... args) {
 		if (object == null) {
@@ -82,6 +90,8 @@ public class Assert {
 	 *
 	 * @param object
 	 *            the object to be tested
+	 * @param <T>
+	 *            the object type
 	 */
 	public static <T> void assertNull(T object) {
 		if (object == null) {

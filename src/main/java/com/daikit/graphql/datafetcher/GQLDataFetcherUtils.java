@@ -58,6 +58,8 @@ public abstract class GQLDataFetcherUtils {
 	 *            the map of query arguments for potential replacements
 	 * @param providedVariableNames
 	 *            names of provided variables for the request
+	 * @param <T>
+	 *            the value type
 	 * @return a mapped object value
 	 */
 	public static <X> X mapValue(final ObjectField field, final Map<String, Object> arguments,
@@ -74,6 +76,8 @@ public abstract class GQLDataFetcherUtils {
 	 *            the map of query arguments for potential replacements
 	 * @param providedVariableNames
 	 *            names of provided variables for the request
+	 * @param <T>
+	 *            the value type
 	 * @return a mapped object value
 	 */
 	public static <X> X mapValue(final Argument argument, final Map<String, Object> arguments,

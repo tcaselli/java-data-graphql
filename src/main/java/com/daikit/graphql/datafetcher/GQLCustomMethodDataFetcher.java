@@ -80,6 +80,8 @@ public class GQLCustomMethodDataFetcher extends GQLAbstractDataFetcher<Object> {
 	 * @param argumentPosition
 	 *            the argument position (0 if first argument of the method, 1
 	 *            the second, etc)
+	 * @param <T>
+	 *            the argument type
 	 * @return the argument value
 	 */
 	@SuppressWarnings("unchecked")

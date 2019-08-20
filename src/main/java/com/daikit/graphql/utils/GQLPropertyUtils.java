@@ -21,6 +21,8 @@ public class GQLPropertyUtils {
 	 *            the source object
 	 * @param propertyName
 	 *            the name of the property within source object
+	 * @param <T>
+	 *            the property type
 	 * @return the property value
 	 */
 	@SuppressWarnings("unchecked")
