@@ -49,9 +49,11 @@ public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataF
 	 *            the GQL {@link ObjectField}
 	 * @param arguments
 	 *            the map of query arguments for potential replacements
+	 * @param <T>
+	 *            the mapped object type
 	 * @return a mapped object value
 	 */
-	protected <X> X mapValue(final ObjectField field, final Map<String, Object> arguments) {
+	protected <T> T mapValue(final ObjectField field, final Map<String, Object> arguments) {
 		return GQLDataFetcherUtils.mapValue(field, arguments, getRequestProvidedVariableNames());
 	}
 
@@ -62,9 +64,11 @@ public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataF
 	 *            the GQL {@link Argument}
 	 * @param arguments
 	 *            the map of query arguments for potential replacements
+	 * @param <T>
+	 *            the mapped object type
 	 * @return a mapped object value
 	 */
-	protected <X> X mapValue(final Argument argument, final Map<String, Object> arguments) {
+	protected <T> T mapValue(final Argument argument, final Map<String, Object> arguments) {
 		return GQLDataFetcherUtils.mapValue(argument, arguments, getRequestProvidedVariableNames());
 	}
 

@@ -18,11 +18,11 @@ public class GQLIntrospection {
 	 *
 	 * @param executor
 	 *            the executor {@link Consumer}
-	 * @param <X>
+	 * @param <T>
 	 *            the return type
 	 * @return an {@link ExecutionResult}
 	 */
-	public static <X> X getAllTypes(final Function<String, X> executor) {
+	public static <T> T getAllTypes(final Function<String, T> executor) {
 		return executor.apply(IntrospectionQuery.INTROSPECTION_QUERY);
 	}
 
@@ -31,11 +31,11 @@ public class GQLIntrospection {
 	 *
 	 * @param executor
 	 *            the executor {@link Consumer}
-	 * @param <X>
+	 * @param <T>
 	 *            the return type
 	 * @return an {@link ExecutionResult}
 	 */
-	public static <X> X getFragments(final Function<String, X> executor) {
+	public static <T> T getFragments(final Function<String, T> executor) {
 		return executor.apply(GQLIntrospectionFragmentsQuery.INTROSPECTION_FRAGMENTS_QUERY);
 	}
 

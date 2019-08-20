@@ -62,7 +62,7 @@ public abstract class GQLDataFetcherUtils {
 	 *            the value type
 	 * @return a mapped object value
 	 */
-	public static <X> X mapValue(final ObjectField field, final Map<String, Object> arguments,
+	public static <T> T mapValue(final ObjectField field, final Map<String, Object> arguments,
 			final Collection<String> providedVariableNames) {
 		return mapValue(field.getValue(), field.getName(), arguments, providedVariableNames);
 	}
@@ -80,7 +80,7 @@ public abstract class GQLDataFetcherUtils {
 	 *            the value type
 	 * @return a mapped object value
 	 */
-	public static <X> X mapValue(final Argument argument, final Map<String, Object> arguments,
+	public static <T> T mapValue(final Argument argument, final Map<String, Object> arguments,
 			final Collection<String> providedVariableNames) {
 		return mapValue(argument.getValue(), argument.getName(), arguments, providedVariableNames);
 	}
