@@ -7,12 +7,8 @@ package com.daikit.graphql.dynamicattribute;
  * @author Thibaut Caselli
  * @param <ENTITY_TYPE>
  *            the input object value holding type
- * @param <ATTRIBUTE_TYPE>
- *            the returned value attribute type
  */
-public abstract class GQLAbstractDynamicAttribute<ENTITY_TYPE, ATTRIBUTE_TYPE>
-		implements
-			IGQLAbstractDynamicAttribute<ENTITY_TYPE, ATTRIBUTE_TYPE> {
+public abstract class GQLAbstractDynamicAttribute<ENTITY_TYPE> implements IGQLAbstractDynamicAttribute<ENTITY_TYPE> {
 
 	private String name;
 

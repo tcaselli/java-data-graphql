@@ -6,12 +6,14 @@ package com.daikit.graphql.dynamicattribute;
  * @author Thibaut Caselli
  * @param <ENTITY_TYPE>
  *            the input object value holding type
- * @param <ATTRIBUTE_TYPE>
- *            the returned value attribute type
+ * @param <GETTER_ATTRIBUTE_TYPE>
+ *            the getter value attribute type
+ * @param <SETTER_ATTRIBUTE_TYPE>
+ *            the setter attribute argument type
  */
-public interface IGQLDynamicAttributeGetterSetter<ENTITY_TYPE, ATTRIBUTE_TYPE>
+public interface IGQLDynamicAttributeGetterSetter<ENTITY_TYPE, GETTER_ATTRIBUTE_TYPE, SETTER_ATTRIBUTE_TYPE>
 		extends
-			IGQLDynamicAttributeGetter<ENTITY_TYPE, ATTRIBUTE_TYPE>,
-			IGQLDynamicAttributeSetter<ENTITY_TYPE, ATTRIBUTE_TYPE> {
+			IGQLDynamicAttributeGetter<ENTITY_TYPE, GETTER_ATTRIBUTE_TYPE>,
+			IGQLDynamicAttributeSetter<ENTITY_TYPE, SETTER_ATTRIBUTE_TYPE> {
 
 }

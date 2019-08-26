@@ -6,16 +6,16 @@ package com.daikit.graphql.dynamicattribute;
  * @author Thibaut Caselli
  * @param <ENTITY_TYPE>
  *            the input object value holding type
- * @param <ATTRIBUTE_TYPE>
- *            the returned value attribute type
+ * @param <FILTER_ATTRIBUTE_TYPE>
+ *            the filtered value attribute type
  * @param <QUERY_TYPE>
  *            the type of the generic query this filter will be applied on
  */
-public abstract class GQLDynamicAttributeFilter<ENTITY_TYPE, ATTRIBUTE_TYPE, QUERY_TYPE>
+public abstract class GQLDynamicAttributeFilter<ENTITY_TYPE, FILTER_ATTRIBUTE_TYPE, QUERY_TYPE>
 		extends
-			GQLAbstractDynamicAttribute<ENTITY_TYPE, ATTRIBUTE_TYPE>
+			GQLAbstractDynamicAttribute<ENTITY_TYPE>
 		implements
-			IGQLDynamicAttributeFilter<ENTITY_TYPE, ATTRIBUTE_TYPE, QUERY_TYPE> {
+			IGQLDynamicAttributeFilter<ENTITY_TYPE, FILTER_ATTRIBUTE_TYPE, QUERY_TYPE> {
 
 	private String filteredPropertyQueryPath;
 

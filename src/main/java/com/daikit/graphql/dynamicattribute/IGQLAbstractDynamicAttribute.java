@@ -9,10 +9,8 @@ import com.daikit.generics.utils.GenericsUtils;
  *
  * @param <ENTITY_TYPE>
  *            the type of the entity this dynamic attribute is registered on
- * @param <ATTRIBUTE_TYPE>
- *            the type of this dynamic attribute
  */
-public interface IGQLAbstractDynamicAttribute<ENTITY_TYPE, ATTRIBUTE_TYPE> {
+public interface IGQLAbstractDynamicAttribute<ENTITY_TYPE> {
 
 	/**
 	 * @return the name for the attribute. This name will be used for building
@@ -26,14 +24,6 @@ public interface IGQLAbstractDynamicAttribute<ENTITY_TYPE, ATTRIBUTE_TYPE> {
 	 */
 	default Class<?> getEntityType() {
 		return GenericsUtils.getTypeClassArguments(getClass(), IGQLAbstractDynamicAttribute.class).get(0);
-	}
-
-	/**
-	 * @return the type of this dynamic attribute. By default it is taken from
-	 *         class generics.
-	 */
-	default Class<?> getAttributeType() {
-		return GenericsUtils.getTypeClassArguments(getClass(), IGQLAbstractDynamicAttribute.class).get(1);
 	}
 
 }
