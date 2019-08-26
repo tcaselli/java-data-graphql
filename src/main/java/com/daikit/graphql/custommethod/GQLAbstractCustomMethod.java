@@ -52,24 +52,14 @@ public abstract class GQLAbstractCustomMethod<OUTPUT_TYPE> implements IGQLAbstra
 	// PUBLIC METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	/**
-	 * Get output type from generic configuration of this class
-	 *
-	 * @return the output type
-	 */
-	protected Type getOutputType() {
+	@Override
+	public Type getOutputType() {
 		return GenericsUtils.getTypeArguments(getClass(), GQLAbstractCustomMethod.class).get(0);
 	}
 
-	/**
-	 * Get argument name at given position
-	 *
-	 * @param argumentPosition
-	 *            the argument position (0 if first argument of the method, 1
-	 * @return the argument name
-	 */
-	public String getArgName(int argumentPosition) {
-		return getArgNames().get(argumentPosition);
+	@Override
+	public String getArgumentName(int argumentPosition) {
+		return getArgumentNames().get(argumentPosition);
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -124,7 +114,7 @@ public abstract class GQLAbstractCustomMethod<OUTPUT_TYPE> implements IGQLAbstra
 	 * @return the argNames
 	 */
 	@Override
-	public List<String> getArgNames() {
+	public List<String> getArgumentNames() {
 		return argNames;
 	}
 

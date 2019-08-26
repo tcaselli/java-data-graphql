@@ -263,7 +263,7 @@ public class GQLMetaData {
 				}
 			};
 			final GQLAbstractMethodMetaData metaData = new GQLMethodEntityMetaData(method, Entity1.class);
-			metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgName(0), GQLScalarTypeEnum.STRING));
+			metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgumentName(0), GQLScalarTypeEnum.STRING));
 			return metaData;
 		}
 
@@ -280,8 +280,8 @@ public class GQLMetaData {
 				}
 			};
 			final GQLAbstractMethodMetaData metaData = new GQLMethodEntityMetaData(method, Entity1.class);
-			metaData.addArgument(new GQLMethodArgumentEntityMetaData(method.getArgName(0), EmbeddedData1.class));
-			metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgName(1), GQLScalarTypeEnum.STRING));
+			metaData.addArgument(new GQLMethodArgumentEntityMetaData(method.getArgumentName(0), EmbeddedData1.class));
+			metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgumentName(1), GQLScalarTypeEnum.STRING));
 			return metaData;
 		}
 
@@ -303,12 +303,12 @@ public class GQLMetaData {
 				}
 			};
 			final GQLAbstractMethodMetaData metaData = new GQLMethodEntityMetaData(method, Entity1.class);
-			metaData.addArgument(new GQLMethodArgumentEnumMetaData(method.getArgName(0), Enum1.class));
+			metaData.addArgument(new GQLMethodArgumentEnumMetaData(method.getArgumentName(0), Enum1.class));
 			metaData.addArgument(
-					new GQLMethodArgumentListScalarMetaData(method.getArgName(1), GQLScalarTypeEnum.STRING));
-			metaData.addArgument(new GQLMethodArgumentListEnumMetaData(method.getArgName(2), Enum1.class));
-			metaData.addArgument(new GQLMethodArgumentListEntityMetaData(method.getArgName(3), EmbeddedData1.class));
-			metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgName(4), GQLScalarTypeEnum.STRING));
+					new GQLMethodArgumentListScalarMetaData(method.getArgumentName(1), GQLScalarTypeEnum.STRING));
+			metaData.addArgument(new GQLMethodArgumentListEnumMetaData(method.getArgumentName(2), Enum1.class));
+			metaData.addArgument(new GQLMethodArgumentListEntityMetaData(method.getArgumentName(3), EmbeddedData1.class));
+			metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgumentName(4), GQLScalarTypeEnum.STRING));
 			return metaData;
 		}
 
@@ -323,7 +323,7 @@ public class GQLMetaData {
 				}
 			};
 			final GQLAbstractMethodMetaData metaData = new GQLMethodEntityMetaData(method, Entity1.class);
-			metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgName(0), GQLScalarTypeEnum.STRING));
+			metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgumentName(0), GQLScalarTypeEnum.STRING));
 			return metaData;
 		}
 	}

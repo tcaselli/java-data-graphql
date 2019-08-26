@@ -13,9 +13,11 @@ import java.util.List;
 public interface IGQLAbstractCustomMethod<OUTPUT_TYPE> {
 
 	/**
-	 * Prefix to be prepended to ID parameter names
+	 * Get output type from generic configuration of this class
+	 *
+	 * @return the output type
 	 */
-	String ID_PREFIX = "ID#";
+	Type getOutputType();
 
 	/**
 	 * Get the method name that will be available in GraphQL schema
@@ -37,7 +39,16 @@ public interface IGQLAbstractCustomMethod<OUTPUT_TYPE> {
 	 *
 	 * @return the argNames
 	 */
-	List<String> getArgNames();
+	List<String> getArgumentNames();
+
+	/**
+	 * Get argument name at given position
+	 *
+	 * @param argumentPosition
+	 *            the argument position (0 if first argument of the method, 1
+	 * @return the argument name
+	 */
+	String getArgumentName(int argumentPosition);
 
 	/**
 	 * Get argument types from generic configuration of this class

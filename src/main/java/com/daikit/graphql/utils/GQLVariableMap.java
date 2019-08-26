@@ -22,10 +22,10 @@ public class GQLVariableMap extends HashMap<String, Object> {
 	 *            the method arguments
 	 */
 	public GQLVariableMap(IGQLAbstractCustomMethod<?> method, Object... args) {
-		for (int i = 0; i < method.getArgNames().size(); i++) {
+		for (int i = 0; i < method.getArgumentNames().size(); i++) {
 			final Object value = args[i];
 
-			put(method.getArgNames().get(i), value);
+			put(method.getArgumentNames().get(i), value);
 		}
 	}
 }
