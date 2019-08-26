@@ -30,6 +30,7 @@ import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeFilter;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
 import com.daikit.graphql.introspection.GQLIntrospection;
 import com.daikit.graphql.meta.GQLMetaDataModel;
+import com.daikit.graphql.test.data.AbstractEntity;
 import com.daikit.graphql.test.data.DataModel;
 import com.daikit.graphql.test.data.Entity1;
 import com.daikit.graphql.test.data.GQLMetaData;
@@ -162,9 +163,11 @@ public abstract class AbstractTestSuite {
 	// PRIVATE METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	private Class<?> getClassByName(String entityName) {
+	@SuppressWarnings("unchecked")
+	private Class<? extends AbstractEntity> getClassByName(String entityName) {
 		try {
-			return Class.forName(Entity1.class.getPackage().getName() + "." + entityName);
+			return (Class<? extends AbstractEntity>) Class
+					.forName(Entity1.class.getPackage().getName() + "." + entityName);
 		} catch (final ClassNotFoundException e) {
 			throw new RuntimeException(e);
 		}
@@ -186,7 +189,7 @@ public abstract class AbstractTestSuite {
 	}
 
 	private DataFetcher<GQLListLoadResult> createListDataFetcher(
-			@SuppressWarnings("rawtypes") List<IGQLDynamicAttributeFilter> dynamicAttributeFilters) {
+			List<IGQLDynamicAttributeFilter<?, ?, ?>> dynamicAttributeFilters) {
 		return new GQLAbstractGetListDataFetcher(dynamicAttributeFilters) {
 
 			@Override
@@ -203,25 +206,25 @@ public abstract class AbstractTestSuite {
 	}
 
 	private DataFetcher<?> createSaveDataFetchers() {
-		return new GQLAbstractSaveDataFetcher() {
+		return new GQLAbstractSaveDataFetcher<AbstractEntity>() {
 
 			@Override
-			protected void save(Object entity) {
+			protected void save(AbstractEntity entity) {
 				dataModel.save(entity);
 			}
 
 			@SuppressWarnings("unchecked")
 			@Override
-			protected Object getOrCreateAndSetProperties(String entityName,
+			protected AbstractEntity getOrCreateAndSetProperties(String entityName,
 					Map<String, IGQLDynamicAttributeSetter<Object, Object>> dynamicAttributeSetters,
 					Map<String, Object> fieldValueMap) {
-				final Class<?> entityClass = getClassByName(entityName);
+				final Class<? extends AbstractEntity> entityClass = getClassByName(entityName);
 				// Find or create entity
 				final String id = (String) fieldValueMap.get(GQLSchemaConstants.FIELD_ID);
-				final Optional<?> existing = StringUtils.isEmpty(id)
+				final Optional<? extends AbstractEntity> existing = StringUtils.isEmpty(id)
 						? Optional.empty()
 						: dataModel.getById(entityClass, id);
-				Object entity;
+				AbstractEntity entity;
 				try {
 					entity = existing.isPresent() ? existing.get() : entityClass.newInstance();
 				} catch (InstantiationException | IllegalAccessException e) {

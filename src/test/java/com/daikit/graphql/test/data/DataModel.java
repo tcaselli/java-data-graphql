@@ -168,7 +168,7 @@ public class DataModel {
 	 *            the ID
 	 * @return an {@link Optional} entity
 	 */
-	public Optional<?> getById(Class<?> entityClass, String id) {
+	public Optional<? extends AbstractEntity> getById(Class<?> entityClass, String id) {
 		return database.get(entityClass).stream().filter(item -> item.getId().equals(id)).findFirst();
 	}
 

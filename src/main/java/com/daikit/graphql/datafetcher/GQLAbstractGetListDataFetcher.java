@@ -34,8 +34,7 @@ import graphql.schema.DataFetchingEnvironment;
  */
 public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetcher<GQLListLoadResult> {
 
-	@SuppressWarnings("rawtypes")
-	private final Map<String, Map<String, IGQLDynamicAttributeFilter>> dynamicAttributeFiltersMap = new HashMap<>();
+	private final Map<String, Map<String, IGQLDynamicAttributeFilter<?, ?, ?>>> dynamicAttributeFiltersMap = new HashMap<>();
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// ABSTRACT METHODS
@@ -65,9 +64,9 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 	 *            the collection of all registered
 	 *            {@link IGQLDynamicAttributeFilter}
 	 */
-	@SuppressWarnings("rawtypes")
-	public GQLAbstractGetListDataFetcher(final Collection<IGQLDynamicAttributeFilter> dynamicAttributeFilters) {
-		final Map<String, List<IGQLDynamicAttributeFilter>> map = dynamicAttributeFilters.stream()
+	public GQLAbstractGetListDataFetcher(
+			final Collection<IGQLDynamicAttributeFilter<?, ?, ?>> dynamicAttributeFilters) {
+		final Map<String, List<IGQLDynamicAttributeFilter<?, ?, ?>>> map = dynamicAttributeFilters.stream()
 				.collect(Collectors.groupingBy(filter -> filter.getEntityType().getSimpleName()));
 		map.entrySet().forEach(entry -> dynamicAttributeFiltersMap.put(entry.getKey(), entry.getValue().stream()
 				.collect(Collectors.toMap(IGQLDynamicAttributeFilter::getName, Function.identity()))));
@@ -88,8 +87,7 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 		final Field queryField = environment.getField();
 		final String entityName = getEntityName(GQLSchemaConstants.QUERY_GET_LIST_PREFIX, queryField.getName());
 
-		@SuppressWarnings("rawtypes")
-		final Map<String, IGQLDynamicAttributeFilter> filters = dynamicAttributeFiltersMap.get(entityName);
+		final Map<String, IGQLDynamicAttributeFilter<?, ?, ?>> filters = dynamicAttributeFiltersMap.get(entityName);
 
 		// Handle paging if needed
 		final Optional<Argument> pagingConfig = queryField.getArguments().stream()

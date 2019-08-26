@@ -23,8 +23,10 @@ import graphql.schema.DataFetchingEnvironment;
  * fetcher argument
  *
  * @author Thibaut Caselli
+ * @param <SUPER_ENTITY_TYPE>
+ *            the super type for all saveable entities
  */
-public abstract class GQLAbstractSaveDataFetcher extends GQLAbstractDataFetcher<Object> {
+public abstract class GQLAbstractSaveDataFetcher<SUPER_ENTITY_TYPE> extends GQLAbstractDataFetcher<SUPER_ENTITY_TYPE> {
 
 	// Map (key=entityName,value=Map(key=fieldName,value=dynAttrSetter))
 	private final Map<String, Map<String, IGQLDynamicAttributeSetter<Object, Object>>> dynamicAttributeSetters = new HashMap<>();
@@ -39,7 +41,7 @@ public abstract class GQLAbstractSaveDataFetcher extends GQLAbstractDataFetcher<
 	 * @param entity
 	 *            the entity to be saved
 	 */
-	protected abstract void save(Object entity);
+	protected abstract void save(SUPER_ENTITY_TYPE entity);
 
 	/**
 	 * Find or create entity and set its field values from given field map.
@@ -53,7 +55,7 @@ public abstract class GQLAbstractSaveDataFetcher extends GQLAbstractDataFetcher<
 	 *            the {@link Map} of fields values to set in entity
 	 * @return the found/created entity
 	 */
-	protected abstract Object getOrCreateAndSetProperties(final String entityName,
+	protected abstract SUPER_ENTITY_TYPE getOrCreateAndSetProperties(final String entityName,
 			final Map<String, IGQLDynamicAttributeSetter<Object, Object>> dynamicAttributeSetters,
 			final Map<String, Object> fieldValueMap);
 
@@ -61,17 +63,17 @@ public abstract class GQLAbstractSaveDataFetcher extends GQLAbstractDataFetcher<
 	// METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	protected Object save(final String entityName,
+	protected SUPER_ENTITY_TYPE save(final String entityName,
 			final Map<String, IGQLDynamicAttributeSetter<Object, Object>> dynamicAttributeSetters,
 			final Map<String, Object> fieldValueMap) {
-		final Object model = getOrCreateAndSetProperties(entityName, dynamicAttributeSetters, fieldValueMap);
+		final SUPER_ENTITY_TYPE model = getOrCreateAndSetProperties(entityName, dynamicAttributeSetters, fieldValueMap);
 		// Run save
 		save(model);
 		return model;
 	}
 
 	@Override
-	public Object get(final DataFetchingEnvironment environment) {
+	public SUPER_ENTITY_TYPE get(final DataFetchingEnvironment environment) {
 		final Field mutationField = environment.getField();
 		final String entityName = getEntityName(GQLSchemaConstants.MUTATION_SAVE_PREFIX, mutationField.getName());
 		final ObjectValue objectValue = (ObjectValue) mutationField.getArguments().stream()
