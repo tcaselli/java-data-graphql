@@ -28,6 +28,22 @@ public class GQLListLoadResult {
 		this.orderBy.add(orderBy);
 	}
 
+	/**
+	 * Set the paging
+	 *
+	 * @param limit
+	 *            the limit
+	 * @param offset
+	 *            the offset
+	 * @param totalLength
+	 *            the total length
+	 * @return this instance for chaining
+	 */
+	public GQLListLoadResult setPaging(final int limit, final int offset, int totalLength) {
+		paging = new GQLPaging(offset, limit, totalLength);
+		return this;
+	}
+
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// GETTERS / SETTERS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
