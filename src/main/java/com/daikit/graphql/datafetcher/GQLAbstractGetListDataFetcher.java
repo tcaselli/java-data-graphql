@@ -45,7 +45,7 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 	protected abstract Object getById(String entityName, String id);
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-	// METHODS
+	// CONSTRUCTORS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
@@ -54,8 +54,9 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 	 * {@link #GQLAbstractGetListDataFetcher(Collection)} instead.
 	 */
 	public GQLAbstractGetListDataFetcher() {
-
+		// Nothing done
 	}
+
 	/**
 	 * Constructor with dynamic attribute filters. Providing dynamic attribute
 	 * filters gives you the possibility to filter on entity dynamic attributes.
@@ -80,7 +81,7 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 	public GQLListLoadResult get(final DataFetchingEnvironment environment) {
 		// The load configuration that will be used to run the query against
 		// database using the service layer
-		final GQLListLoadConfig listLoadConfig = createListLoadConfig();
+		final GQLListLoadConfig listLoadConfig = createGQLListLoadConfig();
 		final Map<String, Object> arguments = environment.getArguments();
 
 		// Parse input query
@@ -184,7 +185,7 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 	 *
 	 * @return a {@link GQLListLoadConfig}
 	 */
-	protected GQLListLoadConfig createListLoadConfig() {
+	protected GQLListLoadConfig createGQLListLoadConfig() {
 		return new GQLListLoadConfig();
 	}
 
