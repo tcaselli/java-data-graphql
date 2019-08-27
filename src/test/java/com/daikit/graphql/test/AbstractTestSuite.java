@@ -206,25 +206,25 @@ public abstract class AbstractTestSuite {
 	}
 
 	private DataFetcher<?> createSaveDataFetchers() {
-		return new GQLAbstractSaveDataFetcher<AbstractEntity>() {
+		return new GQLAbstractSaveDataFetcher<Object>() {
 
 			@Override
-			protected void save(AbstractEntity entity) {
+			protected void save(Object entity) {
 				dataModel.save(entity);
 			}
 
 			@SuppressWarnings("unchecked")
 			@Override
-			protected AbstractEntity getOrCreateAndSetProperties(String entityName,
+			protected Object getOrCreateAndSetProperties(String entityName,
 					Map<String, IGQLDynamicAttributeSetter<Object, Object>> dynamicAttributeSetters,
 					Map<String, Object> fieldValueMap) {
-				final Class<? extends AbstractEntity> entityClass = getClassByName(entityName);
+				final Class<?> entityClass = getClassByName(entityName);
 				// Find or create entity
 				final String id = (String) fieldValueMap.get(GQLSchemaConstants.FIELD_ID);
-				final Optional<? extends AbstractEntity> existing = StringUtils.isEmpty(id)
+				final Optional<?> existing = StringUtils.isEmpty(id)
 						? Optional.empty()
 						: dataModel.getById(entityClass, id);
-				AbstractEntity entity;
+				Object entity;
 				try {
 					entity = existing.isPresent() ? existing.get() : entityClass.newInstance();
 				} catch (InstantiationException | IllegalAccessException e) {
