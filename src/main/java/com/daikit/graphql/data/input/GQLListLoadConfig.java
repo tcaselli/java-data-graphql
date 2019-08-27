@@ -143,6 +143,13 @@ public class GQLListLoadConfig {
 	}
 
 	/**
+	 * @return the filters
+	 */
+	public List<GQLFilterEntry> getFilters() {
+		return filters;
+	}
+
+	/**
 	 * @param limit
 	 *            the limit to set
 	 */
