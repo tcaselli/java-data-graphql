@@ -14,18 +14,17 @@ Java-data-graphql is a layer above the great [graphql-java](https://github.com/g
 
 This library is well tested and used in several projects already. The real advantage of using this library over using graphql-java directly is that you do not define a graphql schema by yourself which can be a painful task, but you rather define a set of entities, custom methods etc and the graphQL schema is generated for you.  
 
-### Generate GraphQL schema and executor
+### Generate GraphQL executor and schema
 
-In order to generate a schema there is 1 entry point : the ```com.daikit.graphql.builder.GQLSchemaBuilder``` class with its buildSchema(...) method.  
-This method is waiting for a [meta model](#the-meta-model) and [data fetchers](#data-fetchers).
+In order to generate a GraphQL executor with its related schema there is 1 entry point : the ```com.daikit.graphql.execution.GQLExecutor```.  
+The constructor for this executor is waiting for a [meta model](#the-meta-model), an [error processor](#the-error-processor), some [data fetchers](#data-fetchers), and eventually an [executor callback](#the-executor-callback) to provide hooks before and/or after each execution.
 
 ```java
-GQLMetaDataModel metaDataModel = GQLMetaData.buildMetaDataModel();
-List<IGQLDynamicAttributeFilter> dynamicAttributeFilters;
-GraphQLSchema schema = new GQLSchemaBuilder().buildSchema(
-    buildMetaDataModel(),  // see "The meta model" section below
+GQLExecutor executor = new GQLExecutor(
+    buildMetaModel(),  // see "The meta model" section below
+    buildErrorProcessor(), // See "The error processor" section below
     createGetByIdDataFetcher(), // see "Data Fetchers" section below
-    createListDataFetcher(dynamicAttributeFilters),
+    createListDataFetcher(),
     createSaveDataFetchers(),
     createDeleteDataFetcher(),
     createCustomMethodsDataFetcher(),
@@ -34,20 +33,14 @@ GraphQLSchema schema = new GQLSchemaBuilder().buildSchema(
 ```
 
 ### Execute operations on the schema
-After building the GraphQLSchema you can now create a ```graphql.GraphQL``` object that will allow you to request your schema. 
+After building the GQLExecutor you can now request your schema.
 
-```java
-// Build the executor. It is thread safe and can be reused.
-GraphQL executor = GraphQL.newGraphQL(schema).build();
-```
-
-Then request your schema.
 
 ```java
 // Get query/mutation string somehow
 String query = readGraphql("query.graphql");
 // Then run the query/mutation (with one parameter here)
-ExecutionResult result = executor.execute(
+GQLExecutionResult result = executor.execute(
     ExecutionInput.newExecutionInput()
         .query(query)
         .variables(Collections.singletonMap("param", "value"))
@@ -57,7 +50,7 @@ ExecutionResult result = executor.execute(
 
 ### The meta model
 
-The meta model ```com.daikit.graphql.meta.GQLMetaDataModel``` is the base of the schema generation. It is in this meta model that you will define all your entities (top level or embedded, abstract or concrete), enumerations and custom methods.  
+The meta model ```com.daikit.graphql.meta.GQLMetaModel``` is the base of the schema generation. It is in this meta model that you will define all your entities (top level or embedded, abstract or concrete), enumerations and custom methods.  
 The meta model can be written by hand in java or parsed from a json/yaml definition file or generated out of your domain layer code (for example using JPA meta model and spring components as a basis).  
 See next sections for details on how to define these things and create this meta model.
 
@@ -243,7 +236,9 @@ attribute.setDynamicAttributeSetter(dynamicAttributeSetter);
 metaData.addAttribute(attribute);
 ```
 
--> For a **readable** AND **writable** attribute, implement both IGQLDynamicAttributeGetter and IGQLDynamicAttributeSetter or extend default implementation GQLDynamicAttributeGetterSetter
+-> For a **readable** AND **writable** dynamic attribute, implement both IGQLDynamicAttributeGetter and IGQLDynamicAttributeSetter or extend default implementation GQLDynamicAttributeGetterSetter
+
+-> For a **readable** dynamic attribute that needs to be available as a filter in getList queries, set the attribute as filterable and implement IGQLDynamicAttributeGetter providing a ```filterQueryPath``` or overriding ```<QUERY_TYPE> void applyModificationsOnRequest(QUERY_TYPE query)``` method.
 
 ### Accessibility on entities & fields for CRUD operations
 
@@ -290,11 +285,12 @@ You have an abstract class to extend for each of these data fetchers.
 See below examples explaining how to create these data fetchers , then you can use them for [generating the schema](#generate-the-schema)
 
 -> Create the unique DataFetcher for all entities "getById" methods.
+
 ```java
 private DataFetcher<?> createGetByIdDataFetcher() {
     return new GQLAbstractGetByIdDataFetcher() {
         @Override
-        protected Object getById(String entityName, String id) {
+        protected Object getById(Class<?> entityClass, String id) {
             // Get the entity by ID from your persistence layer here
             return entity;
         }
@@ -305,20 +301,16 @@ private DataFetcher<?> createGetByIdDataFetcher() {
 -> Create the unique DataFetcher for all entities "getAll" methods.
 
 ```java
-// The list of dynamic attribute filters for beeing able to filter 
-// on dynamic attributes. This is an advanced topic, you can start 
-// with an empty list here.
-List<IGQLDynamicAttributeFilter> dynamicAttributeFilters = Collections.emptyList();
 private DataFetcher<GQLListLoadResult> createListDataFetcher() {
-    return new GQLAbstractGetListDataFetcher(dynamicAttributeFilters) {
+    return new GQLAbstractGetListDataFetcher() {
         @Override
         protected GQLListLoadResult getAll(
-            String entityName, GQLListLoadConfig listLoadConfig) {
+            Class<?> entityClass, GQLListLoadConfig listLoadConfig) {
             // Build the GQLListLoadResult
             return result;
         }
         @Override
-        protected Object getById(String entityName, String id) {
+        protected Object getById(Class<?> entityClass, String id) {
             // Get the entity by ID from your persistence layer here
             // This is the same method than the one in getById DataFetcher
             // It is used to retrieve entity filters by ID
@@ -339,8 +331,8 @@ private DataFetcher<?> createSaveDataFetchers() {
         }
         @Override
         protected Object getOrCreateAndSetProperties(
-            String entityName,
-            Map<String, IGQLDynamicAttributeSetter<Object, Object>> dynamicAttributeSetters,
+            Class<?> entityClass,
+            GQLDynamicAttributeRegistry dynamicAttributeRegistry,
             Map<String, Object> fieldValueMap) {
             // See below an example of code that should be changed 
             // to fit your persistence layer.
@@ -357,7 +349,7 @@ private DataFetcher<?> createSaveDataFetchers() {
             // Set properties
             fieldValueMap.entrySet().stream().forEach(entry -> {
                 final IGQLDynamicAttributeSetter<Object, Object> 
-                    dynamicAttributeSetter = dynamicAttributeSetters.get(entry.getKey());
+                    dynamicAttributeSetter = dynamicAttributeRegistry.getSetter(entityClass, entry.getKey());
                 if (dynamicAttributeSetter == null) {
                     GQLPropertyUtils.setPropertyValue(
                         entity, entry.getKey(), entry.getValue());
@@ -379,7 +371,7 @@ private DataFetcher<?> createSaveDataFetchers() {
 private DataFetcher<GQLDeleteResult> createDeleteDataFetcher() {
     return new GQLAbstractDeleteDataFetcher() {
         @Override
-        protected void delete(String entityName, String id) {
+        protected void delete(Class<?> entityClass, String id) {
             // Delete your entity here
         }
     };
