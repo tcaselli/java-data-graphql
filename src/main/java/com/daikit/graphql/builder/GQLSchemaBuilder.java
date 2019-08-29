@@ -27,6 +27,7 @@ import com.daikit.graphql.builder.types.GQLReferencesBuilder;
 import com.daikit.graphql.data.output.GQLDeleteResult;
 import com.daikit.graphql.data.output.GQLListLoadResult;
 import com.daikit.graphql.datafetcher.GQLAbstractDataFetcher;
+import com.daikit.graphql.datafetcher.GQLAbstractGetListDataFetcher;
 import com.daikit.graphql.datafetcher.GQLAbstractSaveDataFetcher;
 import com.daikit.graphql.datafetcher.GQLCustomMethodDataFetcher;
 import com.daikit.graphql.datafetcher.GQLDynamicAttributeRegistry;
@@ -91,7 +92,14 @@ public class GQLSchemaBuilder {
 				.collect(Collectors.toList());
 		setMetaModel(metaModel, allDataFetchers);
 
-		final GQLDynamicAttributeRegistry attrSetterRegistry = new GQLDynamicAttributeRegistry(metaModel);
+		final GQLDynamicAttributeRegistry dynAttrRegistry = new GQLDynamicAttributeRegistry(metaModel);
+
+		if (listDataFetcher instanceof GQLAbstractGetListDataFetcher) {
+			((GQLAbstractGetListDataFetcher) listDataFetcher).setDynamicAttributeRegistry(dynAttrRegistry);
+		}
+		if (saveDataFetcher instanceof GQLAbstractSaveDataFetcher) {
+			((GQLAbstractSaveDataFetcher<?>) saveDataFetcher).setDynamicAttributeRegistry(dynAttrRegistry);
+		}
 
 		if (customMethodDataFetcher instanceof GQLCustomMethodDataFetcher) {
 			logger.debug("START registering custom methods...");
@@ -99,13 +107,6 @@ public class GQLSchemaBuilder {
 					.stream().map(method -> method.getMethod()).collect(Collectors.toList()));
 			logger.debug("END registering custom methods");
 		}
-
-		if (saveDataFetcher instanceof GQLAbstractSaveDataFetcher) {
-			logger.debug("START registering dynamic attribute setters...");
-			((GQLAbstractSaveDataFetcher<?>) saveDataFetcher).setDynamicAttributeSetterRegistry(attrSetterRegistry);
-			logger.debug("END registering dynamic attribute setters");
-		}
-
 		logger.debug("START building output reference types...");
 		new GQLReferencesBuilder(cache).buildTypeReferences(metaModel);
 		new GQLEnumTypesBuilder(cache).buildEnumTypes(metaModel);

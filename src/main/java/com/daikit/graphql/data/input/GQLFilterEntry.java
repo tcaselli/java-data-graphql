@@ -1,6 +1,6 @@
 package com.daikit.graphql.data.input;
 
-import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeFilter;
+import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeGetter;
 import com.daikit.graphql.enums.GQLFilterOperatorEnum;
 
 /**
@@ -14,7 +14,7 @@ public class GQLFilterEntry {
 	private GQLFilterOperatorEnum operator;
 	private Object value;
 
-	private IGQLDynamicAttributeFilter<?, ?, ?> dynamicAttributeFilter;
+	private IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter;
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -43,16 +43,16 @@ public class GQLFilterEntry {
 	 *            the {@link GQLFilterOperatorEnum}
 	 * @param value
 	 *            the value
-	 * @param dynamicAttributeFilter
+	 * @param dynamicAttributeGetter
 	 *            the {@link IGQLDynamicAttributeFilter} related to the field
 	 *            this entry is applied on
 	 */
 	public GQLFilterEntry(final String fieldName, final GQLFilterOperatorEnum operator, final Object value,
-			IGQLDynamicAttributeFilter<?, ?, ?> dynamicAttributeFilter) {
+			IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter) {
 		this.fieldName = fieldName;
 		this.operator = operator;
 		this.value = value;
-		this.dynamicAttributeFilter = dynamicAttributeFilter;
+		this.dynamicAttributeGetter = dynamicAttributeGetter;
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -105,18 +105,18 @@ public class GQLFilterEntry {
 	}
 
 	/**
-	 * @return the dynamicAttributeFilter
+	 * @return the dynamicAttributeGetter
 	 */
-	public IGQLDynamicAttributeFilter<?, ?, ?> getDynamicAttributeFilter() {
-		return dynamicAttributeFilter;
+	public IGQLDynamicAttributeGetter<?, ?> getDynamicAttributeGetter() {
+		return dynamicAttributeGetter;
 	}
 
 	/**
-	 * @param dynamicAttributeFilter
-	 *            the dynamicAttributeFilter to set
+	 * @param dynamicAttributeGetter
+	 *            the dynamicAttributeGetter to set
 	 */
-	public void setDynamicAttributeFilter(IGQLDynamicAttributeFilter<?, ?, ?> dynamicAttributeFilter) {
-		this.dynamicAttributeFilter = dynamicAttributeFilter;
+	public void setDynamicAttributeGetter(IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter) {
+		this.dynamicAttributeGetter = dynamicAttributeGetter;
 	}
 
 }

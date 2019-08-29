@@ -131,10 +131,6 @@ public class GQLMetaData {
 				public void setValue(Entity1 source, String valueToSet) {
 					source.setStringAttr(valueToSet);
 				}
-				@Override
-				public String getEntityName() {
-					return Entity1.class.getSimpleName();
-				}
 			};
 			final GQLAttributeScalarMetaData dynamicAttrSetterAttribute = new GQLAttributeScalarMetaData(
 					dynamicAttributeSetter.getName(), GQLScalarTypeEnum.STRING);

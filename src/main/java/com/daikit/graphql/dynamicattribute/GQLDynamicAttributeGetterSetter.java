@@ -1,7 +1,5 @@
 package com.daikit.graphql.dynamicattribute;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  * Dynamic attribute getter and setter
  *
@@ -20,7 +18,7 @@ public abstract class GQLDynamicAttributeGetterSetter<ENTITY_TYPE, GETTER_ATTRIB
 			IGQLDynamicAttributeGetter<ENTITY_TYPE, GETTER_ATTRIBUTE_TYPE>,
 			IGQLDynamicAttributeSetter<ENTITY_TYPE, SETTER_ATTRIBUTE_TYPE> {
 
-	private String entityName;
+	private String filterQueryPath;
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -46,16 +44,14 @@ public abstract class GQLDynamicAttributeGetterSetter<ENTITY_TYPE, GETTER_ATTRIB
 	/**
 	 * Constructor
 	 *
-	 * @param entityName
-	 *            the name of the entity holding this attribute in the GQL
-	 *            schema. By default this is the simple name of the entity class
-	 *            taken from class generics.
 	 * @param name
 	 *            the property name that will be available in GraphQL schema
+	 * @param filterQueryPath
+	 *            the query path for the dynamic filter
 	 */
-	public GQLDynamicAttributeGetterSetter(String entityName, String name) {
+	public GQLDynamicAttributeGetterSetter(String name, String filterQueryPath) {
 		super(name);
-		this.entityName = entityName;
+		this.filterQueryPath = filterQueryPath;
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -63,23 +59,18 @@ public abstract class GQLDynamicAttributeGetterSetter<ENTITY_TYPE, GETTER_ATTRIB
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Get the name of the entity holding this attribute in the GQL schema. By
-	 * default this is the simple name of the entity class taken from class
-	 * generics.
-	 *
-	 * @return the entity name
+	 * @return the filterQueryPath
 	 */
 	@Override
-	public String getEntityName() {
-		return StringUtils.isEmpty(entityName) ? IGQLDynamicAttributeSetter.super.getEntityName() : entityName;
+	public String getFilterQueryPath() {
+		return filterQueryPath;
 	}
 
 	/**
-	 * @param entityName
-	 *            the entityName to set
+	 * @param filterQueryPath
+	 *            the filterQueryPath to set
 	 */
-	public void setEntityName(String entityName) {
-		this.entityName = entityName;
+	public void setFilterQueryPath(String filterQueryPath) {
+		this.filterQueryPath = filterQueryPath;
 	}
-
 }

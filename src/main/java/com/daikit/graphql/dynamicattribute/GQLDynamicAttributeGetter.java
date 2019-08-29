@@ -15,6 +15,8 @@ public abstract class GQLDynamicAttributeGetter<ENTITY_TYPE, GETTER_ATTRIBUTE_TY
 		implements
 			IGQLDynamicAttributeGetter<ENTITY_TYPE, GETTER_ATTRIBUTE_TYPE> {
 
+	private String filterQueryPath;
+
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -34,6 +36,39 @@ public abstract class GQLDynamicAttributeGetter<ENTITY_TYPE, GETTER_ATTRIBUTE_TY
 	 */
 	public GQLDynamicAttributeGetter(String name) {
 		super(name);
+	}
+
+	/**
+	 * Constructor
+	 *
+	 * @param name
+	 *            the property name that will be available in GraphQL schema
+	 * @param filterQueryPath
+	 *            the query path for the dynamic filter
+	 */
+	public GQLDynamicAttributeGetter(String name, String filterQueryPath) {
+		super(name);
+		this.filterQueryPath = filterQueryPath;
+	}
+
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+	// GETTERS / SETTERS
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+	/**
+	 * @return the filterQueryPath
+	 */
+	@Override
+	public String getFilterQueryPath() {
+		return filterQueryPath;
+	}
+
+	/**
+	 * @param filterQueryPath
+	 *            the filterQueryPath to set
+	 */
+	public void setFilterQueryPath(String filterQueryPath) {
+		this.filterQueryPath = filterQueryPath;
 	}
 
 }

@@ -17,6 +17,25 @@ public interface IGQLDynamicAttributeGetter<ENTITY_TYPE, GETTER_ATTRIBUTE_TYPE>
 			IGQLAbstractDynamicAttribute<ENTITY_TYPE> {
 
 	/**
+	 * Get the exact path of the property on which the filter will be applied
+	 *
+	 * @return the property path.
+	 */
+	default String getFilterQueryPath() {
+		return null;
+	}
+
+	/**
+	 * Apply modifications on the query this filter will be applied on.
+	 *
+	 * @param query
+	 *            the generic query
+	 */
+	default <QUERY_TYPE> void applyModificationsOnRequest(QUERY_TYPE query) {
+		// Nothing done by default
+	}
+
+	/**
 	 * Get dynamic value computed from given input object
 	 *
 	 * @param source

@@ -27,7 +27,6 @@ import com.daikit.graphql.datafetcher.GQLAbstractSaveDataFetcher;
 import com.daikit.graphql.datafetcher.GQLCustomMethodDataFetcher;
 import com.daikit.graphql.datafetcher.GQLDynamicAttributeRegistry;
 import com.daikit.graphql.datafetcher.GQLPropertyDataFetcher;
-import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeFilter;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
 import com.daikit.graphql.execution.GQLErrorProcessor;
 import com.daikit.graphql.execution.GQLExecutor;
@@ -83,7 +82,7 @@ public abstract class AbstractTestSuite {
 	public void createExecutor() {
 		logger.info("Initialize test graphQL schema & data entity");
 		EXECUTOR = new GQLExecutor(GQLMetaData.buildMetaModel(), new GQLErrorProcessor(), createGetByIdDataFetcher(),
-				createListDataFetcher(Collections.emptyList()), createSaveDataFetchers(), createDeleteDataFetcher(),
+				createListDataFetcher(), createSaveDataFetchers(), createDeleteDataFetcher(),
 				createCustomMethodsDataFetcher(), createPropertyDataFetchers());
 		resetDataModel();
 	}
@@ -170,9 +169,8 @@ public abstract class AbstractTestSuite {
 		};
 	}
 
-	private DataFetcher<GQLListLoadResult> createListDataFetcher(
-			List<IGQLDynamicAttributeFilter<?, ?, ?>> dynamicAttributeFilters) {
-		return new GQLAbstractGetListDataFetcher(dynamicAttributeFilters) {
+	private DataFetcher<GQLListLoadResult> createListDataFetcher() {
+		return new GQLAbstractGetListDataFetcher() {
 
 			@Override
 			protected GQLListLoadResult getAll(Class<?> entityClass, GQLListLoadConfig listLoadConfig) {

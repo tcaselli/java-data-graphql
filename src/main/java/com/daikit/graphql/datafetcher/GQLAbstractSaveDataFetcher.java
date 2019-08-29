@@ -83,7 +83,7 @@ public abstract class GQLAbstractSaveDataFetcher<SUPER_ENTITY_TYPE> extends GQLA
 	/**
 	 * @return the dynamicAttributeRegistry
 	 */
-	public GQLDynamicAttributeRegistry getDynamicAttributeSetterRegistry() {
+	public GQLDynamicAttributeRegistry getDynamicAttributeRegistry() {
 		return dynamicAttributeRegistry;
 	}
 
@@ -91,7 +91,7 @@ public abstract class GQLAbstractSaveDataFetcher<SUPER_ENTITY_TYPE> extends GQLA
 	 * @param dynamicAttributeRegistry
 	 *            the dynamicAttributeRegistry to set
 	 */
-	public void setDynamicAttributeSetterRegistry(GQLDynamicAttributeRegistry dynamicAttributeRegistry) {
+	public void setDynamicAttributeRegistry(GQLDynamicAttributeRegistry dynamicAttributeRegistry) {
 		this.dynamicAttributeRegistry = dynamicAttributeRegistry;
 	}
 }

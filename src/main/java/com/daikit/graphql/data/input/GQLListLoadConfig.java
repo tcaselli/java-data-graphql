@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 
 import com.daikit.graphql.data.output.GQLOrderByEntry;
-import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeFilter;
+import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeGetter;
 import com.daikit.graphql.enums.GQLFilterOperatorEnum;
 import com.daikit.graphql.enums.GQLOrderByDirectionEnum;
 
@@ -88,12 +88,12 @@ public class GQLListLoadConfig {
 	 *            the {@link GQLFilterOperatorEnum}
 	 * @param value
 	 *            the value
-	 * @param fieldFilter
+	 * @param dynamicAttributeGetter
 	 *            the {@link IGQLDynamicAttributeFilter}
 	 */
 	public void addFilter(final String field, final GQLFilterOperatorEnum operator, final Object value,
-			IGQLDynamicAttributeFilter<?, ?, ?> fieldFilter) {
-		filters.add(new GQLFilterEntry(field, operator, value, fieldFilter));
+			IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter) {
+		filters.add(new GQLFilterEntry(field, operator, value, dynamicAttributeGetter));
 	}
 
 	/**
