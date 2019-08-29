@@ -9,7 +9,7 @@ import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.builder.custommethod.GQLCustomMethodBuilder;
 import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.data.output.GQLDeleteResult;
-import com.daikit.graphql.meta.GQLMetaDataModel;
+import com.daikit.graphql.meta.GQLMetaModel;
 import com.daikit.graphql.meta.custommethod.GQLAbstractMethodMetaData;
 import com.daikit.graphql.meta.internal.GQLAbstractEntityMetaDataInfos;
 import com.daikit.graphql.utils.Message;
@@ -48,8 +48,8 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 	/**
 	 * Build mutation type
 	 *
-	 * @param metaDataModel
-	 *            the {@link GQLMetaDataModel}
+	 * @param metaModel
+	 *            the {@link GQLMetaModel}
 	 * @param saveDataFetcher
 	 *            the {@link DataFetcher} for create/update
 	 * @param deleteDataFetcher
@@ -58,7 +58,7 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 	 *            the {@link DataFetcher} for custom methods
 	 * @return the created {@link GraphQLObjectType}
 	 */
-	public GraphQLObjectType buildMutationType(final GQLMetaDataModel metaDataModel,
+	public GraphQLObjectType buildMutationType(final GQLMetaModel metaModel,
 			final DataFetcher<?> saveDataFetcher, final DataFetcher<GQLDeleteResult> deleteDataFetcher,
 			final DataFetcher<?> customMethodsDataFetcher) {
 		logger.debug("START building mutation types...");
@@ -68,11 +68,11 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 		builder.description("Mutation type from meta model");
 
 		logger.debug("Build mutation types for entities...");
-		final List<GraphQLFieldDefinition> saveFieldDefinitions = metaDataModel.getNonEmbeddedConcretes().stream()
+		final List<GraphQLFieldDefinition> saveFieldDefinitions = metaModel.getNonEmbeddedConcretes().stream()
 				.filter(infos -> infos.getEntity().isSaveable()).map(infos -> buildSaveMutationFieldDefinition(infos))
 				.collect(Collectors.toList());
 		builder.fields(saveFieldDefinitions);
-		final List<GraphQLFieldDefinition> deleteFieldDefinitions = metaDataModel.getNonEmbeddedConcretes().stream()
+		final List<GraphQLFieldDefinition> deleteFieldDefinitions = metaModel.getNonEmbeddedConcretes().stream()
 				.filter(infos -> infos.getEntity().isDeletable())
 				.map(infos -> buildDeleteMutationFieldDefinition(infos)).collect(Collectors.toList());
 		builder.fields(deleteFieldDefinitions);
@@ -80,7 +80,7 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 		logger.debug("Build mutation types for custom methods...");
 		final Map<GQLAbstractMethodMetaData, GraphQLFieldDefinition> customMethodFieldDefinitions = new GQLCustomMethodBuilder(
 				getCache())
-						.buildMethods(metaDataModel.getCustomMethods().stream()
+						.buildMethods(metaModel.getCustomMethods().stream()
 								.filter(GQLAbstractMethodMetaData::isMutation).collect(Collectors.toList()));
 		builder.fields(new ArrayList<>(customMethodFieldDefinitions.values()));
 

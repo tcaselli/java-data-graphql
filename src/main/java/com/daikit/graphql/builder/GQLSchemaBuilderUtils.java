@@ -16,7 +16,7 @@ import graphql.schema.GraphQLTypeReference;
  *
  * @author Thibaut Caselli
  */
-public class GQLBuilderUtils {
+public class GQLSchemaBuilderUtils {
 
 	/**
 	 * Add or replace {@link GraphQLInputObjectField} objects from second list

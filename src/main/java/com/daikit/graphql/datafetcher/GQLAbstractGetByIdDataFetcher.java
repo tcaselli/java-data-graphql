@@ -21,7 +21,7 @@ public abstract class GQLAbstractGetByIdDataFetcher extends GQLAbstractDataFetch
 	// ABSTRACT METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	protected abstract Object getById(String entityName, String id);
+	protected abstract Object getById(Class<?> entityClass, String id);
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// METHODS
@@ -35,7 +35,7 @@ public abstract class GQLAbstractGetByIdDataFetcher extends GQLAbstractDataFetch
 				queryField.getArguments().stream()
 						.filter(argument -> GQLSchemaConstants.FIELD_ID.equals(argument.getName())).findFirst().get(),
 				environment.getArguments());
-		return getById(entityName, id);
+		return getById(getEntityClassByEntityName(entityName), id);
 	}
 
 }

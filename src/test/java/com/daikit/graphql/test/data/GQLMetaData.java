@@ -12,8 +12,7 @@ import com.daikit.graphql.dynamicattribute.GQLDynamicAttributeSetter;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeGetter;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
 import com.daikit.graphql.enums.GQLScalarTypeEnum;
-import com.daikit.graphql.meta.GQLMetaDataModel;
-import com.daikit.graphql.meta.GQLMetaDataModelBuilder;
+import com.daikit.graphql.meta.GQLMetaModel;
 import com.daikit.graphql.meta.attribute.GQLAttributeEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEnumMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeListEntityMetaData;
@@ -41,19 +40,19 @@ public class GQLMetaData {
 	/**
 	 * Build the test GraphQL data meta entity
 	 *
-	 * @return the built {@link GQLMetaDataModel}
+	 * @return the built {@link GQLMetaModel}
 	 */
-	public static GQLMetaDataModel buildMetaDataModel() {
-		return new GQLTestMetaDataModelBuilder().build();
+	public static GQLMetaModel buildMetaModel() {
+		return new GQLTestMetaModelBuilder().build();
 	}
 
-	private static class GQLTestMetaDataModelBuilder {
+	private static class GQLTestMetaModelBuilder {
 
 		private final Collection<GQLEntityMetaData> entityMetaDatas = new ArrayList<>();
 		private final Collection<GQLEnumMetaData> enumMetaDatas = new ArrayList<>();
 		private final Collection<GQLAbstractMethodMetaData> methodMetaDatas = new ArrayList<>();
 
-		protected GQLMetaDataModel build() {
+		protected GQLMetaModel build() {
 			entityMetaDatas.add(buildEntity1());
 			entityMetaDatas.add(buildEntity2());
 			entityMetaDatas.add(buildEntity3());
@@ -74,7 +73,7 @@ public class GQLMetaData {
 			methodMetaDatas.add(buildCustomMethodMutation1());
 			methodMetaDatas.add(buildCustomMethodQuery3());
 
-			return new GQLMetaDataModelBuilder().build(enumMetaDatas, entityMetaDatas, methodMetaDatas);
+			return new GQLMetaModel(enumMetaDatas, entityMetaDatas, methodMetaDatas);
 		}
 
 		private GQLEntityMetaData buildEntity1() {
@@ -263,7 +262,8 @@ public class GQLMetaData {
 				}
 			};
 			final GQLAbstractMethodMetaData metaData = new GQLMethodEntityMetaData(method, Entity1.class);
-			metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgumentName(0), GQLScalarTypeEnum.STRING));
+			metaData.addArgument(
+					new GQLMethodArgumentScalarMetaData(method.getArgumentName(0), GQLScalarTypeEnum.STRING));
 			return metaData;
 		}
 
@@ -281,7 +281,8 @@ public class GQLMetaData {
 			};
 			final GQLAbstractMethodMetaData metaData = new GQLMethodEntityMetaData(method, Entity1.class);
 			metaData.addArgument(new GQLMethodArgumentEntityMetaData(method.getArgumentName(0), EmbeddedData1.class));
-			metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgumentName(1), GQLScalarTypeEnum.STRING));
+			metaData.addArgument(
+					new GQLMethodArgumentScalarMetaData(method.getArgumentName(1), GQLScalarTypeEnum.STRING));
 			return metaData;
 		}
 
@@ -307,8 +308,10 @@ public class GQLMetaData {
 			metaData.addArgument(
 					new GQLMethodArgumentListScalarMetaData(method.getArgumentName(1), GQLScalarTypeEnum.STRING));
 			metaData.addArgument(new GQLMethodArgumentListEnumMetaData(method.getArgumentName(2), Enum1.class));
-			metaData.addArgument(new GQLMethodArgumentListEntityMetaData(method.getArgumentName(3), EmbeddedData1.class));
-			metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgumentName(4), GQLScalarTypeEnum.STRING));
+			metaData.addArgument(
+					new GQLMethodArgumentListEntityMetaData(method.getArgumentName(3), EmbeddedData1.class));
+			metaData.addArgument(
+					new GQLMethodArgumentScalarMetaData(method.getArgumentName(4), GQLScalarTypeEnum.STRING));
 			return metaData;
 		}
 
@@ -323,7 +326,8 @@ public class GQLMetaData {
 				}
 			};
 			final GQLAbstractMethodMetaData metaData = new GQLMethodEntityMetaData(method, Entity1.class);
-			metaData.addArgument(new GQLMethodArgumentScalarMetaData(method.getArgumentName(0), GQLScalarTypeEnum.STRING));
+			metaData.addArgument(
+					new GQLMethodArgumentScalarMetaData(method.getArgumentName(0), GQLScalarTypeEnum.STRING));
 			return metaData;
 		}
 	}

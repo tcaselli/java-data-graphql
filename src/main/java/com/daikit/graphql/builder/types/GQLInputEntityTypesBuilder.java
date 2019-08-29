@@ -11,10 +11,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.daikit.graphql.builder.GQLBuilderUtils;
+import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.constants.GQLSchemaConstants;
-import com.daikit.graphql.meta.GQLMetaDataModel;
+import com.daikit.graphql.meta.GQLMetaModel;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEnumMetaData;
@@ -60,14 +60,14 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Build {@link GraphQLObjectType} from given {@link GQLMetaDataModel}
+	 * Build {@link GraphQLObjectType} from given {@link GQLMetaModel}
 	 *
-	 * @param metaDataModel
-	 *            the {@link GQLMetaDataModel}
+	 * @param metaModel
+	 *            the {@link GQLMetaModel}
 	 */
-	public void buildInputEntities(final GQLMetaDataModel metaDataModel) {
+	public void buildInputEntities(final GQLMetaModel metaModel) {
 		logger.debug("START building input entity types...");
-		new BuilderImpl().build(metaDataModel);
+		new BuilderImpl().build(metaModel);
 		logger.debug("END building input entity types");
 	}
 
@@ -84,10 +84,10 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 		// phase
 		private final Map<GQLAbstractEntityMetaDataInfos, Set<Class<?>>> lazyEntities = new HashMap<>();
 
-		public void build(final GQLMetaDataModel metaDataModel) {
-			allInfos.addAll(metaDataModel.getEmbeddedConcretes());
-			allInfos.addAll(metaDataModel.getEmbeddedInterfaces());
-			allInfos.addAll(metaDataModel.getAllNonEmbeddedEntities());
+		public void build(final GQLMetaModel metaModel) {
+			allInfos.addAll(metaModel.getEmbeddedConcretes());
+			allInfos.addAll(metaModel.getEmbeddedInterfaces());
+			allInfos.addAll(metaModel.getAllNonEmbeddedEntities());
 			allInfos.forEach(infos -> getOrBuildAndRegisterInputEntity(infos));
 			generateLazyEntities();
 		}
@@ -146,7 +146,7 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 					fields.add(buildIdInputField());
 				}
 				// Add other attributes
-				GQLBuilderUtils.addOrReplaceInputObjectFields(fields, buildFields);
+				GQLSchemaBuilderUtils.addOrReplaceInputObjectFields(fields, buildFields);
 				// Effectively add fields
 				builder.fields(fields);
 				ret = builder.build();

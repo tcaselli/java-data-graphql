@@ -22,7 +22,7 @@ public abstract class GQLAbstractDeleteDataFetcher extends GQLAbstractDataFetche
 	// ABSTRACT METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	protected abstract void delete(String entityName, String id);
+	protected abstract void delete(Class<?> entityClass, String id);
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// METHODS
@@ -34,7 +34,7 @@ public abstract class GQLAbstractDeleteDataFetcher extends GQLAbstractDataFetche
 		final String entityName = getEntityName(GQLSchemaConstants.MUTATION_DELETE_PREFIX, queryField.getName());
 		final String id = (String) getArgumentValue(queryField, GQLSchemaConstants.FIELD_ID,
 				environment.getArguments());
-		delete(entityName, id);
+		delete(getEntityClassByEntityName(entityName), id);
 		final GQLDeleteResult result = new GQLDeleteResult();
 		result.setId(id);
 		result.setTypename(entityName);

@@ -86,18 +86,20 @@ public class Assert {
 	}
 
 	/**
-	 * Assert null
+	 * Assert given condition is true
 	 *
-	 * @param object
-	 *            the object to be tested
-	 * @param <T>
-	 *            the object type
+	 * @param condition
+	 *            the condition to be tested
+	 * @param format
+	 *            the message in case of error
+	 * @param args
+	 *            arguments for the message
 	 */
-	public static <T> void assertNull(T object) {
-		if (object == null) {
+	public static void assertTrue(boolean condition, String format, Object... args) {
+		if (condition) {
 			return;
 		}
-		throw new AssertException("Object required to be null");
+		throw new AssertException(format(format, args));
 	}
 
 }

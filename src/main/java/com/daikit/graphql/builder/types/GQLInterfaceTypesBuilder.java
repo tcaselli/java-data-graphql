@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.daikit.graphql.builder.GQLBuilderUtils;
+import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.datafetcher.GQLPropertyDataFetcher;
-import com.daikit.graphql.meta.GQLMetaDataModel;
+import com.daikit.graphql.meta.GQLMetaModel;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
 import com.daikit.graphql.meta.internal.GQLAbstractEntityMetaDataInfos;
 import com.daikit.graphql.meta.internal.GQLInterfaceEntityMetaDataInfos;
@@ -47,18 +47,18 @@ public class GQLInterfaceTypesBuilder extends GQLAbstractTypesBuilder {
 
 	/**
 	 * Build abstract entities {@link GraphQLInterfaceType} types from given
-	 * {@link GQLMetaDataModel}
+	 * {@link GQLMetaModel}
 	 *
-	 * @param metaDataModel
-	 *            the {@link GQLMetaDataModel}
+	 * @param metaModel
+	 *            the {@link GQLMetaModel}
 	 * @param propertiesDataFetchers
 	 *            the list of {@link GQLPropertyDataFetcher}
 	 */
-	public void buildInterfaceTypes(final GQLMetaDataModel metaDataModel,
+	public void buildInterfaceTypes(final GQLMetaModel metaModel,
 			final List<GQLPropertyDataFetcher<?>> propertiesDataFetchers) {
 		logger.debug("START building interface types...");
 		// Create abstract entities types
-		for (final GQLInterfaceEntityMetaDataInfos infos : metaDataModel.getNonEmbeddedInterfaces()) {
+		for (final GQLInterfaceEntityMetaDataInfos infos : metaModel.getNonEmbeddedInterfaces()) {
 			// Filter propertyDataFetcher by entity class name
 			final List<GQLPropertyDataFetcher<?>> propertyDataFetchers = propertiesDataFetchers.stream()
 					.filter(propertyDataFetcher -> propertyDataFetcher.getEntityClass()
@@ -93,7 +93,7 @@ public class GQLInterfaceTypesBuilder extends GQLAbstractTypesBuilder {
 		// Add other fields
 		final Map<GQLAbstractAttributeMetaData, GraphQLFieldDefinition> entityFieldDefinitions = buildEntityFieldDefinitions(
 				infos.getEntity());
-		GQLBuilderUtils.addOrReplaceFieldDefinitions(fieldDefinitions, entityFieldDefinitions.values());
+		GQLSchemaBuilderUtils.addOrReplaceFieldDefinitions(fieldDefinitions, entityFieldDefinitions.values());
 
 		// Effectively add fields
 		builder.fields(fieldDefinitions);

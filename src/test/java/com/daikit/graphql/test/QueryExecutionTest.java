@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.daikit.graphql.data.output.GQLExecutionResult;
 import com.daikit.graphql.test.data.EmbeddedData1;
 import com.daikit.graphql.test.data.Entity1;
 import com.daikit.graphql.test.data.Entity1ListLoadResult;
@@ -117,7 +118,7 @@ public class QueryExecutionTest extends AbstractTestSuite {
 	public void testGetDynamicAttribute() {
 		final String id = "3";
 		final String query = readGraphql("testGetDynamicAttribute.graphql");
-		final ExecutionResult result = handleErrors(EXECUTOR
+		final GQLExecutionResult result = handleErrors(EXECUTOR
 				.execute(ExecutionInput.newExecutionInput().query(query).variables(new HashMap<String, Object>() {
 					private static final long serialVersionUID = 1L;
 					{

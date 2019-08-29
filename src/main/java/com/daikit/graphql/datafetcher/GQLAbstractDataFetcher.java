@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.daikit.graphql.meta.GQLMetaModel;
+
 import graphql.language.Argument;
 import graphql.language.Field;
 import graphql.language.ObjectField;
@@ -19,6 +21,12 @@ import graphql.schema.DataFetcher;
  *            the fetched data type
  */
 public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataFetcher<FETCHED_DATA_TYPE> {
+
+	private GQLMetaModel metaModel;
+
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+	// PUBLIC METHODS
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
 	 * Get provided variable names for the request
@@ -128,6 +136,36 @@ public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataF
 	 */
 	protected Object getArgumentValue(final Field queryField, final String name, final Map<String, Object> arguments) {
 		return GQLDataFetcherUtils.getArgumentValue(queryField, name, arguments, getRequestProvidedVariableNames());
+	}
+
+	/**
+	 * Get entity class by its name
+	 *
+	 * @param entityName
+	 *            the entity class name
+	 * @return the entity class
+	 */
+	protected Class<?> getEntityClassByEntityName(String entityName) {
+		return metaModel.getEntityClassByEntityName(entityName);
+	}
+
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+	// GETTERS / SETTERS
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+	/**
+	 * @return the metaModel
+	 */
+	public GQLMetaModel getMetaModel() {
+		return metaModel;
+	}
+
+	/**
+	 * @param metaModel
+	 *            the metaModel to set
+	 */
+	public void setMetaModel(GQLMetaModel metaModel) {
+		this.metaModel = metaModel;
 	}
 
 }

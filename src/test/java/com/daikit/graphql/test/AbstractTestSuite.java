@@ -15,24 +15,24 @@ import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.daikit.graphql.builder.GQLSchemaBuilder;
 import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.data.input.GQLListLoadConfig;
 import com.daikit.graphql.data.output.GQLDeleteResult;
+import com.daikit.graphql.data.output.GQLExecutionResult;
 import com.daikit.graphql.data.output.GQLListLoadResult;
 import com.daikit.graphql.datafetcher.GQLAbstractDeleteDataFetcher;
 import com.daikit.graphql.datafetcher.GQLAbstractGetByIdDataFetcher;
 import com.daikit.graphql.datafetcher.GQLAbstractGetListDataFetcher;
 import com.daikit.graphql.datafetcher.GQLAbstractSaveDataFetcher;
 import com.daikit.graphql.datafetcher.GQLCustomMethodDataFetcher;
+import com.daikit.graphql.datafetcher.GQLDynamicAttributeRegistry;
 import com.daikit.graphql.datafetcher.GQLPropertyDataFetcher;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeFilter;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
+import com.daikit.graphql.execution.GQLErrorProcessor;
+import com.daikit.graphql.execution.GQLExecutor;
 import com.daikit.graphql.introspection.GQLIntrospection;
-import com.daikit.graphql.meta.GQLMetaDataModel;
-import com.daikit.graphql.test.data.AbstractEntity;
 import com.daikit.graphql.test.data.DataModel;
-import com.daikit.graphql.test.data.Entity1;
 import com.daikit.graphql.test.data.GQLMetaData;
 import com.daikit.graphql.utils.GQLPropertyUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -43,9 +43,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import graphql.ExecutionResult;
-import graphql.GraphQL;
 import graphql.schema.DataFetcher;
-import graphql.schema.GraphQLSchema;
 
 /**
  * Super class for all tests. It initialize a data entity , a graphQL meta
@@ -58,11 +56,11 @@ public abstract class AbstractTestSuite {
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private ExecutionResult schemaIntrospection;
+	private GQLExecutionResult schemaIntrospection;
 
 	protected DataModel dataModel;
 
-	protected static GraphQL EXECUTOR;
+	protected static GQLExecutor EXECUTOR;
 	protected static ObjectMapper MAPPER;
 	protected static ObjectWriter WRITER_PRETTY;
 
@@ -82,13 +80,11 @@ public abstract class AbstractTestSuite {
 	 * Initialize schema
 	 */
 	@Before
-	public void initializeSchema() {
+	public void createExecutor() {
 		logger.info("Initialize test graphQL schema & data entity");
-		final GQLMetaDataModel metaDataModel = GQLMetaData.buildMetaDataModel();
-		final GraphQLSchema schema = new GQLSchemaBuilder().buildSchema(metaDataModel, createGetByIdDataFetcher(),
+		EXECUTOR = new GQLExecutor(GQLMetaData.buildMetaModel(), new GQLErrorProcessor(), createGetByIdDataFetcher(),
 				createListDataFetcher(Collections.emptyList()), createSaveDataFetchers(), createDeleteDataFetcher(),
 				createCustomMethodsDataFetcher(), createPropertyDataFetchers());
-		EXECUTOR = GraphQL.newGraphQL(schema).build();
 		resetDataModel();
 	}
 
@@ -101,10 +97,10 @@ public abstract class AbstractTestSuite {
 		}
 	}
 
-	protected ExecutionResult handleErrors(ExecutionResult result) {
-		if (!result.getErrors().isEmpty()) {
+	protected GQLExecutionResult handleErrors(GQLExecutionResult result) {
+		if (result.getErrorDetails() != null) {
 			result.getErrors().forEach(error -> System.err.println(error));
-			Assert.fail("Error(s) happened during graphql execution, see log for details");
+			Assert.fail("Error(s) happened during graphql execution. " + result.getErrorDetails().getMessage());
 		}
 		return result;
 	}
@@ -125,7 +121,7 @@ public abstract class AbstractTestSuite {
 		}
 	}
 
-	protected ExecutionResult getSchemaIntrospection() {
+	protected GQLExecutionResult getSchemaIntrospection() {
 		if (schemaIntrospection == null) {
 			schemaIntrospection = GQLIntrospection.getAllTypes(query -> EXECUTOR.execute(query));
 		}
@@ -150,7 +146,7 @@ public abstract class AbstractTestSuite {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <T> T getResultDataProperty(ExecutionResult executionResult, String path) {
+	protected <T> T getResultDataProperty(GQLExecutionResult executionResult, String path) {
 		final String[] pathFragments = path.split("\\.");
 		Object value = executionResult.<Map<String, Object>>getData().values().iterator().next();
 		for (final String pathFragment : pathFragments) {
@@ -163,26 +159,12 @@ public abstract class AbstractTestSuite {
 	// PRIVATE METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	@SuppressWarnings("unchecked")
-	private Class<? extends AbstractEntity> getClassByName(String entityName) {
-		try {
-			return (Class<? extends AbstractEntity>) Class
-					.forName(Entity1.class.getPackage().getName() + "." + entityName);
-		} catch (final ClassNotFoundException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private String getClassEntityName(Class<?> clazz) {
-		return clazz.getSimpleName();
-	}
-
 	private DataFetcher<?> createGetByIdDataFetcher() {
 		return new GQLAbstractGetByIdDataFetcher() {
 
 			@Override
-			protected Object getById(String entityName, String id) {
-				return dataModel.getById(getClassByName(entityName), id);
+			protected Object getById(Class<?> entityClass, String id) {
+				return dataModel.getById(entityClass, id);
 			}
 
 		};
@@ -193,13 +175,13 @@ public abstract class AbstractTestSuite {
 		return new GQLAbstractGetListDataFetcher(dynamicAttributeFilters) {
 
 			@Override
-			protected GQLListLoadResult getAll(String entityName, GQLListLoadConfig listLoadConfig) {
-				return dataModel.getAll(getClassByName(entityName), listLoadConfig);
+			protected GQLListLoadResult getAll(Class<?> entityClass, GQLListLoadConfig listLoadConfig) {
+				return dataModel.getAll(entityClass, listLoadConfig);
 			}
 
 			@Override
-			protected Object getById(String entityName, String id) {
-				return dataModel.getById(getClassByName(entityName), id);
+			protected Object getById(Class<?> entityClass, String id) {
+				return dataModel.getById(entityClass, id);
 			}
 
 		};
@@ -215,10 +197,8 @@ public abstract class AbstractTestSuite {
 
 			@SuppressWarnings("unchecked")
 			@Override
-			protected Object getOrCreateAndSetProperties(String entityName,
-					Map<String, IGQLDynamicAttributeSetter<Object, Object>> dynamicAttributeSetters,
-					Map<String, Object> fieldValueMap) {
-				final Class<?> entityClass = getClassByName(entityName);
+			protected Object getOrCreateAndSetProperties(Class<?> entityClass,
+					GQLDynamicAttributeRegistry dynamicAttributeRegistry, Map<String, Object> fieldValueMap) {
 				// Find or create entity
 				final String id = (String) fieldValueMap.get(GQLSchemaConstants.FIELD_ID);
 				final Optional<?> existing = StringUtils.isEmpty(id)
@@ -232,22 +212,20 @@ public abstract class AbstractTestSuite {
 				}
 				// Set properties
 				fieldValueMap.entrySet().stream().forEach(entry -> {
-					final IGQLDynamicAttributeSetter<Object, Object> dynamicAttributeSetter = dynamicAttributeSetters
-							.get(entry.getKey());
+					final Optional<IGQLDynamicAttributeSetter<Object, Object>> dynamicAttributeSetter = dynamicAttributeRegistry
+							.getSetter(entityClass, entry.getKey());
 					if (!GQLSchemaConstants.FIELD_ID.equals(entry.getKey())) {
 						Object value = entry.getValue();
 						if (entry.getValue() instanceof Map) {
 							final Class<?> propertyType = GQLPropertyUtils.getPropertyType(entity.getClass(),
 									entry.getKey());
-							final String entryEntityName = getClassEntityName(propertyType);
-							value = getOrCreateAndSetProperties(entryEntityName,
-									getDynamicAttributeSetters(entryEntityName),
+							value = getOrCreateAndSetProperties(propertyType, dynamicAttributeRegistry,
 									(Map<String, Object>) entry.getValue());
 						}
-						if (dynamicAttributeSetter == null) {
-							GQLPropertyUtils.setPropertyValue(entity, entry.getKey(), value);
+						if (dynamicAttributeSetter.isPresent()) {
+							dynamicAttributeSetter.get().setValue(entity, value);
 						} else {
-							dynamicAttributeSetter.setValue(entity, value);
+							GQLPropertyUtils.setPropertyValue(entity, entry.getKey(), value);
 						}
 					}
 				});
@@ -259,8 +237,8 @@ public abstract class AbstractTestSuite {
 	private DataFetcher<GQLDeleteResult> createDeleteDataFetcher() {
 		return new GQLAbstractDeleteDataFetcher() {
 			@Override
-			protected void delete(String entityName, String id) {
-				dataModel.delete(getClassByName(entityName), id);
+			protected void delete(Class<?> entityClass, String id) {
+				dataModel.delete(entityClass, id);
 			}
 		};
 	}

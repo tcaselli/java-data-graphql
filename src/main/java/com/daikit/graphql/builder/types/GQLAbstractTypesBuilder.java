@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.daikit.graphql.builder.GQLAbstractSchemaSubBuilder;
-import com.daikit.graphql.builder.GQLBuilderUtils;
+import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.datafetcher.GQLDynamicAttributeDataFetcher;
@@ -145,7 +145,7 @@ public class GQLAbstractTypesBuilder extends GQLAbstractSchemaSubBuilder {
 		builder.description("Field definition [" + attribute.getName() + "]");
 		builder.type(type);
 		logger.debug(Message.format("Field definition created for [{}] with type [{}]", attribute.getName(),
-				GQLBuilderUtils.typeToString(type)));
+				GQLSchemaBuilderUtils.typeToString(type)));
 		return builder.build();
 	}
 }

@@ -11,7 +11,7 @@ import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.enums.GQLFilterOperatorEnum;
 import com.daikit.graphql.enums.GQLScalarTypeEnum;
-import com.daikit.graphql.meta.GQLMetaDataModel;
+import com.daikit.graphql.meta.GQLMetaModel;
 import com.daikit.graphql.meta.entity.GQLEnumMetaData;
 
 import graphql.schema.GraphQLEnumType;
@@ -47,15 +47,15 @@ public class GQLQueryFilterOperatorsInputTypeBuilder extends GQLAbstractTypesBui
 
 	/**
 	 * Build query filter input type and cache it from given
-	 * {@link GQLMetaDataModel}
+	 * {@link GQLMetaModel}
 	 *
-	 * @param metaDataModel
-	 *            the {@link GQLMetaDataModel}
+	 * @param metaModel
+	 *            the {@link GQLMetaModel}
 	 */
-	public void buildFilterOperatorsInputTypes(final GQLMetaDataModel metaDataModel) {
+	public void buildFilterOperatorsInputTypes(final GQLMetaModel metaModel) {
 		logger.debug("Build filter operators types");
 		getCache().getInputScalarFilterOperators().putAll(buildScalarFilterOperatorsInputObjectTypes());
-		metaDataModel.getEnums().forEach(enumMeta -> getCache().getInputEnumFilterOperators()
+		metaModel.getEnums().forEach(enumMeta -> getCache().getInputEnumFilterOperators()
 				.put(enumMeta.getEnumClass(), buildEnumFilterOperatorsInputObjectType(enumMeta)));
 	}
 

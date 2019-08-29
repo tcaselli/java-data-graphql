@@ -4,7 +4,7 @@ import java.util.stream.Stream;
 
 import com.daikit.graphql.builder.GQLAbstractSchemaSubBuilder;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
-import com.daikit.graphql.meta.GQLMetaDataModel;
+import com.daikit.graphql.meta.GQLMetaModel;
 import com.daikit.graphql.meta.entity.GQLEnumMetaData;
 import com.daikit.graphql.utils.Message;
 
@@ -36,14 +36,14 @@ public class GQLEnumTypesBuilder extends GQLAbstractSchemaSubBuilder {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Builder {@link GraphQLEnumType} types from given {@link GQLMetaDataModel}
+	 * Builder {@link GraphQLEnumType} types from given {@link GQLMetaModel}
 	 *
-	 * @param metaDataModel
-	 *            the {@link GQLMetaDataModel}
+	 * @param metaModel
+	 *            the {@link GQLMetaModel}
 	 */
-	public void buildEnumTypes(final GQLMetaDataModel metaDataModel) {
+	public void buildEnumTypes(final GQLMetaModel metaModel) {
 		logger.debug("START building enum types...");
-		metaDataModel.getEnums()
+		metaModel.getEnums()
 				.forEach(enumMeta -> getCache().getEnumTypes().put(enumMeta.getEnumClass(), buildEnum(enumMeta)));
 		logger.debug("END building enum types");
 	}

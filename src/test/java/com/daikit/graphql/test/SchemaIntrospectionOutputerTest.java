@@ -10,10 +10,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.daikit.graphql.data.output.GQLExecutionResult;
 import com.daikit.graphql.introspection.GQLIntrospection;
 import com.daikit.graphql.utils.Message;
-
-import graphql.ExecutionResult;
 
 /**
  * Test suite for schema building
@@ -33,7 +32,7 @@ public class SchemaIntrospectionOutputerTest extends AbstractTestSuite {
 	@Test
 	public void testIntrospection() throws IOException {
 		logger.info("Test introspection");
-		final ExecutionResult schemaIntrospection = GQLIntrospection.getAllTypes(query -> EXECUTOR.execute(query));
+		final GQLExecutionResult schemaIntrospection = GQLIntrospection.getAllTypes(query -> EXECUTOR.execute(query));
 		final String json = WRITER_PRETTY.writeValueAsString(schemaIntrospection.toSpecification());
 		new File("src/test/output").mkdirs();
 		final File output = new File("src/test/output/introspection.json");

@@ -14,7 +14,7 @@ Java-data-graphql is a layer above the great [graphql-java](https://github.com/g
 
 This library is well tested and used in several projects already. The real advantage of using this library over using graphql-java directly is that you do not define a graphql schema by yourself which can be a painful task, but you rather define a set of entities, custom methods etc and the graphQL schema is generated for you.  
 
-### Generate the schema
+### Generate GraphQL schema and executor
 
 In order to generate a schema there is 1 entry point : the ```com.daikit.graphql.builder.GQLSchemaBuilder``` class with its buildSchema(...) method.  
 This method is waiting for a [meta model](#the-meta-model) and [data fetchers](#data-fetchers).

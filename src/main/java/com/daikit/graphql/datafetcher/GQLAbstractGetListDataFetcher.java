@@ -40,9 +40,9 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 	// ABSTRACT METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	protected abstract GQLListLoadResult getAll(String entityName, GQLListLoadConfig listLoadConfig);
+	protected abstract GQLListLoadResult getAll(Class<?> entityClass, GQLListLoadConfig listLoadConfig);
 
-	protected abstract Object getById(String entityName, String id);
+	protected abstract Object getById(Class<?> entityClass, String id);
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -87,6 +87,7 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 		// Parse input query
 		final Field queryField = environment.getField();
 		final String entityName = getEntityName(GQLSchemaConstants.QUERY_GET_LIST_PREFIX, queryField.getName());
+		final Class<?> entityClass = getEntityClassByEntityName(entityName);
 
 		final Map<String, IGQLDynamicAttributeFilter<?, ?, ?>> filters = dynamicAttributeFiltersMap.get(entityName);
 
@@ -167,7 +168,7 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 					value = optionalValueField.isPresent() ? mapValue(optionalValueField.get(), filterArguments) : null;
 				} else {
 					operator = GQLFilterOperatorEnum.EQUAL;
-					value = getById(entityName, mapValue(filterField, contextArguments));
+					value = getById(entityClass, mapValue(filterField, contextArguments));
 				}
 
 				final IGQLDynamicAttributeFilter<?, ?, ?> filter = filters == null ? null : filters.get(name);
@@ -177,7 +178,7 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 			}
 		}
 
-		return getAll(entityName, listLoadConfig);
+		return getAll(entityClass, listLoadConfig);
 	}
 
 	/**
