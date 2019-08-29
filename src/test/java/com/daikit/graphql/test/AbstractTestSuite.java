@@ -82,8 +82,8 @@ public abstract class AbstractTestSuite {
 	public void createExecutor() {
 		logger.info("Initialize test graphQL schema & data entity");
 		EXECUTOR = new GQLExecutor(GQLMetaData.buildMetaModel(), new GQLErrorProcessor(), createGetByIdDataFetcher(),
-				createListDataFetcher(), createSaveDataFetchers(), createDeleteDataFetcher(),
-				createCustomMethodsDataFetcher(), createPropertyDataFetchers());
+				createListDataFetcher(), createSaveDataFetcher(), createDeleteDataFetcher(),
+				createCustomMethodDataFetcher(), createPropertyDataFetchers());
 		resetDataModel();
 	}
 
@@ -185,7 +185,7 @@ public abstract class AbstractTestSuite {
 		};
 	}
 
-	private DataFetcher<?> createSaveDataFetchers() {
+	private DataFetcher<?> createSaveDataFetcher() {
 		return new GQLAbstractSaveDataFetcher<Object>() {
 
 			@Override
@@ -241,7 +241,7 @@ public abstract class AbstractTestSuite {
 		};
 	}
 
-	private DataFetcher<?> createCustomMethodsDataFetcher() {
+	private DataFetcher<?> createCustomMethodDataFetcher() {
 		return new GQLCustomMethodDataFetcher();
 	}
 

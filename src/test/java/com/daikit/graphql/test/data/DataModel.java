@@ -35,11 +35,6 @@ import com.daikit.graphql.utils.GQLPropertyUtils;
  */
 public class DataModel {
 
-	private final List<Entity1> entity1s = new ArrayList<>();
-	private final List<Entity2> entity2s = new ArrayList<>();
-	private final List<Entity3> entity3s = new ArrayList<>();
-	private final List<Entity4> entity4s = new ArrayList<>();
-
 	private final Map<Class<?>, List<? extends AbstractEntity>> database = new HashMap<>();
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -55,11 +50,8 @@ public class DataModel {
 	 *             if file is not found
 	 */
 	public DataModel() throws FileNotFoundException, IOException {
-
-		database.put(Entity1.class, entity1s);
-		database.put(Entity2.class, entity2s);
-		database.put(Entity3.class, entity3s);
-		database.put(Entity4.class, entity4s);
+		Stream.of(Entity1.class, Entity2.class, Entity3.class, Entity4.class)
+				.forEach(entityClass -> database.put(entityClass, new ArrayList<>()));
 
 		final File file = new File(getClass().getClassLoader().getResource("data/file.txt").getFile());
 		final byte[] fileBytes = IOUtils.toByteArray(new FileInputStream(file));
@@ -82,25 +74,25 @@ public class DataModel {
 			entity.setLocalDateAttr(LocalDate.now());
 			entity.setLocalDateTimeAttr(LocalDateTime.now());
 			entity.setEnumAttr(Enum1.VAL2);
-			entity1s.add(entity);
+			registerEntity(entity);
 		}
 
 		for (int i = 0; i < 5; i++) {
 			final Entity2 entity = new Entity2();
 			entity.setId(Integer.valueOf(i).toString());
-			entity2s.add(entity);
+			registerEntity(entity);
 		}
 
 		for (int i = 0; i < 5; i++) {
 			final Entity3 entity = new Entity3();
 			entity.setId(Integer.valueOf(i).toString());
-			entity3s.add(entity);
+			registerEntity(entity);
 		}
 
 		for (int i = 0; i < 5; i++) {
 			final Entity4 entity = new Entity4();
 			entity.setId(Integer.valueOf(i).toString());
-			entity4s.add(entity);
+			registerEntity(entity);
 		}
 
 		final List<EmbeddedData1> embeddedData1s = new ArrayList<>();
@@ -135,24 +127,38 @@ public class DataModel {
 		}
 
 		for (int i = 0; i < 5; i++) {
-			final Entity1 entity1 = entity1s.get(i);
-			final Entity2 entity2 = entity2s.get(i);
+			final Entity1 entity1 = getAll(Entity1.class).get(i);
+			final Entity2 entity2 = getAll(Entity2.class).get(i);
 
 			entity1.setEntity2(entity2);
 			entity2.getEntity1s().add(entity1);
 
 			if (i == 0) {
-				entity1.getEntity3s().addAll(entity3s);
-				entity3s.forEach(entity3 -> entity3.setEntity1(entity1));
+				entity1.getEntity3s().addAll(getAll(Entity3.class));
+				getAll(Entity3.class).forEach(entity3 -> entity3.setEntity1(entity1));
 			}
 
-			entity1.getEntity4s().addAll(entity4s);
-			entity4s.forEach(entity4 -> entity4.getEntity1s().add(entity1));
+			entity1.getEntity4s().addAll(getAll(Entity4.class));
+			getAll(Entity4.class).forEach(entity4 -> entity4.getEntity1s().add(entity1));
 
 			entity1.setEmbeddedData1(embeddedData1s.get(i));
 
 			entity1.getEmbeddedData1s().addAll(embeddedData1s);
 		}
+	}
+
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+	// PRIVATE METHODS
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+	@SuppressWarnings("unchecked")
+	private <T extends AbstractEntity> void registerEntity(T entity) {
+		getAll((Class<T>) entity.getClass()).add(entity);
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T extends AbstractEntity> List<T> getAll(Class<T> entityClass) {
+		return (List<T>) database.get(entityClass);
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -255,38 +261,6 @@ public class DataModel {
 		if (optionalEntity.isPresent()) {
 			database.get(entityClass).remove(optionalEntity.get());
 		}
-	}
-
-	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-	// GETTERS / SETTERS
-	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-
-	/**
-	 * @return the entity1s
-	 */
-	public List<Entity1> getEntity1s() {
-		return entity1s;
-	}
-
-	/**
-	 * @return the entity2s
-	 */
-	public List<Entity2> getEntity2s() {
-		return entity2s;
-	}
-
-	/**
-	 * @return the entity3s
-	 */
-	public List<Entity3> getEntity3s() {
-		return entity3s;
-	}
-
-	/**
-	 * @return the entity4s
-	 */
-	public List<Entity4> getEntity4s() {
-		return entity4s;
 	}
 
 }
