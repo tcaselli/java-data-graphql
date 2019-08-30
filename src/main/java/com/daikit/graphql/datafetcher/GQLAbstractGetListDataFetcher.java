@@ -156,7 +156,7 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 				listLoadConfig
 						.addFilter(dynAttr.isPresent() && StringUtils.isNoneEmpty(dynAttr.get().getFilterQueryPath())
 								? dynAttr.get().getFilterQueryPath()
-								: fieldName, operator, value, dynAttr.get());
+								: fieldName, operator, value, dynAttr.isPresent() ? dynAttr.get() : null);
 			}
 		}
 
