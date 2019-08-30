@@ -54,8 +54,8 @@ public class QueryExecutionTest extends AbstractTestSuite {
 		final ExecutionResult result = handleErrors(EXECUTOR.execute(ExecutionInput.newExecutionInput().query(query)
 				.variables(Collections.singletonMap("arg1", "testString")).build()));
 		final Entity1 resultData = toObject(result, Entity1.class);
-		Assert.assertEquals("stringAttr", resultData.getStringAttr());
-		Assert.assertEquals("test attr", resultData.getEmbeddedData1().getStringAttr());
+		Assert.assertEquals("testString", resultData.getStringAttr());
+		Assert.assertEquals("testString", resultData.getEmbeddedData1().getStringAttr());
 	}
 
 	@Test
@@ -68,13 +68,13 @@ public class QueryExecutionTest extends AbstractTestSuite {
 				.execute(ExecutionInput.newExecutionInput().query(query).variables(new HashMap<String, Object>() {
 					private static final long serialVersionUID = 1L;
 					{
-						put("arg1", toMap(arg1));
-						put("arg2", "value2");
+						put("arg1", "testString1");
+						put("arg2", toMap(arg1));
 					}
 				}).build()));
 		final Entity1 resultData = toObject(result, Entity1.class);
 		Assert.assertEquals(5, resultData.getIntAttr());
-		Assert.assertEquals("stringAttr", resultData.getStringAttr());
+		Assert.assertEquals("testString1", resultData.getStringAttr());
 		Assert.assertEquals(2, resultData.getEmbeddedData1().getIntAttr());
 		Assert.assertEquals("testString", resultData.getEmbeddedData1().getStringAttr());
 	}

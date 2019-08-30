@@ -31,8 +31,8 @@ import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
 import com.daikit.graphql.execution.GQLErrorProcessor;
 import com.daikit.graphql.execution.GQLExecutor;
 import com.daikit.graphql.introspection.GQLIntrospection;
+import com.daikit.graphql.meta.GQLMetaModel;
 import com.daikit.graphql.test.data.DataModel;
-import com.daikit.graphql.test.data.GQLMetaData;
 import com.daikit.graphql.utils.GQLPropertyUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
@@ -81,7 +81,7 @@ public abstract class AbstractTestSuite {
 	@Before
 	public void createExecutor() {
 		logger.info("Initialize test graphQL schema & data entity");
-		EXECUTOR = new GQLExecutor(GQLMetaData.buildMetaModel(), new GQLErrorProcessor(), createGetByIdDataFetcher(),
+		EXECUTOR = new GQLExecutor(createMetaModel(), new GQLErrorProcessor(), createGetByIdDataFetcher(),
 				createListDataFetcher(), createSaveDataFetcher(), createDeleteDataFetcher(),
 				createCustomMethodDataFetcher(), createPropertyDataFetchers());
 		resetDataModel();
@@ -157,6 +157,10 @@ public abstract class AbstractTestSuite {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// PRIVATE METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+	private GQLMetaModel createMetaModel() {
+		return new GQLMetaModelBuilder().build();
+	}
 
 	private DataFetcher<?> createGetByIdDataFetcher() {
 		return new GQLAbstractGetByIdDataFetcher() {

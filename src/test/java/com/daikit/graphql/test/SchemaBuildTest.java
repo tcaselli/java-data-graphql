@@ -20,8 +20,8 @@ import com.daikit.graphql.test.data.Entity1;
 import com.daikit.graphql.test.data.Entity2;
 import com.daikit.graphql.test.data.Entity3;
 import com.daikit.graphql.test.data.Entity4;
-import com.daikit.graphql.test.data.Entity5;
 import com.daikit.graphql.test.data.Entity6;
+import com.daikit.graphql.test.data.Entity5;
 import com.daikit.graphql.test.data.Entity7;
 import com.daikit.graphql.test.data.Entity8;
 import com.daikit.graphql.test.data.Enum1;
@@ -430,8 +430,8 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		final IntrospectionResult introspection = getIntrospection();
 		final IntrospectionFullType queryType = getFullType(introspection, GQLSchemaConstants.QUERY_TYPE);
 		final IntrospectionFullType mutationType = getFullType(introspection, GQLSchemaConstants.MUTATION_TYPE);
-		final String getByIdMethodName = GQLSchemaConstants.QUERY_GET_SINGLE_PREFIX + Entity6.class.getSimpleName();
-		final String getAllMethodName = GQLSchemaConstants.QUERY_GET_LIST_PREFIX + Entity6.class.getSimpleName();
+		final String getByIdMethodName = GQLSchemaConstants.QUERY_GET_SINGLE_PREFIX + Entity5.class.getSimpleName();
+		final String getAllMethodName = GQLSchemaConstants.QUERY_GET_LIST_PREFIX + Entity5.class.getSimpleName();
 		final String saveMethodName = GQLSchemaConstants.MUTATION_SAVE_PREFIX + Entity7.class.getSimpleName();
 		final String deleteMethodName = GQLSchemaConstants.MUTATION_DELETE_PREFIX + Entity8.class.getSimpleName();
 		final Optional<IntrospectionTypeField> optionalGetByIdMethod = getOptionalField(queryType, getByIdMethodName);
@@ -454,9 +454,9 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	@Test
 	public void testFieldCRUDConfig() {
 		final IntrospectionResult introspection = getIntrospection();
-		final String entityInputTypeName = Entity5.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX;
+		final String entityInputTypeName = Entity6.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX;
 		final IntrospectionFullType entityInputType = getFullType(introspection, entityInputTypeName);
-		final String entity5TypeName = Entity5.class.getSimpleName();
+		final String entity5TypeName = Entity6.class.getSimpleName();
 		final IntrospectionFullType entityType = getFullType(introspection, entity5TypeName);
 		// Check field attr1 is not readable
 		final Optional<IntrospectionTypeField> attr1Field = getOptionalField(entityType, "attr1");
@@ -473,7 +473,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		// creation but not necessarily for update
 		assertInputField(entityInputType, "attr3", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
 		// Check field attr4 is not filterable
-		final String entityFilterTypeName = Entity5.class.getSimpleName() + GQLSchemaConstants.FILTER_SUFFIX;
+		final String entityFilterTypeName = Entity6.class.getSimpleName() + GQLSchemaConstants.FILTER_SUFFIX;
 		final IntrospectionFullType entityFilterInputType = getFullType(introspection, entityFilterTypeName);
 		final Optional<IntrospectionInputValue> attr4IinputField = getOptionalInputField(entityFilterInputType,
 				"attr4");

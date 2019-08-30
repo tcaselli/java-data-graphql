@@ -9,11 +9,14 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,8 +25,10 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
+import com.daikit.graphql.data.input.GQLFilterEntry;
 import com.daikit.graphql.data.input.GQLListLoadConfig;
 import com.daikit.graphql.data.output.GQLListLoadResult;
+import com.daikit.graphql.data.output.GQLOrderByEntry;
 import com.daikit.graphql.data.output.GQLPaging;
 import com.daikit.graphql.enums.GQLOrderByDirectionEnum;
 import com.daikit.graphql.utils.GQLPropertyUtils;
@@ -50,8 +55,8 @@ public class DataModel {
 	 *             if file is not found
 	 */
 	public DataModel() throws FileNotFoundException, IOException {
-		Stream.of(Entity1.class, Entity2.class, Entity3.class, Entity4.class)
-				.forEach(entityClass -> database.put(entityClass, new ArrayList<>()));
+		Stream.of(Entity1.class, Entity2.class, Entity3.class, Entity4.class, Entity6.class, Entity5.class,
+				Entity7.class, Entity8.class).forEach(entityClass -> database.put(entityClass, new ArrayList<>()));
 
 		final File file = new File(getClass().getClassLoader().getResource("data/file.txt").getFile());
 		final byte[] fileBytes = IOUtils.toByteArray(new FileInputStream(file));
@@ -92,6 +97,14 @@ public class DataModel {
 		for (int i = 0; i < 5; i++) {
 			final Entity4 entity = new Entity4();
 			entity.setId(Integer.valueOf(i).toString());
+			registerEntity(entity);
+		}
+
+		for (int i = 0; i < 100; i++) {
+			final Entity5 entity = new Entity5();
+			entity.setId(Integer.valueOf(i).toString());
+			entity.setIntAttr(i % 10);
+			entity.setStringAttr("value-" + Integer.valueOf((i + 1) * 3 % 8).toString());
 			registerEntity(entity);
 		}
 
@@ -179,7 +192,7 @@ public class DataModel {
 	}
 
 	/**
-	 * Get all entitys
+	 * Get all entities
 	 *
 	 * @param entityClass
 	 *            the entity class
@@ -189,31 +202,38 @@ public class DataModel {
 	 */
 	public GQLListLoadResult getAll(Class<?> entityClass, GQLListLoadConfig listLoadConfig) {
 		final List<?> all = database.get(entityClass);
-		final Stream<?> stream = all.stream();
+		Stream<?> stream = all.stream();
+
+		// Handle paging
 		if (listLoadConfig.getOffset() > 0) {
-			stream.skip(listLoadConfig.getOffset());
+			stream = stream.skip(listLoadConfig.getOffset());
 		}
 		if (listLoadConfig.getLimit() > 0) {
-			stream.limit(listLoadConfig.getLimit());
+			stream = stream.limit(listLoadConfig.getLimit());
 		}
+
+		// Handle sorting
 		if (!listLoadConfig.getOrderBy().isEmpty()) {
-			listLoadConfig.getOrderBy().stream().forEach(orderBy -> stream.sorted(new Comparator<Object>() {
-				@SuppressWarnings({"rawtypes", "unchecked"})
+			final List<Comparator<Object>> comparators = listLoadConfig.getOrderBy().stream()
+					.map(orderBy -> createEntityComparator(orderBy)).collect(Collectors.toList());
+			stream = stream.sorted(new Comparator<Object>() {
 				@Override
 				public int compare(Object o1, Object o2) {
-					final Object prop1 = GQLPropertyUtils.getPropertyValue(o1, orderBy.getField());
-					final Object prop2 = GQLPropertyUtils.getPropertyValue(o2, orderBy.getField());
-					int comparison;
-					if (prop1 instanceof Comparable) {
-						comparison = prop1 == null ? prop2 == null ? 0 : -1 : ((Comparable) prop1).compareTo(prop2);
-					} else {
-						// We don't care about testing non comparable types in
-						// tests
-						comparison = 0;
+					int comparison = 0;
+					final Iterator<Comparator<Object>> it = comparators.iterator();
+					while (it.hasNext() && comparison == 0) {
+						comparison = it.next().compare(o1, o2);
 					}
-					return (GQLOrderByDirectionEnum.DESC.equals(orderBy.getDirection()) ? -1 : 1) * comparison;
+					return comparison;
 				}
-			}));
+			});
+		}
+
+		//
+		if (!listLoadConfig.getFilters().isEmpty()) {
+			for (final GQLFilterEntry filterEntry : listLoadConfig.getFilters()) {
+				stream = stream.filter(entity -> isMatching(entity, filterEntry));
+			}
 		}
 		final GQLListLoadResult result = new GQLListLoadResult();
 		result.setData(stream.collect(Collectors.toList()));
@@ -224,6 +244,115 @@ public class DataModel {
 			result.setOrderBy(listLoadConfig.getOrderBy());
 		}
 		return result;
+	}
+
+	private Comparator<Object> createEntityComparator(GQLOrderByEntry orderBy) {
+		return new Comparator<Object>() {
+			@SuppressWarnings({"rawtypes", "unchecked"})
+			@Override
+			public int compare(Object o1, Object o2) {
+				final Object prop1 = GQLPropertyUtils.getPropertyValue(o1, orderBy.getField());
+				final Object prop2 = GQLPropertyUtils.getPropertyValue(o2, orderBy.getField());
+				int comparison;
+				if (prop1 instanceof Comparable) {
+					comparison = prop1 == null ? prop2 == null ? 0 : -1 : ((Comparable) prop1).compareTo(prop2);
+				} else {
+					// We don't care about testing non comparable types
+					// here, let's keep it simple for the demo
+					comparison = 0;
+				}
+				return (GQLOrderByDirectionEnum.DESC.equals(orderBy.getDirection()) ? -1 : 1) * comparison;
+			}
+		};
+	}
+
+	@SuppressWarnings("unchecked")
+	private boolean isMatching(Object entity, GQLFilterEntry filterEntry) {
+		final Class<?> propertyType = GQLPropertyUtils.getPropertyType(entity.getClass(), filterEntry.getFieldName());
+		boolean matching = true;
+		if (String.class.isAssignableFrom(propertyType)) {
+			final String propertyValue = GQLPropertyUtils.getPropertyValue(entity, filterEntry.getFieldName());
+			switch (filterEntry.getOperator()) {
+				case EQUAL :
+					matching = Objects.equals(filterEntry.getValue(), propertyValue);
+					break;
+				case NOT_EQUAL :
+					matching = !Objects.equals(filterEntry.getValue(), propertyValue);
+					break;
+				case IN :
+					matching = ((Collection<String>) filterEntry.getValue()).contains(propertyValue);
+					break;
+				case NOT_IN :
+					matching = !((Collection<String>) filterEntry.getValue()).contains(propertyValue);
+					break;
+				case NULL :
+					matching = propertyValue == null;
+					break;
+				case NOT_NULL :
+					matching = propertyValue != null;
+					break;
+				case EMPTY :
+					matching = StringUtils.isEmpty(propertyValue);
+					break;
+				case NOT_EMPTY :
+					matching = StringUtils.isNotEmpty(propertyValue);
+					break;
+				case STARTS_WITH :
+					matching = propertyValue != null && propertyValue.startsWith((String) filterEntry.getValue());
+					break;
+				case ENDS_WITH :
+					matching = propertyValue != null && propertyValue.endsWith((String) filterEntry.getValue());
+					break;
+				case CONTAINS :
+					matching = propertyValue != null && propertyValue.indexOf((String) filterEntry.getValue()) > -1;
+					break;
+				case LIKE :
+					// TODO
+					break;
+				default :
+					// Cannot happen
+					break;
+			}
+		} else if (Integer.class.isAssignableFrom(propertyType) || int.class.isAssignableFrom(propertyType)) {
+			final Integer propertyValue = GQLPropertyUtils.<Integer>getPropertyValue(entity,
+					filterEntry.getFieldName());
+			switch (filterEntry.getOperator()) {
+				case EQUAL :
+					matching = propertyValue.intValue() == ((Integer) filterEntry.getValue()).intValue();
+					break;
+				case NOT_EQUAL :
+					matching = propertyValue.intValue() != ((Integer) filterEntry.getValue()).intValue();
+					break;
+				case GREATER_EQUAL :
+					matching = propertyValue.intValue() >= ((Integer) filterEntry.getValue()).intValue();
+					break;
+				case GREATER_THAN :
+					matching = propertyValue.intValue() > ((Integer) filterEntry.getValue()).intValue();
+					break;
+				case LOWER_EQUAL :
+					matching = propertyValue.intValue() <= ((Integer) filterEntry.getValue()).intValue();
+					break;
+				case LOWER_THAN :
+					matching = propertyValue.intValue() < ((Integer) filterEntry.getValue()).intValue();
+					break;
+				case IN :
+					matching = ((Collection<Integer>) filterEntry.getValue()).contains(propertyValue);
+					break;
+				case NOT_IN :
+					matching = !((Collection<Integer>) filterEntry.getValue()).contains(propertyValue);
+					break;
+				case NULL :
+					matching = propertyValue == null;
+					break;
+				case NOT_NULL :
+					matching = propertyValue != null;
+					break;
+				default :
+					// Cannot happen
+					break;
+			}
+		}
+		return matching;
 	}
 
 	/**

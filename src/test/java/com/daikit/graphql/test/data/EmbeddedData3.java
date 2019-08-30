@@ -8,4 +8,21 @@ package com.daikit.graphql.test.data;
  */
 public class EmbeddedData3 {
 
+	private int intAttr;
+
+	/**
+	 * @return the intAttr
+	 */
+	public int getIntAttr() {
+		return intAttr;
+	}
+
+	/**
+	 * @param intAttr
+	 *            the intAttr to set
+	 */
+	public void setIntAttr(int intAttr) {
+		this.intAttr = intAttr;
+	}
+
 }
