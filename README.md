@@ -21,8 +21,8 @@ The constructor for this executor is waiting for a [meta model](#the-meta-model)
 
 ```java
 GQLExecutor executor = new GQLExecutor(
-    buildMetaModel(),  // see "The meta model" section below
-    buildErrorProcessor(), // See "The error processor" section below
+    createMetaModel(),  // see "The meta model" section below
+    createErrorProcessor(), // See "The error processor" section below
     createGetByIdDataFetcher(), // see "Data Fetchers" section below
     createListDataFetcher(),
     createSaveDataFetchers(),
