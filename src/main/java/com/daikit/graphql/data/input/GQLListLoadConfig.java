@@ -36,7 +36,7 @@ public class GQLListLoadConfig {
 	 * @param offset
 	 *            the paging offset
 	 */
-	public void setPaging(int limit, int offset) {
+	public void setPaging(final int limit, final int offset) {
 		setLimit(limit);
 		setOffset(offset);
 	}
@@ -89,10 +89,10 @@ public class GQLListLoadConfig {
 	 * @param value
 	 *            the value
 	 * @param dynamicAttributeGetter
-	 *            the {@link IGQLDynamicAttributeFilter}
+	 *            the {@link IGQLDynamicAttributeGetter}
 	 */
 	public void addFilter(final String field, final GQLFilterOperatorEnum operator, final Object value,
-			IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter) {
+			final IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter) {
 		filters.add(new GQLFilterEntry(field, operator, value, dynamicAttributeGetter));
 	}
 

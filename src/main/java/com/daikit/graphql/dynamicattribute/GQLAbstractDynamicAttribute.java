@@ -1,8 +1,8 @@
 package com.daikit.graphql.dynamicattribute;
 
 /**
- * Abstract super class for {@link GQLDynamicAttributeGetter} ,
- * {@link GQLDynamicAttributeSetter} and {@link GQLDynamicAttributeFilter}
+ * Abstract super class for {@link GQLDynamicAttributeGetter} and
+ * {@link GQLDynamicAttributeSetter}
  *
  * @author Thibaut Caselli
  * @param <ENTITY_TYPE>
@@ -29,7 +29,7 @@ public abstract class GQLAbstractDynamicAttribute<ENTITY_TYPE> implements IGQLAb
 	 * @param name
 	 *            the property name that will be available in GraphQL schema
 	 */
-	public GQLAbstractDynamicAttribute(String name) {
+	public GQLAbstractDynamicAttribute(final String name) {
 		this.name = name;
 	}
 
@@ -49,7 +49,7 @@ public abstract class GQLAbstractDynamicAttribute<ENTITY_TYPE> implements IGQLAb
 	 * @param name
 	 *            the name to set
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 }

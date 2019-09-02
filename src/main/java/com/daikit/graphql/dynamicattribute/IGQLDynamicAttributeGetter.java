@@ -30,8 +30,10 @@ public interface IGQLDynamicAttributeGetter<ENTITY_TYPE, GETTER_ATTRIBUTE_TYPE>
 	 *
 	 * @param query
 	 *            the generic query
+	 * @param <QUERY_TYPE>
+	 *            the query type
 	 */
-	default <QUERY_TYPE> void applyModificationsOnRequest(QUERY_TYPE query) {
+	default <QUERY_TYPE> void applyModificationsOnRequest(final QUERY_TYPE query) {
 		// Nothing done by default
 	}
 

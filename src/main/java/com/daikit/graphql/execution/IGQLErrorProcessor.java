@@ -23,7 +23,7 @@ public interface IGQLErrorProcessor {
 	GQLExecutionErrorDetails handleError(List<GraphQLError> errors);
 
 	/**
-	 * Create {@link GQLErrorData} after catching given exception
+	 * Create {@link GQLExecutionErrorDetails} after catching given exception
 	 *
 	 * @param exception
 	 *            the exception to populate error from

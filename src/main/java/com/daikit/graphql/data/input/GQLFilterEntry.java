@@ -44,11 +44,11 @@ public class GQLFilterEntry {
 	 * @param value
 	 *            the value
 	 * @param dynamicAttributeGetter
-	 *            the {@link IGQLDynamicAttributeFilter} related to the field
+	 *            the {@link IGQLDynamicAttributeGetter} related to the field
 	 *            this entry is applied on
 	 */
 	public GQLFilterEntry(final String fieldName, final GQLFilterOperatorEnum operator, final Object value,
-			IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter) {
+			final IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter) {
 		this.fieldName = fieldName;
 		this.operator = operator;
 		this.value = value;
@@ -70,7 +70,7 @@ public class GQLFilterEntry {
 	 * @param fieldName
 	 *            the fieldName to set
 	 */
-	public void setFieldName(String fieldName) {
+	public void setFieldName(final String fieldName) {
 		this.fieldName = fieldName;
 	}
 
@@ -85,7 +85,7 @@ public class GQLFilterEntry {
 	 * @param operator
 	 *            the operator to set
 	 */
-	public void setOperator(GQLFilterOperatorEnum operator) {
+	public void setOperator(final GQLFilterOperatorEnum operator) {
 		this.operator = operator;
 	}
 
@@ -100,7 +100,7 @@ public class GQLFilterEntry {
 	 * @param value
 	 *            the value to set
 	 */
-	public void setValue(Object value) {
+	public void setValue(final Object value) {
 		this.value = value;
 	}
 
@@ -115,7 +115,7 @@ public class GQLFilterEntry {
 	 * @param dynamicAttributeGetter
 	 *            the dynamicAttributeGetter to set
 	 */
-	public void setDynamicAttributeGetter(IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter) {
+	public void setDynamicAttributeGetter(final IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter) {
 		this.dynamicAttributeGetter = dynamicAttributeGetter;
 	}
 

@@ -35,17 +35,17 @@ public class GQLDynamicAttributeRegistry {
 	 * @param metaModel
 	 *            the {@link GQLMetaModel}
 	 */
-	public GQLDynamicAttributeRegistry(GQLMetaModel metaModel) {
-		this.register(metaModel, metaModel.getDynamicAttributeSetters(), this.dynamicAttributeSetters);
-		this.register(metaModel, metaModel.getDynamicAttributeGetters(), this.dynamicAttributeGetters);
+	public GQLDynamicAttributeRegistry(final GQLMetaModel metaModel) {
+		this.register(metaModel, metaModel.getDynamicAttributeSetters(), dynamicAttributeSetters);
+		this.register(metaModel, metaModel.getDynamicAttributeGetters(), dynamicAttributeGetters);
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// PRIVATE METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	private <T extends IGQLAbstractDynamicAttribute<?>> void register(GQLMetaModel metaModel,
-			Collection<T> dynamicAttributes, Map<Class<?>, Map<String, T>> map) {
+	private <T extends IGQLAbstractDynamicAttribute<?>> void register(final GQLMetaModel metaModel,
+			final Collection<T> dynamicAttributes, final Map<Class<?>, Map<String, T>> map) {
 		dynamicAttributes.stream().forEach(dynAttr -> {
 			final Map<String, T> attrMap = map.computeIfAbsent(dynAttr.getEntityType(), x -> new HashMap<>());
 			final T existing = attrMap.get(dynAttr.getName());
@@ -73,11 +73,16 @@ public class GQLDynamicAttributeRegistry {
 	 *            the name of the attribute the
 	 *            {@link IGQLDynamicAttributeSetter} is registered on within the
 	 *            entity with given entityClass
+	 * @param <ENTITY_TYPE>
+	 *            the entity type
+	 * @param <SETTER_ATTRIBUTE_TYPE>
+	 *            the attribute type within the
+	 *            {@link IGQLDynamicAttributeSetter}
 	 * @return the {@link Optional} {@link IGQLDynamicAttributeSetter}
 	 */
 	@SuppressWarnings("unchecked")
 	public <ENTITY_TYPE, SETTER_ATTRIBUTE_TYPE> Optional<IGQLDynamicAttributeSetter<ENTITY_TYPE, SETTER_ATTRIBUTE_TYPE>> getSetter(
-			Class<?> entityClass, String attributeName) {
+			final Class<?> entityClass, final String attributeName) {
 		final Map<String, IGQLDynamicAttributeSetter<?, ?>> map = dynamicAttributeSetters.get(entityClass);
 		return map == null
 				? Optional.empty()
@@ -96,11 +101,16 @@ public class GQLDynamicAttributeRegistry {
 	 *            the name of the attribute the
 	 *            {@link IGQLDynamicAttributeGetter} is registered on within the
 	 *            entity with given entityClass
+	 * @param <ENTITY_TYPE>
+	 *            the entity type
+	 * @param <SETTER_ATTRIBUTE_TYPE>
+	 *            the attribute type within the
+	 *            {@link IGQLDynamicAttributeSetter}
 	 * @return the {@link Optional} {@link IGQLDynamicAttributeGetter}
 	 */
 	@SuppressWarnings("unchecked")
 	public <ENTITY_TYPE, SETTER_ATTRIBUTE_TYPE> Optional<IGQLDynamicAttributeGetter<ENTITY_TYPE, SETTER_ATTRIBUTE_TYPE>> getGetter(
-			Class<?> entityClass, String attributeName) {
+			final Class<?> entityClass, final String attributeName) {
 		final Map<String, IGQLDynamicAttributeGetter<?, ?>> map = dynamicAttributeGetters.get(entityClass);
 		return map == null
 				? Optional.empty()

@@ -136,16 +136,18 @@ public class GQLMetaModel {
 	 *
 	 * @param entityName
 	 *            the entity class name
+	 * @param <ENTITY_CLASS>
+	 *            the entity class
 	 * @return the entity class
 	 */
 	@SuppressWarnings("unchecked")
-	public <MODEL_CLASS> Class<? extends MODEL_CLASS> getEntityClassByEntityName(final String entityName) {
+	public <ENTITY_CLASS> Class<? extends ENTITY_CLASS> getEntityClassByEntityName(final String entityName) {
 		final Optional<GQLAbstractEntityMetaDataInfos> entityMetaDataOptional = getAllEntities().stream()
 				.filter(metaDataInfos -> metaDataInfos.getEntity().getName().equals(entityName)).findFirst();
 		if (!entityMetaDataOptional.isPresent()) {
 			throw new GQLException(Message.format("Not entity exists for name [{}]", entityName));
 		}
-		return (Class<? extends MODEL_CLASS>) entityMetaDataOptional.get().getEntity().getEntityClass();
+		return (Class<? extends ENTITY_CLASS>) entityMetaDataOptional.get().getEntity().getEntityClass();
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -168,7 +170,7 @@ public class GQLMetaModel {
 
 	/**
 	 * Get all registered dynamic attribute getters
-	 * {@link IGQLDynamicAttributeGetters} in meta model
+	 * {@link IGQLDynamicAttributeGetter} in meta model
 	 *
 	 * @return a {@link List} of {@link IGQLDynamicAttributeGetter}
 	 */
