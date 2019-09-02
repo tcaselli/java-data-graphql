@@ -21,9 +21,9 @@ import com.daikit.graphql.test.data.Entity2;
 import com.daikit.graphql.test.data.Entity3;
 import com.daikit.graphql.test.data.Entity4;
 import com.daikit.graphql.test.data.Entity6;
-import com.daikit.graphql.test.data.Entity5;
 import com.daikit.graphql.test.data.Entity7;
 import com.daikit.graphql.test.data.Entity8;
+import com.daikit.graphql.test.data.Entity9;
 import com.daikit.graphql.test.data.Enum1;
 import com.daikit.graphql.test.introspection.IntrospectionEnum;
 import com.daikit.graphql.test.introspection.IntrospectionFullType;
@@ -417,9 +417,9 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		final IntrospectionTypeField customMethod2 = assertField(queryType, queryNames.get(1),
 				IntrospectionTypeKindEnum.OBJECT, Entity1.class);
 		Assert.assertEquals(2, customMethod2.getArgs().size());
-		assertArg(customMethod2, "arg1", IntrospectionTypeKindEnum.INPUT_OBJECT,
+		assertArg(customMethod2, "arg1", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
+		assertArg(customMethod2, "arg2", IntrospectionTypeKindEnum.INPUT_OBJECT,
 				EmbeddedData1.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
-		assertArg(customMethod2, "arg2", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
 	}
 
 	/**
@@ -430,22 +430,22 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		final IntrospectionResult introspection = getIntrospection();
 		final IntrospectionFullType queryType = getFullType(introspection, GQLSchemaConstants.QUERY_TYPE);
 		final IntrospectionFullType mutationType = getFullType(introspection, GQLSchemaConstants.MUTATION_TYPE);
-		final String getByIdMethodName = GQLSchemaConstants.QUERY_GET_SINGLE_PREFIX + Entity5.class.getSimpleName();
-		final String getAllMethodName = GQLSchemaConstants.QUERY_GET_LIST_PREFIX + Entity5.class.getSimpleName();
 		final String saveMethodName = GQLSchemaConstants.MUTATION_SAVE_PREFIX + Entity7.class.getSimpleName();
 		final String deleteMethodName = GQLSchemaConstants.MUTATION_DELETE_PREFIX + Entity8.class.getSimpleName();
-		final Optional<IntrospectionTypeField> optionalGetByIdMethod = getOptionalField(queryType, getByIdMethodName);
-		final Optional<IntrospectionTypeField> optionalGetAllMethod = getOptionalField(queryType, getAllMethodName);
+		final String getByIdMethodName = GQLSchemaConstants.QUERY_GET_SINGLE_PREFIX + Entity9.class.getSimpleName();
+		final String getAllMethodName = GQLSchemaConstants.QUERY_GET_LIST_PREFIX + Entity9.class.getSimpleName();
 		final Optional<IntrospectionTypeField> optionalSaveMethod = getOptionalField(mutationType, saveMethodName);
 		final Optional<IntrospectionTypeField> optionalDeleteMethod = getOptionalField(mutationType, deleteMethodName);
-		Assert.assertFalse(Message.format("There shouldn't be a [{}] method.", getByIdMethodName),
-				optionalGetByIdMethod.isPresent());
-		Assert.assertFalse(Message.format("There shouldn't be a [{}] method.", getAllMethodName),
-				optionalGetAllMethod.isPresent());
+		final Optional<IntrospectionTypeField> optionalGetByIdMethod = getOptionalField(queryType, getByIdMethodName);
+		final Optional<IntrospectionTypeField> optionalGetAllMethod = getOptionalField(queryType, getAllMethodName);
 		Assert.assertFalse(Message.format("There shouldn't be a [{}] method.", saveMethodName),
 				optionalSaveMethod.isPresent());
 		Assert.assertFalse(Message.format("There shouldn't be a [{}] method.", deleteMethodName),
 				optionalDeleteMethod.isPresent());
+		Assert.assertFalse(Message.format("There shouldn't be a [{}] method.", getByIdMethodName),
+				optionalGetByIdMethod.isPresent());
+		Assert.assertFalse(Message.format("There shouldn't be a [{}] method.", getAllMethodName),
+				optionalGetAllMethod.isPresent());
 	}
 
 	/**
@@ -456,12 +456,12 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		final IntrospectionResult introspection = getIntrospection();
 		final String entityInputTypeName = Entity6.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX;
 		final IntrospectionFullType entityInputType = getFullType(introspection, entityInputTypeName);
-		final String entity5TypeName = Entity6.class.getSimpleName();
-		final IntrospectionFullType entityType = getFullType(introspection, entity5TypeName);
+		final String entity6TypeName = Entity6.class.getSimpleName();
+		final IntrospectionFullType entityType = getFullType(introspection, entity6TypeName);
 		// Check field attr1 is not readable
 		final Optional<IntrospectionTypeField> attr1Field = getOptionalField(entityType, "attr1");
 		Assert.assertFalse(
-				Message.format("There shouldn't be a readable field [{}] in [{}].", "typeField", entity5TypeName),
+				Message.format("There shouldn't be a readable field [{}] in [{}].", "typeField", entity6TypeName),
 				attr1Field.isPresent());
 		// Check field attr2 is not saveable
 		final Optional<IntrospectionInputValue> attr2InputField = getOptionalInputField(entityInputType, "attr2");
@@ -517,11 +517,11 @@ public class SchemaBuildTest extends AbstractTestSuite {
 
 	// FullTypes
 
-	private IntrospectionFullType getFullType(IntrospectionResult introspection, Class<?> entityClass) {
+	private IntrospectionFullType getFullType(final IntrospectionResult introspection, final Class<?> entityClass) {
 		return getFullType(introspection, entityClass.getSimpleName());
 	}
 
-	private IntrospectionFullType getFullType(IntrospectionResult introspection, String name) {
+	private IntrospectionFullType getFullType(final IntrospectionResult introspection, final String name) {
 		final List<IntrospectionFullType> types = introspection.getData().getSchema().getTypes().stream()
 				.filter(type -> name.equals(type.getName())).collect(Collectors.toList());
 		Assert.assertEquals(1, types.size());
@@ -530,7 +530,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 
 	// Enumerations
 
-	private void assertEnum(IntrospectionFullType fullType, String name, boolean deprecated) {
+	private void assertEnum(final IntrospectionFullType fullType, final String name, final boolean deprecated) {
 		final List<IntrospectionEnum> introEnums = fullType.getEnumValues().stream()
 				.filter(en -> name.equals(en.getName())).collect(Collectors.toList());
 		Assert.assertEquals(1, introEnums.size());
@@ -539,37 +539,38 @@ public class SchemaBuildTest extends AbstractTestSuite {
 
 	// Fields
 
-	private Optional<IntrospectionTypeField> getOptionalField(IntrospectionFullType fullType, String fieldName) {
+	private Optional<IntrospectionTypeField> getOptionalField(final IntrospectionFullType fullType,
+			final String fieldName) {
 		return fullType.getFields().stream().filter(field -> fieldName.equals(field.getName())).findAny();
 	}
 
-	private IntrospectionTypeField getField(IntrospectionFullType fullType, String fieldName) {
+	private IntrospectionTypeField getField(final IntrospectionFullType fullType, final String fieldName) {
 		final List<IntrospectionTypeField> typeField = fullType.getFields().stream()
 				.filter(field -> fieldName.equals(field.getName())).collect(Collectors.toList());
 		Assert.assertEquals(1, typeField.size());
 		return typeField.get(0);
 	}
 
-	private IntrospectionTypeField assertField(IntrospectionFullType fullType, String fieldName,
-			IntrospectionTypeKindEnum kind, Class<?> typeClass) {
+	private IntrospectionTypeField assertField(final IntrospectionFullType fullType, final String fieldName,
+			final IntrospectionTypeKindEnum kind, final Class<?> typeClass) {
 		return assertField(fullType, fieldName, kind, typeClass.getSimpleName());
 	}
 
-	private IntrospectionTypeField assertField(IntrospectionFullType fullType, String fieldName,
-			IntrospectionTypeKindEnum kind, String typeName) {
+	private IntrospectionTypeField assertField(final IntrospectionFullType fullType, final String fieldName,
+			final IntrospectionTypeKindEnum kind, final String typeName) {
 		final IntrospectionTypeField field = getField(fullType, fieldName);
 		Assert.assertEquals(kind, field.getType().getKind());
 		Assert.assertEquals(typeName, field.getType().getName());
 		return field;
 	}
 
-	private IntrospectionTypeField assertField(IntrospectionFullType fullType, String fieldName,
-			IntrospectionTypeKindEnum kind, IntrospectionTypeKindEnum ofKind, Class<?> typeClass) {
+	private IntrospectionTypeField assertField(final IntrospectionFullType fullType, final String fieldName,
+			final IntrospectionTypeKindEnum kind, final IntrospectionTypeKindEnum ofKind, final Class<?> typeClass) {
 		return assertField(fullType, fieldName, kind, ofKind, typeClass.getSimpleName());
 	}
 
-	private IntrospectionTypeField assertField(IntrospectionFullType fullType, String fieldName,
-			IntrospectionTypeKindEnum kind, IntrospectionTypeKindEnum ofKind, String typeName) {
+	private IntrospectionTypeField assertField(final IntrospectionFullType fullType, final String fieldName,
+			final IntrospectionTypeKindEnum kind, final IntrospectionTypeKindEnum ofKind, final String typeName) {
 		final IntrospectionTypeField field = getField(fullType, fieldName);
 		Assert.assertEquals(kind, field.getType().getKind());
 		Assert.assertEquals(ofKind, field.getType().getOfType().getKind());
@@ -579,11 +580,12 @@ public class SchemaBuildTest extends AbstractTestSuite {
 
 	// InputFields
 
-	private Optional<IntrospectionInputValue> getOptionalInputField(IntrospectionFullType fullType, String fieldName) {
+	private Optional<IntrospectionInputValue> getOptionalInputField(final IntrospectionFullType fullType,
+			final String fieldName) {
 		return fullType.getInputFields().stream().filter(field -> fieldName.equals(field.getName())).findAny();
 	}
 
-	private IntrospectionInputValue getInputField(IntrospectionFullType fullType, String fieldName) {
+	private IntrospectionInputValue getInputField(final IntrospectionFullType fullType, final String fieldName) {
 		final List<IntrospectionInputValue> typeField = fullType.getInputFields().stream()
 				.filter(field -> fieldName.equals(field.getName())).collect(Collectors.toList());
 		Assert.assertEquals(1, typeField.size());
@@ -597,21 +599,21 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	// typeClass.getSimpleName());
 	// }
 
-	private IntrospectionInputValue assertInputField(IntrospectionFullType fullType, String fieldName,
-			IntrospectionTypeKindEnum kind, String typeName) {
+	private IntrospectionInputValue assertInputField(final IntrospectionFullType fullType, final String fieldName,
+			final IntrospectionTypeKindEnum kind, final String typeName) {
 		final IntrospectionInputValue field = getInputField(fullType, fieldName);
 		Assert.assertEquals(kind, field.getType().getKind());
 		Assert.assertEquals(typeName, field.getType().getName());
 		return field;
 	}
 
-	private IntrospectionInputValue assertInputField(IntrospectionFullType fullType, String fieldName,
-			IntrospectionTypeKindEnum kind, IntrospectionTypeKindEnum ofKind, Class<?> typeClass) {
+	private IntrospectionInputValue assertInputField(final IntrospectionFullType fullType, final String fieldName,
+			final IntrospectionTypeKindEnum kind, final IntrospectionTypeKindEnum ofKind, final Class<?> typeClass) {
 		return assertInputField(fullType, fieldName, kind, ofKind, typeClass.getSimpleName());
 	}
 
-	private IntrospectionInputValue assertInputField(IntrospectionFullType fullType, String fieldName,
-			IntrospectionTypeKindEnum kind, IntrospectionTypeKindEnum ofKind, String typeName) {
+	private IntrospectionInputValue assertInputField(final IntrospectionFullType fullType, final String fieldName,
+			final IntrospectionTypeKindEnum kind, final IntrospectionTypeKindEnum ofKind, final String typeName) {
 		final IntrospectionInputValue field = getInputField(fullType, fieldName);
 		Assert.assertEquals(kind, field.getType().getKind());
 		Assert.assertEquals(ofKind, field.getType().getOfType().getKind());
@@ -621,7 +623,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 
 	// Args
 
-	private IntrospectionInputValue getArg(IntrospectionTypeField field, String argName) {
+	private IntrospectionInputValue getArg(final IntrospectionTypeField field, final String argName) {
 		final List<IntrospectionInputValue> typeArg = field.getArgs().stream()
 				.filter(arg -> argName.equals(arg.getName())).collect(Collectors.toList());
 		Assert.assertEquals(1, typeArg.size());
@@ -634,8 +636,8 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	// return assertArg(field, argName, kind, typeClass.getSimpleName());
 	// }
 
-	private IntrospectionInputValue assertArg(IntrospectionTypeField field, String argName,
-			IntrospectionTypeKindEnum kind, String typeName) {
+	private IntrospectionInputValue assertArg(final IntrospectionTypeField field, final String argName,
+			final IntrospectionTypeKindEnum kind, final String typeName) {
 		final IntrospectionInputValue arg = getArg(field, argName);
 		Assert.assertEquals(kind, arg.getType().getKind());
 		Assert.assertEquals(typeName, arg.getType().getName());
@@ -649,8 +651,8 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	// typeClass.getSimpleName());
 	// }
 
-	private IntrospectionInputValue assertArg(IntrospectionTypeField fullType, String argName,
-			IntrospectionTypeKindEnum kind, IntrospectionTypeKindEnum ofKind, String typeName) {
+	private IntrospectionInputValue assertArg(final IntrospectionTypeField fullType, final String argName,
+			final IntrospectionTypeKindEnum kind, final IntrospectionTypeKindEnum ofKind, final String typeName) {
 		final IntrospectionInputValue arg = getArg(fullType, argName);
 		Assert.assertEquals(kind, arg.getType().getKind());
 		Assert.assertEquals(ofKind, arg.getType().getOfType().getKind());
