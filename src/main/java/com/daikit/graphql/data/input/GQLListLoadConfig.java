@@ -114,6 +114,15 @@ public class GQLListLoadConfig {
 		return !getOrderBy().isEmpty();
 	}
 
+	/**
+	 * Get whether this configuration contains at least a filter configuration
+	 *
+	 * @return a boolean
+	 */
+	public boolean isFiltered() {
+		return !getFilters().isEmpty();
+	}
+
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// PROTECTED METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
