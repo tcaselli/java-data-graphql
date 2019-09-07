@@ -1,6 +1,8 @@
 package com.daikit.graphql.enums;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -73,6 +75,36 @@ public enum GQLFilterOperatorEnum {
 	public static GQLFilterOperatorEnum forCode(final String code) {
 		return MAP.get(code);
 	}
+
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+	// PUBLIC METHODS
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+	public static final List<GQLFilterOperatorEnum> __NUMBER_OPERATORS = Arrays.asList(GQLFilterOperatorEnum.EQUAL,
+			GQLFilterOperatorEnum.NOT_EQUAL, GQLFilterOperatorEnum.GREATER_EQUAL, GQLFilterOperatorEnum.GREATER_THAN,
+			GQLFilterOperatorEnum.LOWER_EQUAL, GQLFilterOperatorEnum.LOWER_THAN, GQLFilterOperatorEnum.IN,
+			GQLFilterOperatorEnum.NOT_IN, GQLFilterOperatorEnum.NULL, GQLFilterOperatorEnum.NOT_NULL);
+
+	public static final List<GQLFilterOperatorEnum> __BOOLEAN_OPERATORS = Arrays.asList(GQLFilterOperatorEnum.EQUAL,
+			GQLFilterOperatorEnum.NULL, GQLFilterOperatorEnum.NOT_NULL);
+
+	public static final List<GQLFilterOperatorEnum> __DATE_OPERATORS = Arrays.asList(GQLFilterOperatorEnum.EQUAL,
+			GQLFilterOperatorEnum.NOT_EQUAL, GQLFilterOperatorEnum.GREATER_EQUAL, GQLFilterOperatorEnum.GREATER_THAN,
+			GQLFilterOperatorEnum.LOWER_EQUAL, GQLFilterOperatorEnum.LOWER_THAN, GQLFilterOperatorEnum.IN,
+			GQLFilterOperatorEnum.NOT_IN, GQLFilterOperatorEnum.NULL, GQLFilterOperatorEnum.NOT_NULL);
+
+	public static final List<GQLFilterOperatorEnum> __STRING_OPERATORS = Arrays.asList(GQLFilterOperatorEnum.EQUAL,
+			GQLFilterOperatorEnum.NOT_EQUAL, GQLFilterOperatorEnum.IN, GQLFilterOperatorEnum.NOT_IN,
+			GQLFilterOperatorEnum.NULL, GQLFilterOperatorEnum.NOT_NULL, GQLFilterOperatorEnum.EMPTY,
+			GQLFilterOperatorEnum.NOT_EMPTY, GQLFilterOperatorEnum.STARTS_WITH, GQLFilterOperatorEnum.ENDS_WITH,
+			GQLFilterOperatorEnum.CONTAINS, GQLFilterOperatorEnum.LIKE);
+
+	public static final List<GQLFilterOperatorEnum> __ID_OPERATORS = Arrays.asList(GQLFilterOperatorEnum.EQUAL,
+			GQLFilterOperatorEnum.NOT_EQUAL, GQLFilterOperatorEnum.IN, GQLFilterOperatorEnum.NOT_IN);
+
+	public static final List<GQLFilterOperatorEnum> __ENUM_OPERATORS = Arrays.asList(GQLFilterOperatorEnum.EQUAL,
+			GQLFilterOperatorEnum.NOT_EQUAL, GQLFilterOperatorEnum.IN, GQLFilterOperatorEnum.NOT_IN,
+			GQLFilterOperatorEnum.NULL, GQLFilterOperatorEnum.NOT_NULL);
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// GETTERS / SETTERS

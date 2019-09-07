@@ -1,6 +1,6 @@
 package com.daikit.graphql.builder.types;
 
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,8 +55,8 @@ public class GQLQueryFilterOperatorsInputTypeBuilder extends GQLAbstractTypesBui
 	public void buildFilterOperatorsInputTypes(final GQLMetaModel metaModel) {
 		logger.debug("Build filter operators types");
 		getCache().getInputScalarFilterOperators().putAll(buildScalarFilterOperatorsInputObjectTypes());
-		metaModel.getEnums().forEach(enumMeta -> getCache().getInputEnumFilterOperators()
-				.put(enumMeta.getEnumClass(), buildEnumFilterOperatorsInputObjectType(enumMeta)));
+		metaModel.getEnums().forEach(enumMeta -> getCache().getInputEnumFilterOperators().put(enumMeta.getEnumClass(),
+				buildEnumFilterOperatorsInputObjectType(enumMeta)));
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -67,29 +67,20 @@ public class GQLQueryFilterOperatorsInputTypeBuilder extends GQLAbstractTypesBui
 		final Map<GQLScalarTypeEnum, GraphQLInputObjectType> filterOperators = new HashMap<>();
 
 		// Enumeration type for numbers
-		final GraphQLEnumType numberOperatorEnumType = buildOperatorEnumType("numbers", GQLFilterOperatorEnum.EQUAL,
-				GQLFilterOperatorEnum.NOT_EQUAL, GQLFilterOperatorEnum.GREATER_EQUAL,
-				GQLFilterOperatorEnum.GREATER_THAN, GQLFilterOperatorEnum.LOWER_EQUAL, GQLFilterOperatorEnum.LOWER_THAN,
-				GQLFilterOperatorEnum.IN, GQLFilterOperatorEnum.NOT_IN, GQLFilterOperatorEnum.NULL,
-				GQLFilterOperatorEnum.NOT_NULL);
+		final GraphQLEnumType numberOperatorEnumType = buildOperatorEnumType("numbers",
+				GQLFilterOperatorEnum.__NUMBER_OPERATORS);
 
-		final GraphQLEnumType booleanOperatorEnumType = buildOperatorEnumType("booleans", GQLFilterOperatorEnum.EQUAL,
-				GQLFilterOperatorEnum.NULL, GQLFilterOperatorEnum.NOT_NULL);
+		final GraphQLEnumType booleanOperatorEnumType = buildOperatorEnumType("booleans",
+				GQLFilterOperatorEnum.__BOOLEAN_OPERATORS);
 
-		final GraphQLEnumType dateOperatorEnumType = buildOperatorEnumType("dates", GQLFilterOperatorEnum.EQUAL,
-				GQLFilterOperatorEnum.NOT_EQUAL, GQLFilterOperatorEnum.GREATER_EQUAL,
-				GQLFilterOperatorEnum.GREATER_THAN, GQLFilterOperatorEnum.LOWER_EQUAL, GQLFilterOperatorEnum.LOWER_THAN,
-				GQLFilterOperatorEnum.IN, GQLFilterOperatorEnum.NOT_IN, GQLFilterOperatorEnum.NULL,
-				GQLFilterOperatorEnum.NOT_NULL);
+		final GraphQLEnumType dateOperatorEnumType = buildOperatorEnumType("dates",
+				GQLFilterOperatorEnum.__DATE_OPERATORS);
 
-		final GraphQLEnumType stringOperatorEnumType = buildOperatorEnumType("strings", GQLFilterOperatorEnum.EQUAL,
-				GQLFilterOperatorEnum.NOT_EQUAL, GQLFilterOperatorEnum.IN, GQLFilterOperatorEnum.NOT_IN,
-				GQLFilterOperatorEnum.NULL, GQLFilterOperatorEnum.NOT_NULL, GQLFilterOperatorEnum.EMPTY,
-				GQLFilterOperatorEnum.NOT_EMPTY, GQLFilterOperatorEnum.STARTS_WITH, GQLFilterOperatorEnum.ENDS_WITH,
-				GQLFilterOperatorEnum.CONTAINS, GQLFilterOperatorEnum.LIKE);
+		final GraphQLEnumType stringOperatorEnumType = buildOperatorEnumType("strings",
+				GQLFilterOperatorEnum.__STRING_OPERATORS);
 
-		final GraphQLEnumType idOperatorEnumType = buildOperatorEnumType("entities", GQLFilterOperatorEnum.EQUAL,
-				GQLFilterOperatorEnum.NOT_EQUAL, GQLFilterOperatorEnum.IN, GQLFilterOperatorEnum.NOT_IN);
+		final GraphQLEnumType idOperatorEnumType = buildOperatorEnumType("entities",
+				GQLFilterOperatorEnum.__ID_OPERATORS);
 
 		final Map<GQLScalarTypeEnum, GraphQLEnumType> scalarOperators = new HashMap<>();
 		scalarOperators.put(GQLScalarTypeEnum.BIG_DECIMAL, numberOperatorEnumType);
@@ -117,19 +108,19 @@ public class GQLQueryFilterOperatorsInputTypeBuilder extends GQLAbstractTypesBui
 		return filterOperators;
 	}
 
-	private GraphQLEnumType buildOperatorEnumType(final String typeName, final GQLFilterOperatorEnum... operators) {
+	private GraphQLEnumType buildOperatorEnumType(final String typeName,
+			final Collection<GQLFilterOperatorEnum> operators) {
 		final GraphQLEnumType.Builder operatorEnumTypeBuilder = GraphQLEnumType.newEnum();
 		operatorEnumTypeBuilder.name("FilterOperatorEnum" + removeEnumSuffix(StringUtils.capitalize(typeName)));
 		operatorEnumTypeBuilder.description("Filter operators for " + typeName + ".");
-		Arrays.asList(operators).forEach(
+		operators.forEach(
 				operator -> operatorEnumTypeBuilder.value(operator.getCode(), operator, operator.getDescription()));
 		return operatorEnumTypeBuilder.build();
 	}
 
 	private GraphQLInputObjectType buildEnumFilterOperatorsInputObjectType(final GQLEnumMetaData enumMetaData) {
 		final GraphQLEnumType enumOperatorEnumType = buildOperatorEnumType(enumMetaData.getName(),
-				GQLFilterOperatorEnum.EQUAL, GQLFilterOperatorEnum.NOT_EQUAL, GQLFilterOperatorEnum.IN,
-				GQLFilterOperatorEnum.NOT_IN, GQLFilterOperatorEnum.NULL, GQLFilterOperatorEnum.NOT_NULL);
+				GQLFilterOperatorEnum.__ENUM_OPERATORS);
 		return buildFilterOperator(enumOperatorEnumType, enumMetaData.getName(),
 				getCache().getEnumType(enumMetaData.getEnumClass()));
 	}
