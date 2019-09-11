@@ -6,10 +6,12 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.slf4j.Logger;
@@ -33,7 +35,6 @@ import com.daikit.graphql.execution.GQLExecutor;
 import com.daikit.graphql.introspection.GQLIntrospection;
 import com.daikit.graphql.meta.GQLMetaModel;
 import com.daikit.graphql.test.data.DataModel;
-import com.daikit.graphql.utils.GQLPropertyUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -213,24 +214,28 @@ public abstract class AbstractTestSuite {
 					throw new RuntimeException(e);
 				}
 				// Set properties
-				fieldValueMap.entrySet().stream().forEach(entry -> {
+				for (final Entry<String, Object> entry : fieldValueMap.entrySet()) {
 					final Optional<IGQLDynamicAttributeSetter<Object, Object>> dynamicAttributeSetter = dynamicAttributeRegistry
 							.getSetter(entityClass, entry.getKey());
 					if (!GQLSchemaConstants.FIELD_ID.equals(entry.getKey())) {
 						Object value = entry.getValue();
 						if (entry.getValue() instanceof Map) {
-							final Class<?> propertyType = GQLPropertyUtils.getPropertyType(entity.getClass(),
-									entry.getKey());
+							final Class<?> propertyType = FieldUtils.getField(entity.getClass(), entry.getKey(), true)
+									.getType();
 							value = getOrCreateAndSetProperties(propertyType, dynamicAttributeRegistry,
 									(Map<String, Object>) entry.getValue());
 						}
 						if (dynamicAttributeSetter.isPresent()) {
 							dynamicAttributeSetter.get().setValue(entity, value);
 						} else {
-							GQLPropertyUtils.setPropertyValue(entity, entry.getKey(), value);
+							try {
+								FieldUtils.writeField(entity, entry.getKey(), value, true);
+							} catch (final IllegalAccessException e) {
+								throw new RuntimeException(e);
+							}
 						}
 					}
-				});
+				}
 				return entity;
 			}
 		};

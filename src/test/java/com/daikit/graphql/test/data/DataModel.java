@@ -23,7 +23,8 @@ import java.util.stream.Stream;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.Assert;
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.junit.Assert;
 
 import com.daikit.graphql.data.input.GQLFilterEntry;
 import com.daikit.graphql.data.input.GQLListLoadConfig;
@@ -31,7 +32,6 @@ import com.daikit.graphql.data.output.GQLListLoadResult;
 import com.daikit.graphql.data.output.GQLOrderByEntry;
 import com.daikit.graphql.data.output.GQLPaging;
 import com.daikit.graphql.enums.GQLOrderByDirectionEnum;
-import com.daikit.graphql.utils.GQLPropertyUtils;
 
 /**
  * A data entity for tests
@@ -232,7 +232,13 @@ public class DataModel {
 		//
 		if (!listLoadConfig.getFilters().isEmpty()) {
 			for (final GQLFilterEntry filterEntry : listLoadConfig.getFilters()) {
-				stream = stream.filter(entity -> isMatching(entity, filterEntry));
+				stream = stream.filter(entity -> {
+					try {
+						return isMatching(entity, filterEntry);
+					} catch (final IllegalAccessException e) {
+						throw new RuntimeException(e);
+					}
+				});
 			}
 		}
 		final GQLListLoadResult result = new GQLListLoadResult();
@@ -251,8 +257,14 @@ public class DataModel {
 			@SuppressWarnings({"rawtypes", "unchecked"})
 			@Override
 			public int compare(Object o1, Object o2) {
-				final Object prop1 = GQLPropertyUtils.getPropertyValue(o1, orderBy.getField());
-				final Object prop2 = GQLPropertyUtils.getPropertyValue(o2, orderBy.getField());
+				Object prop1;
+				Object prop2;
+				try {
+					prop1 = FieldUtils.readField(o1, orderBy.getField(), true);
+					prop2 = FieldUtils.readField(o2, orderBy.getField(), true);
+				} catch (final IllegalAccessException e) {
+					throw new RuntimeException(e);
+				}
 				int comparison;
 				if (prop1 instanceof Comparable) {
 					comparison = prop1 == null ? prop2 == null ? 0 : -1 : ((Comparable) prop1).compareTo(prop2);
@@ -267,11 +279,12 @@ public class DataModel {
 	}
 
 	@SuppressWarnings("unchecked")
-	private boolean isMatching(Object entity, GQLFilterEntry filterEntry) {
-		final Class<?> propertyType = GQLPropertyUtils.getPropertyType(entity.getClass(), filterEntry.getFieldName());
+	private boolean isMatching(Object entity, GQLFilterEntry filterEntry) throws IllegalAccessException {
+		final Class<?> propertyType = FieldUtils.getField(entity.getClass(), filterEntry.getFieldName(), true)
+				.getType();
 		boolean matching = true;
 		if (String.class.isAssignableFrom(propertyType)) {
-			final String propertyValue = GQLPropertyUtils.getPropertyValue(entity, filterEntry.getFieldName());
+			final String propertyValue = (String) FieldUtils.readField(entity, filterEntry.getFieldName(), true);
 			switch (filterEntry.getOperator()) {
 				case EQUAL :
 					matching = Objects.equals(filterEntry.getValue(), propertyValue);
@@ -314,8 +327,7 @@ public class DataModel {
 					break;
 			}
 		} else if (Integer.class.isAssignableFrom(propertyType) || int.class.isAssignableFrom(propertyType)) {
-			final Integer propertyValue = GQLPropertyUtils.<Integer>getPropertyValue(entity,
-					filterEntry.getFieldName());
+			final Integer propertyValue = (Integer) FieldUtils.readField(entity, filterEntry.getFieldName());
 			switch (filterEntry.getOperator()) {
 				case EQUAL :
 					matching = propertyValue.intValue() == ((Integer) filterEntry.getValue()).intValue();
@@ -364,7 +376,7 @@ public class DataModel {
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void save(Object entity) {
 		final List<?> all = database.get(entity.getClass());
-		Assert.notNull(all, "Unkonwn entity class " + entity.getClass().getName());
+		Assert.assertNotNull("Unkonwn entity class " + entity.getClass().getName(), all);
 		final String entityId = ((AbstractEntity) entity).getId();
 		if (StringUtils.isEmpty(entityId)) {
 			final Optional<Integer> maxId = all.stream().map(item -> Integer.valueOf(((AbstractEntity) item).getId()))
@@ -372,7 +384,7 @@ public class DataModel {
 			((AbstractEntity) entity).setId(maxId.isPresent() ? Integer.valueOf(maxId.get() + 1).toString() : "0");
 			((List) all).add(entity);
 		} else {
-			Assert.isTrue(all.contains(entity), "Entity to be updated (id != null) does not exist yet.");
+			Assert.assertTrue("Entity to be updated (id != null) does not exist yet.", all.contains(entity));
 			// nothing do do then ..
 		}
 	}
