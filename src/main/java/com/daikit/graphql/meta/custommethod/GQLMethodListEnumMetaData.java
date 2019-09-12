@@ -11,7 +11,7 @@ import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
  */
 public class GQLMethodListEnumMetaData extends GQLAbstractMethodMetaData {
 
-	private Class<?> enumClass;
+	private Class<? extends Enum<?>> enumClass;
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -58,7 +58,7 @@ public class GQLMethodListEnumMetaData extends GQLAbstractMethodMetaData {
 	 *
 	 * @return the enumClass
 	 */
-	public Class<?> getEnumClass() {
+	public Class<? extends Enum<?>> getEnumClass() {
 		return enumClass;
 	}
 
@@ -69,7 +69,7 @@ public class GQLMethodListEnumMetaData extends GQLAbstractMethodMetaData {
 	 *            the enumClass to set
 	 * @return this instance
 	 */
-	public GQLMethodListEnumMetaData setEnumClass(final Class<?> enumClass) {
+	public GQLMethodListEnumMetaData setEnumClass(final Class<? extends Enum<?>> enumClass) {
 		this.enumClass = enumClass;
 		return this;
 	}

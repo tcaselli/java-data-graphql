@@ -72,7 +72,7 @@ public class GQLSchemaBuilder {
 	 *
 	 * @return the generated {@link GraphQLSchema}
 	 */
-	public GraphQLSchema buildSchema(final GQLMetaModel metaModel, final DataFetcher<?> getByIdDataFetcher,
+	public GraphQLSchema build(final GQLMetaModel metaModel, final DataFetcher<?> getByIdDataFetcher,
 			final DataFetcher<GQLListLoadResult> listDataFetcher, final DataFetcher<?> saveDataFetcher,
 			final DataFetcher<GQLDeleteResult> deleteDataFetcher, final DataFetcher<?> customMethodDataFetcher,
 			final List<GQLPropertyDataFetcher<?>> propertyDataFetchers) {

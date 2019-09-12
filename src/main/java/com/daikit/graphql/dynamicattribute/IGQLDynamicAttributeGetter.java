@@ -51,7 +51,7 @@ public interface IGQLDynamicAttributeGetter<ENTITY_TYPE, GETTER_ATTRIBUTE_TYPE>
 	 *         from class generics.
 	 */
 	default Class<?> getGetterAttributeType() {
-		return GenericsUtils.getTypeClassArguments(getClass(), IGQLDynamicAttributeGetter.class).get(1);
+		return GenericsUtils.getTypeArgumentsAsClasses(getClass(), IGQLDynamicAttributeGetter.class).get(1);
 	}
 
 }

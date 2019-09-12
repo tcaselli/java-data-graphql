@@ -92,7 +92,7 @@ public class GQLExecutor {
 		this.metaModel = metaModel;
 		this.errorProcessor = errorProcessor;
 		this.callback = callback;
-		this.schema = new GQLSchemaBuilder().buildSchema(metaModel, getByIdDataFetcher, listDataFetcher,
+		this.schema = new GQLSchemaBuilder().build(metaModel, getByIdDataFetcher, listDataFetcher,
 				saveDataFetcher, deleteDataFetcher, customMethodDataFetcher, propertyDataFetchers);
 		this.graphql = GraphQL.newGraphQL(schema).build();
 	}

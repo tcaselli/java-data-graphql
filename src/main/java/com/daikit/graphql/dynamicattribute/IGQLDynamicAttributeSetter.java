@@ -31,7 +31,7 @@ public interface IGQLDynamicAttributeSetter<ENTITY_TYPE, SETTER_ATTRIBUTE_TYPE>
 	 *         from class generics.
 	 */
 	default Class<?> getSetterAttributeType() {
-		return GenericsUtils.getTypeClassArguments(getClass(), IGQLDynamicAttributeSetter.class).get(1);
+		return GenericsUtils.getTypeArgumentsAsClasses(getClass(), IGQLDynamicAttributeSetter.class).get(1);
 	}
 
 }

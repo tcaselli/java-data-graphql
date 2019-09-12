@@ -57,9 +57,26 @@ public abstract class GQLAbstractCustomMethod<OUTPUT_TYPE> implements IGQLAbstra
 		return GenericsUtils.getTypeArguments(getClass(), GQLAbstractCustomMethod.class).get(0);
 	}
 
-	@Override
+	/**
+	 * Get the nae of this custom method argument at given position
+	 *
+	 * @param argumentPosition
+	 *            the argument position
+	 * @return the name of the argument
+	 */
 	public String getArgumentName(int argumentPosition) {
 		return getArgumentNames().get(argumentPosition);
+	}
+
+	/**
+	 * Get the {@link Type} of this custom method argument at given position
+	 *
+	 * @param argumentPosition
+	 *            the argument position
+	 * @return the {@link Type} of the argument
+	 */
+	public Type getArgumentType(int argumentPosition) {
+		return getArgumentTypes().get(argumentPosition);
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-

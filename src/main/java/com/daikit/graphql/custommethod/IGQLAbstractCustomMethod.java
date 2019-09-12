@@ -42,15 +42,6 @@ public interface IGQLAbstractCustomMethod<OUTPUT_TYPE> {
 	List<String> getArgumentNames();
 
 	/**
-	 * Get argument name at given position
-	 *
-	 * @param argumentPosition
-	 *            the argument position (0 if first argument of the method, 1
-	 * @return the argument name
-	 */
-	String getArgumentName(int argumentPosition);
-
-	/**
 	 * Get argument types from generic configuration of this class
 	 *
 	 * @return the output type
