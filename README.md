@@ -54,9 +54,28 @@ GQLExecutionResult result = executor.execute(
 
 ### The meta model
 
-The meta model ```com.daikit.graphql.meta.GQLMetaModel``` is the base of the schema generation. It is in this meta model that you will define all your entities (top level or embedded, abstract or concrete), enumerations and custom methods.  
+The meta model ```com.daikit.graphql.meta.GQLMetaModel``` is the base of the schema generation. It is in this meta model that you will define all your entities (top level or embedded, abstract or concrete), enumerations, dynamic attributes and custom methods.  
 The meta model can be written by hand in java or parsed from a json/yaml definition file or generated out of your domain layer code (for example using JPA meta model and spring components as a basis).  
-See next sections for details on how to define these things and create this meta model.
+
+### Creation of the meta model
+
+The constructor of the meta model is as follow :
+
+```java
+GQLMetaModel(
+    final Collection<GQLEnumMetaData> enumMetaDatas,
+    final Collection<GQLEntityMetaData> entityMetaDatas,
+    final Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes,
+    final Collection<GQLAbstractCustomMethod<?>> customMethods){
+        ...
+    }
+```
+
+So you will need to create all Enum and Entity meta datas and then create the meta model.   
+For dynamic attributes and custom methods , meta datas will be automatically generated from given Collections of ```IGQLAbstractDynamicAttribute``` and ```GQLAbstractCustomMethod```.  
+--> See next sections for details on how to define these meta datas, dynamic attributes and custom methods.  
+
+**Be careful, all entities and enums referenced in dynamic attributes or custom methods arguments and returned types must have a corresponding registered meta data.**
 
 ### Serializable property types for building meta model
 
@@ -214,12 +233,7 @@ IGQLDynamicAttributeGetter<Entity1, String> dynamicAttributeGetter =
         return result;
     }
 };
-// Register the attribute in the entity meta data
-GQLEntityMetaData metaData = new GQLEntityMetaData("Entity1", Entity1.class, AbstractEntity.class);
-GQLAttributeScalarMetaData attribute = new GQLAttributeScalarMetaData(
-    dynamicAttributeGetter.getName(), GQLScalarTypeEnum.STRING);
-attribute.setDynamicAttributeGetter(dynamicAttributeGetter);
-metaData.addAttribute(attribute);
+// Then provide this attribute getter to the MetaModel constructor (see below)
 ```
 
 -> For a **writable** dynamic attribute, implement IGQLDynamicAttributeSetter or extend default implementation GQLDynamicAttributeSetter
@@ -232,12 +246,7 @@ IGQLDynamicAttributeSetter<Entity1, EmbeddedEntity1> dynamicAttributeSetter =
         source.setStringAttr(valueToSet);
     }
 };
-// Register the attribute in the entity meta data
-GQLEntityMetaData metaData = new GQLEntityMetaData("Entity1", Entity1.class, AbstractEntity.class);
-GQLAttributeEmbeddedEntityMetaData attribute = new GQLAttributeEmbeddedEntityMetaData(
-    dynamicAttributeSetter.getName(), EmbeddedEntity1.class);
-attribute.setDynamicAttributeSetter(dynamicAttributeSetter);
-metaData.addAttribute(attribute);
+// Then provide this attribute getter to the MetaModel constructor (see below)
 ```
 
 -> For a **readable** AND **writable** dynamic attribute, implement both IGQLDynamicAttributeGetter and IGQLDynamicAttributeSetter or extend default implementation GQLDynamicAttributeGetterSetter
