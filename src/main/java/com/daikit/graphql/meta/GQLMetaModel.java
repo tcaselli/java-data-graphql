@@ -101,8 +101,14 @@ public class GQLMetaModel {
 			final Class<?> entityType = dynamicAttribute.isDynamicAttributeGetter()
 					? dynamicAttribute.getDynamicAttributeGetter().getEntityType()
 					: dynamicAttribute.getDynamicAttributeSetter().getEntityType();
-			entityMetaDatas.stream().filter(metaData -> metaData.getEntityClass().isAssignableFrom(entityType))
-					.findFirst();
+			final Optional<GQLEntityMetaData> entityMetaData = entityMetaDatas.stream()
+					.filter(metaData -> metaData.getEntityClass().isAssignableFrom(entityType)).findFirst();
+			if (!entityMetaData.isPresent()) {
+				throw new GQLException(
+						Message.format("No entity meta data registered for dynamic attribute [{}] entity class [{}]",
+								dynamicAttribute.getName(), entityType.getSimpleName()));
+			}
+			entityMetaData.get().addAttribute(dynamicAttribute);
 		}
 
 	}

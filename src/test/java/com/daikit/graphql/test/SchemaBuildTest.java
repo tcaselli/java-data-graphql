@@ -51,7 +51,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		logger.info("Run testEntity1");
 		final IntrospectionResult introspection = getIntrospection();
 		final IntrospectionFullType fullType = getFullType(introspection, Entity1.class);
-		Assert.assertEquals(27, fullType.getFields().size());
+		Assert.assertEquals(26, fullType.getFields().size());
 
 		assertField(fullType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
 		assertField(fullType, "intAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLInt.getName());
@@ -214,7 +214,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		// Entity1InputType
 		final IntrospectionFullType entity1InputType = getFullType(introspection,
 				Entity1.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
-		Assert.assertEquals(27, entity1InputType.getInputFields().size());
+		Assert.assertEquals(26, entity1InputType.getInputFields().size());
 
 		assertInputField(entity1InputType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
 		assertInputField(entity1InputType, "intAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLInt.getName());

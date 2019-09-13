@@ -50,7 +50,7 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	@Override
 	protected void appendToString(final StringBuilder stringBuilder) {
 		stringBuilder.append(name).append(nullable ? "[N]" : "").append(readable ? "[R]" : "")
-				.append(saveable ? "[S]" : "");
+				.append(saveable ? "[S]" : "").append(filterable ? "[F]" : "").append(isDynamic() ? "[DYN]" : "");
 	}
 
 	/**
