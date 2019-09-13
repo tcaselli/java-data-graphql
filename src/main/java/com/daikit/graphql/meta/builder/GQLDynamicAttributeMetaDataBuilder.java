@@ -3,6 +3,8 @@ package com.daikit.graphql.meta.builder;
 import java.lang.reflect.Type;
 import java.util.Collection;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.daikit.generics.utils.GenericsUtils;
 import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
 import com.daikit.graphql.dynamicattribute.IGQLAbstractDynamicAttribute;
@@ -52,14 +54,14 @@ public class GQLDynamicAttributeMetaDataBuilder extends GQLAbstractMetaDataBuild
 		Type attributeType;
 		boolean readable = false;
 		boolean saveable = false;
+		boolean filterable = false;
 		// Type is given by getter
 		if (attribute instanceof IGQLDynamicAttributeGetter) {
 			attributeType = GenericsUtils.getTypeArguments(attribute.getClass(), IGQLDynamicAttributeGetter.class)
 					.get(1);
 			readable = true;
-			if (attribute instanceof IGQLDynamicAttributeSetter) {
-				saveable = true;
-			}
+			saveable = attribute instanceof IGQLDynamicAttributeSetter;
+			filterable = StringUtils.isNotEmpty(((IGQLDynamicAttributeGetter<?, ?>) attribute).getFilterQueryPath());
 		}
 		// If attribute is not a getter then type is given by setter
 		else if (attribute instanceof IGQLDynamicAttributeSetter) {
@@ -110,6 +112,7 @@ public class GQLDynamicAttributeMetaDataBuilder extends GQLAbstractMetaDataBuild
 
 		attributeMetaData.setReadable(readable);
 		attributeMetaData.setSaveable(saveable);
+		attributeMetaData.setFilterable(filterable);
 		attributeMetaData.setName(attribute.getName());
 		attributeMetaData.setDynamicAttributeGetter(
 				attribute instanceof IGQLDynamicAttributeGetter ? (IGQLDynamicAttributeGetter<?, ?>) attribute : null);
