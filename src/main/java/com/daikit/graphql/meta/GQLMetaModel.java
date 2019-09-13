@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
+import com.daikit.graphql.custommethod.IGQLAbstractCustomMethod;
 import com.daikit.graphql.dynamicattribute.IGQLAbstractDynamicAttribute;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeGetter;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
@@ -60,7 +61,7 @@ public class GQLMetaModel {
 	public GQLMetaModel(final Collection<GQLEnumMetaData> enumMetaDatas,
 			final Collection<GQLEntityMetaData> entityMetaDatas,
 			final Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes,
-			final Collection<GQLAbstractCustomMethod<?>> customMethods) {
+			final Collection<IGQLAbstractCustomMethod<?>> customMethods) {
 		final GQLDynamicAttributeMetaDataBuilder dynamicAttributeMetaDataBuilder = new GQLDynamicAttributeMetaDataBuilder();
 		final GQLMethodMetaDataBuilder methodMetaDataBuilder = new GQLMethodMetaDataBuilder();
 		final Collection<GQLAbstractAttributeMetaData> dynamicAttributeMetaDatas = dynamicAttributes.stream()

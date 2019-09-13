@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.daikit.generics.utils.GenericsUtils;
 import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
+import com.daikit.graphql.custommethod.IGQLAbstractCustomMethod;
 import com.daikit.graphql.meta.GQLAbstractMetaData;
 
 /**
@@ -15,7 +16,7 @@ import com.daikit.graphql.meta.GQLAbstractMetaData;
  */
 public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 
-	private GQLAbstractCustomMethod<?> method;
+	private IGQLAbstractCustomMethod<?> method;
 	private List<GQLAbstractMethodArgumentMetaData> arguments = new ArrayList<>();
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -93,11 +94,11 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Get the method {@link GQLAbstractCustomMethod}
+	 * Get the method {@link IGQLAbstractCustomMethod}
 	 *
 	 * @return the method
 	 */
-	public GQLAbstractCustomMethod<?> getMethod() {
+	public IGQLAbstractCustomMethod<?> getMethod() {
 		return method;
 	}
 
@@ -106,7 +107,7 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 	 *            the method to set
 	 * @return this instance
 	 */
-	public GQLAbstractMethodMetaData setMethod(GQLAbstractCustomMethod<?> method) {
+	public GQLAbstractMethodMetaData setMethod(IGQLAbstractCustomMethod<?> method) {
 		this.method = method;
 		return this;
 	}

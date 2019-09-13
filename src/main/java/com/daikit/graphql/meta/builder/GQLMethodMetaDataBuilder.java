@@ -51,11 +51,11 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 	 * @return the created {@link GQLAbstractMethodMetaData}
 	 */
 	public GQLAbstractMethodMetaData build(final Collection<GQLEnumMetaData> enumMetaDatas,
-			final Collection<GQLEntityMetaData> entityMetaDatas, final GQLAbstractCustomMethod<?> customMethod) {
+			final Collection<GQLEntityMetaData> entityMetaDatas, final IGQLAbstractCustomMethod<?> customMethod) {
 		final List<GQLAbstractMethodArgumentMetaData> arguments = new ArrayList<>();
 		for (int i = 0; i < customMethod.getArgumentTypes().size(); i++) {
 			arguments.add(createMethodArgument(enumMetaDatas, entityMetaDatas, customMethod,
-					customMethod.getArgumentName(i), customMethod.getArgumentType(i)));
+					customMethod.getArgumentNames().get(i), customMethod.getArgumentTypes().get(i)));
 		}
 		return createMethod(enumMetaDatas, entityMetaDatas, customMethod, arguments);
 	}
@@ -66,7 +66,7 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 
 	@SuppressWarnings("unchecked")
 	private GQLAbstractMethodMetaData createMethod(Collection<GQLEnumMetaData> enumMetaDatas,
-			Collection<GQLEntityMetaData> entityMetaDatas, GQLAbstractCustomMethod<?> customMethod,
+			Collection<GQLEntityMetaData> entityMetaDatas, IGQLAbstractCustomMethod<?> customMethod,
 			List<GQLAbstractMethodArgumentMetaData> arguments) {
 		final GQLAbstractMethodMetaData methodMetaData;
 		final Class<?> outputRawClass = GenericsUtils.getTypeClass(customMethod.getOutputType());
@@ -111,8 +111,8 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 
 	@SuppressWarnings("unchecked")
 	private GQLAbstractMethodArgumentMetaData createMethodArgument(Collection<GQLEnumMetaData> enumMetaDatas,
-			Collection<GQLEntityMetaData> entityMetaDatas, GQLAbstractCustomMethod<?> customMethod, String argumentName,
-			Type argumentType) {
+			Collection<GQLEntityMetaData> entityMetaDatas, IGQLAbstractCustomMethod<?> customMethod,
+			String argumentName, Type argumentType) {
 		final GQLAbstractMethodArgumentMetaData argumentMetaData;
 
 		final Class<?> argumentRawClass = GenericsUtils.getTypeClass(argumentType);

@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
 import com.daikit.graphql.custommethod.GQLCustomMethod1Arg;
 import com.daikit.graphql.custommethod.GQLCustomMethod2Arg;
 import com.daikit.graphql.custommethod.GQLCustomMethod5Arg;
+import com.daikit.graphql.custommethod.IGQLAbstractCustomMethod;
 import com.daikit.graphql.dynamicattribute.GQLDynamicAttributeGetter;
 import com.daikit.graphql.dynamicattribute.GQLDynamicAttributeSetter;
 import com.daikit.graphql.dynamicattribute.IGQLAbstractDynamicAttribute;
@@ -233,7 +233,7 @@ public class GQLMetaModelBuilder {
 		}).collect(Collectors.toList());
 	}
 
-	private List<GQLAbstractCustomMethod<?>> buildCustomMethods() {
+	private List<IGQLAbstractCustomMethod<?>> buildCustomMethods() {
 		return Stream.of(new GQLCustomMethod1Arg<Entity1, String>("customMethodQuery1", false, "arg1") {
 			@Override
 			public Entity1 apply(final String arg1) {
