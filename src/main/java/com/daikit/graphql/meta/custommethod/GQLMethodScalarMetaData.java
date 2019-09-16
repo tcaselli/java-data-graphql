@@ -1,7 +1,6 @@
 package com.daikit.graphql.meta.custommethod;
 
 import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
-import com.daikit.graphql.enums.GQLScalarTypeEnum;
 
 /**
  * GraphQL dynamic method returning a scalar meta data
@@ -10,7 +9,7 @@ import com.daikit.graphql.enums.GQLScalarTypeEnum;
  */
 public class GQLMethodScalarMetaData extends GQLAbstractMethodMetaData {
 
-	private GQLScalarTypeEnum scalarType;
+	private String scalarTypeCode;
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -29,13 +28,12 @@ public class GQLMethodScalarMetaData extends GQLAbstractMethodMetaData {
 	 *
 	 * @param method
 	 *            the {@link GQLAbstractCustomMethod}
-	 * @param scalarType
-	 *            the scalar type for method return type
-	 *            {@link GQLScalarTypeEnum}
+	 * @param scalarTypeCode
+	 *            the scalar type code for method return type
 	 */
-	public GQLMethodScalarMetaData(GQLAbstractCustomMethod<?> method, GQLScalarTypeEnum scalarType) {
+	public GQLMethodScalarMetaData(GQLAbstractCustomMethod<?> method, String scalarTypeCode) {
 		super(method);
-		this.scalarType = scalarType;
+		this.scalarTypeCode = scalarTypeCode;
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -44,7 +42,7 @@ public class GQLMethodScalarMetaData extends GQLAbstractMethodMetaData {
 
 	@Override
 	protected void appendToString(final StringBuilder stringBuilder) {
-		stringBuilder.append("{METHOD-SCALAR(").append(scalarType == null ? "" : scalarType.name()).append(")}");
+		stringBuilder.append("{METHOD-SCALAR(").append(scalarTypeCode == null ? "" : scalarTypeCode).append(")}");
 		super.appendToString(stringBuilder);
 	}
 
@@ -53,23 +51,23 @@ public class GQLMethodScalarMetaData extends GQLAbstractMethodMetaData {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Get the method scalar return type {@link GQLScalarTypeEnum}
+	 * Get the method scalar return type
 	 *
-	 * @return the scalarType
+	 * @return the scalarTypeCode
 	 */
-	public GQLScalarTypeEnum getScalarType() {
-		return scalarType;
+	public String getScalarType() {
+		return scalarTypeCode;
 	}
 
 	/**
-	 * Set the method scalar return type {@link GQLScalarTypeEnum}
+	 * Set the method scalar return type
 	 *
-	 * @param scalarType
-	 *            the scalarType to set
+	 * @param scalarTypeCode
+	 *            the scalarTypeCode to set
 	 * @return this instance
 	 */
-	public GQLMethodScalarMetaData setScalarType(final GQLScalarTypeEnum scalarType) {
-		this.scalarType = scalarType;
+	public GQLMethodScalarMetaData setScalarType(final String scalarTypeCode) {
+		this.scalarTypeCode = scalarTypeCode;
 		return this;
 	}
 

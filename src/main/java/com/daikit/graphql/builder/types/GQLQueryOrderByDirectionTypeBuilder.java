@@ -5,7 +5,6 @@ import java.util.Arrays;
 import org.apache.commons.lang3.StringUtils;
 
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
-import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.enums.GQLOrderByDirectionEnum;
 
 import graphql.schema.GraphQLEnumType;
@@ -49,11 +48,11 @@ public class GQLQueryOrderByDirectionTypeBuilder extends GQLAbstractTypesBuilder
 
 	private GraphQLEnumType buildOrderByDirectionEnumType() {
 		final GraphQLEnumType.Builder builder = GraphQLEnumType.newEnum();
-		builder.name(StringUtils.capitalize(GQLSchemaConstants.ORDER_BY)
-				+ StringUtils.capitalize(GQLSchemaConstants.ORDER_BY_DIRECTION)
-				+ GQLSchemaConstants.OUTPUT_OBJECT_SUFFIX);
+		builder.name(StringUtils.capitalize(getConfig().getQueryGetListFilterAttributeOrderByName())
+				+ StringUtils.capitalize(getConfig().getQueryGetListFilterAttributeOrderByDirectionName())
+				+ getConfig().getOutputTypeNameSuffix());
 		builder.description("Possible directions in which to order a list of items when provided an ["
-				+ GQLSchemaConstants.ORDER_BY + "] argument.");
+				+ getConfig().getQueryGetListFilterAttributeOrderByName() + "] argument.");
 		Arrays.asList(GQLOrderByDirectionEnum.values())
 				.forEach(orderEnum -> builder.value(orderEnum.name(), orderEnum));
 		return builder.build();

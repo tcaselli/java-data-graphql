@@ -3,7 +3,6 @@ package com.daikit.graphql.datafetcher;
 import java.util.Map;
 
 import com.daikit.graphql.builder.GQLSchemaBuilder;
-import com.daikit.graphql.constants.GQLSchemaConstants;
 
 import graphql.language.Field;
 import graphql.language.ObjectValue;
@@ -47,15 +46,14 @@ public abstract class GQLAbstractSaveDataFetcher<SUPER_ENTITY_TYPE> extends GQLA
 	 * @return the found/created entity
 	 */
 	protected abstract SUPER_ENTITY_TYPE getOrCreateAndSetProperties(final Class<?> entityClass,
-			final GQLDynamicAttributeRegistry dynamicAttributeRegistry,
-			final Map<String, Object> fieldValueMap);
+			final GQLDynamicAttributeRegistry dynamicAttributeRegistry, final Map<String, Object> fieldValueMap);
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	protected SUPER_ENTITY_TYPE save(final Class<?> entityClass,
-			GQLDynamicAttributeRegistry dynamicAttributeRegistry, final Map<String, Object> fieldValueMap) {
+	protected SUPER_ENTITY_TYPE save(final Class<?> entityClass, GQLDynamicAttributeRegistry dynamicAttributeRegistry,
+			final Map<String, Object> fieldValueMap) {
 		final SUPER_ENTITY_TYPE model = getOrCreateAndSetProperties(entityClass, dynamicAttributeRegistry,
 				fieldValueMap);
 		// Run save
@@ -66,12 +64,12 @@ public abstract class GQLAbstractSaveDataFetcher<SUPER_ENTITY_TYPE> extends GQLA
 	@Override
 	public SUPER_ENTITY_TYPE get(final DataFetchingEnvironment environment) {
 		final Field mutationField = environment.getField();
-		final String entityName = getEntityName(GQLSchemaConstants.MUTATION_SAVE_PREFIX, mutationField.getName());
+		final String entityName = getEntityName(getConfig().getMutationSavePrefix(), mutationField.getName());
 		final ObjectValue objectValue = (ObjectValue) mutationField.getArguments().stream()
-				.filter(argument -> GQLSchemaConstants.INPUT_DATA.equals(argument.getName())).findFirst().get()
-				.getValue();
+				.filter(argument -> getConfig().getMutationAttributeInputDataName().equals(argument.getName()))
+				.findFirst().get().getValue();
 		final Map<String, Object> arguments = getArgumentsForContext(environment.getArguments(),
-				GQLSchemaConstants.INPUT_DATA);
+				getConfig().getMutationAttributeInputDataName());
 		final Map<String, Object> fieldValueMap = convertObjectValue(objectValue, arguments);
 		return save(getEntityClassByEntityName(entityName), dynamicAttributeRegistry, fieldValueMap);
 	}

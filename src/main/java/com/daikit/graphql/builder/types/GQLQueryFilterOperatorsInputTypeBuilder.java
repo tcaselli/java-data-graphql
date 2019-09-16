@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.WordUtils;
 
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
-import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.enums.GQLFilterOperatorEnum;
 import com.daikit.graphql.enums.GQLScalarTypeEnum;
 import com.daikit.graphql.meta.GQLMetaModel;
@@ -63,8 +62,8 @@ public class GQLQueryFilterOperatorsInputTypeBuilder extends GQLAbstractTypesBui
 	// PRIVATE UTILS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	private Map<GQLScalarTypeEnum, GraphQLInputObjectType> buildScalarFilterOperatorsInputObjectTypes() {
-		final Map<GQLScalarTypeEnum, GraphQLInputObjectType> filterOperators = new HashMap<>();
+	private Map<String, GraphQLInputObjectType> buildScalarFilterOperatorsInputObjectTypes() {
+		final Map<String, GraphQLInputObjectType> filterOperators = new HashMap<>();
 
 		// Enumeration type for numbers
 		final GraphQLEnumType numberOperatorEnumType = buildOperatorEnumType("numbers",
@@ -100,10 +99,10 @@ public class GQLQueryFilterOperatorsInputTypeBuilder extends GQLAbstractTypesBui
 		// // TODO
 
 		scalarOperators.entrySet()
-				.forEach(entry -> filterOperators.put(entry.getKey(), buildFilterOperator(entry.getValue(),
+				.forEach(entry -> filterOperators.put(entry.getKey().toString(), buildFilterOperator(entry.getValue(),
 						// Convert UPPER_SNAKE_CASE to CamelCase
 						StringUtils.remove(WordUtils.capitalizeFully(entry.getKey().name(), '_'), "_"),
-						GQLSchemaConstants.SCALARS.get(entry.getKey()))));
+						getConfig().getScalarType(entry.getKey().toString()).get())));
 
 		return filterOperators;
 	}
@@ -132,18 +131,18 @@ public class GQLQueryFilterOperatorsInputTypeBuilder extends GQLAbstractTypesBui
 	private GraphQLInputObjectType buildFilterOperator(final GraphQLEnumType operatorType, final String typeName,
 			final GraphQLType valueType) {
 		final GraphQLInputObjectType.Builder builder = GraphQLInputObjectType.newInputObject();
-		builder.name("FilterOperator" + typeName);
+		builder.name(getConfig().getQueryGetListFilterAttributeOperatorTypeNamePrefix() + typeName);
 		builder.description("Filter field for value type [" + valueType.getName() + "]");
 
 		final GraphQLInputObjectField.Builder operatorFieldBuilder = GraphQLInputObjectField.newInputObjectField();
-		operatorFieldBuilder.name(GQLSchemaConstants.FILTER_OPERATOR);
+		operatorFieldBuilder.name(getConfig().getQueryGetListFilterAttributeOperatorName());
 		operatorFieldBuilder.description("Filter operator.");
 		operatorFieldBuilder.type(new GraphQLNonNull(operatorType));
 		builder.field(operatorFieldBuilder.build());
 
 		if (valueType != null) {
 			final GraphQLInputObjectField.Builder valueFieldBuilder = GraphQLInputObjectField.newInputObjectField();
-			valueFieldBuilder.name(GQLSchemaConstants.FILTER_VALUE);
+			valueFieldBuilder.name(getConfig().getQueryGetListFilterAttributeValueName());
 			valueFieldBuilder.description("Filter value.");
 			valueFieldBuilder.type(new GraphQLNonNull(valueType));
 			builder.field(valueFieldBuilder.build());

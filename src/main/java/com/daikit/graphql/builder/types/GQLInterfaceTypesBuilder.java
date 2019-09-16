@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
+import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.datafetcher.GQLPropertyDataFetcher;
 import com.daikit.graphql.meta.GQLMetaModel;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;

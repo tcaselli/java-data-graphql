@@ -10,8 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.daikit.graphql.constants.GQLJavaScalars;
-import com.daikit.graphql.constants.GQLSchemaConstants;
+import com.daikit.graphql.config.GQLJavaScalars;
 import com.daikit.graphql.enums.GQLOrderByDirectionEnum;
 import com.daikit.graphql.test.data.EmbeddedData1;
 import com.daikit.graphql.test.data.EmbeddedData2;
@@ -213,7 +212,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 
 		// Entity1InputType
 		final IntrospectionFullType entity1InputType = getFullType(introspection,
-				Entity1.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
+				Entity1.class.getSimpleName() + schemaConfig.getInputTypeNameSuffix());
 		Assert.assertEquals(26, entity1InputType.getInputFields().size());
 
 		assertInputField(entity1InputType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
@@ -260,22 +259,22 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		assertInputField(entity1InputType, "enumSet", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.ENUM,
 				Enum1.class);
 
-		assertInputField(entity1InputType, "entity2" + GQLSchemaConstants.ID_SUFFIX, IntrospectionTypeKindEnum.SCALAR,
-				Scalars.GraphQLID.getName());
-		assertInputField(entity1InputType, "entity3" + GQLSchemaConstants.IDS_SUFFIX, IntrospectionTypeKindEnum.LIST,
+		assertInputField(entity1InputType, "entity2" + schemaConfig.getAttributeIdSuffix(),
 				IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
-		assertInputField(entity1InputType, "entity4" + GQLSchemaConstants.IDS_SUFFIX, IntrospectionTypeKindEnum.LIST,
-				IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
+		assertInputField(entity1InputType, "entity3" + schemaConfig.getAttributeIdPluralSuffix(),
+				IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
+		assertInputField(entity1InputType, "entity4" + schemaConfig.getAttributeIdPluralSuffix(),
+				IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
 
 		assertInputField(entity1InputType, "embeddedData1", IntrospectionTypeKindEnum.INPUT_OBJECT,
-				EmbeddedData1.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
+				EmbeddedData1.class.getSimpleName() + schemaConfig.getInputTypeNameSuffix());
 		assertInputField(entity1InputType, "embeddedData1s", IntrospectionTypeKindEnum.LIST,
 				IntrospectionTypeKindEnum.INPUT_OBJECT,
-				EmbeddedData1.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
+				EmbeddedData1.class.getSimpleName() + schemaConfig.getInputTypeNameSuffix());
 
 		// Entity1LoadResult
 		final IntrospectionFullType entity1LoadResult = getFullType(introspection,
-				Entity1.class.getSimpleName() + GQLSchemaConstants.LOAD_RESULT_SUFFIX);
+				Entity1.class.getSimpleName() + schemaConfig.getQueryGetListOutputTypeNameSuffix());
 		Assert.assertEquals(3, entity1LoadResult.getFields().size());
 
 		assertField(entity1LoadResult, "data", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT,
@@ -286,16 +285,16 @@ public class SchemaBuildTest extends AbstractTestSuite {
 
 		// Entity2InputType
 		final IntrospectionFullType entity2InputType = getFullType(introspection,
-				Entity2.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
+				Entity2.class.getSimpleName() + schemaConfig.getInputTypeNameSuffix());
 		Assert.assertEquals(2, entity2InputType.getInputFields().size());
 
 		assertInputField(entity2InputType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
-		assertInputField(entity2InputType, "entity1" + GQLSchemaConstants.IDS_SUFFIX, IntrospectionTypeKindEnum.LIST,
-				IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
+		assertInputField(entity2InputType, "entity1" + schemaConfig.getAttributeIdPluralSuffix(),
+				IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
 
 		// Entity2LoadResult
 		final IntrospectionFullType entity2LoadResult = getFullType(introspection,
-				Entity2.class.getSimpleName() + GQLSchemaConstants.LOAD_RESULT_SUFFIX);
+				Entity2.class.getSimpleName() + schemaConfig.getQueryGetListOutputTypeNameSuffix());
 		Assert.assertEquals(3, entity2LoadResult.getFields().size());
 
 		assertField(entity2LoadResult, "data", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT,
@@ -306,21 +305,21 @@ public class SchemaBuildTest extends AbstractTestSuite {
 
 		// Entity3InputType
 		final IntrospectionFullType entity3InputType = getFullType(introspection,
-				Entity3.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
+				Entity3.class.getSimpleName() + schemaConfig.getInputTypeNameSuffix());
 		Assert.assertEquals(2, entity3InputType.getInputFields().size());
 
 		assertInputField(entity3InputType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
-		assertInputField(entity3InputType, "entity1" + GQLSchemaConstants.ID_SUFFIX, IntrospectionTypeKindEnum.SCALAR,
-				Scalars.GraphQLID.getName());
+		assertInputField(entity3InputType, "entity1" + schemaConfig.getAttributeIdSuffix(),
+				IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
 
 		// Entity4InputType
 		final IntrospectionFullType entity4InputType = getFullType(introspection,
-				Entity4.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
+				Entity4.class.getSimpleName() + schemaConfig.getInputTypeNameSuffix());
 		Assert.assertEquals(2, entity4InputType.getInputFields().size());
 
 		assertInputField(entity4InputType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
-		assertInputField(entity4InputType, "entity1" + GQLSchemaConstants.IDS_SUFFIX, IntrospectionTypeKindEnum.LIST,
-				IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
+		assertInputField(entity4InputType, "entity1" + schemaConfig.getAttributeIdPluralSuffix(),
+				IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
 	}
 
 	/**
@@ -330,12 +329,12 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	public void testQueryTypes() {
 		final IntrospectionResult introspection = getIntrospection();
 		// QueryType
-		final IntrospectionFullType queryType = getFullType(introspection, GQLSchemaConstants.QUERY_TYPE);
+		final IntrospectionFullType queryType = getFullType(introspection, schemaConfig.getQueryTypeName());
 		// - check all queries are available
 		final List<String> queryNames = new ArrayList<>();
 		Arrays.asList(Entity1.class, Entity2.class, Entity3.class, Entity4.class).stream().forEach(clazz -> {
-			queryNames.add(GQLSchemaConstants.QUERY_GET_SINGLE_PREFIX + clazz.getSimpleName());
-			queryNames.add(GQLSchemaConstants.QUERY_GET_LIST_PREFIX + clazz.getSimpleName());
+			queryNames.add(schemaConfig.getQueryGetByIdPrefix() + clazz.getSimpleName());
+			queryNames.add(schemaConfig.getQueryGetListPrefix() + clazz.getSimpleName());
 		});
 		queryNames.forEach(queryName -> Assert.assertTrue(queryType.getFields().stream()
 				.map(IntrospectionTypeField::getName).collect(Collectors.toList()).contains(queryName)));
@@ -350,14 +349,15 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		// - check one 'getAll' query (other ones are built the same way)
 		final IntrospectionTypeField getAllEntity1 = assertField(queryType, queryNames.get(1),
 				IntrospectionTypeKindEnum.OBJECT,
-				Entity1.class.getSimpleName() + GQLSchemaConstants.LOAD_RESULT_SUFFIX);
+				Entity1.class.getSimpleName() + schemaConfig.getQueryGetListOutputTypeNameSuffix());
 		Assert.assertEquals(3, getAllEntity1.getArgs().size());
-		assertArg(getAllEntity1, GQLSchemaConstants.FILTER, IntrospectionTypeKindEnum.INPUT_OBJECT,
-				Entity1.class.getSimpleName() + GQLSchemaConstants.FILTER_SUFFIX);
-		assertArg(getAllEntity1, GQLSchemaConstants.PAGING, IntrospectionTypeKindEnum.INPUT_OBJECT,
-				getPagingInputTypeName());
-		assertArg(getAllEntity1, GQLSchemaConstants.ORDER_BY, IntrospectionTypeKindEnum.LIST,
-				IntrospectionTypeKindEnum.INPUT_OBJECT, getOrderByInputTypeName());
+		assertArg(getAllEntity1, schemaConfig.getQueryGetListFilterAttributeName(),
+				IntrospectionTypeKindEnum.INPUT_OBJECT,
+				Entity1.class.getSimpleName() + schemaConfig.getQueryGetListFilterEntityTypeNameSuffix());
+		assertArg(getAllEntity1, schemaConfig.getQueryGetListPagingAttributeName(),
+				IntrospectionTypeKindEnum.INPUT_OBJECT, getPagingInputTypeName());
+		assertArg(getAllEntity1, schemaConfig.getQueryGetListFilterAttributeOrderByName(),
+				IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.INPUT_OBJECT, getOrderByInputTypeName());
 	}
 
 	/**
@@ -367,13 +367,13 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	public void testMutationTypes() {
 		final IntrospectionResult introspection = getIntrospection();
 		// MutationType
-		final IntrospectionFullType mutationType = getFullType(introspection, GQLSchemaConstants.MUTATION_TYPE);
+		final IntrospectionFullType mutationType = getFullType(introspection, schemaConfig.getMutationTypeName());
 
 		// - check all mutations are available
 		final List<String> mutationNames = new ArrayList<>();
 		Arrays.asList(Entity1.class, Entity2.class, Entity3.class, Entity4.class).stream().forEach(clazz -> {
-			mutationNames.add(GQLSchemaConstants.MUTATION_SAVE_PREFIX + clazz.getSimpleName());
-			mutationNames.add(GQLSchemaConstants.MUTATION_DELETE_PREFIX + clazz.getSimpleName());
+			mutationNames.add(schemaConfig.getMutationSavePrefix() + clazz.getSimpleName());
+			mutationNames.add(schemaConfig.getMutationDeletePrefix() + clazz.getSimpleName());
 		});
 		mutationNames.forEach(mutationName -> Assert.assertTrue(mutationType.getFields().stream()
 				.map(IntrospectionTypeField::getName).collect(Collectors.toList()).contains(mutationName)));
@@ -383,12 +383,12 @@ public class SchemaBuildTest extends AbstractTestSuite {
 				IntrospectionTypeKindEnum.OBJECT, Entity1.class);
 		Assert.assertEquals(1, saveEntity1.getArgs().size());
 		assertArg(saveEntity1, "data", IntrospectionTypeKindEnum.NON_NULL, IntrospectionTypeKindEnum.INPUT_OBJECT,
-				Entity1.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
+				Entity1.class.getSimpleName() + schemaConfig.getInputTypeNameSuffix());
 
 		// - check one 'delete' mutation (other ones are built the same way)
 		final IntrospectionTypeField deleteEntity1 = assertField(mutationType, mutationNames.get(1),
 				IntrospectionTypeKindEnum.OBJECT,
-				GQLSchemaConstants.DELETE_RESULT_PREFIX + GQLSchemaConstants.OUTPUT_OBJECT_SUFFIX);
+				schemaConfig.getOutputDeleteResultTypeNamePrefix() + schemaConfig.getOutputTypeNameSuffix());
 		Assert.assertEquals(1, deleteEntity1.getArgs().size());
 		assertArg(deleteEntity1, "id", IntrospectionTypeKindEnum.NON_NULL, IntrospectionTypeKindEnum.SCALAR,
 				Scalars.GraphQLID.getName());
@@ -400,7 +400,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	@Test
 	public void testCustomMethodTypes() {
 		final IntrospectionResult introspection = getIntrospection();
-		final IntrospectionFullType queryType = getFullType(introspection, GQLSchemaConstants.QUERY_TYPE);
+		final IntrospectionFullType queryType = getFullType(introspection, schemaConfig.getQueryTypeName());
 
 		// - check all custom method queries are available
 		final List<String> queryNames = Arrays.asList("customMethodQuery1", "customMethodQuery2");
@@ -419,7 +419,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		Assert.assertEquals(2, customMethod2.getArgs().size());
 		assertArg(customMethod2, "arg1", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
 		assertArg(customMethod2, "arg2", IntrospectionTypeKindEnum.INPUT_OBJECT,
-				EmbeddedData1.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
+				EmbeddedData1.class.getSimpleName() + schemaConfig.getInputTypeNameSuffix());
 	}
 
 	/**
@@ -428,12 +428,12 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	@Test
 	public void testMethodCRUDConfig() {
 		final IntrospectionResult introspection = getIntrospection();
-		final IntrospectionFullType queryType = getFullType(introspection, GQLSchemaConstants.QUERY_TYPE);
-		final IntrospectionFullType mutationType = getFullType(introspection, GQLSchemaConstants.MUTATION_TYPE);
-		final String saveMethodName = GQLSchemaConstants.MUTATION_SAVE_PREFIX + Entity7.class.getSimpleName();
-		final String deleteMethodName = GQLSchemaConstants.MUTATION_DELETE_PREFIX + Entity8.class.getSimpleName();
-		final String getByIdMethodName = GQLSchemaConstants.QUERY_GET_SINGLE_PREFIX + Entity9.class.getSimpleName();
-		final String getAllMethodName = GQLSchemaConstants.QUERY_GET_LIST_PREFIX + Entity9.class.getSimpleName();
+		final IntrospectionFullType queryType = getFullType(introspection, schemaConfig.getQueryTypeName());
+		final IntrospectionFullType mutationType = getFullType(introspection, schemaConfig.getMutationTypeName());
+		final String saveMethodName = schemaConfig.getMutationSavePrefix() + Entity7.class.getSimpleName();
+		final String deleteMethodName = schemaConfig.getMutationDeletePrefix() + Entity8.class.getSimpleName();
+		final String getByIdMethodName = schemaConfig.getQueryGetByIdPrefix() + Entity9.class.getSimpleName();
+		final String getAllMethodName = schemaConfig.getQueryGetListPrefix() + Entity9.class.getSimpleName();
 		final Optional<IntrospectionTypeField> optionalSaveMethod = getOptionalField(mutationType, saveMethodName);
 		final Optional<IntrospectionTypeField> optionalDeleteMethod = getOptionalField(mutationType, deleteMethodName);
 		final Optional<IntrospectionTypeField> optionalGetByIdMethod = getOptionalField(queryType, getByIdMethodName);
@@ -454,7 +454,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	@Test
 	public void testFieldCRUDConfig() {
 		final IntrospectionResult introspection = getIntrospection();
-		final String entityInputTypeName = Entity6.class.getSimpleName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX;
+		final String entityInputTypeName = Entity6.class.getSimpleName() + schemaConfig.getInputTypeNameSuffix();
 		final IntrospectionFullType entityInputType = getFullType(introspection, entityInputTypeName);
 		final String entity6TypeName = Entity6.class.getSimpleName();
 		final IntrospectionFullType entityType = getFullType(introspection, entity6TypeName);
@@ -473,7 +473,8 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		// creation but not necessarily for update
 		assertInputField(entityInputType, "attr3", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
 		// Check field attr4 is not filterable
-		final String entityFilterTypeName = Entity6.class.getSimpleName() + GQLSchemaConstants.FILTER_SUFFIX;
+		final String entityFilterTypeName = Entity6.class.getSimpleName()
+				+ schemaConfig.getQueryGetListFilterEntityTypeNameSuffix();
 		final IntrospectionFullType entityFilterInputType = getFullType(introspection, entityFilterTypeName);
 		final Optional<IntrospectionInputValue> attr4IinputField = getOptionalInputField(entityFilterInputType,
 				"attr4");
@@ -489,26 +490,31 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	// Names
 
 	private String getOrderByInputTypeName() {
-		return StringUtils.capitalize(GQLSchemaConstants.ORDER_BY) + GQLSchemaConstants.INPUT_OBJECT_SUFFIX;
+		return StringUtils.capitalize(schemaConfig.getQueryGetListFilterAttributeOrderByName())
+				+ schemaConfig.getInputTypeNameSuffix();
 	}
 
 	private String getOrderByDirectionOutputTypeName() {
-		final String orderByDirectionOutputTypeName = StringUtils.capitalize(GQLSchemaConstants.ORDER_BY)
-				+ StringUtils.capitalize(GQLSchemaConstants.ORDER_BY_DIRECTION)
-				+ GQLSchemaConstants.OUTPUT_OBJECT_SUFFIX;
+		final String orderByDirectionOutputTypeName = StringUtils
+				.capitalize(schemaConfig.getQueryGetListFilterAttributeOrderByName())
+				+ StringUtils.capitalize(schemaConfig.getQueryGetListFilterAttributeOrderByDirectionName())
+				+ schemaConfig.getOutputTypeNameSuffix();
 		return orderByDirectionOutputTypeName;
 	}
 
 	private String getOrderByOutputTypeName() {
-		return StringUtils.capitalize(GQLSchemaConstants.ORDER_BY) + GQLSchemaConstants.OUTPUT_OBJECT_SUFFIX;
+		return StringUtils.capitalize(schemaConfig.getQueryGetListFilterAttributeOrderByName())
+				+ schemaConfig.getOutputTypeNameSuffix();
 	}
 
 	private String getPagingInputTypeName() {
-		return StringUtils.capitalize(GQLSchemaConstants.PAGING) + GQLSchemaConstants.INPUT_OBJECT_SUFFIX;
+		return StringUtils.capitalize(schemaConfig.getQueryGetListPagingAttributeName())
+				+ schemaConfig.getInputTypeNameSuffix();
 	}
 
 	private String getPagingOutputTypeName() {
-		return StringUtils.capitalize(GQLSchemaConstants.PAGING) + GQLSchemaConstants.OUTPUT_OBJECT_SUFFIX;
+		return StringUtils.capitalize(schemaConfig.getQueryGetListPagingAttributeName())
+				+ schemaConfig.getOutputTypeNameSuffix();
 	}
 
 	private IntrospectionResult getIntrospection() {

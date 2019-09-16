@@ -2,12 +2,12 @@ package com.daikit.graphql.builder;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.daikit.graphql.constants.GQLSchemaConstants;
-import com.daikit.graphql.enums.GQLScalarTypeEnum;
+import com.daikit.graphql.config.GQLSchemaConfig;
 import com.daikit.graphql.utils.Message;
 
 import graphql.schema.GraphQLCodeRegistry;
@@ -27,6 +27,8 @@ public class GQLSchemaBuilderCache {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
+	private final GQLSchemaConfig schemaConfig;
+
 	// Type references for outputs
 	private final Map<Class<?>, String> typeReferences = new HashMap<>();
 	private final Map<Class<?>, GraphQLEnumType> enumTypes = new HashMap<>();
@@ -42,13 +44,27 @@ public class GQLSchemaBuilderCache {
 	private GraphQLEnumType orderByDirectionEnumType;
 	private GraphQLInputObjectType pagingInputObjectType;
 	private GraphQLInputObjectType orderByInputObjectType;
-	private final Map<GQLScalarTypeEnum, GraphQLInputObjectType> inputScalarFilterOperators = new HashMap<>();
+	private final Map<String, GraphQLInputObjectType> inputScalarFilterOperators = new HashMap<>();
 	private final Map<Class<?>, GraphQLInputObjectType> inputEnumFilterOperators = new HashMap<>();
 	private GraphQLOutputType pagingOutputObjectType;
 	private GraphQLOutputType orderByOutputObjectType;
 
 	// Data fetcher code registry
 	private GraphQLCodeRegistry.Builder codeRegistryBuilder;
+
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+	// CONSTRUCTORS
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+	/**
+	 * Constructor
+	 *
+	 * @param schemaConfig
+	 *            the {@link GQLSchemaConfig}
+	 */
+	public GQLSchemaBuilderCache(GQLSchemaConfig schemaConfig) {
+		this.schemaConfig = schemaConfig;
+	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// METHODS
@@ -108,22 +124,21 @@ public class GQLSchemaBuilderCache {
 	}
 
 	/**
-	 * Get cached {@link GraphQLScalarType} by its related
-	 * {@link GQLScalarTypeEnum}
+	 * Get cached {@link GraphQLScalarType} by its related scalar type code
 	 *
-	 * @param scalarTypeEnum
-	 *            the scalar type enum
+	 * @param scalarTypeCode
+	 *            the scalar type code
 	 * @return the found {@link GraphQLScalarType}
 	 * @throws IllegalArgumentException
 	 *             if not found
 	 */
-	public GraphQLScalarType getScalarType(final GQLScalarTypeEnum scalarTypeEnum) {
-		final GraphQLScalarType scalarType = GQLSchemaConstants.SCALARS.get(scalarTypeEnum);
-		if (scalarType == null) {
+	public GraphQLScalarType getScalarType(final String scalarTypeCode) {
+		final Optional<GraphQLScalarType> scalarType = schemaConfig.getScalarType(scalarTypeCode);
+		if (!scalarType.isPresent()) {
 			throw new IllegalArgumentException(
-					Message.format("No scalar type defined for scalar type [{}]", scalarTypeEnum));
+					Message.format("No scalar type defined for scalar type code [{}]", scalarTypeCode));
 		}
-		return scalarType;
+		return scalarType.get();
 	}
 
 	/**
@@ -278,7 +293,7 @@ public class GQLSchemaBuilderCache {
 	/**
 	 * @return the inputScalarFilterOperators
 	 */
-	public Map<GQLScalarTypeEnum, GraphQLInputObjectType> getInputScalarFilterOperators() {
+	public Map<String, GraphQLInputObjectType> getInputScalarFilterOperators() {
 		return inputScalarFilterOperators;
 	}
 
@@ -325,6 +340,13 @@ public class GQLSchemaBuilderCache {
 	 */
 	public void setOrderByOutputObjectType(GraphQLOutputType orderByOutputObjectType) {
 		this.orderByOutputObjectType = orderByOutputObjectType;
+	}
+
+	/**
+	 * @return the schemaConfig
+	 */
+	public GQLSchemaConfig getConfig() {
+		return schemaConfig;
 	}
 
 }

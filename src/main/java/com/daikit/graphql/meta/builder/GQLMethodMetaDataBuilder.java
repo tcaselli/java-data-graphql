@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.daikit.generics.utils.GenericsUtils;
+import com.daikit.graphql.config.GQLSchemaConfig;
 import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
 import com.daikit.graphql.custommethod.IGQLAbstractCustomMethod;
 import com.daikit.graphql.meta.custommethod.GQLAbstractMethodArgumentMetaData;
@@ -24,7 +25,6 @@ import com.daikit.graphql.meta.custommethod.GQLMethodListScalarMetaData;
 import com.daikit.graphql.meta.custommethod.GQLMethodScalarMetaData;
 import com.daikit.graphql.meta.entity.GQLEntityMetaData;
 import com.daikit.graphql.meta.entity.GQLEnumMetaData;
-import com.daikit.graphql.utils.GQLScalarUtils;
 import com.daikit.graphql.utils.Message;
 
 /**
@@ -33,6 +33,24 @@ import com.daikit.graphql.utils.Message;
  * @author Thibaut Caselli
  */
 public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
+
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+	// CONSTRUCTORS
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+	/**
+	 * Constructor
+	 *
+	 * @param schemaConfig
+	 *            the {@link GQLSchemaConfig}
+	 */
+	public GQLMethodMetaDataBuilder(GQLSchemaConfig schemaConfig) {
+		super(schemaConfig);
+	}
+
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+	// PUBLIC METHODS
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
 	 * Build custom method meta data from its {@link GQLAbstractCustomMethod}
@@ -70,10 +88,10 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 			List<GQLAbstractMethodArgumentMetaData> arguments) {
 		final GQLAbstractMethodMetaData methodMetaData;
 		final Class<?> outputRawClass = GenericsUtils.getTypeClass(customMethod.getOutputType());
-		if (GQLScalarUtils.isScalarType(outputRawClass)) {
+		if (getConfig().isScalarType(outputRawClass)) {
 			methodMetaData = new GQLMethodScalarMetaData();
 			((GQLMethodScalarMetaData) methodMetaData)
-					.setScalarType(GQLScalarUtils.getScalarTypeFromClass(outputRawClass).get());
+					.setScalarType(getConfig().getScalarTypeCodeFromClass(outputRawClass).get());
 		} else if (isEnum(enumMetaDatas, outputRawClass)) {
 			methodMetaData = new GQLMethodEnumMetaData();
 			((GQLMethodEnumMetaData) methodMetaData).setEnumClass((Class<? extends Enum<?>>) outputRawClass);
@@ -83,10 +101,10 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 		} else if (Collection.class.isAssignableFrom(outputRawClass)) {
 			final Class<?> foreignClass = GenericsUtils
 					.getTypeArgumentsAsClasses(customMethod.getOutputType(), Collection.class).get(0);
-			if (GQLScalarUtils.isScalarType(foreignClass)) {
+			if (getConfig().isScalarType(foreignClass)) {
 				methodMetaData = new GQLMethodListScalarMetaData();
 				((GQLMethodListScalarMetaData) methodMetaData)
-						.setScalarType(GQLScalarUtils.getScalarTypeFromClass(foreignClass).get());
+						.setScalarType(getConfig().getScalarTypeCodeFromClass(foreignClass).get());
 			} else if (isEnum(enumMetaDatas, foreignClass)) {
 				methodMetaData = new GQLMethodListEnumMetaData();
 				((GQLMethodListEnumMetaData) methodMetaData).setEnumClass((Class<? extends Enum<?>>) foreignClass);
@@ -117,10 +135,10 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 
 		final Class<?> argumentRawClass = GenericsUtils.getTypeClass(argumentType);
 
-		if (GQLScalarUtils.isScalarType(argumentRawClass)) {
+		if (getConfig().isScalarType(argumentRawClass)) {
 			argumentMetaData = new GQLMethodArgumentScalarMetaData();
 			((GQLMethodArgumentScalarMetaData) argumentMetaData)
-					.setScalarType(GQLScalarUtils.getScalarTypeFromClass(argumentRawClass).get());
+					.setScalarType(getConfig().getScalarTypeCodeFromClass(argumentRawClass).get());
 		} else if (isEnum(enumMetaDatas, argumentRawClass)) {
 			argumentMetaData = new GQLMethodArgumentEnumMetaData();
 			((GQLMethodArgumentEnumMetaData) argumentMetaData)
@@ -131,10 +149,10 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 		} else if (Collection.class.isAssignableFrom(argumentRawClass)) {
 			final Class<?> foreignClass = GenericsUtils.getTypeArgumentsAsClasses(argumentType, Collection.class)
 					.get(0);
-			if (GQLScalarUtils.isScalarType(foreignClass)) {
+			if (getConfig().isScalarType(foreignClass)) {
 				argumentMetaData = new GQLMethodArgumentListScalarMetaData();
 				((GQLMethodArgumentListScalarMetaData) argumentMetaData)
-						.setScalarType(GQLScalarUtils.getScalarTypeFromClass(foreignClass).get());
+						.setScalarType(getConfig().getScalarTypeCodeFromClass(foreignClass).get());
 			} else if (isEnum(enumMetaDatas, foreignClass)) {
 				argumentMetaData = new GQLMethodArgumentListEnumMetaData();
 				((GQLMethodArgumentListEnumMetaData) argumentMetaData).setEnumClass(foreignClass);

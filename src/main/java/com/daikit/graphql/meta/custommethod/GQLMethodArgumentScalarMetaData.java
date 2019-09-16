@@ -9,7 +9,7 @@ import com.daikit.graphql.enums.GQLScalarTypeEnum;
  */
 public class GQLMethodArgumentScalarMetaData extends GQLAbstractMethodArgumentMetaData {
 
-	private GQLScalarTypeEnum scalarType;
+	private String scalarTypeCode;
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -29,12 +29,27 @@ public class GQLMethodArgumentScalarMetaData extends GQLAbstractMethodArgumentMe
 	 * @param name
 	 *            the name for the method argument. This name will be used for
 	 *            building GraphQL schema query or mutation for this method
+	 * @param scalarTypeCode
+	 *            the scalar type code
+	 */
+	public GQLMethodArgumentScalarMetaData(String name, String scalarTypeCode) {
+		super(name);
+		this.scalarTypeCode = scalarTypeCode;
+	}
+
+	/**
+	 * Constructor passing name and scalar type and keeping default values for
+	 * other attributes.
+	 *
+	 * @param name
+	 *            the name for the method argument. This name will be used for
+	 *            building GraphQL schema query or mutation for this method
 	 * @param scalarType
-	 *            the scalar type
+	 *            the scalar type {@link GQLScalarTypeEnum}
 	 */
 	public GQLMethodArgumentScalarMetaData(String name, GQLScalarTypeEnum scalarType) {
 		super(name);
-		this.scalarType = scalarType;
+		this.scalarTypeCode = scalarType.toString();
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -43,7 +58,7 @@ public class GQLMethodArgumentScalarMetaData extends GQLAbstractMethodArgumentMe
 
 	@Override
 	protected void appendToString(final StringBuilder stringBuilder) {
-		stringBuilder.append("{METHOD-ARGUMENT-SCALAR(").append(scalarType == null ? "" : scalarType.name())
+		stringBuilder.append("{METHOD-ARGUMENT-SCALAR(").append(scalarTypeCode == null ? "" : scalarTypeCode)
 				.append(")}");
 		super.appendToString(stringBuilder);
 	}
@@ -55,21 +70,21 @@ public class GQLMethodArgumentScalarMetaData extends GQLAbstractMethodArgumentMe
 	/**
 	 * Get the scalar type
 	 *
-	 * @return the scalarType
+	 * @return the scalarTypeCode
 	 */
-	public GQLScalarTypeEnum getScalarType() {
-		return scalarType;
+	public String getScalarType() {
+		return scalarTypeCode;
 	}
 
 	/**
 	 * Set the scalar type
 	 *
-	 * @param scalarType
-	 *            the scalarType to set
+	 * @param scalarTypeCode
+	 *            the scalarTypeCode to set
 	 * @return this instance
 	 */
-	public GQLMethodArgumentScalarMetaData setScalarType(final GQLScalarTypeEnum scalarType) {
-		this.scalarType = scalarType;
+	public GQLMethodArgumentScalarMetaData setScalarType(final String scalarTypeCode) {
+		this.scalarTypeCode = scalarTypeCode;
 		return this;
 	}
 

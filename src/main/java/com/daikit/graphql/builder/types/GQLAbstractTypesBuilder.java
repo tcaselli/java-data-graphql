@@ -7,9 +7,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 import com.daikit.graphql.builder.GQLAbstractSchemaSubBuilder;
-import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
-import com.daikit.graphql.constants.GQLSchemaConstants;
+import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.datafetcher.GQLDynamicAttributeDataFetcher;
 import com.daikit.graphql.datafetcher.GQLPropertyDataFetcher;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
@@ -65,8 +64,8 @@ public class GQLAbstractTypesBuilder extends GQLAbstractSchemaSubBuilder {
 
 	protected GraphQLFieldDefinition buildIdFieldDefinition() {
 		final GraphQLFieldDefinition.Builder builder = GraphQLFieldDefinition.newFieldDefinition();
-		builder.name(GQLSchemaConstants.FIELD_ID);
-		builder.description("Field [" + GQLSchemaConstants.FIELD_ID + "]");
+		builder.name(getConfig().getAttributeIdName());
+		builder.description("Field [" + getConfig().getAttributeIdName() + "]");
 		builder.type(Scalars.GraphQLID);
 		return builder.build();
 	}
@@ -75,7 +74,7 @@ public class GQLAbstractTypesBuilder extends GQLAbstractSchemaSubBuilder {
 			GraphQLFieldDefinition idFieldDefinition, final List<GQLPropertyDataFetcher<?>> propertiesDataFetchers) {
 		if (idFieldDefinition != null) {
 			final Optional<GQLPropertyDataFetcher<?>> dataFetcher = propertiesDataFetchers.stream()
-					.filter(df -> GQLSchemaConstants.FIELD_ID.equals(df.getGraphQLPropertyName())).findFirst();
+					.filter(df -> getConfig().getAttributeIdName().equals(df.getGraphQLPropertyName())).findFirst();
 			if (dataFetcher.isPresent()) {
 				getCache().getCodeRegistryBuilder().dataFetcher(fieldsContainer, idFieldDefinition, dataFetcher.get());
 			}
@@ -115,7 +114,7 @@ public class GQLAbstractTypesBuilder extends GQLAbstractSchemaSubBuilder {
 		// Set attribute type
 		if (attribute instanceof GQLAttributeScalarMetaData) {
 			fieldDefinition = buildFieldDefinition(attribute,
-					GQLSchemaConstants.SCALARS.get(((GQLAttributeScalarMetaData) attribute).getScalarType()));
+					getCache().getScalarType(((GQLAttributeScalarMetaData) attribute).getScalarType()));
 		} else if (attribute instanceof GQLAttributeEnumMetaData) {
 			fieldDefinition = buildFieldDefinition(attribute,
 					getCache().getEnumType(((GQLAttributeEnumMetaData) attribute).getEnumClass()));

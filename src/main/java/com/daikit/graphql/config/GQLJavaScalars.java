@@ -1,4 +1,4 @@
-package com.daikit.graphql.constants;
+package com.daikit.graphql.config;
 
 import java.io.File;
 import java.math.BigInteger;

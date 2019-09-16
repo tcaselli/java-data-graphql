@@ -9,7 +9,7 @@ import com.daikit.graphql.enums.GQLScalarTypeEnum;
  */
 public class GQLAttributeListScalarMetaData extends GQLAbstractAttributeMetaData {
 
-	private GQLScalarTypeEnum scalarType;
+	private String scalarTypeCode;
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -30,12 +30,28 @@ public class GQLAttributeListScalarMetaData extends GQLAbstractAttributeMetaData
 	 *            the name for the attribute. This name will be used for
 	 *            building GraphQL schema : queries, mutations, descriptions
 	 *            etc.
+	 * @param scalarTypeCode
+	 *            the scalar type code
+	 */
+	public GQLAttributeListScalarMetaData(String name, String scalarTypeCode) {
+		super(name);
+		this.scalarTypeCode = scalarTypeCode;
+	}
+
+	/**
+	 * Constructor passing name and scalar type and keeping default values for
+	 * other attributes.
+	 *
+	 * @param name
+	 *            the name for the attribute. This name will be used for
+	 *            building GraphQL schema : queries, mutations, descriptions
+	 *            etc.
 	 * @param scalarType
-	 *            the scalar type
+	 *            the scalar type {@link GQLScalarTypeEnum}
 	 */
 	public GQLAttributeListScalarMetaData(String name, GQLScalarTypeEnum scalarType) {
 		super(name);
-		this.scalarType = scalarType;
+		this.scalarTypeCode = scalarType.toString();
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -44,7 +60,7 @@ public class GQLAttributeListScalarMetaData extends GQLAbstractAttributeMetaData
 
 	@Override
 	protected void appendToString(final StringBuilder stringBuilder) {
-		stringBuilder.append("{LIST-SCALAR(").append(scalarType == null ? "" : scalarType.name()).append(")}");
+		stringBuilder.append("{LIST-SCALAR(").append(scalarTypeCode == null ? "" : scalarTypeCode).append(")}");
 		super.appendToString(stringBuilder);
 	}
 
@@ -53,23 +69,23 @@ public class GQLAttributeListScalarMetaData extends GQLAbstractAttributeMetaData
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Get the scalar type {@link GQLScalarTypeEnum}
+	 * Get the scalar type code
 	 *
-	 * @return the scalarType
+	 * @return the scalarTypeCode
 	 */
-	public GQLScalarTypeEnum getScalarType() {
-		return scalarType;
+	public String getScalarType() {
+		return scalarTypeCode;
 	}
 
 	/**
-	 * Set the scalar type {@link GQLScalarTypeEnum}
+	 * Set the scalar type code
 	 *
-	 * @param scalarType
-	 *            the scalarType to set
+	 * @param scalarTypeCode
+	 *            the scalarTypeCode to set
 	 * @return this instance
 	 */
-	public GQLAttributeListScalarMetaData setScalarType(final GQLScalarTypeEnum scalarType) {
-		this.scalarType = scalarType;
+	public GQLAttributeListScalarMetaData setScalarType(final String scalarTypeCode) {
+		this.scalarTypeCode = scalarTypeCode;
 		return this;
 	}
 

@@ -11,9 +11,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
-import com.daikit.graphql.constants.GQLSchemaConstants;
+import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.meta.GQLMetaModel;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEntityMetaData;
@@ -135,14 +134,15 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 						infos.getEntity().getName()));
 			} else {
 				final GraphQLInputObjectType.Builder builder = GraphQLInputObjectType.newInputObject();
-				builder.name(infos.getEntity().getName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
+				builder.name(infos.getEntity().getName() + getConfig().getInputTypeNameSuffix());
 				builder.description("Object input type for " + (infos.getEntity().isEmbedded() ? "embedded " : "")
 						+ "entity [" + infos.getEntity().getName() + "]");
 				// set interface
 				final List<GraphQLInputObjectField> fields = new ArrayList<>();
 				// Add id input field if existing
 				if (infos.getEntity().getAttributes().stream()
-						.filter(attribute -> GQLSchemaConstants.FIELD_ID.equals(attribute.getName())).count() > 0) {
+						.filter(attribute -> getConfig().getAttributeIdName().equals(attribute.getName()))
+						.count() > 0) {
 					fields.add(buildIdInputField());
 				}
 				// Add other attributes
@@ -173,7 +173,7 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 			// Set attribute type
 			if (attribute instanceof GQLAttributeScalarMetaData) {
 				inputFields.add(buildInputField(name, description,
-						GQLSchemaConstants.SCALARS.get(((GQLAttributeScalarMetaData) attribute).getScalarType())));
+						getConfig().getScalarType(((GQLAttributeScalarMetaData) attribute).getScalarType()).get()));
 			} else if (attribute instanceof GQLAttributeEnumMetaData) {
 				inputFields.add(buildInputField(name, description,
 						getCache().getEnumType(((GQLAttributeEnumMetaData) attribute).getEnumClass())));
@@ -184,7 +184,7 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 					inputFields.add(buildInputField(name, "Input field [object-embedded] [" + attribute.getName() + "]"
 							+ getDescriptionNullableSuffix(attribute), existingInputEntityType));
 				} else {
-					inputFields.add(buildInputField(name + GQLSchemaConstants.ID_SUFFIX, "Input field [id] of ["
+					inputFields.add(buildInputField(name + getConfig().getAttributeIdSuffix(), "Input field [id] of ["
 							+ attribute.getName() + "]" + getDescriptionNullableSuffix(attribute), Scalars.GraphQLID));
 				}
 			} else if (attribute instanceof GQLAttributeListEnumMetaData) {
@@ -210,18 +210,18 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 									.add(((GQLAttributeListEntityMetaData) attribute).getForeignClass());
 						} else {
 							inputFields.add(buildInputField(
-									name.endsWith(GQLSchemaConstants.PLURAL_SUFFIX)
+									name.endsWith(getConfig().getAttributePluralSuffix())
 											? name
-											: name + GQLSchemaConstants.PLURAL_SUFFIX,
+											: name + getConfig().getAttributePluralSuffix(),
 									"Input field [Array] of [" + attribute.getName() + "]"
 											+ getDescriptionNullableSuffix(attribute),
 									new GraphQLList(foreignInputType)));
 						}
 					}
 					inputFields.add(buildInputField(
-							(name.endsWith(GQLSchemaConstants.PLURAL_SUFFIX)
+							(name.endsWith(getConfig().getAttributePluralSuffix())
 									? name.substring(0, name.length() - 1)
-									: name) + GQLSchemaConstants.IDS_SUFFIX,
+									: name) + getConfig().getAttributeIdPluralSuffix(),
 							"Input field [Array] of [id] of [" + attribute.getName() + "]"
 									+ getDescriptionNullableSuffix(attribute),
 							new GraphQLList(Scalars.GraphQLID)));
@@ -240,7 +240,7 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 			logger.debug(
 					Message.format("Build input save embedded abstract entity type [{}]", infos.getEntity().getName()));
 			final GraphQLInputObjectType.Builder builder = GraphQLInputObjectType.newInputObject();
-			builder.name(infos.getEntity().getName() + GQLSchemaConstants.INPUT_OBJECT_SUFFIX);
+			builder.name(infos.getEntity().getName() + getConfig().getInputTypeNameSuffix());
 			builder.description("Object input type for embedded abstract entity [" + infos.getEntity().getName() + "]");
 			// set interface
 			final List<GraphQLInputObjectField> fields = infos.getConcreteSubEntities().stream()
@@ -256,7 +256,8 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 				final GQLConcreteEntityMetaDataInfos concreteSubEntityType) {
 			logger.debug(Message.format("Build input save entity field for concrete embedded extending type [{}]",
 					concreteSubEntityType.getEntity().getName()));
-			final String name = GQLSchemaConstants.EMBEDDED_TYPE_PREFIX + concreteSubEntityType.getEntity().getName();
+			final String name = getConfig().getConcreteEmbeddedExtendingTypeNamePrefix()
+					+ concreteSubEntityType.getEntity().getName();
 			final GraphQLInputObjectType type = getCache()
 					.getInputEntityType(concreteSubEntityType.getEntity().getEntityClass());
 			final GraphQLInputObjectField.Builder builder = GraphQLInputObjectField.newInputObjectField();
@@ -314,8 +315,8 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 
 		private GraphQLInputObjectField buildIdInputField() {
 			final GraphQLInputObjectField.Builder builder = GraphQLInputObjectField.newInputObjectField();
-			builder.name(GQLSchemaConstants.FIELD_ID);
-			builder.description("Input field [" + GQLSchemaConstants.FIELD_ID + "]");
+			builder.name(getConfig().getAttributeIdName());
+			builder.description("Input field [" + getConfig().getAttributeIdName() + "]");
 			builder.type(Scalars.GraphQLID);
 			return builder.build();
 		}

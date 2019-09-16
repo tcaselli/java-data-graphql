@@ -3,6 +3,8 @@ package com.daikit.graphql.builder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.daikit.graphql.config.GQLSchemaConfig;
+
 /**
  * Abstract super class for all schema fragment builders
  *
@@ -29,14 +31,21 @@ public class GQLAbstractSchemaSubBuilder {
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-	// GETTERS / SETTERS
+	// PROTECTED METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * @return the cache
+	 * @return the {@link GQLSchemaBuilderCache}
 	 */
-	public GQLSchemaBuilderCache getCache() {
+	protected GQLSchemaBuilderCache getCache() {
 		return cache;
+	}
+
+	/**
+	 * @return the {@link GQLSchemaConfig}
+	 */
+	protected GQLSchemaConfig getConfig() {
+		return cache.getConfig();
 	}
 
 }

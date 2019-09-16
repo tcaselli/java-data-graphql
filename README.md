@@ -21,10 +21,11 @@ Demo project with spring boot available here : [spring-data-graphql-demo](https:
 ### Generate GraphQL executor and schema
 
 In order to generate a GraphQL executor with its related schema there is 1 entry point : the ```com.daikit.graphql.execution.GQLExecutor```.  
-The constructor for this executor is waiting for a [meta model](#the-meta-model), an [error processor](#the-error-processor), some [data fetchers](#data-fetchers), and eventually an [executor callback](#the-executor-callback) to provide hooks before and/or after each execution.
+The constructor for this executor is waiting for a [schema configuration](#the-schema-configuration), a [meta model](#the-meta-model), an [error processor](#the-error-processor), some [data fetchers](#data-fetchers), and eventually an [executor callback](#the-executor-callback) to provide hooks before and/or after each execution.
 
 ```java
 GQLExecutor executor = new GQLExecutor(
+    createSchemaConfig(), // see "The schema configuration" section below
     createMetaModel(),  // see "The meta model" section below
     createErrorProcessor(), // See "The error processor" section below
     createGetByIdDataFetcher(), // see "Data Fetchers" section below
@@ -51,6 +52,11 @@ GQLExecutionResult result = executor.execute(
         .build()
 );
 ```
+
+### The schema configuration
+
+The schema configuration allows to choose prefixes, suffixes, attribute names,
+ type names, method names... for generated schema items. Just use default class ```com.daikit.graphql.config.GQLSchemaConfig``` and eventually modify properties of your choice if default values do not suit your needs.
 
 ### The meta model
 

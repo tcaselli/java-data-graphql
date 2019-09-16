@@ -1,7 +1,6 @@
 package com.daikit.graphql.datafetcher;
 
 import com.daikit.graphql.builder.GQLSchemaBuilder;
-import com.daikit.graphql.constants.GQLSchemaConstants;
 
 import graphql.language.Field;
 import graphql.schema.DataFetchingEnvironment;
@@ -30,10 +29,9 @@ public abstract class GQLAbstractGetByIdDataFetcher extends GQLAbstractDataFetch
 	@Override
 	public Object get(final DataFetchingEnvironment environment) {
 		final Field queryField = environment.getField();
-		final String entityName = getEntityName(GQLSchemaConstants.QUERY_GET_SINGLE_PREFIX, queryField.getName());
-		final String id = mapValue(
-				queryField.getArguments().stream()
-						.filter(argument -> GQLSchemaConstants.FIELD_ID.equals(argument.getName())).findFirst().get(),
+		final String entityName = getEntityName(getConfig().getQueryGetByIdPrefix(), queryField.getName());
+		final String id = mapValue(queryField.getArguments().stream()
+				.filter(argument -> getConfig().getAttributeIdName().equals(argument.getName())).findFirst().get(),
 				environment.getArguments());
 		return getById(getEntityClassByEntityName(entityName), id);
 	}

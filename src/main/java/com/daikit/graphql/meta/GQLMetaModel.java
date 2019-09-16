@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.daikit.graphql.config.GQLSchemaConfig;
 import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
 import com.daikit.graphql.custommethod.IGQLAbstractCustomMethod;
 import com.daikit.graphql.dynamicattribute.IGQLAbstractDynamicAttribute;
@@ -33,10 +34,14 @@ import com.daikit.graphql.utils.Message;
  */
 public class GQLMetaModel {
 
-	private final List<GQLEnumMetaData> enums = new ArrayList<>();
-	private final List<GQLInterfaceEntityMetaDataInfos> interfaces = new ArrayList<>();
-	private final List<GQLConcreteEntityMetaDataInfos> concretes = new ArrayList<>();
-	private final List<GQLAbstractMethodMetaData> customMethods = new ArrayList<>();
+	private final Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes = new ArrayList<>();
+	private final Collection<IGQLAbstractCustomMethod<?>> methods = new ArrayList<>();
+	private final Collection<GQLEntityMetaData> entityMetaDatas = new ArrayList<>();
+
+	private final List<GQLAbstractMethodMetaData> methodMetaDatas = new ArrayList<>();
+	private final List<GQLEnumMetaData> enumMetaDatas = new ArrayList<>();
+	private final List<GQLInterfaceEntityMetaDataInfos> interfaceMetaDatas = new ArrayList<>();
+	private final List<GQLConcreteEntityMetaDataInfos> concreteMetaDatas = new ArrayList<>();
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -62,17 +67,10 @@ public class GQLMetaModel {
 			final Collection<GQLEntityMetaData> entityMetaDatas,
 			final Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes,
 			final Collection<IGQLAbstractCustomMethod<?>> customMethods) {
-		final GQLDynamicAttributeMetaDataBuilder dynamicAttributeMetaDataBuilder = new GQLDynamicAttributeMetaDataBuilder();
-		final GQLMethodMetaDataBuilder methodMetaDataBuilder = new GQLMethodMetaDataBuilder();
-		final Collection<GQLAbstractAttributeMetaData> dynamicAttributeMetaDatas = dynamicAttributes.stream()
-				.map(attribute -> dynamicAttributeMetaDataBuilder.build(enumMetaDatas, entityMetaDatas, attribute))
-				.collect(Collectors.toList());
-		final Collection<GQLAbstractMethodMetaData> methodMetaDatas = customMethods.stream()
-				.map(customMethod -> methodMetaDataBuilder.build(enumMetaDatas, entityMetaDatas, customMethod))
-				.collect(Collectors.toList());
-
-		registerDynamicAttributes(entityMetaDatas, dynamicAttributeMetaDatas);
-		initialize(enumMetaDatas, entityMetaDatas, methodMetaDatas);
+		this.enumMetaDatas.addAll(enumMetaDatas);
+		this.entityMetaDatas.addAll(entityMetaDatas);
+		this.dynamicAttributes.addAll(dynamicAttributes);
+		this.methods.addAll(customMethods);
 	}
 
 	/**
@@ -89,34 +87,36 @@ public class GQLMetaModel {
 	public GQLMetaModel(final Collection<GQLEnumMetaData> enumMetaDatas,
 			final Collection<GQLEntityMetaData> entityMetaDatas,
 			final Collection<GQLAbstractMethodMetaData> methodMetaDatas) {
-		initialize(enumMetaDatas, entityMetaDatas, methodMetaDatas);
+		this.enumMetaDatas.addAll(enumMetaDatas);
+		this.entityMetaDatas.addAll(entityMetaDatas);
+		this.methodMetaDatas.addAll(methodMetaDatas);
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-	// PRIVATE METHODS
+	// PUBLIC INITIALIZATION METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	private void registerDynamicAttributes(Collection<GQLEntityMetaData> entityMetaDatas,
-			Collection<GQLAbstractAttributeMetaData> dynamicAttributes) {
-		for (final GQLAbstractAttributeMetaData dynamicAttribute : dynamicAttributes) {
-			final Class<?> entityType = dynamicAttribute.isDynamicAttributeGetter()
-					? dynamicAttribute.getDynamicAttributeGetter().getEntityType()
-					: dynamicAttribute.getDynamicAttributeSetter().getEntityType();
-			final Optional<GQLEntityMetaData> entityMetaData = entityMetaDatas.stream()
-					.filter(metaData -> metaData.getEntityClass().isAssignableFrom(entityType)).findFirst();
-			if (!entityMetaData.isPresent()) {
-				throw new GQLException(
-						Message.format("No entity meta data registered for dynamic attribute [{}] entity class [{}]",
-								dynamicAttribute.getName(), entityType.getSimpleName()));
-			}
-			entityMetaData.get().addAttribute(dynamicAttribute);
-		}
+	/**
+	 * Post initialize this meta model with given {@link GQLSchemaConfig}. This
+	 * method will be called automatically during schema building process.
+	 *
+	 * @param schemaConfig
+	 *            the {@link GQLSchemaConfig}
+	 */
+	public void initialize(final GQLSchemaConfig schemaConfig) {
 
-	}
+		final GQLDynamicAttributeMetaDataBuilder dynamicAttributeMetaDataBuilder = new GQLDynamicAttributeMetaDataBuilder(
+				schemaConfig);
+		final GQLMethodMetaDataBuilder methodMetaDataBuilder = new GQLMethodMetaDataBuilder(schemaConfig);
+		final Collection<GQLAbstractAttributeMetaData> dynamicAttributeMetaDatas = dynamicAttributes.stream()
+				.map(attribute -> dynamicAttributeMetaDataBuilder.build(enumMetaDatas, entityMetaDatas, attribute))
+				.collect(Collectors.toList());
+		final Collection<GQLAbstractMethodMetaData> methodMetaDatas = methods.stream()
+				.map(customMethod -> methodMetaDataBuilder.build(enumMetaDatas, entityMetaDatas, customMethod))
+				.collect(Collectors.toList());
 
-	private void initialize(final Collection<GQLEnumMetaData> enumMetaDatas,
-			final Collection<GQLEntityMetaData> entityMetaDatas,
-			final Collection<GQLAbstractMethodMetaData> methodMetaDatas) {
+		registerDynamicAttributes(entityMetaDatas, dynamicAttributeMetaDatas);
+
 		final Comparator<GQLEnumMetaData> enumComparator = new Comparator<GQLEnumMetaData>() {
 			@Override
 			public int compare(final GQLEnumMetaData o1, final GQLEnumMetaData o2) {
@@ -166,25 +166,47 @@ public class GQLMetaModel {
 		getCustomMethods().addAll(methodMetaDatas);
 	}
 
-	private void buildAndSetSuperInterfaces(final List<GQLInterfaceEntityMetaDataInfos> allInterfaces,
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+	// PRIVATE INITIALIZATION METHODS
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+	private void registerDynamicAttributes(Collection<GQLEntityMetaData> entityMetaDatas,
+			Collection<GQLAbstractAttributeMetaData> dynamicAttributes) {
+		for (final GQLAbstractAttributeMetaData dynamicAttribute : dynamicAttributes) {
+			final Class<?> entityType = dynamicAttribute.isDynamicAttributeGetter()
+					? dynamicAttribute.getDynamicAttributeGetter().getEntityType()
+					: dynamicAttribute.getDynamicAttributeSetter().getEntityType();
+			final Optional<GQLEntityMetaData> entityMetaData = entityMetaDatas.stream()
+					.filter(metaData -> metaData.getEntityClass().isAssignableFrom(entityType)).findFirst();
+			if (!entityMetaData.isPresent()) {
+				throw new GQLException(
+						Message.format("No entity meta data registered for dynamic attribute [{}] entity class [{}]",
+								dynamicAttribute.getName(), entityType.getSimpleName()));
+			}
+			entityMetaData.get().addAttribute(dynamicAttribute);
+		}
+	}
+
+	private void buildAndSetSuperInterfaces(final Collection<GQLInterfaceEntityMetaDataInfos> allInterfaces,
 			final GQLAbstractEntityMetaDataInfos infos) {
 		getSuperInterfaceInfos(allInterfaces, infos)
 				.ifPresent(superInterface -> setSuperInterfaceInfos(allInterfaces, superInterface, infos));
 	}
 
 	private Optional<GQLInterfaceEntityMetaDataInfos> getSuperInterfaceInfos(
-			final List<GQLInterfaceEntityMetaDataInfos> allInterfaces, final GQLAbstractEntityMetaDataInfos infos) {
+			final Collection<GQLInterfaceEntityMetaDataInfos> allInterfaces,
+			final GQLAbstractEntityMetaDataInfos infos) {
 		return allInterfaces.stream().filter(potential -> potential.equals(infos.getSuperEntity())).findFirst();
 	}
 
-	private void setSuperInterfaceInfos(final List<GQLInterfaceEntityMetaDataInfos> allInterfaces,
+	private void setSuperInterfaceInfos(final Collection<GQLInterfaceEntityMetaDataInfos> allInterfaces,
 			final GQLAbstractEntityMetaDataInfos superInterfaceInfos, final GQLAbstractEntityMetaDataInfos infos) {
 		infos.getSuperInterfaces().add(superInterfaceInfos);
 		getSuperInterfaceInfos(allInterfaces, superInterfaceInfos).ifPresent(
 				superSuperInterfaceInfos -> setSuperInterfaceInfos(allInterfaces, superSuperInterfaceInfos, infos));
 	}
 
-	private void setConcreteSubEntities(final List<GQLConcreteEntityMetaDataInfos> concretes,
+	private void setConcreteSubEntities(final Collection<GQLConcreteEntityMetaDataInfos> concretes,
 			final GQLInterfaceEntityMetaDataInfos infos) {
 		infos.getConcreteSubEntities().addAll(concretes.stream()
 				.filter(concrete -> concrete.getSuperInterfaces().contains(infos)).collect(Collectors.toList()));
@@ -224,7 +246,7 @@ public class GQLMetaModel {
 	 * @return a {@link List} of {@link IGQLDynamicAttributeSetter}
 	 */
 	public List<IGQLDynamicAttributeSetter<?, ?>> getDynamicAttributeSetters() {
-		return concretes.stream()
+		return concreteMetaDatas.stream()
 				.flatMap(entityMetaData -> entityMetaData.getEntity().getAttributes().stream()
 						.filter(attribute -> attribute.isDynamicAttributeSetter())
 						.map(attribute -> attribute.getDynamicAttributeSetter()))
@@ -238,7 +260,7 @@ public class GQLMetaModel {
 	 * @return a {@link List} of {@link IGQLDynamicAttributeGetter}
 	 */
 	public List<IGQLDynamicAttributeGetter<?, ?>> getDynamicAttributeGetters() {
-		return concretes.stream()
+		return concreteMetaDatas.stream()
 				.flatMap(entityMetaData -> entityMetaData.getEntity().getAttributes().stream()
 						.filter(attribute -> attribute.isDynamicAttributeGetter())
 						.map(attribute -> attribute.getDynamicAttributeGetter()))
@@ -249,42 +271,43 @@ public class GQLMetaModel {
 	 * @return the enums
 	 */
 	public List<GQLEnumMetaData> getEnums() {
-		return enums;
+		return enumMetaDatas;
 	}
 
 	/**
 	 * @return the interfaces
 	 */
 	public List<GQLInterfaceEntityMetaDataInfos> getNonEmbeddedInterfaces() {
-		return interfaces.stream().filter(infos -> !infos.getEntity().isEmbedded()).collect(Collectors.toList());
+		return interfaceMetaDatas.stream().filter(infos -> !infos.getEntity().isEmbedded())
+				.collect(Collectors.toList());
 	}
 
 	/**
 	 * @return the concretes
 	 */
 	public List<GQLConcreteEntityMetaDataInfos> getNonEmbeddedConcretes() {
-		return concretes.stream().filter(infos -> !infos.getEntity().isEmbedded()).collect(Collectors.toList());
+		return concreteMetaDatas.stream().filter(infos -> !infos.getEntity().isEmbedded()).collect(Collectors.toList());
 	}
 
 	/**
 	 * @return the embeddedInterfaces
 	 */
 	public List<GQLInterfaceEntityMetaDataInfos> getEmbeddedInterfaces() {
-		return interfaces.stream().filter(infos -> infos.getEntity().isEmbedded()).collect(Collectors.toList());
+		return interfaceMetaDatas.stream().filter(infos -> infos.getEntity().isEmbedded()).collect(Collectors.toList());
 	}
 
 	/**
 	 * @return the embeddedConcretes
 	 */
 	public List<GQLConcreteEntityMetaDataInfos> getEmbeddedConcretes() {
-		return concretes.stream().filter(infos -> infos.getEntity().isEmbedded()).collect(Collectors.toList());
+		return concreteMetaDatas.stream().filter(infos -> infos.getEntity().isEmbedded()).collect(Collectors.toList());
 	}
 
 	/**
 	 * @return the allEntities
 	 */
 	public List<GQLAbstractEntityMetaDataInfos> getAllEntities() {
-		return Stream.concat(interfaces.stream(), concretes.stream()).collect(Collectors.toList());
+		return Stream.concat(interfaceMetaDatas.stream(), concreteMetaDatas.stream()).collect(Collectors.toList());
 	}
 
 	/**
@@ -307,21 +330,21 @@ public class GQLMetaModel {
 	 * @return the interfaces
 	 */
 	public List<GQLInterfaceEntityMetaDataInfos> getAllInterfaces() {
-		return interfaces;
+		return interfaceMetaDatas;
 	}
 
 	/**
 	 * @return the concretes
 	 */
 	public List<GQLConcreteEntityMetaDataInfos> getAllConcretes() {
-		return concretes;
+		return concreteMetaDatas;
 	}
 
 	/**
 	 * @return the customMethods
 	 */
 	public List<GQLAbstractMethodMetaData> getCustomMethods() {
-		return customMethods;
+		return methodMetaDatas;
 	}
 
 }

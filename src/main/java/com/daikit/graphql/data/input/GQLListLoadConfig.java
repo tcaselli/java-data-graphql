@@ -13,7 +13,7 @@ import com.daikit.graphql.enums.GQLFilterOperatorEnum;
 import com.daikit.graphql.enums.GQLOrderByDirectionEnum;
 
 /**
- * List load config for "get list" method
+ * List load schemaConfig for "get list" method
  *
  * @author Thibaut Caselli
  */

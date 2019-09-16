@@ -24,6 +24,7 @@ import com.daikit.graphql.builder.types.GQLQueryPagingInputTypeBuilder;
 import com.daikit.graphql.builder.types.GQLQueryPagingOutputTypeBuilder;
 import com.daikit.graphql.builder.types.GQLQueryTypeBuilder;
 import com.daikit.graphql.builder.types.GQLReferencesBuilder;
+import com.daikit.graphql.config.GQLSchemaConfig;
 import com.daikit.graphql.data.output.GQLDeleteResult;
 import com.daikit.graphql.data.output.GQLListLoadResult;
 import com.daikit.graphql.datafetcher.GQLAbstractDataFetcher;
@@ -55,6 +56,8 @@ public class GQLSchemaBuilder {
 	/**
 	 * Initialize GraphQL schema from given {@link GQLMetaModel}
 	 *
+	 * @param schemaConfig
+	 *            the schema configuration {@link GQLSchemaConfig}
 	 * @param metaModel
 	 *            the meta model
 	 * @param getByIdDataFetcher
@@ -72,13 +75,13 @@ public class GQLSchemaBuilder {
 	 *
 	 * @return the generated {@link GraphQLSchema}
 	 */
-	public GraphQLSchema build(final GQLMetaModel metaModel, final DataFetcher<?> getByIdDataFetcher,
-			final DataFetcher<GQLListLoadResult> listDataFetcher, final DataFetcher<?> saveDataFetcher,
-			final DataFetcher<GQLDeleteResult> deleteDataFetcher, final DataFetcher<?> customMethodDataFetcher,
-			final List<GQLPropertyDataFetcher<?>> propertyDataFetchers) {
+	public GraphQLSchema build(final GQLSchemaConfig schemaConfig, final GQLMetaModel metaModel,
+			final DataFetcher<?> getByIdDataFetcher, final DataFetcher<GQLListLoadResult> listDataFetcher,
+			final DataFetcher<?> saveDataFetcher, final DataFetcher<GQLDeleteResult> deleteDataFetcher,
+			final DataFetcher<?> customMethodDataFetcher, final List<GQLPropertyDataFetcher<?>> propertyDataFetchers) {
 
 		logger.debug("START building schema...");
-		final GQLSchemaBuilderCache cache = new GQLSchemaBuilderCache();
+		final GQLSchemaBuilderCache cache = new GQLSchemaBuilderCache(schemaConfig);
 		final GraphQLSchema.Builder builder = GraphQLSchema.newSchema();
 
 		cache.setCodeRegistryBuilder(GraphQLCodeRegistry.newCodeRegistry());
@@ -90,7 +93,7 @@ public class GQLSchemaBuilder {
 		final List<DataFetcher<?>> allDataFetchers = Stream.concat(Stream.of(getByIdDataFetcher, listDataFetcher,
 				saveDataFetcher, deleteDataFetcher, customMethodDataFetcher), propertyDataFetchers.stream())
 				.collect(Collectors.toList());
-		setMetaModel(metaModel, allDataFetchers);
+		setContext(schemaConfig, metaModel, allDataFetchers);
 
 		final GQLDynamicAttributeRegistry dynAttrRegistry = new GQLDynamicAttributeRegistry(metaModel);
 
@@ -152,12 +155,15 @@ public class GQLSchemaBuilder {
 
 	}
 
-	private void setMetaModel(final GQLMetaModel metaModel, List<DataFetcher<?>> allDataFetchers) {
+	private void setContext(final GQLSchemaConfig schemaConfig, final GQLMetaModel metaModel,
+			List<DataFetcher<?>> allDataFetchers) {
 		allDataFetchers.forEach(dataFetcher -> {
 			if (dataFetcher instanceof GQLAbstractDataFetcher) {
 				((GQLAbstractDataFetcher<?>) dataFetcher).setMetaModel(metaModel);
+				((GQLAbstractDataFetcher<?>) dataFetcher).setSchemaConfig(schemaConfig);
 			}
 		});
+		metaModel.initialize(schemaConfig);
 	}
 
 	private Set<GraphQLType> getDictionnaryTypes(final GQLSchemaBuilderCache cache) {

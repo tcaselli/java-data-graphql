@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.builder.custommethod.GQLCustomMethodBuilder;
-import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.data.output.GQLDeleteResult;
 import com.daikit.graphql.meta.GQLMetaModel;
 import com.daikit.graphql.meta.custommethod.GQLAbstractMethodMetaData;
@@ -58,13 +57,12 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 	 *            the {@link DataFetcher} for custom methods
 	 * @return the created {@link GraphQLObjectType}
 	 */
-	public GraphQLObjectType buildMutationType(final GQLMetaModel metaModel,
-			final DataFetcher<?> saveDataFetcher, final DataFetcher<GQLDeleteResult> deleteDataFetcher,
-			final DataFetcher<?> customMethodsDataFetcher) {
+	public GraphQLObjectType buildMutationType(final GQLMetaModel metaModel, final DataFetcher<?> saveDataFetcher,
+			final DataFetcher<GQLDeleteResult> deleteDataFetcher, final DataFetcher<?> customMethodsDataFetcher) {
 		logger.debug("START building mutation types...");
 
 		final GraphQLObjectType.Builder builder = GraphQLObjectType.newObject();
-		builder.name(GQLSchemaConstants.MUTATION_TYPE);
+		builder.name(getConfig().getMutationTypeName());
 		builder.description("Mutation type from meta model");
 
 		logger.debug("Build mutation types for entities...");
@@ -106,7 +104,7 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 	private GraphQLFieldDefinition buildSaveMutationFieldDefinition(final GQLAbstractEntityMetaDataInfos infos) {
 		logger.debug(Message.format("Build save mutation for entity [{}]", infos.getEntity().getName()));
 		final GraphQLFieldDefinition.Builder builderSave = GraphQLFieldDefinition.newFieldDefinition();
-		builderSave.name(GQLSchemaConstants.MUTATION_SAVE_PREFIX + infos.getEntity().getName());
+		builderSave.name(getConfig().getMutationSavePrefix() + infos.getEntity().getName());
 		builderSave.description("Entity save mutation for [" + infos.getEntity().getName() + "].");
 		builderSave.type(getCache().getEntityType(infos.getEntity().getEntityClass()));
 		builderSave.argument(buildSaveMutationArgument(infos));
@@ -116,7 +114,7 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 	private GraphQLArgument buildSaveMutationArgument(final GQLAbstractEntityMetaDataInfos infos) {
 		logger.debug(Message.format("Build save mutation argument for entity [{}]", infos.getEntity().getName()));
 		final GraphQLArgument.Builder builder = GraphQLArgument.newArgument();
-		builder.name(GQLSchemaConstants.INPUT_DATA);
+		builder.name(getConfig().getMutationAttributeInputDataName());
 		builder.description("Entity save mutation argument for [" + infos.getEntity().getName() + "]");
 		builder.type(new GraphQLNonNull(getCache().getInputEntityType(infos.getEntity().getEntityClass())));
 		return builder.build();
@@ -125,7 +123,7 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 	private GraphQLFieldDefinition buildDeleteMutationFieldDefinition(final GQLAbstractEntityMetaDataInfos infos) {
 		logger.debug(Message.format("Build delete mutation for entity [{}]", infos.getEntity().getName()));
 		final GraphQLFieldDefinition.Builder builderDelete = GraphQLFieldDefinition.newFieldDefinition();
-		builderDelete.name(GQLSchemaConstants.MUTATION_DELETE_PREFIX + infos.getEntity().getName());
+		builderDelete.name(getConfig().getMutationDeletePrefix() + infos.getEntity().getName());
 		builderDelete.description("Entity delete mutation for [" + infos.getEntity().getName() + "].");
 		builderDelete.type(getCache().getDeleteResultOutputObjectType());
 		builderDelete.argument(buildArgumentNonNull(getIdAttribute(infos)));

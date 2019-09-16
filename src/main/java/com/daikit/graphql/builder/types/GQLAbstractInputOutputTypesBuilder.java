@@ -2,7 +2,6 @@ package com.daikit.graphql.builder.types;
 
 import com.daikit.graphql.builder.GQLAbstractSchemaSubBuilder;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
-import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.enums.GQLScalarTypeEnum;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeScalarMetaData;
@@ -45,8 +44,8 @@ public class GQLAbstractInputOutputTypesBuilder extends GQLAbstractSchemaSubBuil
 		GQLAttributeScalarMetaData idAttribute = null;
 		while (idAttribute == null && currentInfos != null) {
 			idAttribute = (GQLAttributeScalarMetaData) currentInfos.getEntity().getAttributes().stream()
-					.filter(attribute -> attribute instanceof GQLAttributeScalarMetaData
-							&& GQLScalarTypeEnum.ID.equals(((GQLAttributeScalarMetaData) attribute).getScalarType()))
+					.filter(attribute -> attribute instanceof GQLAttributeScalarMetaData && GQLScalarTypeEnum.ID
+							.toString().equals(((GQLAttributeScalarMetaData) attribute).getScalarType()))
 					.findFirst().orElse(null);
 			currentInfos = currentInfos.getSuperEntity();
 		}
@@ -62,7 +61,7 @@ public class GQLAbstractInputOutputTypesBuilder extends GQLAbstractSchemaSubBuil
 		builder.name(attribute.getName());
 		builder.description("Argument [" + attribute.getName() + "]");
 		builder.type(new GraphQLNonNull(
-				GQLSchemaConstants.SCALARS.get(((GQLAttributeScalarMetaData) attribute).getScalarType())));
+				getConfig().getScalarType(((GQLAttributeScalarMetaData) attribute).getScalarType()).get()));
 		return builder.build();
 	}
 

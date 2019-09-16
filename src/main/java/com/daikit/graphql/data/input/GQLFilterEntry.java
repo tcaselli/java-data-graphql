@@ -4,7 +4,7 @@ import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeGetter;
 import com.daikit.graphql.enums.GQLFilterOperatorEnum;
 
 /**
- * Filter config for {@link GQLListLoadConfig}
+ * Filter schemaConfig for {@link GQLListLoadConfig}
  *
  * @author Thibaut Caselli
  */

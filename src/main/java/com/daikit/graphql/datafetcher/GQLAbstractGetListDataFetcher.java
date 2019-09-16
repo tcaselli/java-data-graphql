@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 
 import com.daikit.graphql.builder.GQLSchemaBuilder;
-import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.data.input.GQLListLoadConfig;
 import com.daikit.graphql.data.output.GQLListLoadResult;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeGetter;
@@ -68,24 +67,29 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 
 		// Parse input query
 		final Field queryField = environment.getField();
-		final String entityName = getEntityName(GQLSchemaConstants.QUERY_GET_LIST_PREFIX, queryField.getName());
+		final String entityName = getEntityName(getConfig().getQueryGetListPrefix(), queryField.getName());
 		final Class<?> entityClass = getEntityClassByEntityName(entityName);
 
 		// Handle paging if needed
 		final Optional<Argument> pagingConfig = queryField.getArguments().stream()
-				.filter(argument -> GQLSchemaConstants.PAGING.equals(argument.getName())).findFirst();
+				.filter(argument -> getConfig().getQueryGetListPagingAttributeName().equals(argument.getName()))
+				.findFirst();
 		if (pagingConfig.isPresent()) {
 			final Map<String, Object> contextArguments = getArgumentsForContext(arguments,
 					pagingConfig.get().getName());
 
 			final Optional<ObjectField> limitField = ((ObjectValue) pagingConfig.get().getValue()).getObjectFields()
-					.stream().filter(field -> GQLSchemaConstants.PAGING_LIMIT.equals(field.getName())).findFirst();
+					.stream()
+					.filter(field -> getConfig().getQueryGetListPagingAttributeLimitName().equals(field.getName()))
+					.findFirst();
 			final Optional<ObjectField> offsetField = ((ObjectValue) pagingConfig.get().getValue()).getObjectFields()
-					.stream().filter(field -> GQLSchemaConstants.PAGING_OFFSET.equals(field.getName())).findFirst();
+					.stream()
+					.filter(field -> getConfig().getQueryGetListPagingAttributeOffsetName().equals(field.getName()))
+					.findFirst();
 
 			final int limit = limitField.isPresent()
 					? mapValue(limitField.get(), contextArguments)
-					: GQLSchemaConstants.PAGING_LIMIT_DEFAULT_VALUE;
+					: getConfig().getQueryGetListPagingAttributeLimitDefaultValue();
 			final int offset = offsetField.isPresent() ? mapValue(offsetField.get(), contextArguments) : 0;
 
 			listLoadConfig.setPaging(limit, offset);
@@ -93,17 +97,22 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 
 		// Handle sorting if needed
 		final Optional<Argument> orderByConfig = queryField.getArguments().stream()
-				.filter(argument -> GQLSchemaConstants.ORDER_BY.equals(argument.getName())).findFirst();
+				.filter(argument -> getConfig().getQueryGetListFilterAttributeOrderByName().equals(argument.getName()))
+				.findFirst();
 		if (orderByConfig.isPresent()) {
 			for (final Node<?> sortInfoNode : ((ArrayValue) orderByConfig.get().getValue()).getChildren()) {
 				final List<Map<String, Object>> subArgumentsList = getArgumentsForContextAsList(arguments,
 						orderByConfig.get().getName());
 
 				for (final Map<String, Object> subArguments : subArgumentsList) {
-					final Optional<ObjectField> fieldField = ((ObjectValue) sortInfoNode).getObjectFields().stream()
-							.filter(field -> GQLSchemaConstants.ORDER_BY_FIELD.equals(field.getName())).findFirst();
-					final Optional<ObjectField> directionField = ((ObjectValue) sortInfoNode).getObjectFields().stream()
-							.filter(field -> GQLSchemaConstants.ORDER_BY_DIRECTION.equals(field.getName())).findFirst();
+					final Optional<ObjectField> fieldField = ((ObjectValue) sortInfoNode)
+							.getObjectFields().stream().filter(field -> getConfig()
+									.getQueryGetListFilterAttributeOrderByFieldName().equals(field.getName()))
+							.findFirst();
+					final Optional<ObjectField> directionField = ((ObjectValue) sortInfoNode)
+							.getObjectFields().stream().filter(field -> getConfig()
+									.getQueryGetListFilterAttributeOrderByDirectionName().equals(field.getName()))
+							.findFirst();
 
 					// Field always non null
 					final String field = mapValue(fieldField.get(), subArguments);
@@ -112,7 +121,7 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 							? directionObj instanceof String
 									? GQLOrderByDirectionEnum.valueOf((String) directionObj)
 									: (GQLOrderByDirectionEnum) directionObj
-							: GQLSchemaConstants.ORDER_BY_DIRECTION_DEFAULT_VALUE;
+							: getConfig().getQueryGetListFilterAttributeOrderByDirectionDefaultValue();
 
 					listLoadConfig.addOrderBy(field, direction);
 				}
@@ -121,24 +130,27 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 
 		// Handle filtering if needed
 		final Optional<Argument> filterConfig = queryField.getArguments().stream()
-				.filter(argument -> GQLSchemaConstants.FILTER.equals(argument.getName())).findFirst();
+				.filter(argument -> getConfig().getQueryGetListFilterAttributeName().equals(argument.getName()))
+				.findFirst();
 		if (filterConfig.isPresent()) {
 			final Map<String, Object> contextArguments = getArgumentsForContext(arguments,
 					filterConfig.get().getName());
 
 			for (final ObjectField filterField : ((ObjectValue) filterConfig.get().getValue()).getObjectFields()) {
-				final String fieldName = GQLSchemaConstants.removePropertyIdSuffix(filterField.getName());
+				final String fieldName = getConfig().removePropertyIdSuffix(filterField.getName());
 
 				GQLFilterOperatorEnum operator;
 				Object value;
 
 				if (filterField.getValue() instanceof ObjectValue) {
 					final Optional<ObjectField> operatorField = ((ObjectValue) filterField.getValue()).getObjectFields()
-							.stream().filter(field -> GQLSchemaConstants.FILTER_OPERATOR.equals(field.getName()))
+							.stream().filter(field -> getConfig().getQueryGetListFilterAttributeOperatorName()
+									.equals(field.getName()))
 							.findFirst();
 					final Optional<ObjectField> optionalValueField = ((ObjectValue) filterField.getValue())
-							.getObjectFields().stream()
-							.filter(field -> GQLSchemaConstants.FILTER_VALUE.equals(field.getName())).findFirst();
+							.getObjectFields().stream().filter(field -> getConfig()
+									.getQueryGetListFilterAttributeValueName().equals(field.getName()))
+							.findFirst();
 
 					final Map<String, Object> filterArguments = getArgumentsForContext(contextArguments,
 							filterField.getName());

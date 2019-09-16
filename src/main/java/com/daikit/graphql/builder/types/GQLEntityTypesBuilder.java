@@ -6,9 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
-import com.daikit.graphql.constants.GQLSchemaConstants;
+import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.datafetcher.GQLConcreteSubEntityPropertyDataFetcher;
 import com.daikit.graphql.datafetcher.GQLPropertyDataFetcher;
 import com.daikit.graphql.meta.GQLMetaModel;
@@ -105,7 +104,8 @@ public class GQLEntityTypesBuilder extends GQLAbstractTypesBuilder {
 				// set interface
 				builder.withInterface(interfaceType);
 				// Add fields from interface
-				GQLSchemaBuilderUtils.addOrReplaceFieldDefinitions(fieldDefinitions, interfaceType.getFieldDefinitions());
+				GQLSchemaBuilderUtils.addOrReplaceFieldDefinitions(fieldDefinitions,
+						interfaceType.getFieldDefinitions());
 			});
 		}
 
@@ -160,7 +160,8 @@ public class GQLEntityTypesBuilder extends GQLAbstractTypesBuilder {
 		logger.debug("Build field definition for concrete embedded extending type [{}]",
 				concreteSubEntityType.getEntity().getName());
 		final GraphQLFieldDefinition.Builder builder = GraphQLFieldDefinition.newFieldDefinition();
-		final String name = GQLSchemaConstants.EMBEDDED_TYPE_PREFIX + concreteSubEntityType.getEntity().getName();
+		final String name = getCache().getConfig().getConcreteEmbeddedExtendingTypeNamePrefix()
+				+ concreteSubEntityType.getEntity().getName();
 		final GraphQLOutputType type = new GraphQLTypeReference(
 				getCache().getEntityTypeName(concreteSubEntityType.getEntity().getEntityClass()));
 		builder.name(name);

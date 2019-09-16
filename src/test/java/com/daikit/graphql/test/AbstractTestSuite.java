@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.daikit.graphql.constants.GQLSchemaConstants;
+import com.daikit.graphql.config.GQLSchemaConfig;
 import com.daikit.graphql.data.input.GQLListLoadConfig;
 import com.daikit.graphql.data.output.GQLDeleteResult;
 import com.daikit.graphql.data.output.GQLExecutionResult;
@@ -59,6 +59,7 @@ public abstract class AbstractTestSuite {
 	private GQLExecutionResult schemaIntrospection;
 
 	protected DataModel dataModel;
+	protected GQLSchemaConfig schemaConfig;
 
 	protected static GQLExecutor EXECUTOR;
 	protected static ObjectMapper MAPPER;
@@ -82,7 +83,8 @@ public abstract class AbstractTestSuite {
 	@Before
 	public void createExecutor() {
 		logger.info("Initialize test graphQL schema & data entity");
-		EXECUTOR = new GQLExecutor(createMetaModel(), new GQLErrorProcessor(), createGetByIdDataFetcher(),
+		schemaConfig = createSchemaConfig();
+		EXECUTOR = new GQLExecutor(schemaConfig, createMetaModel(), new GQLErrorProcessor(), createGetByIdDataFetcher(),
 				createListDataFetcher(), createSaveDataFetcher(), createDeleteDataFetcher(),
 				createCustomMethodDataFetcher(), createPropertyDataFetchers());
 		resetDataModel();
@@ -159,6 +161,10 @@ public abstract class AbstractTestSuite {
 	// PRIVATE METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
+	private GQLSchemaConfig createSchemaConfig() {
+		return new GQLSchemaConfig();
+	}
+
 	private GQLMetaModel createMetaModel() {
 		return new GQLMetaModelBuilder().build();
 	}
@@ -203,7 +209,7 @@ public abstract class AbstractTestSuite {
 			protected Object getOrCreateAndSetProperties(Class<?> entityClass,
 					GQLDynamicAttributeRegistry dynamicAttributeRegistry, Map<String, Object> fieldValueMap) {
 				// Find or create entity
-				final String id = (String) fieldValueMap.get(GQLSchemaConstants.FIELD_ID);
+				final String id = (String) fieldValueMap.get(getConfig().getAttributeIdName());
 				final Optional<?> existing = StringUtils.isEmpty(id)
 						? Optional.empty()
 						: dataModel.getById(entityClass, id);
@@ -217,7 +223,7 @@ public abstract class AbstractTestSuite {
 				for (final Entry<String, Object> entry : fieldValueMap.entrySet()) {
 					final Optional<IGQLDynamicAttributeSetter<Object, Object>> dynamicAttributeSetter = dynamicAttributeRegistry
 							.getSetter(entityClass, entry.getKey());
-					if (!GQLSchemaConstants.FIELD_ID.equals(entry.getKey())) {
+					if (!getConfig().getAttributeIdName().equals(entry.getKey())) {
 						Object value = entry.getValue();
 						if (entry.getValue() instanceof Map) {
 							final Class<?> propertyType = FieldUtils.getField(entity.getClass(), entry.getKey(), true)

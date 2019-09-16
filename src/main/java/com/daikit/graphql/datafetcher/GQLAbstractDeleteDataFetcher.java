@@ -1,7 +1,6 @@
 package com.daikit.graphql.datafetcher;
 
 import com.daikit.graphql.builder.GQLSchemaBuilder;
-import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.data.output.GQLDeleteResult;
 
 import graphql.language.Field;
@@ -31,8 +30,8 @@ public abstract class GQLAbstractDeleteDataFetcher extends GQLAbstractDataFetche
 	@Override
 	public GQLDeleteResult get(final DataFetchingEnvironment environment) {
 		final Field queryField = environment.getField();
-		final String entityName = getEntityName(GQLSchemaConstants.MUTATION_DELETE_PREFIX, queryField.getName());
-		final String id = (String) getArgumentValue(queryField, GQLSchemaConstants.FIELD_ID,
+		final String entityName = getEntityName(getConfig().getMutationDeletePrefix(), queryField.getName());
+		final String id = (String) getArgumentValue(queryField, getConfig().getAttributeIdName(),
 				environment.getArguments());
 		delete(getEntityClassByEntityName(entityName), id);
 		final GQLDeleteResult result = new GQLDeleteResult();

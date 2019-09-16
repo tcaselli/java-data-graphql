@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.daikit.graphql.builder.GQLSchemaBuilder;
+import com.daikit.graphql.config.GQLSchemaConfig;
 import com.daikit.graphql.data.output.GQLDeleteResult;
 import com.daikit.graphql.data.output.GQLExecutionResult;
 import com.daikit.graphql.data.output.GQLListLoadResult;
@@ -36,7 +37,9 @@ public class GQLExecutor {
 	/**
 	 * Initialize GraphQL executor from given {@link GQLMetaModel} with no
 	 * callback
-	 *
+	 * 
+	 * @param schemaConfig
+	 *            the schema configuration {@link GQLSchemaConfig}
 	 * @param metaModel
 	 *            the meta model
 	 * @param errorProcessor
@@ -54,18 +57,21 @@ public class GQLExecutor {
 	 * @param propertyDataFetchers
 	 *            custom {@link GQLPropertyDataFetcher} list
 	 */
-	public GQLExecutor(final GQLMetaModel metaModel, IGQLErrorProcessor errorProcessor,
-			final DataFetcher<?> getByIdDataFetcher, final DataFetcher<GQLListLoadResult> listDataFetcher,
-			final DataFetcher<?> saveDataFetcher, final DataFetcher<GQLDeleteResult> deleteDataFetcher,
-			final DataFetcher<?> customMethodDataFetcher, final List<GQLPropertyDataFetcher<?>> propertyDataFetchers) {
-		this(metaModel, errorProcessor, null, getByIdDataFetcher, listDataFetcher, saveDataFetcher, deleteDataFetcher,
-				customMethodDataFetcher, propertyDataFetchers);
+	public GQLExecutor(final GQLSchemaConfig schemaConfig, final GQLMetaModel metaModel,
+			IGQLErrorProcessor errorProcessor, final DataFetcher<?> getByIdDataFetcher,
+			final DataFetcher<GQLListLoadResult> listDataFetcher, final DataFetcher<?> saveDataFetcher,
+			final DataFetcher<GQLDeleteResult> deleteDataFetcher, final DataFetcher<?> customMethodDataFetcher,
+			final List<GQLPropertyDataFetcher<?>> propertyDataFetchers) {
+		this(schemaConfig, metaModel, errorProcessor, null, getByIdDataFetcher, listDataFetcher, saveDataFetcher,
+				deleteDataFetcher, customMethodDataFetcher, propertyDataFetchers);
 	}
 
 	/**
 	 * Initialize GraphQL executor from given {@link GQLMetaModel} with a
 	 * callback {@link IGQLExecutorCallback}
 	 *
+	 * @param schemaConfig
+	 *            the schema configuration {@link GQLSchemaConfig}
 	 * @param metaModel
 	 *            the meta model
 	 * @param errorProcessor
@@ -85,14 +91,15 @@ public class GQLExecutor {
 	 * @param propertyDataFetchers
 	 *            custom {@link GQLPropertyDataFetcher} list
 	 */
-	public GQLExecutor(final GQLMetaModel metaModel, IGQLErrorProcessor errorProcessor, IGQLExecutorCallback callback,
-			final DataFetcher<?> getByIdDataFetcher, final DataFetcher<GQLListLoadResult> listDataFetcher,
-			final DataFetcher<?> saveDataFetcher, final DataFetcher<GQLDeleteResult> deleteDataFetcher,
-			final DataFetcher<?> customMethodDataFetcher, final List<GQLPropertyDataFetcher<?>> propertyDataFetchers) {
+	public GQLExecutor(final GQLSchemaConfig schemaConfig, final GQLMetaModel metaModel,
+			IGQLErrorProcessor errorProcessor, IGQLExecutorCallback callback, final DataFetcher<?> getByIdDataFetcher,
+			final DataFetcher<GQLListLoadResult> listDataFetcher, final DataFetcher<?> saveDataFetcher,
+			final DataFetcher<GQLDeleteResult> deleteDataFetcher, final DataFetcher<?> customMethodDataFetcher,
+			final List<GQLPropertyDataFetcher<?>> propertyDataFetchers) {
 		this.metaModel = metaModel;
 		this.errorProcessor = errorProcessor;
 		this.callback = callback;
-		this.schema = new GQLSchemaBuilder().build(metaModel, getByIdDataFetcher, listDataFetcher,
+		this.schema = new GQLSchemaBuilder().build(schemaConfig, metaModel, getByIdDataFetcher, listDataFetcher,
 				saveDataFetcher, deleteDataFetcher, customMethodDataFetcher, propertyDataFetchers);
 		this.graphql = GraphQL.newGraphQL(schema).build();
 	}

@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.apache.commons.lang3.StringUtils;
 
 import com.daikit.generics.utils.GenericsUtils;
+import com.daikit.graphql.config.GQLSchemaConfig;
 import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
 import com.daikit.graphql.dynamicattribute.IGQLAbstractDynamicAttribute;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeGetter;
@@ -20,7 +21,6 @@ import com.daikit.graphql.meta.attribute.GQLAttributeScalarMetaData;
 import com.daikit.graphql.meta.custommethod.GQLAbstractMethodMetaData;
 import com.daikit.graphql.meta.entity.GQLEntityMetaData;
 import com.daikit.graphql.meta.entity.GQLEnumMetaData;
-import com.daikit.graphql.utils.GQLScalarUtils;
 import com.daikit.graphql.utils.Message;
 
 /**
@@ -30,6 +30,24 @@ import com.daikit.graphql.utils.Message;
  * @author Thibaut Caselli
  */
 public class GQLDynamicAttributeMetaDataBuilder extends GQLAbstractMetaDataBuilder {
+
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+	// CONSTRUCTORS
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+	/**
+	 * Constructor
+	 *
+	 * @param schemaConfig
+	 *            the {@link GQLSchemaConfig}
+	 */
+	public GQLDynamicAttributeMetaDataBuilder(GQLSchemaConfig schemaConfig) {
+		super(schemaConfig);
+	}
+
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+	// PUBLIC METHODS
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
 	 * Build dynamic attribute meta data from its
@@ -77,10 +95,10 @@ public class GQLDynamicAttributeMetaDataBuilder extends GQLAbstractMetaDataBuild
 
 		final GQLAbstractAttributeMetaData attributeMetaData;
 		// Create attribute
-		if (GQLScalarUtils.isScalarType(attributeRawClass)) {
+		if (getConfig().isScalarType(attributeRawClass)) {
 			attributeMetaData = new GQLAttributeScalarMetaData();
 			((GQLAttributeScalarMetaData) attributeMetaData)
-					.setScalarType(GQLScalarUtils.getScalarTypeFromClass(attributeRawClass).get());
+					.setScalarType(getConfig().getScalarTypeCodeFromClass(attributeRawClass).get());
 		} else if (isEnum(enumMetaDatas, attributeRawClass)) {
 			attributeMetaData = new GQLAttributeEnumMetaData();
 			((GQLAttributeEnumMetaData) attributeMetaData).setEnumClass((Class<? extends Enum<?>>) attributeRawClass);
@@ -90,10 +108,10 @@ public class GQLDynamicAttributeMetaDataBuilder extends GQLAbstractMetaDataBuild
 		} else if (Collection.class.isAssignableFrom(attributeRawClass)) {
 			final Class<?> foreignClass = GenericsUtils.getTypeArgumentsAsClasses(attributeType, Collection.class)
 					.get(0);
-			if (GQLScalarUtils.isScalarType(foreignClass)) {
+			if (getConfig().isScalarType(foreignClass)) {
 				attributeMetaData = new GQLAttributeListScalarMetaData();
 				((GQLAttributeListScalarMetaData) attributeMetaData)
-						.setScalarType(GQLScalarUtils.getScalarTypeFromClass(foreignClass).get());
+						.setScalarType(getConfig().getScalarTypeCodeFromClass(foreignClass).get());
 			} else if (isEnum(enumMetaDatas, foreignClass)) {
 				attributeMetaData = new GQLAttributeListEnumMetaData();
 				((GQLAttributeListEnumMetaData) attributeMetaData).setEnumClass(foreignClass);

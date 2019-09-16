@@ -6,10 +6,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
+import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.builder.custommethod.GQLCustomMethodBuilder;
-import com.daikit.graphql.constants.GQLSchemaConstants;
 import com.daikit.graphql.data.output.GQLListLoadResult;
 import com.daikit.graphql.meta.GQLMetaModel;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
@@ -72,31 +71,28 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 	 *            the {@link DataFetcher} for custom methods
 	 * @return the created {@link GraphQLObjectType}
 	 */
-	public GraphQLObjectType buildQueryType(final GQLMetaModel metaModel,
-			final DataFetcher<?> getByIdDataFetcher, final DataFetcher<GQLListLoadResult> listDataFetcher,
-			final DataFetcher<?> customMethodsDataFetcher) {
+	public GraphQLObjectType buildQueryType(final GQLMetaModel metaModel, final DataFetcher<?> getByIdDataFetcher,
+			final DataFetcher<GQLListLoadResult> listDataFetcher, final DataFetcher<?> customMethodsDataFetcher) {
 		logger.debug("START building query types...");
 
 		final GraphQLObjectType.Builder builder = GraphQLObjectType.newObject();
-		builder.name(GQLSchemaConstants.QUERY_TYPE);
+		builder.name(getConfig().getQueryTypeName());
 		builder.description("Query type from meta model");
 
 		final List<GraphQLFieldDefinition> getByIdFieldDefinitions = new ArrayList<>();
 		final List<GraphQLFieldDefinition> getAllFieldDefinitions = new ArrayList<>();
 
 		logger.debug("Build query types for interfaces...");
-		metaModel.getNonEmbeddedInterfaces().stream().filter(infos -> infos.getEntity().isReadable())
-				.forEach(infos -> {
-					getByIdFieldDefinitions.add(buildGetSingleQueryFieldDefinitions(infos, true));
-					getAllFieldDefinitions.add(buildGetAllQueryFieldDefinitions(infos, true));
-				});
+		metaModel.getNonEmbeddedInterfaces().stream().filter(infos -> infos.getEntity().isReadable()).forEach(infos -> {
+			getByIdFieldDefinitions.add(buildGetSingleQueryFieldDefinitions(infos, true));
+			getAllFieldDefinitions.add(buildGetAllQueryFieldDefinitions(infos, true));
+		});
 
 		logger.debug("Build query types for entities...");
-		metaModel.getNonEmbeddedConcretes().stream().filter(infos -> infos.getEntity().isReadable())
-				.forEach(infos -> {
-					getByIdFieldDefinitions.add(buildGetSingleQueryFieldDefinitions(infos, false));
-					getAllFieldDefinitions.add(buildGetAllQueryFieldDefinitions(infos, false));
-				});
+		metaModel.getNonEmbeddedConcretes().stream().filter(infos -> infos.getEntity().isReadable()).forEach(infos -> {
+			getByIdFieldDefinitions.add(buildGetSingleQueryFieldDefinitions(infos, false));
+			getAllFieldDefinitions.add(buildGetAllQueryFieldDefinitions(infos, false));
+		});
 
 		builder.fields(getByIdFieldDefinitions);
 		builder.fields(getAllFieldDefinitions);
@@ -142,7 +138,7 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 						infos.getEntity().getName()));
 		// Query for single entity
 		final GraphQLFieldDefinition.Builder builder = GraphQLFieldDefinition.newFieldDefinition();
-		builder.name(GQLSchemaConstants.QUERY_GET_SINGLE_PREFIX + infos.getEntity().getName());
+		builder.name(getConfig().getQueryGetByIdPrefix() + infos.getEntity().getName());
 		builder.description(
 				(isInterface ? "Interface" : "Entity") + " single result query for [" + infos.getEntity().getName()
 						+ "]. This method only accepts the mandatory [id] parameter and returns a single result.");
@@ -159,11 +155,11 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 				infos.getEntity().getName());
 		// Query for list of entities
 		final GraphQLFieldDefinition.Builder builder = GraphQLFieldDefinition.newFieldDefinition();
-		builder.name(GQLSchemaConstants.QUERY_GET_LIST_PREFIX + infos.getEntity().getName());
+		builder.name(getConfig().getQueryGetListPrefix() + infos.getEntity().getName());
 		builder.description(
 				(isInterface ? "Interface" : "Entity") + " listing query for [" + infos.getEntity().getName()
 						+ "]. This method accepts several filtering arguments and returns a list load result. Give a ["
-						+ GQLSchemaConstants.PAGING + "] argument if you need paging.");
+						+ getConfig().getQueryGetListPagingAttributeName() + "] argument if you need paging.");
 		builder.type(buildListResultWrapperType(infos, isInterface));
 		builder.arguments(buildListQueryArguments(infos));
 		return builder.build();
@@ -180,7 +176,7 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 
 	private GraphQLArgument buildPagingQueryArgument() {
 		final GraphQLArgument.Builder builder = GraphQLArgument.newArgument();
-		builder.name(GQLSchemaConstants.PAGING);
+		builder.name(getConfig().getQueryGetListPagingAttributeName());
 		builder.type(getCache().getPagingInputObjectType());
 		return builder.build();
 	}
@@ -197,7 +193,7 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 
 	private GraphQLArgument buildOrderByQueryArgument() {
 		final GraphQLArgument.Builder builder = GraphQLArgument.newArgument();
-		builder.name(GQLSchemaConstants.ORDER_BY);
+		builder.name(getConfig().getQueryGetListFilterAttributeOrderByName());
 		builder.type(new GraphQLList(getCache().getOrderByInputObjectType()));
 		return builder.build();
 	}
@@ -222,7 +218,7 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 
 	private GraphQLInputObjectType buildQueryFilterFieldsObjectType(final GQLAbstractEntityMetaDataInfos infos) {
 		final GraphQLInputObjectType.Builder builder = GraphQLInputObjectType.newInputObject();
-		builder.name(infos.getEntity().getName() + GQLSchemaConstants.FILTER_SUFFIX);
+		builder.name(infos.getEntity().getName() + getConfig().getQueryGetListFilterEntityTypeNameSuffix());
 		builder.description("Query filter fields object type for entity [" + infos.getEntity().getName() + "]");
 		final List<GraphQLInputObjectField> objectFields = new ArrayList<>();
 		// Add fields
@@ -259,7 +255,7 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 			if (((GQLAttributeEntityMetaData) attribute).isEmbedded()) {
 				// Not handled
 			} else {
-				field = buildInputField(name + GQLSchemaConstants.ID_SUFFIX,
+				field = buildInputField(name + getConfig().getAttributeIdSuffix(),
 						"Filter [id] of [" + attribute.getName() + "]", Scalars.GraphQLID);
 				// TODO add operator
 			}
@@ -281,14 +277,15 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 	private GraphQLObjectType buildListResultWrapperType(final GQLAbstractEntityMetaDataInfos infos,
 			final boolean isInterface) {
 		final GraphQLObjectType.Builder builder = GraphQLObjectType.newObject();
-		builder.name(infos.getEntity().getName() + GQLSchemaConstants.LOAD_RESULT_SUFFIX);
+		builder.name(infos.getEntity().getName() + getConfig().getQueryGetListOutputTypeNameSuffix());
 		builder.description("Result list wrapper for [" + infos.getEntity().getName()
-				+ "]. This object will contain list load result in [" + GQLSchemaConstants.RESULT_DATA
+				+ "]. This object will contain list load result in ["
+				+ getConfig().getQueryGetListAttributeOutputDataName()
 				+ "] property and also metadata about the query. (paging, sorting...)");
 
 		// Result content field
 		final GraphQLFieldDefinition.Builder contentBuilder = GraphQLFieldDefinition.newFieldDefinition();
-		contentBuilder.name(GQLSchemaConstants.RESULT_DATA);
+		contentBuilder.name(getConfig().getQueryGetListAttributeOutputDataName());
 		contentBuilder.description("The actual results list.");
 		contentBuilder.type(new GraphQLList(isInterface
 				? getCache().getInterfaceType(infos.getEntity().getEntityClass())
@@ -296,13 +293,13 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 		builder.field(contentBuilder.build());
 		// OrderBy field
 		final GraphQLFieldDefinition.Builder orderByBuilder = GraphQLFieldDefinition.newFieldDefinition();
-		orderByBuilder.name(GQLSchemaConstants.ORDER_BY);
+		orderByBuilder.name(getConfig().getQueryGetListFilterAttributeOrderByName());
 		orderByBuilder.description("Sort informations used to sort this query.");
 		orderByBuilder.type(new GraphQLList(getCache().getOrderByOutputObjectType()));
 		builder.field(orderByBuilder.build());
 		// Paging field
 		final GraphQLFieldDefinition.Builder pagingBuilder = GraphQLFieldDefinition.newFieldDefinition();
-		pagingBuilder.name(GQLSchemaConstants.PAGING);
+		pagingBuilder.name(getConfig().getQueryGetListPagingAttributeName());
 		pagingBuilder.description("Paging informations used for this query.");
 		pagingBuilder.type(getCache().getPagingOutputObjectType());
 		builder.field(pagingBuilder.build());

@@ -11,7 +11,7 @@ import com.daikit.graphql.enums.GQLScalarTypeEnum;
  */
 public class GQLMethodArgumentListScalarMetaData extends GQLAbstractMethodArgumentMetaData {
 
-	private GQLScalarTypeEnum scalarType;
+	private String scalarTypeCode;
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -31,12 +31,27 @@ public class GQLMethodArgumentListScalarMetaData extends GQLAbstractMethodArgume
 	 * @param name
 	 *            the name for the method argument. This name will be used for
 	 *            building GraphQL schema query or mutation for this method
-	 * @param scalarType
+	 * @param scalarTypeCode
 	 *            the scalar type
+	 */
+	public GQLMethodArgumentListScalarMetaData(String name, String scalarTypeCode) {
+		super(name);
+		this.scalarTypeCode = scalarTypeCode;
+	}
+
+	/**
+	 * Constructor passing name and scalar type and keeping default values for
+	 * other attributes.
+	 *
+	 * @param name
+	 *            the name for the method argument. This name will be used for
+	 *            building GraphQL schema query or mutation for this method
+	 * @param scalarType
+	 *            the scalar type {@link GQLScalarTypeEnum}
 	 */
 	public GQLMethodArgumentListScalarMetaData(String name, GQLScalarTypeEnum scalarType) {
 		super(name);
-		this.scalarType = scalarType;
+		this.scalarTypeCode = scalarType.toString();
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -45,7 +60,7 @@ public class GQLMethodArgumentListScalarMetaData extends GQLAbstractMethodArgume
 
 	@Override
 	protected void appendToString(final StringBuilder stringBuilder) {
-		stringBuilder.append("{METHOD-ARGUMENT-LIST-SCALAR(").append(scalarType == null ? "" : scalarType.name())
+		stringBuilder.append("{METHOD-ARGUMENT-LIST-SCALAR(").append(scalarTypeCode == null ? "" : scalarTypeCode)
 				.append(")}");
 		super.appendToString(stringBuilder);
 	}
@@ -57,21 +72,21 @@ public class GQLMethodArgumentListScalarMetaData extends GQLAbstractMethodArgume
 	/**
 	 * Get the scalar type
 	 *
-	 * @return the scalarType
+	 * @return the scalarTypeCode
 	 */
-	public GQLScalarTypeEnum getScalarType() {
-		return scalarType;
+	public String getScalarType() {
+		return scalarTypeCode;
 	}
 
 	/**
 	 * Set the scalar type
 	 *
-	 * @param scalarType
-	 *            the scalarType to set
+	 * @param scalarTypeCode
+	 *            the scalarTypeCode to set
 	 * @return this instance
 	 */
-	public GQLMethodArgumentListScalarMetaData setScalarType(final GQLScalarTypeEnum scalarType) {
-		this.scalarType = scalarType;
+	public GQLMethodArgumentListScalarMetaData setScalarType(final String scalarTypeCode) {
+		this.scalarTypeCode = scalarTypeCode;
 		return this;
 	}
 

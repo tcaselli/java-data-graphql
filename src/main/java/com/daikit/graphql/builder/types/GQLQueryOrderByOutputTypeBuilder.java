@@ -3,7 +3,6 @@ package com.daikit.graphql.builder.types;
 import org.apache.commons.lang3.StringUtils;
 
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
-import com.daikit.graphql.constants.GQLSchemaConstants;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLFieldDefinition;
@@ -48,17 +47,18 @@ public class GQLQueryOrderByOutputTypeBuilder extends GQLAbstractTypesBuilder {
 
 	private GraphQLObjectType buildOrderByOutputObjectType() {
 		final GraphQLObjectType.Builder builder = GraphQLObjectType.newObject();
-		builder.name(StringUtils.capitalize(GQLSchemaConstants.ORDER_BY) + GQLSchemaConstants.OUTPUT_OBJECT_SUFFIX);
+		builder.name(StringUtils.capitalize(getConfig().getQueryGetListFilterAttributeOrderByName())
+				+ getConfig().getOutputTypeNameSuffix());
 		builder.description("Sort configuration for returned list of objects.");
 
 		final GraphQLFieldDefinition.Builder attributeFieldBuilder = GraphQLFieldDefinition.newFieldDefinition();
-		attributeFieldBuilder.name(GQLSchemaConstants.ORDER_BY_FIELD);
+		attributeFieldBuilder.name(getConfig().getQueryGetListFilterAttributeOrderByFieldName());
 		attributeFieldBuilder.description("The field in which objects have been ordered.");
 		attributeFieldBuilder.type(Scalars.GraphQLString);
 		builder.field(attributeFieldBuilder.build());
 
 		final GraphQLFieldDefinition.Builder directionFieldBuilder = GraphQLFieldDefinition.newFieldDefinition();
-		directionFieldBuilder.name(GQLSchemaConstants.ORDER_BY_DIRECTION);
+		directionFieldBuilder.name(getConfig().getQueryGetListFilterAttributeOrderByDirectionName());
 		directionFieldBuilder.description("The direction in which objects have been ordered.");
 		directionFieldBuilder.type(getCache().getOrderByDirectionEnumType());
 		builder.field(directionFieldBuilder.build());

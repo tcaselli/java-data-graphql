@@ -1,7 +1,6 @@
 package com.daikit.graphql.builder.types;
 
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
-import com.daikit.graphql.constants.GQLSchemaConstants;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLFieldDefinition;
@@ -46,17 +45,17 @@ public class GQLMutationDeleteResultOutputTypeBuilder extends GQLAbstractTypesBu
 
 	private GraphQLObjectType buildDeleteResultOutputObjectType() {
 		final GraphQLObjectType.Builder builder = GraphQLObjectType.newObject();
-		builder.name(GQLSchemaConstants.DELETE_RESULT_PREFIX + GQLSchemaConstants.OUTPUT_OBJECT_SUFFIX);
+		builder.name(getConfig().getOutputDeleteResultTypeNamePrefix() + getConfig().getOutputTypeNameSuffix());
 		builder.description("Output type for deletion mutation for all entities.");
 
 		final GraphQLFieldDefinition.Builder idFieldBuilder = GraphQLFieldDefinition.newFieldDefinition();
-		idFieldBuilder.name(GQLSchemaConstants.DELETE_RESULT_ID);
+		idFieldBuilder.name(getConfig().getMutationDeleteResultAttributeId());
 		idFieldBuilder.description("The id of the deleted entity.");
 		idFieldBuilder.type(Scalars.GraphQLString);
 		builder.field(idFieldBuilder.build());
 
 		final GraphQLFieldDefinition.Builder typenameFieldBuilder = GraphQLFieldDefinition.newFieldDefinition();
-		typenameFieldBuilder.name(GQLSchemaConstants.DELETE_RESULT_TYPENAME);
+		typenameFieldBuilder.name(getConfig().getMutationDeleteResultAttributeTypename());
 		typenameFieldBuilder.description("The type name of the deleted entity.");
 		typenameFieldBuilder.type(Scalars.GraphQLString);
 		builder.field(typenameFieldBuilder.build());

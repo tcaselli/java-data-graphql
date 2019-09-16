@@ -3,7 +3,6 @@ package com.daikit.graphql.builder.types;
 import org.apache.commons.lang3.StringUtils;
 
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
-import com.daikit.graphql.constants.GQLSchemaConstants;
 
 import graphql.Scalars;
 import graphql.schema.GraphQLFieldDefinition;
@@ -49,26 +48,27 @@ public class GQLQueryPagingOutputTypeBuilder extends GQLAbstractTypesBuilder {
 	// Paging output type
 	private GraphQLObjectType buildPagingOutputObjectType() {
 		final GraphQLObjectType.Builder builder = GraphQLObjectType.newObject();
-		builder.name(StringUtils.capitalize(GQLSchemaConstants.PAGING) + GQLSchemaConstants.OUTPUT_OBJECT_SUFFIX);
+		builder.name(StringUtils.capitalize(getConfig().getQueryGetListPagingAttributeName())
+				+ getConfig().getOutputTypeNameSuffix());
 		builder.description("Paging informations. Only meaningful for paging requests.");
 
 		// Paging limit field
 		final GraphQLFieldDefinition.Builder limitBuilder = GraphQLFieldDefinition.newFieldDefinition();
-		limitBuilder.name(GQLSchemaConstants.PAGING_LIMIT);
+		limitBuilder.name(getConfig().getQueryGetListPagingAttributeLimitName());
 		limitBuilder.description(
 				"How many results this query load contains at maximum. This is equal to the limit passed as parameter.");
 		limitBuilder.type(Scalars.GraphQLInt);
 		builder.field(limitBuilder.build());
 		// Paging offset field
 		final GraphQLFieldDefinition.Builder offsetBuilder = GraphQLFieldDefinition.newFieldDefinition();
-		offsetBuilder.name(GQLSchemaConstants.PAGING_OFFSET);
+		offsetBuilder.name(getConfig().getQueryGetListPagingAttributeOffsetName());
 		offsetBuilder.description(
 				"Offset of the results for this query. This is equal to the offset passed as parameters. This is equal to the offset passed as parameter.");
 		offsetBuilder.type(Scalars.GraphQLInt);
 		builder.field(offsetBuilder.build());
 		// Paging total length field
 		final GraphQLFieldDefinition.Builder totalLengthBuilder = GraphQLFieldDefinition.newFieldDefinition();
-		totalLengthBuilder.name(GQLSchemaConstants.PAGING_TOTAL_LENGTH);
+		totalLengthBuilder.name(getConfig().getQueryGetListPagingAttributeTotalLengthName());
 		totalLengthBuilder.description("Total number of results on the database for this query.");
 		totalLengthBuilder.type(Scalars.GraphQLLong);
 		builder.field(totalLengthBuilder.build());
