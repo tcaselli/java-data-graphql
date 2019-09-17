@@ -23,7 +23,7 @@ public class Assert {
 	 *            the object type
 	 * @return the input object
 	 */
-	public static <T> T assertNotNull(T object, String format, Object... args) {
+	public static <T> T assertNotNull(final T object, final String format, final Object... args) {
 		if (object != null) {
 			return object;
 		}
@@ -43,7 +43,7 @@ public class Assert {
 	 *            the object type
 	 * @return the input object
 	 */
-	public static <T> T assertNotNullWithNPE(T object, String format, Object... args) {
+	public static <T> T assertNotNullWithNPE(final T object, final String format, final Object... args) {
 		if (object != null) {
 			return object;
 		}
@@ -59,7 +59,7 @@ public class Assert {
 	 *            the object type
 	 * @return the input object
 	 */
-	public static <T> T assertNotNull(T object) {
+	public static <T> T assertNotNull(final T object) {
 		if (object != null) {
 			return object;
 		}
@@ -78,7 +78,7 @@ public class Assert {
 	 * @param <T>
 	 *            the object type
 	 */
-	public static <T> void assertNull(T object, String format, Object... args) {
+	public static <T> void assertNull(final T object, final String format, final Object... args) {
 		if (object == null) {
 			return;
 		}
@@ -95,7 +95,7 @@ public class Assert {
 	 * @param args
 	 *            arguments for the message
 	 */
-	public static void assertTrue(boolean condition, String format, Object... args) {
+	public static void assertTrue(final boolean condition, final String format, final Object... args) {
 		if (condition) {
 			return;
 		}

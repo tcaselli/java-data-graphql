@@ -187,7 +187,7 @@ public class GQLSchemaConfig {
 	 *            the scalar type code
 	 * @return the {@link Optional} found {@link GraphQLScalarType}
 	 */
-	public Optional<GraphQLScalarType> getScalarType(String scalarTypeCode) {
+	public Optional<GraphQLScalarType> getScalarType(final String scalarTypeCode) {
 		return Optional.ofNullable(scalars.get(scalarTypeCode));
 	}
 
@@ -206,7 +206,7 @@ public class GQLSchemaConfig {
 	 * @param queryTypeName
 	 *            the queryTypeName to set
 	 */
-	public void setQueryTypeName(String queryTypeName) {
+	public void setQueryTypeName(final String queryTypeName) {
 		this.queryTypeName = queryTypeName;
 	}
 
@@ -221,7 +221,7 @@ public class GQLSchemaConfig {
 	 * @param mutationTypeName
 	 *            the mutationTypeName to set
 	 */
-	public void setMutationTypeName(String mutationTypeName) {
+	public void setMutationTypeName(final String mutationTypeName) {
 		this.mutationTypeName = mutationTypeName;
 	}
 
@@ -236,7 +236,7 @@ public class GQLSchemaConfig {
 	 * @param inputTypeNameSuffix
 	 *            the inputTypeNameSuffix to set
 	 */
-	public void setInputTypeNameSuffix(String inputTypeNameSuffix) {
+	public void setInputTypeNameSuffix(final String inputTypeNameSuffix) {
 		this.inputTypeNameSuffix = inputTypeNameSuffix;
 	}
 
@@ -251,7 +251,7 @@ public class GQLSchemaConfig {
 	 * @param outputTypeNameSuffix
 	 *            the outputTypeNameSuffix to set
 	 */
-	public void setOutputTypeNameSuffix(String outputTypeNameSuffix) {
+	public void setOutputTypeNameSuffix(final String outputTypeNameSuffix) {
 		this.outputTypeNameSuffix = outputTypeNameSuffix;
 	}
 
@@ -266,7 +266,7 @@ public class GQLSchemaConfig {
 	 * @param queryGetListOutputTypeNameSuffix
 	 *            the queryGetListOutputTypeNameSuffix to set
 	 */
-	public void setQueryGetListOutputTypeNameSuffix(String queryGetListOutputTypeNameSuffix) {
+	public void setQueryGetListOutputTypeNameSuffix(final String queryGetListOutputTypeNameSuffix) {
 		this.queryGetListOutputTypeNameSuffix = queryGetListOutputTypeNameSuffix;
 	}
 
@@ -281,7 +281,7 @@ public class GQLSchemaConfig {
 	 * @param outputDeleteResultTypeNamePrefix
 	 *            the outputDeleteResultTypeNamePrefix to set
 	 */
-	public void setOutputDeleteResultTypeNamePrefix(String outputDeleteResultTypeNamePrefix) {
+	public void setOutputDeleteResultTypeNamePrefix(final String outputDeleteResultTypeNamePrefix) {
 		this.outputDeleteResultTypeNamePrefix = outputDeleteResultTypeNamePrefix;
 	}
 
@@ -296,7 +296,7 @@ public class GQLSchemaConfig {
 	 * @param queryGetListPrefix
 	 *            the queryGetListPrefix to set
 	 */
-	public void setQueryGetListPrefix(String queryGetListPrefix) {
+	public void setQueryGetListPrefix(final String queryGetListPrefix) {
 		this.queryGetListPrefix = queryGetListPrefix;
 	}
 
@@ -311,7 +311,7 @@ public class GQLSchemaConfig {
 	 * @param queryGetByIdPrefix
 	 *            the queryGetByIdPrefix to set
 	 */
-	public void setQueryGetByIdPrefix(String queryGetByIdPrefix) {
+	public void setQueryGetByIdPrefix(final String queryGetByIdPrefix) {
 		this.queryGetByIdPrefix = queryGetByIdPrefix;
 	}
 
@@ -326,7 +326,7 @@ public class GQLSchemaConfig {
 	 * @param mutationSavePrefix
 	 *            the mutationSavePrefix to set
 	 */
-	public void setMutationSavePrefix(String mutationSavePrefix) {
+	public void setMutationSavePrefix(final String mutationSavePrefix) {
 		this.mutationSavePrefix = mutationSavePrefix;
 	}
 
@@ -341,7 +341,7 @@ public class GQLSchemaConfig {
 	 * @param mutationDeletePrefix
 	 *            the mutationDeletePrefix to set
 	 */
-	public void setMutationDeletePrefix(String mutationDeletePrefix) {
+	public void setMutationDeletePrefix(final String mutationDeletePrefix) {
 		this.mutationDeletePrefix = mutationDeletePrefix;
 	}
 
@@ -356,7 +356,7 @@ public class GQLSchemaConfig {
 	 * @param attributeIdSuffix
 	 *            the attributeIdSuffix to set
 	 */
-	public void setAttributeIdSuffix(String attributeIdSuffix) {
+	public void setAttributeIdSuffix(final String attributeIdSuffix) {
 		this.attributeIdSuffix = attributeIdSuffix;
 	}
 
@@ -371,7 +371,7 @@ public class GQLSchemaConfig {
 	 * @param attributePluralSuffix
 	 *            the attributePluralSuffix to set
 	 */
-	public void setAttributePluralSuffix(String attributePluralSuffix) {
+	public void setAttributePluralSuffix(final String attributePluralSuffix) {
 		this.attributePluralSuffix = attributePluralSuffix;
 	}
 
@@ -386,7 +386,7 @@ public class GQLSchemaConfig {
 	 * @param attributeIdPluralSuffix
 	 *            the attributeIdPluralSuffix to set
 	 */
-	public void setAttributeIdPluralSuffix(String attributeIdPluralSuffix) {
+	public void setAttributeIdPluralSuffix(final String attributeIdPluralSuffix) {
 		this.attributeIdPluralSuffix = attributeIdPluralSuffix;
 	}
 
@@ -401,7 +401,7 @@ public class GQLSchemaConfig {
 	 * @param mutationAttributeInputDataName
 	 *            the mutationAttributeInputDataName to set
 	 */
-	public void setMutationAttributeInputDataName(String mutationAttributeInputDataName) {
+	public void setMutationAttributeInputDataName(final String mutationAttributeInputDataName) {
 		this.mutationAttributeInputDataName = mutationAttributeInputDataName;
 	}
 
@@ -416,7 +416,7 @@ public class GQLSchemaConfig {
 	 * @param queryGetListAttributeOutputDataName
 	 *            the queryGetListAttributeOutputDataName to set
 	 */
-	public void setQueryGetListAttributeOutputDataName(String queryGetListAttributeOutputDataName) {
+	public void setQueryGetListAttributeOutputDataName(final String queryGetListAttributeOutputDataName) {
 		this.queryGetListAttributeOutputDataName = queryGetListAttributeOutputDataName;
 	}
 
@@ -433,7 +433,7 @@ public class GQLSchemaConfig {
 	 *            set
 	 */
 	public void setQueryGetListFilterAttributeOrderByDirectionDefaultValue(
-			GQLOrderByDirectionEnum queryGetListFilterAttributeOrderByDirectionDefaultValue) {
+			final GQLOrderByDirectionEnum queryGetListFilterAttributeOrderByDirectionDefaultValue) {
 		this.queryGetListFilterAttributeOrderByDirectionDefaultValue = queryGetListFilterAttributeOrderByDirectionDefaultValue;
 	}
 
@@ -448,7 +448,7 @@ public class GQLSchemaConfig {
 	 * @param mutationDeleteResultAttributeId
 	 *            the mutationDeleteResultAttributeId to set
 	 */
-	public void setMutationDeleteResultAttributeId(String mutationDeleteResultAttributeId) {
+	public void setMutationDeleteResultAttributeId(final String mutationDeleteResultAttributeId) {
 		this.mutationDeleteResultAttributeId = mutationDeleteResultAttributeId;
 	}
 
@@ -463,7 +463,7 @@ public class GQLSchemaConfig {
 	 * @param mutationDeleteResultAttributeTypename
 	 *            the mutationDeleteResultAttributeTypename to set
 	 */
-	public void setMutationDeleteResultAttributeTypename(String mutationDeleteResultAttributeTypename) {
+	public void setMutationDeleteResultAttributeTypename(final String mutationDeleteResultAttributeTypename) {
 		this.mutationDeleteResultAttributeTypename = mutationDeleteResultAttributeTypename;
 	}
 
@@ -478,7 +478,7 @@ public class GQLSchemaConfig {
 	 * @param queryGetListFilterAttributeName
 	 *            the queryGetListFilterAttributeName to set
 	 */
-	public void setQueryGetListFilterAttributeName(String queryGetListFilterAttributeName) {
+	public void setQueryGetListFilterAttributeName(final String queryGetListFilterAttributeName) {
 		this.queryGetListFilterAttributeName = queryGetListFilterAttributeName;
 	}
 
@@ -494,7 +494,7 @@ public class GQLSchemaConfig {
 	 *            the queryGetListFilterAttributeOperatorTypeNamePrefix to set
 	 */
 	public void setQueryGetListFilterAttributeOperatorTypeNamePrefix(
-			String queryGetListFilterAttributeOperatorTypeNamePrefix) {
+			final String queryGetListFilterAttributeOperatorTypeNamePrefix) {
 		this.queryGetListFilterAttributeOperatorTypeNamePrefix = queryGetListFilterAttributeOperatorTypeNamePrefix;
 	}
 
@@ -509,7 +509,7 @@ public class GQLSchemaConfig {
 	 * @param queryGetListFilterAttributeOperatorName
 	 *            the queryGetListFilterAttributeOperatorName to set
 	 */
-	public void setQueryGetListFilterAttributeOperatorName(String queryGetListFilterAttributeOperatorName) {
+	public void setQueryGetListFilterAttributeOperatorName(final String queryGetListFilterAttributeOperatorName) {
 		this.queryGetListFilterAttributeOperatorName = queryGetListFilterAttributeOperatorName;
 	}
 
@@ -524,7 +524,7 @@ public class GQLSchemaConfig {
 	 * @param queryGetListFilterAttributeValueName
 	 *            the queryGetListFilterAttributeValueName to set
 	 */
-	public void setQueryGetListFilterAttributeValueName(String queryGetListFilterAttributeValueName) {
+	public void setQueryGetListFilterAttributeValueName(final String queryGetListFilterAttributeValueName) {
 		this.queryGetListFilterAttributeValueName = queryGetListFilterAttributeValueName;
 	}
 
@@ -539,7 +539,7 @@ public class GQLSchemaConfig {
 	 * @param queryGetListFilterAttributeOrderByName
 	 *            the queryGetListFilterAttributeOrderByName to set
 	 */
-	public void setQueryGetListFilterAttributeOrderByName(String queryGetListFilterAttributeOrderByName) {
+	public void setQueryGetListFilterAttributeOrderByName(final String queryGetListFilterAttributeOrderByName) {
 		this.queryGetListFilterAttributeOrderByName = queryGetListFilterAttributeOrderByName;
 	}
 
@@ -554,7 +554,7 @@ public class GQLSchemaConfig {
 	 * @param queryGetListFilterAttributeOrderByFieldName
 	 *            the queryGetListFilterAttributeOrderByFieldName to set
 	 */
-	public void setQueryGetListFilterAttributeOrderByFieldName(String queryGetListFilterAttributeOrderByFieldName) {
+	public void setQueryGetListFilterAttributeOrderByFieldName(final String queryGetListFilterAttributeOrderByFieldName) {
 		this.queryGetListFilterAttributeOrderByFieldName = queryGetListFilterAttributeOrderByFieldName;
 	}
 
@@ -570,7 +570,7 @@ public class GQLSchemaConfig {
 	 *            the queryGetListFilterAttributeOrderByDirectionName to set
 	 */
 	public void setQueryGetListFilterAttributeOrderByDirectionName(
-			String queryGetListFilterAttributeOrderByDirectionName) {
+			final String queryGetListFilterAttributeOrderByDirectionName) {
 		this.queryGetListFilterAttributeOrderByDirectionName = queryGetListFilterAttributeOrderByDirectionName;
 	}
 
@@ -585,7 +585,7 @@ public class GQLSchemaConfig {
 	 * @param queryGetListPagingAttributeName
 	 *            the queryGetListPagingAttributeName to set
 	 */
-	public void setQueryGetListPagingAttributeName(String queryGetListPagingAttributeName) {
+	public void setQueryGetListPagingAttributeName(final String queryGetListPagingAttributeName) {
 		this.queryGetListPagingAttributeName = queryGetListPagingAttributeName;
 	}
 
@@ -600,7 +600,7 @@ public class GQLSchemaConfig {
 	 * @param queryGetListPagingAttributeTotalLengthName
 	 *            the queryGetListPagingAttributeTotalLengthName to set
 	 */
-	public void setQueryGetListPagingAttributeTotalLengthName(String queryGetListPagingAttributeTotalLengthName) {
+	public void setQueryGetListPagingAttributeTotalLengthName(final String queryGetListPagingAttributeTotalLengthName) {
 		this.queryGetListPagingAttributeTotalLengthName = queryGetListPagingAttributeTotalLengthName;
 	}
 
@@ -615,7 +615,7 @@ public class GQLSchemaConfig {
 	 * @param queryGetListPagingAttributeOffsetName
 	 *            the queryGetListPagingAttributeOffsetName to set
 	 */
-	public void setQueryGetListPagingAttributeOffsetName(String queryGetListPagingAttributeOffsetName) {
+	public void setQueryGetListPagingAttributeOffsetName(final String queryGetListPagingAttributeOffsetName) {
 		this.queryGetListPagingAttributeOffsetName = queryGetListPagingAttributeOffsetName;
 	}
 
@@ -630,7 +630,7 @@ public class GQLSchemaConfig {
 	 * @param queryGetListPagingAttributeLimitName
 	 *            the queryGetListPagingAttributeLimitName to set
 	 */
-	public void setQueryGetListPagingAttributeLimitName(String queryGetListPagingAttributeLimitName) {
+	public void setQueryGetListPagingAttributeLimitName(final String queryGetListPagingAttributeLimitName) {
 		this.queryGetListPagingAttributeLimitName = queryGetListPagingAttributeLimitName;
 	}
 
@@ -645,7 +645,7 @@ public class GQLSchemaConfig {
 	 * @param queryGetListPagingAttributeLimitDefaultValue
 	 *            the queryGetListPagingAttributeLimitDefaultValue to set
 	 */
-	public void setQueryGetListPagingAttributeLimitDefaultValue(int queryGetListPagingAttributeLimitDefaultValue) {
+	public void setQueryGetListPagingAttributeLimitDefaultValue(final int queryGetListPagingAttributeLimitDefaultValue) {
 		this.queryGetListPagingAttributeLimitDefaultValue = queryGetListPagingAttributeLimitDefaultValue;
 	}
 
@@ -660,7 +660,7 @@ public class GQLSchemaConfig {
 	 * @param queryGetListFilterEntityTypeNameSuffix
 	 *            the queryGetListFilterEntityTypeNameSuffix to set
 	 */
-	public void setQueryGetListFilterEntityTypeNameSuffix(String queryGetListFilterEntityTypeNameSuffix) {
+	public void setQueryGetListFilterEntityTypeNameSuffix(final String queryGetListFilterEntityTypeNameSuffix) {
 		this.queryGetListFilterEntityTypeNameSuffix = queryGetListFilterEntityTypeNameSuffix;
 	}
 
@@ -675,7 +675,7 @@ public class GQLSchemaConfig {
 	 * @param concreteEmbeddedExtendingTypeNamePrefix
 	 *            the concreteEmbeddedExtendingTypeNamePrefix to set
 	 */
-	public void setConcreteEmbeddedExtendingTypeNamePrefix(String concreteEmbeddedExtendingTypeNamePrefix) {
+	public void setConcreteEmbeddedExtendingTypeNamePrefix(final String concreteEmbeddedExtendingTypeNamePrefix) {
 		this.concreteEmbeddedExtendingTypeNamePrefix = concreteEmbeddedExtendingTypeNamePrefix;
 	}
 
@@ -690,7 +690,7 @@ public class GQLSchemaConfig {
 	 * @param attributeIdName
 	 *            the attributeIdName to set
 	 */
-	public void setAttributeIdName(String attributeIdName) {
+	public void setAttributeIdName(final String attributeIdName) {
 		this.attributeIdName = attributeIdName;
 	}
 

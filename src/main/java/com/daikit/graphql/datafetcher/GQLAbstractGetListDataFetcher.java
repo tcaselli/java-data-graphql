@@ -190,7 +190,7 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 	 * @param dynamicAttributeRegistry
 	 *            the dynamicAttributeRegistry to set
 	 */
-	public void setDynamicAttributeRegistry(GQLDynamicAttributeRegistry dynamicAttributeRegistry) {
+	public void setDynamicAttributeRegistry(final GQLDynamicAttributeRegistry dynamicAttributeRegistry) {
 		this.dynamicAttributeRegistry = dynamicAttributeRegistry;
 	}
 }

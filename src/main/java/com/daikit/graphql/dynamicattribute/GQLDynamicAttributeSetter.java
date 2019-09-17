@@ -32,7 +32,7 @@ public abstract class GQLDynamicAttributeSetter<ENTITY_TYPE, SETTER_ATTRIBUTE_TY
 	 * @param name
 	 *            the property name that will be available in GraphQL schema
 	 */
-	public GQLDynamicAttributeSetter(String name) {
+	public GQLDynamicAttributeSetter(final String name) {
 		super(name);
 	}
 

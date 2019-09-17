@@ -23,7 +23,7 @@ public class IntrospectionSchema {
 	 * @param types
 	 *            the types to set
 	 */
-	public void setTypes(List<IntrospectionFullType> types) {
+	public void setTypes(final List<IntrospectionFullType> types) {
 		this.types = types;
 	}
 }

@@ -51,7 +51,7 @@ public abstract class GQLCustomMethod3Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE, ARGUMENT
 	 * @param arg3Name
 	 *            third argument name
 	 */
-	public GQLCustomMethod3Arg(String methodName, boolean mutation, String arg1Name, String arg2Name, String arg3Name) {
+	public GQLCustomMethod3Arg(final String methodName, final boolean mutation, final String arg1Name, final String arg2Name, final String arg3Name) {
 		super(methodName, mutation, arg1Name, arg2Name, arg3Name);
 	}
 

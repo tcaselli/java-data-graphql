@@ -33,7 +33,7 @@ public class GQLAttributeScalarMetaData extends GQLAbstractAttributeMetaData {
 	 * @param scalarTypeCode
 	 *            the scalar type code
 	 */
-	public GQLAttributeScalarMetaData(String name, String scalarTypeCode) {
+	public GQLAttributeScalarMetaData(final String name, final String scalarTypeCode) {
 		super(name);
 		this.scalarTypeCode = scalarTypeCode;
 	}
@@ -49,7 +49,7 @@ public class GQLAttributeScalarMetaData extends GQLAbstractAttributeMetaData {
 	 * @param scalarType
 	 *            the scalar type {@link GQLScalarTypeEnum}
 	 */
-	public GQLAttributeScalarMetaData(String name, GQLScalarTypeEnum scalarType) {
+	public GQLAttributeScalarMetaData(final String name, final GQLScalarTypeEnum scalarType) {
 		super(name);
 		this.scalarTypeCode = scalarType.toString();
 	}

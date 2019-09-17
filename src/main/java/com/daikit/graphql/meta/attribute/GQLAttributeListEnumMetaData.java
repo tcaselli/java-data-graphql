@@ -31,7 +31,7 @@ public class GQLAttributeListEnumMetaData extends GQLAbstractAttributeMetaData {
 	 * @param enumClass
 	 *            the enum class
 	 */
-	public GQLAttributeListEnumMetaData(String name, Class<? extends Enum<?>> enumClass) {
+	public GQLAttributeListEnumMetaData(final String name, final Class<? extends Enum<?>> enumClass) {
 		super(name);
 		this.enumClass = enumClass;
 	}

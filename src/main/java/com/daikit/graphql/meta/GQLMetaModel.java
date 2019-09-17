@@ -170,8 +170,8 @@ public class GQLMetaModel {
 	// PRIVATE INITIALIZATION METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	private void registerDynamicAttributes(Collection<GQLEntityMetaData> entityMetaDatas,
-			Collection<GQLAbstractAttributeMetaData> dynamicAttributes) {
+	private void registerDynamicAttributes(final Collection<GQLEntityMetaData> entityMetaDatas,
+			final Collection<GQLAbstractAttributeMetaData> dynamicAttributes) {
 		for (final GQLAbstractAttributeMetaData dynamicAttribute : dynamicAttributes) {
 			final Class<?> entityType = dynamicAttribute.isDynamicAttributeGetter()
 					? dynamicAttribute.getDynamicAttributeGetter().getEntityType()

@@ -19,7 +19,7 @@ public class IntrospectionInputValue {
 	 * @param name
 	 *            the name to set
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 	/**
@@ -32,7 +32,7 @@ public class IntrospectionInputValue {
 	 * @param description
 	 *            the description to set
 	 */
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 	/**
@@ -45,7 +45,7 @@ public class IntrospectionInputValue {
 	 * @param type
 	 *            the type to set
 	 */
-	public void setType(IntrospectionTypeRef type) {
+	public void setType(final IntrospectionTypeRef type) {
 		this.type = type;
 	}
 	/**
@@ -58,7 +58,7 @@ public class IntrospectionInputValue {
 	 * @param defaultValue
 	 *            the defaultValue to set
 	 */
-	public void setDefaultValue(Object defaultValue) {
+	public void setDefaultValue(final Object defaultValue) {
 		this.defaultValue = defaultValue;
 	}
 }

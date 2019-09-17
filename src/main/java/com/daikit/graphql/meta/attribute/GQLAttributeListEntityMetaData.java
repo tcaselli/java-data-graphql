@@ -33,7 +33,7 @@ public class GQLAttributeListEntityMetaData extends GQLAbstractAttributeMetaData
 	 * @param foreignClass
 	 *            the foreign entity class
 	 */
-	public GQLAttributeListEntityMetaData(String name, Class<?> foreignClass) {
+	public GQLAttributeListEntityMetaData(final String name, final Class<?> foreignClass) {
 		super(name);
 		this.foreignClass = foreignClass;
 	}
@@ -109,7 +109,7 @@ public class GQLAttributeListEntityMetaData extends GQLAbstractAttributeMetaData
 	 *            the embedded to set
 	 * @return this instance
 	 */
-	public GQLAttributeListEntityMetaData setEmbedded(boolean embedded) {
+	public GQLAttributeListEntityMetaData setEmbedded(final boolean embedded) {
 		this.embedded = embedded;
 		return this;
 	}

@@ -20,7 +20,7 @@ public class IntrospectionResult {
 	 * @param data
 	 *            the data to set
 	 */
-	public void setData(IntrospectionData data) {
+	public void setData(final IntrospectionData data) {
 		this.data = data;
 	}
 }

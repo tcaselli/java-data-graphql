@@ -33,7 +33,7 @@ public class GQLMethodListEntityMetaData extends GQLAbstractMethodMetaData {
 	 * @param foreignClass
 	 *            the foreign entity class for method return type
 	 */
-	public GQLMethodListEntityMetaData(GQLAbstractCustomMethod<?> method, Class<?> foreignClass) {
+	public GQLMethodListEntityMetaData(final GQLAbstractCustomMethod<?> method, final Class<?> foreignClass) {
 		super(method);
 		this.foreignClass = foreignClass;
 	}

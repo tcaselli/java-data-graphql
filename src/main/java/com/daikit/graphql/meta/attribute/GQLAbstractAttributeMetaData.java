@@ -39,7 +39,7 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	 *            building GraphQL schema : queries, mutations, descriptions
 	 *            etc.
 	 */
-	public GQLAbstractAttributeMetaData(String name) {
+	public GQLAbstractAttributeMetaData(final String name) {
 		this.name = name;
 	}
 

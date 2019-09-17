@@ -27,7 +27,7 @@ public class Entity1ListLoadResult {
 	 * @param data
 	 *            the data to set
 	 */
-	public void setData(List<Entity1> data) {
+	public void setData(final List<Entity1> data) {
 		this.data = data;
 	}
 	/**
@@ -40,7 +40,7 @@ public class Entity1ListLoadResult {
 	 * @param paging
 	 *            the paging to set
 	 */
-	public void setPaging(GQLPaging paging) {
+	public void setPaging(final GQLPaging paging) {
 		this.paging = paging;
 	}
 	/**

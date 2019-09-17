@@ -19,7 +19,7 @@ public class IntrospectionTypeRef {
 	 * @param kind
 	 *            the kind to set
 	 */
-	public void setKind(IntrospectionTypeKindEnum kind) {
+	public void setKind(final IntrospectionTypeKindEnum kind) {
 		this.kind = kind;
 	}
 	/**
@@ -32,7 +32,7 @@ public class IntrospectionTypeRef {
 	 * @param name
 	 *            the name to set
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 	/**
@@ -45,7 +45,7 @@ public class IntrospectionTypeRef {
 	 * @param ofType
 	 *            the ofType to set
 	 */
-	public void setOfType(IntrospectionTypeRef ofType) {
+	public void setOfType(final IntrospectionTypeRef ofType) {
 		this.ofType = ofType;
 	}
 }

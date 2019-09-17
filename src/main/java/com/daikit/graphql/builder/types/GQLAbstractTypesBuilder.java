@@ -70,8 +70,8 @@ public class GQLAbstractTypesBuilder extends GQLAbstractSchemaSubBuilder {
 		return builder.build();
 	}
 
-	protected void registerIdDataFetcher(GraphQLFieldsContainer fieldsContainer,
-			GraphQLFieldDefinition idFieldDefinition, final List<GQLPropertyDataFetcher<?>> propertiesDataFetchers) {
+	protected void registerIdDataFetcher(final GraphQLFieldsContainer fieldsContainer,
+			final GraphQLFieldDefinition idFieldDefinition, final List<GQLPropertyDataFetcher<?>> propertiesDataFetchers) {
 		if (idFieldDefinition != null) {
 			final Optional<GQLPropertyDataFetcher<?>> dataFetcher = propertiesDataFetchers.stream()
 					.filter(df -> getConfig().getAttributeIdName().equals(df.getGraphQLPropertyName())).findFirst();
@@ -81,8 +81,8 @@ public class GQLAbstractTypesBuilder extends GQLAbstractSchemaSubBuilder {
 		}
 	}
 
-	protected void registerOtherDataFetchers(GraphQLFieldsContainer fieldsContainer,
-			Map<GQLAbstractAttributeMetaData, GraphQLFieldDefinition> fieldDefinitions,
+	protected void registerOtherDataFetchers(final GraphQLFieldsContainer fieldsContainer,
+			final Map<GQLAbstractAttributeMetaData, GraphQLFieldDefinition> fieldDefinitions,
 			final List<GQLPropertyDataFetcher<?>> propertiesDataFetchers) {
 		fieldDefinitions.entrySet().stream().forEach(entry -> {
 			if (entry.getKey().isDynamic()) {

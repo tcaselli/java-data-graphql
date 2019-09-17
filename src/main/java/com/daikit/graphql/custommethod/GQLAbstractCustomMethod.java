@@ -42,7 +42,7 @@ public abstract class GQLAbstractCustomMethod<OUTPUT_TYPE> implements IGQLAbstra
 	 * @param argNames
 	 *            argument names
 	 */
-	public GQLAbstractCustomMethod(String methodName, boolean mutation, String... argNames) {
+	public GQLAbstractCustomMethod(final String methodName, final boolean mutation, final String... argNames) {
 		this.methodName = methodName;
 		this.mutation = mutation;
 		this.argNames = Arrays.asList(argNames);
@@ -64,7 +64,7 @@ public abstract class GQLAbstractCustomMethod<OUTPUT_TYPE> implements IGQLAbstra
 	 *            the argument position
 	 * @return the name of the argument
 	 */
-	public String getArgumentName(int argumentPosition) {
+	public String getArgumentName(final int argumentPosition) {
 		return getArgumentNames().get(argumentPosition);
 	}
 
@@ -75,7 +75,7 @@ public abstract class GQLAbstractCustomMethod<OUTPUT_TYPE> implements IGQLAbstra
 	 *            the argument position
 	 * @return the {@link Type} of the argument
 	 */
-	public Type getArgumentType(int argumentPosition) {
+	public Type getArgumentType(final int argumentPosition) {
 		return getArgumentTypes().get(argumentPosition);
 	}
 
@@ -89,7 +89,7 @@ public abstract class GQLAbstractCustomMethod<OUTPUT_TYPE> implements IGQLAbstra
 	 * @param methodName
 	 *            the methodName to set
 	 */
-	public void setMethodName(String methodName) {
+	public void setMethodName(final String methodName) {
 		this.methodName = methodName;
 	}
 
@@ -110,7 +110,7 @@ public abstract class GQLAbstractCustomMethod<OUTPUT_TYPE> implements IGQLAbstra
 	 * @param mutation
 	 *            the mutation to set
 	 */
-	public void setMutation(boolean mutation) {
+	public void setMutation(final boolean mutation) {
 		this.mutation = mutation;
 	}
 
@@ -141,7 +141,7 @@ public abstract class GQLAbstractCustomMethod<OUTPUT_TYPE> implements IGQLAbstra
 	 * @param argNames
 	 *            the argNames to set
 	 */
-	public void setArgNames(List<String> argNames) {
+	public void setArgNames(final List<String> argNames) {
 		this.argNames = argNames;
 	}
 

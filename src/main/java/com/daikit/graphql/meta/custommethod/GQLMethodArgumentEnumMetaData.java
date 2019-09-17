@@ -30,7 +30,7 @@ public class GQLMethodArgumentEnumMetaData extends GQLAbstractMethodArgumentMeta
 	 * @param enumClass
 	 *            the enumeration class
 	 */
-	public GQLMethodArgumentEnumMetaData(String name, Class<? extends Enum<?>> enumClass) {
+	public GQLMethodArgumentEnumMetaData(final String name, final Class<? extends Enum<?>> enumClass) {
 		super(name);
 		this.enumClass = enumClass;
 	}

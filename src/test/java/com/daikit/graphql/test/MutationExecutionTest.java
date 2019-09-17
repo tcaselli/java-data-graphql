@@ -88,7 +88,7 @@ public class MutationExecutionTest extends AbstractTestSuite {
 		Assert.assertEquals("blabla", entity1Ter.getStringAttr());
 	}
 
-	private Entity1 getEntity(String id) {
+	private Entity1 getEntity(final String id) {
 		final String query = readGraphql("testGetEntity1.graphql");
 		final ExecutionResult result = handleErrors(EXECUTOR.execute(
 				ExecutionInput.newExecutionInput().query(query).variables(Collections.singletonMap("id", id)).build()));

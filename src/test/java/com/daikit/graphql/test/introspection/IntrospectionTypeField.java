@@ -26,7 +26,7 @@ public class IntrospectionTypeField {
 	 * @param name
 	 *            the name to set
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 	/**
@@ -39,7 +39,7 @@ public class IntrospectionTypeField {
 	 * @param description
 	 *            the description to set
 	 */
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 	/**
@@ -52,7 +52,7 @@ public class IntrospectionTypeField {
 	 * @param args
 	 *            the args to set
 	 */
-	public void setArgs(List<IntrospectionInputValue> args) {
+	public void setArgs(final List<IntrospectionInputValue> args) {
 		this.args = args;
 	}
 	/**
@@ -65,7 +65,7 @@ public class IntrospectionTypeField {
 	 * @param isDeprecated
 	 *            the isDeprecated to set
 	 */
-	public void setDeprecated(boolean isDeprecated) {
+	public void setDeprecated(final boolean isDeprecated) {
 		this.isDeprecated = isDeprecated;
 	}
 	/**
@@ -78,7 +78,7 @@ public class IntrospectionTypeField {
 	 * @param deprecationReason
 	 *            the deprecationReason to set
 	 */
-	public void setDeprecationReason(String deprecationReason) {
+	public void setDeprecationReason(final String deprecationReason) {
 		this.deprecationReason = deprecationReason;
 	}
 	/**
@@ -91,7 +91,7 @@ public class IntrospectionTypeField {
 	 * @param type
 	 *            the type to set
 	 */
-	public void setType(IntrospectionTypeRef type) {
+	public void setType(final IntrospectionTypeRef type) {
 		this.type = type;
 	}
 }

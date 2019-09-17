@@ -30,7 +30,7 @@ public class GQLMethodArgumentEntityMetaData extends GQLAbstractMethodArgumentMe
 	 * @param entityClass
 	 *            the entity class
 	 */
-	public GQLMethodArgumentEntityMetaData(String name, Class<?> entityClass) {
+	public GQLMethodArgumentEntityMetaData(final String name, final Class<?> entityClass) {
 		super(name);
 		this.entityClass = entityClass;
 	}

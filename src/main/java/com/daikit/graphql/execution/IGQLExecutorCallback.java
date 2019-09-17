@@ -18,7 +18,7 @@ public interface IGQLExecutorCallback {
 	 * @param executionInput
 	 *            the {@link ExecutionInput}
 	 */
-	default void onBeforeExecute(ExecutionInput executionInput) {
+	default void onBeforeExecute(final ExecutionInput executionInput) {
 		// Nothing done by default
 	}
 
@@ -30,7 +30,7 @@ public interface IGQLExecutorCallback {
 	 * @param executionResult
 	 *            the {@link GQLExecutionResult}
 	 */
-	default void onAfterExecute(ExecutionInput executionInput, GQLExecutionResult executionResult) {
+	default void onAfterExecute(final ExecutionInput executionInput, final GQLExecutionResult executionResult) {
 		// Nothing done by default
 	}
 

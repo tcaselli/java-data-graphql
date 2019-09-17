@@ -165,12 +165,12 @@ public class DataModel {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	@SuppressWarnings("unchecked")
-	private <T extends AbstractEntity> void registerEntity(T entity) {
+	private <T extends AbstractEntity> void registerEntity(final T entity) {
 		getAll((Class<T>) entity.getClass()).add(entity);
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T extends AbstractEntity> List<T> getAll(Class<T> entityClass) {
+	private <T extends AbstractEntity> List<T> getAll(final Class<T> entityClass) {
 		return (List<T>) database.get(entityClass);
 	}
 
@@ -187,7 +187,7 @@ public class DataModel {
 	 *            the ID
 	 * @return an {@link Optional} entity
 	 */
-	public Optional<? extends AbstractEntity> getById(Class<?> entityClass, String id) {
+	public Optional<? extends AbstractEntity> getById(final Class<?> entityClass, final String id) {
 		return database.get(entityClass).stream().filter(item -> item.getId().equals(id)).findFirst();
 	}
 
@@ -200,7 +200,7 @@ public class DataModel {
 	 *            the {@link GQLListLoadConfig}
 	 * @return a {@link GQLListLoadResult}
 	 */
-	public GQLListLoadResult getAll(Class<?> entityClass, GQLListLoadConfig listLoadConfig) {
+	public GQLListLoadResult getAll(final Class<?> entityClass, final GQLListLoadConfig listLoadConfig) {
 		final List<?> all = database.get(entityClass);
 		Stream<?> stream = all.stream();
 
@@ -218,7 +218,7 @@ public class DataModel {
 					.map(orderBy -> createEntityComparator(orderBy)).collect(Collectors.toList());
 			stream = stream.sorted(new Comparator<Object>() {
 				@Override
-				public int compare(Object o1, Object o2) {
+				public int compare(final Object o1, final Object o2) {
 					int comparison = 0;
 					final Iterator<Comparator<Object>> it = comparators.iterator();
 					while (it.hasNext() && comparison == 0) {
@@ -252,11 +252,11 @@ public class DataModel {
 		return result;
 	}
 
-	private Comparator<Object> createEntityComparator(GQLOrderByEntry orderBy) {
+	private Comparator<Object> createEntityComparator(final GQLOrderByEntry orderBy) {
 		return new Comparator<Object>() {
 			@SuppressWarnings({"rawtypes", "unchecked"})
 			@Override
-			public int compare(Object o1, Object o2) {
+			public int compare(final Object o1, final Object o2) {
 				Object prop1;
 				Object prop2;
 				try {
@@ -279,7 +279,7 @@ public class DataModel {
 	}
 
 	@SuppressWarnings("unchecked")
-	private boolean isMatching(Object entity, GQLFilterEntry filterEntry) throws IllegalAccessException {
+	private boolean isMatching(final Object entity, final GQLFilterEntry filterEntry) throws IllegalAccessException {
 		final Class<?> propertyType = FieldUtils.getField(entity.getClass(), filterEntry.getFieldName(), true)
 				.getType();
 		boolean matching = true;
@@ -374,7 +374,7 @@ public class DataModel {
 	 *            the entity to be saved
 	 */
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void save(Object entity) {
+	public void save(final Object entity) {
 		final List<?> all = database.get(entity.getClass());
 		Assert.assertNotNull("Unkonwn entity class " + entity.getClass().getName(), all);
 		final String entityId = ((AbstractEntity) entity).getId();
@@ -397,7 +397,7 @@ public class DataModel {
 	 * @param id
 	 *            the ID of the entity
 	 */
-	public void delete(Class<?> entityClass, String id) {
+	public void delete(final Class<?> entityClass, final String id) {
 		final Optional<?> optionalEntity = getById(entityClass, id);
 		if (optionalEntity.isPresent()) {
 			database.get(entityClass).remove(optionalEntity.get());

@@ -90,7 +90,7 @@ public abstract class AbstractTestSuite {
 		resetDataModel();
 	}
 
-	protected String readGraphql(String fileName) {
+	protected String readGraphql(final String fileName) {
 		try {
 			final InputStream stream = AbstractTestSuite.class.getResourceAsStream(fileName);
 			return IOUtils.toString(stream, "UTF-8");
@@ -99,7 +99,7 @@ public abstract class AbstractTestSuite {
 		}
 	}
 
-	protected GQLExecutionResult handleErrors(GQLExecutionResult result) {
+	protected GQLExecutionResult handleErrors(final GQLExecutionResult result) {
 		if (result.getErrorDetails() != null) {
 			result.getErrors().forEach(error -> System.err.println(error));
 			Assert.fail("Error(s) happened during graphql execution. " + result.getErrorDetails().getMessage());
@@ -131,24 +131,24 @@ public abstract class AbstractTestSuite {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected Map<String, Object> toMap(Object object) {
+	protected Map<String, Object> toMap(final Object object) {
 		return MAPPER.convertValue(object, Map.class);
 	}
 
-	protected <T> T toObject(ExecutionResult executionResult, Class<T> expectedType, String property) {
+	protected <T> T toObject(final ExecutionResult executionResult, final Class<T> expectedType, final String property) {
 		return toObject(executionResult.<Map<String, Object>>getData().get(property), expectedType);
 	}
 
-	protected <T> T toObject(ExecutionResult executionResult, Class<T> expectedType) {
+	protected <T> T toObject(final ExecutionResult executionResult, final Class<T> expectedType) {
 		return toObject(executionResult.<Map<String, Object>>getData().values().iterator().next(), expectedType);
 	}
 
-	protected <T> T toObject(Object object, Class<T> expectedType) {
+	protected <T> T toObject(final Object object, final Class<T> expectedType) {
 		return MAPPER.convertValue(object, expectedType);
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <T> T getResultDataProperty(GQLExecutionResult executionResult, String path) {
+	protected <T> T getResultDataProperty(final GQLExecutionResult executionResult, final String path) {
 		final String[] pathFragments = path.split("\\.");
 		Object value = executionResult.<Map<String, Object>>getData().values().iterator().next();
 		for (final String pathFragment : pathFragments) {
@@ -173,7 +173,7 @@ public abstract class AbstractTestSuite {
 		return new GQLAbstractGetByIdDataFetcher() {
 
 			@Override
-			protected Object getById(Class<?> entityClass, String id) {
+			protected Object getById(final Class<?> entityClass, final String id) {
 				return dataModel.getById(entityClass, id);
 			}
 
@@ -184,12 +184,12 @@ public abstract class AbstractTestSuite {
 		return new GQLAbstractGetListDataFetcher() {
 
 			@Override
-			protected GQLListLoadResult getAll(Class<?> entityClass, GQLListLoadConfig listLoadConfig) {
+			protected GQLListLoadResult getAll(final Class<?> entityClass, final GQLListLoadConfig listLoadConfig) {
 				return dataModel.getAll(entityClass, listLoadConfig);
 			}
 
 			@Override
-			protected Object getById(Class<?> entityClass, String id) {
+			protected Object getById(final Class<?> entityClass, final String id) {
 				return dataModel.getById(entityClass, id);
 			}
 
@@ -200,14 +200,14 @@ public abstract class AbstractTestSuite {
 		return new GQLAbstractSaveDataFetcher<Object>() {
 
 			@Override
-			protected void save(Object entity) {
+			protected void save(final Object entity) {
 				dataModel.save(entity);
 			}
 
 			@SuppressWarnings("unchecked")
 			@Override
-			protected Object getOrCreateAndSetProperties(Class<?> entityClass,
-					GQLDynamicAttributeRegistry dynamicAttributeRegistry, Map<String, Object> fieldValueMap) {
+			protected Object getOrCreateAndSetProperties(final Class<?> entityClass,
+					final GQLDynamicAttributeRegistry dynamicAttributeRegistry, final Map<String, Object> fieldValueMap) {
 				// Find or create entity
 				final String id = (String) fieldValueMap.get(getConfig().getAttributeIdName());
 				final Optional<?> existing = StringUtils.isEmpty(id)
@@ -250,7 +250,7 @@ public abstract class AbstractTestSuite {
 	private DataFetcher<GQLDeleteResult> createDeleteDataFetcher() {
 		return new GQLAbstractDeleteDataFetcher() {
 			@Override
-			protected void delete(Class<?> entityClass, String id) {
+			protected void delete(final Class<?> entityClass, final String id) {
 				dataModel.delete(entityClass, id);
 			}
 		};

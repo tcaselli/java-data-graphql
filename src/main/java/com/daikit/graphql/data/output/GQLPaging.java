@@ -32,7 +32,7 @@ public class GQLPaging {
 	 * @param totalLength
 	 *            the total length
 	 */
-	public GQLPaging(int offset, int limit, int totalLength) {
+	public GQLPaging(final int offset, final int limit, final int totalLength) {
 		this.offset = offset;
 		this.limit = limit;
 		this.totalLength = totalLength;

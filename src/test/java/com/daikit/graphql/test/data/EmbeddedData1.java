@@ -64,7 +64,7 @@ public class EmbeddedData1 {
 	 * @param intAttr
 	 *            the intAttr to set
 	 */
-	public void setIntAttr(int intAttr) {
+	public void setIntAttr(final int intAttr) {
 		this.intAttr = intAttr;
 	}
 
@@ -79,7 +79,7 @@ public class EmbeddedData1 {
 	 * @param longAttr
 	 *            the longAttr to set
 	 */
-	public void setLongAttr(long longAttr) {
+	public void setLongAttr(final long longAttr) {
 		this.longAttr = longAttr;
 	}
 
@@ -94,7 +94,7 @@ public class EmbeddedData1 {
 	 * @param doubleAttr
 	 *            the doubleAttr to set
 	 */
-	public void setDoubleAttr(double doubleAttr) {
+	public void setDoubleAttr(final double doubleAttr) {
 		this.doubleAttr = doubleAttr;
 	}
 
@@ -109,7 +109,7 @@ public class EmbeddedData1 {
 	 * @param stringAttr
 	 *            the stringAttr to set
 	 */
-	public void setStringAttr(String stringAttr) {
+	public void setStringAttr(final String stringAttr) {
 		this.stringAttr = stringAttr;
 	}
 
@@ -124,7 +124,7 @@ public class EmbeddedData1 {
 	 * @param booleanAttr
 	 *            the booleanAttr to set
 	 */
-	public void setBooleanAttr(boolean booleanAttr) {
+	public void setBooleanAttr(final boolean booleanAttr) {
 		this.booleanAttr = booleanAttr;
 	}
 
@@ -139,7 +139,7 @@ public class EmbeddedData1 {
 	 * @param bigIntAttr
 	 *            the bigIntAttr to set
 	 */
-	public void setBigIntAttr(BigInteger bigIntAttr) {
+	public void setBigIntAttr(final BigInteger bigIntAttr) {
 		this.bigIntAttr = bigIntAttr;
 	}
 
@@ -154,7 +154,7 @@ public class EmbeddedData1 {
 	 * @param bigDecimalAttr
 	 *            the bigDecimalAttr to set
 	 */
-	public void setBigDecimalAttr(BigDecimal bigDecimalAttr) {
+	public void setBigDecimalAttr(final BigDecimal bigDecimalAttr) {
 		this.bigDecimalAttr = bigDecimalAttr;
 	}
 
@@ -169,7 +169,7 @@ public class EmbeddedData1 {
 	 * @param bytesAttr
 	 *            the bytesAttr to set
 	 */
-	public void setBytesAttr(byte[] bytesAttr) {
+	public void setBytesAttr(final byte[] bytesAttr) {
 		this.bytesAttr = bytesAttr;
 	}
 
@@ -184,7 +184,7 @@ public class EmbeddedData1 {
 	 * @param shortAttr
 	 *            the shortAttr to set
 	 */
-	public void setShortAttr(short shortAttr) {
+	public void setShortAttr(final short shortAttr) {
 		this.shortAttr = shortAttr;
 	}
 
@@ -199,7 +199,7 @@ public class EmbeddedData1 {
 	 * @param charAttr
 	 *            the charAttr to set
 	 */
-	public void setCharAttr(char charAttr) {
+	public void setCharAttr(final char charAttr) {
 		this.charAttr = charAttr;
 	}
 
@@ -214,7 +214,7 @@ public class EmbeddedData1 {
 	 * @param dateAttr
 	 *            the dateAttr to set
 	 */
-	public void setDateAttr(Date dateAttr) {
+	public void setDateAttr(final Date dateAttr) {
 		this.dateAttr = dateAttr;
 	}
 
@@ -229,7 +229,7 @@ public class EmbeddedData1 {
 	 * @param fileAttr
 	 *            the fileAttr to set
 	 */
-	public void setFileAttr(File fileAttr) {
+	public void setFileAttr(final File fileAttr) {
 		this.fileAttr = fileAttr;
 	}
 
@@ -244,7 +244,7 @@ public class EmbeddedData1 {
 	 * @param localDateAttr
 	 *            the localDateAttr to set
 	 */
-	public void setLocalDateAttr(LocalDate localDateAttr) {
+	public void setLocalDateAttr(final LocalDate localDateAttr) {
 		this.localDateAttr = localDateAttr;
 	}
 
@@ -259,7 +259,7 @@ public class EmbeddedData1 {
 	 * @param localDateTimeAttr
 	 *            the localDateTimeAttr to set
 	 */
-	public void setLocalDateTimeAttr(LocalDateTime localDateTimeAttr) {
+	public void setLocalDateTimeAttr(final LocalDateTime localDateTimeAttr) {
 		this.localDateTimeAttr = localDateTimeAttr;
 	}
 
@@ -274,7 +274,7 @@ public class EmbeddedData1 {
 	 * @param data2
 	 *            the data2 to set
 	 */
-	public void setData2(EmbeddedData2 data2) {
+	public void setData2(final EmbeddedData2 data2) {
 		this.data2 = data2;
 	}
 
@@ -289,7 +289,7 @@ public class EmbeddedData1 {
 	 * @param data3s
 	 *            the data3s to set
 	 */
-	public void setData3s(List<EmbeddedData3> data3s) {
+	public void setData3s(final List<EmbeddedData3> data3s) {
 		this.data3s = data3s;
 	}
 
@@ -304,7 +304,7 @@ public class EmbeddedData1 {
 	 * @param enumAttr
 	 *            the enumAttr to set
 	 */
-	public void setEnumAttr(Enum1 enumAttr) {
+	public void setEnumAttr(final Enum1 enumAttr) {
 		this.enumAttr = enumAttr;
 	}
 
@@ -319,7 +319,7 @@ public class EmbeddedData1 {
 	 * @param stringList
 	 *            the stringList to set
 	 */
-	public void setStringList(List<String> stringList) {
+	public void setStringList(final List<String> stringList) {
 		this.stringList = stringList;
 	}
 
@@ -334,7 +334,7 @@ public class EmbeddedData1 {
 	 * @param stringSet
 	 *            the stringSet to set
 	 */
-	public void setStringSet(Set<String> stringSet) {
+	public void setStringSet(final Set<String> stringSet) {
 		this.stringSet = stringSet;
 	}
 
@@ -349,7 +349,7 @@ public class EmbeddedData1 {
 	 * @param enumList
 	 *            the enumList to set
 	 */
-	public void setEnumList(List<Enum1> enumList) {
+	public void setEnumList(final List<Enum1> enumList) {
 		this.enumList = enumList;
 	}
 
@@ -364,7 +364,7 @@ public class EmbeddedData1 {
 	 * @param enumSet
 	 *            the enumSet to set
 	 */
-	public void setEnumSet(Set<Enum1> enumSet) {
+	public void setEnumSet(final Set<Enum1> enumSet) {
 		this.enumSet = enumSet;
 	}
 }

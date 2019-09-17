@@ -20,7 +20,7 @@ public class EmbeddedData2 {
 	 * @param intAttr
 	 *            the intAttr to set
 	 */
-	public void setIntAttr(int intAttr) {
+	public void setIntAttr(final int intAttr) {
 		this.intAttr = intAttr;
 	}
 

@@ -44,7 +44,7 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 	 * @param schemaConfig
 	 *            the {@link GQLSchemaConfig}
 	 */
-	public GQLMethodMetaDataBuilder(GQLSchemaConfig schemaConfig) {
+	public GQLMethodMetaDataBuilder(final GQLSchemaConfig schemaConfig) {
 		super(schemaConfig);
 	}
 
@@ -83,9 +83,9 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	@SuppressWarnings("unchecked")
-	private GQLAbstractMethodMetaData createMethod(Collection<GQLEnumMetaData> enumMetaDatas,
-			Collection<GQLEntityMetaData> entityMetaDatas, IGQLAbstractCustomMethod<?> customMethod,
-			List<GQLAbstractMethodArgumentMetaData> arguments) {
+	private GQLAbstractMethodMetaData createMethod(final Collection<GQLEnumMetaData> enumMetaDatas,
+			final Collection<GQLEntityMetaData> entityMetaDatas, final IGQLAbstractCustomMethod<?> customMethod,
+			final List<GQLAbstractMethodArgumentMetaData> arguments) {
 		final GQLAbstractMethodMetaData methodMetaData;
 		final Class<?> outputRawClass = GenericsUtils.getTypeClass(customMethod.getOutputType());
 		if (getConfig().isScalarType(outputRawClass)) {
@@ -128,9 +128,9 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 	}
 
 	@SuppressWarnings("unchecked")
-	private GQLAbstractMethodArgumentMetaData createMethodArgument(Collection<GQLEnumMetaData> enumMetaDatas,
-			Collection<GQLEntityMetaData> entityMetaDatas, IGQLAbstractCustomMethod<?> customMethod,
-			String argumentName, Type argumentType) {
+	private GQLAbstractMethodArgumentMetaData createMethodArgument(final Collection<GQLEnumMetaData> enumMetaDatas,
+			final Collection<GQLEntityMetaData> entityMetaDatas, final IGQLAbstractCustomMethod<?> customMethod,
+			final String argumentName, final Type argumentType) {
 		final GQLAbstractMethodArgumentMetaData argumentMetaData;
 
 		final Class<?> argumentRawClass = GenericsUtils.getTypeClass(argumentType);

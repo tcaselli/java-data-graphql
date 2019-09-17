@@ -32,7 +32,7 @@ public class GQLAttributeEntityMetaData extends GQLAbstractAttributeMetaData {
 	 * @param entityClass
 	 *            the entity class
 	 */
-	public GQLAttributeEntityMetaData(String name, Class<?> entityClass) {
+	public GQLAttributeEntityMetaData(final String name, final Class<?> entityClass) {
 		super(name);
 		this.entityClass = entityClass;
 	}
@@ -80,7 +80,7 @@ public class GQLAttributeEntityMetaData extends GQLAbstractAttributeMetaData {
 	 *            the embedded to set
 	 * @return this instance
 	 */
-	public GQLAttributeEntityMetaData setEmbedded(boolean embedded) {
+	public GQLAttributeEntityMetaData setEmbedded(final boolean embedded) {
 		this.embedded = embedded;
 		return this;
 	}

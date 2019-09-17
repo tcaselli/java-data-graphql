@@ -37,7 +37,7 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 	 * @param method
 	 *            the {@link GQLAbstractCustomMethod}
 	 */
-	public GQLAbstractMethodMetaData(GQLAbstractCustomMethod<?> method) {
+	public GQLAbstractMethodMetaData(final GQLAbstractCustomMethod<?> method) {
 		this.method = method;
 	}
 
@@ -85,7 +85,7 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 	 * @param argument
 	 *            the argument
 	 */
-	public void addArgument(GQLAbstractMethodArgumentMetaData argument) {
+	public void addArgument(final GQLAbstractMethodArgumentMetaData argument) {
 		getArguments().add(argument);
 	}
 
@@ -107,7 +107,7 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 	 *            the method to set
 	 * @return this instance
 	 */
-	public GQLAbstractMethodMetaData setMethod(IGQLAbstractCustomMethod<?> method) {
+	public GQLAbstractMethodMetaData setMethod(final IGQLAbstractCustomMethod<?> method) {
 		this.method = method;
 		return this;
 	}
@@ -124,7 +124,7 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 	 *            the arguments to set
 	 * @return this instance
 	 */
-	public GQLAbstractMethodMetaData setArguments(List<GQLAbstractMethodArgumentMetaData> arguments) {
+	public GQLAbstractMethodMetaData setArguments(final List<GQLAbstractMethodArgumentMetaData> arguments) {
 		this.arguments = arguments;
 		return this;
 	}

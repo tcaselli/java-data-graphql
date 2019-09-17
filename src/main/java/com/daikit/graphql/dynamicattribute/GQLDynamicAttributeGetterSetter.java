@@ -37,7 +37,7 @@ public abstract class GQLDynamicAttributeGetterSetter<ENTITY_TYPE, GETTER_ATTRIB
 	 * @param name
 	 *            the property name that will be available in GraphQL schema
 	 */
-	public GQLDynamicAttributeGetterSetter(String name) {
+	public GQLDynamicAttributeGetterSetter(final String name) {
 		super(name);
 	}
 
@@ -49,7 +49,7 @@ public abstract class GQLDynamicAttributeGetterSetter<ENTITY_TYPE, GETTER_ATTRIB
 	 * @param filterQueryPath
 	 *            the query path for the dynamic filter
 	 */
-	public GQLDynamicAttributeGetterSetter(String name, String filterQueryPath) {
+	public GQLDynamicAttributeGetterSetter(final String name, final String filterQueryPath) {
 		super(name);
 		this.filterQueryPath = filterQueryPath;
 	}
@@ -70,7 +70,7 @@ public abstract class GQLDynamicAttributeGetterSetter<ENTITY_TYPE, GETTER_ATTRIB
 	 * @param filterQueryPath
 	 *            the filterQueryPath to set
 	 */
-	public void setFilterQueryPath(String filterQueryPath) {
+	public void setFilterQueryPath(final String filterQueryPath) {
 		this.filterQueryPath = filterQueryPath;
 	}
 }

@@ -23,7 +23,7 @@ public class IntrospectionData {
 	 * @param schema
 	 *            the schema to set
 	 */
-	public void setSchema(IntrospectionSchema schema) {
+	public void setSchema(final IntrospectionSchema schema) {
 		this.schema = schema;
 	}
 

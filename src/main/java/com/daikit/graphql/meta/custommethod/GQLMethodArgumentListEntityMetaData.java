@@ -32,7 +32,7 @@ public class GQLMethodArgumentListEntityMetaData extends GQLAbstractMethodArgume
 	 * @param foreignClass
 	 *            the foreign entity class
 	 */
-	public GQLMethodArgumentListEntityMetaData(String name, Class<?> foreignClass) {
+	public GQLMethodArgumentListEntityMetaData(final String name, final Class<?> foreignClass) {
 		super(name);
 		this.foreignClass = foreignClass;
 	}

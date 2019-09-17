@@ -48,7 +48,7 @@ public class GQLEntityMetaData extends GQLAbstractMetaData {
 	 * @param entityClass
 	 *            the entity class
 	 */
-	public GQLEntityMetaData(String name, Class<?> entityClass) {
+	public GQLEntityMetaData(final String name, final Class<?> entityClass) {
 		this.name = name;
 		this.entityClass = entityClass;
 	}
@@ -67,7 +67,7 @@ public class GQLEntityMetaData extends GQLAbstractMetaData {
 	 *            abstract class (<code>false</code>). Default is
 	 *            <code>true</code>.
 	 */
-	public GQLEntityMetaData(String name, Class<?> entityClass, boolean concrete) {
+	public GQLEntityMetaData(final String name, final Class<?> entityClass, final boolean concrete) {
 		this.name = name;
 		this.entityClass = entityClass;
 		this.concrete = concrete;
@@ -87,7 +87,7 @@ public class GQLEntityMetaData extends GQLAbstractMetaData {
 	 * @param superEntityClass
 	 *            the super entity class
 	 */
-	public GQLEntityMetaData(String name, Class<?> entityClass, Class<?> superEntityClass) {
+	public GQLEntityMetaData(final String name, final Class<?> entityClass, final Class<?> superEntityClass) {
 		this.name = name;
 		this.entityClass = entityClass;
 		this.superEntityClass = superEntityClass;
@@ -110,7 +110,7 @@ public class GQLEntityMetaData extends GQLAbstractMetaData {
 	 *            abstract class (<code>false</code>). Default is
 	 *            <code>true</code>.
 	 */
-	public GQLEntityMetaData(String name, Class<?> entityClass, Class<?> superEntityClass, boolean concrete) {
+	public GQLEntityMetaData(final String name, final Class<?> entityClass, final Class<?> superEntityClass, final boolean concrete) {
 		this.name = name;
 		this.entityClass = entityClass;
 		this.superEntityClass = superEntityClass;
@@ -268,7 +268,7 @@ public class GQLEntityMetaData extends GQLAbstractMetaData {
 	 *            the readable to set
 	 * @return this instance
 	 */
-	public GQLEntityMetaData setReadable(boolean readable) {
+	public GQLEntityMetaData setReadable(final boolean readable) {
 		this.readable = readable;
 		return this;
 	}
@@ -285,7 +285,7 @@ public class GQLEntityMetaData extends GQLAbstractMetaData {
 	 *            the deletable to set
 	 * @return this instance
 	 */
-	public GQLEntityMetaData setDeletable(boolean deletable) {
+	public GQLEntityMetaData setDeletable(final boolean deletable) {
 		this.deletable = deletable;
 		return this;
 	}
@@ -302,7 +302,7 @@ public class GQLEntityMetaData extends GQLAbstractMetaData {
 	 *            the saveable to set
 	 * @return this instance
 	 */
-	public GQLEntityMetaData setSaveable(boolean saveable) {
+	public GQLEntityMetaData setSaveable(final boolean saveable) {
 		this.saveable = saveable;
 		return this;
 	}
@@ -319,7 +319,7 @@ public class GQLEntityMetaData extends GQLAbstractMetaData {
 	 *            the embedded to set
 	 * @return this instance
 	 */
-	public GQLEntityMetaData setEmbedded(boolean embedded) {
+	public GQLEntityMetaData setEmbedded(final boolean embedded) {
 		this.embedded = embedded;
 		return this;
 	}

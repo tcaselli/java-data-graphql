@@ -29,7 +29,7 @@ public abstract class GQLAbstractMethodArgumentMetaData extends GQLAbstractMetaD
 	 *            the name for the method. This name will be used for building
 	 *            GraphQL schema query or mutation for this method
 	 */
-	public GQLAbstractMethodArgumentMetaData(String name) {
+	public GQLAbstractMethodArgumentMetaData(final String name) {
 		this.name = name;
 	}
 

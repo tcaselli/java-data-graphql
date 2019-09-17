@@ -20,7 +20,7 @@ public class GQLErrorProcessor implements IGQLErrorProcessor {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	@Override
-	public GQLExecutionErrorDetails handleError(List<GraphQLError> errors) {
+	public GQLExecutionErrorDetails handleError(final List<GraphQLError> errors) {
 		GQLExecutionErrorDetails error = null;
 		if (errors.size() == 1 && errors.get(0) instanceof ExceptionWhileDataFetching) {
 			error = handleError(((ExceptionWhileDataFetching) errors.get(0)).getException());
@@ -34,7 +34,7 @@ public class GQLErrorProcessor implements IGQLErrorProcessor {
 	}
 
 	@Override
-	public GQLExecutionErrorDetails handleError(Throwable exception) {
+	public GQLExecutionErrorDetails handleError(final Throwable exception) {
 		final GQLExecutionErrorDetails error = createError();
 		error.setMessage(exception.getMessage());
 		error.setType(exception.getClass().getSimpleName());

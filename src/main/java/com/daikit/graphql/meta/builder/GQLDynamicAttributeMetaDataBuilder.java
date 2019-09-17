@@ -41,7 +41,7 @@ public class GQLDynamicAttributeMetaDataBuilder extends GQLAbstractMetaDataBuild
 	 * @param schemaConfig
 	 *            the {@link GQLSchemaConfig}
 	 */
-	public GQLDynamicAttributeMetaDataBuilder(GQLSchemaConfig schemaConfig) {
+	public GQLDynamicAttributeMetaDataBuilder(final GQLSchemaConfig schemaConfig) {
 		super(schemaConfig);
 	}
 

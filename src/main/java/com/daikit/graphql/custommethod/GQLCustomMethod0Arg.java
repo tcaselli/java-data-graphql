@@ -35,7 +35,7 @@ public abstract class GQLCustomMethod0Arg<OUTPUT_TYPE> extends GQLAbstractCustom
 	 *            whether this method is a mutation (return true) or a query
 	 *            (return false)
 	 */
-	public GQLCustomMethod0Arg(String methodName, boolean mutation) {
+	public GQLCustomMethod0Arg(final String methodName, final boolean mutation) {
 		super(methodName, mutation);
 	}
 

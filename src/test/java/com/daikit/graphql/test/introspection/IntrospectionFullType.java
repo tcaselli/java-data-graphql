@@ -28,7 +28,7 @@ public class IntrospectionFullType {
 	 * @param kind
 	 *            the kind to set
 	 */
-	public void setKind(String kind) {
+	public void setKind(final String kind) {
 		this.kind = kind;
 	}
 	/**
@@ -41,7 +41,7 @@ public class IntrospectionFullType {
 	 * @param name
 	 *            the name to set
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 	/**
@@ -54,7 +54,7 @@ public class IntrospectionFullType {
 	 * @param description
 	 *            the description to set
 	 */
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 	/**
@@ -67,7 +67,7 @@ public class IntrospectionFullType {
 	 * @param fields
 	 *            the fields to set
 	 */
-	public void setFields(List<IntrospectionTypeField> fields) {
+	public void setFields(final List<IntrospectionTypeField> fields) {
 		this.fields = fields;
 	}
 	/**
@@ -80,7 +80,7 @@ public class IntrospectionFullType {
 	 * @param inputFields
 	 *            the inputFields to set
 	 */
-	public void setInputFields(List<IntrospectionInputValue> inputFields) {
+	public void setInputFields(final List<IntrospectionInputValue> inputFields) {
 		this.inputFields = inputFields;
 	}
 	/**
@@ -93,7 +93,7 @@ public class IntrospectionFullType {
 	 * @param interfaces
 	 *            the interfaces to set
 	 */
-	public void setInterfaces(List<IntrospectionTypeRef> interfaces) {
+	public void setInterfaces(final List<IntrospectionTypeRef> interfaces) {
 		this.interfaces = interfaces;
 	}
 	/**
@@ -106,7 +106,7 @@ public class IntrospectionFullType {
 	 * @param enumValues
 	 *            the enumValues to set
 	 */
-	public void setEnumValues(List<IntrospectionEnum> enumValues) {
+	public void setEnumValues(final List<IntrospectionEnum> enumValues) {
 		this.enumValues = enumValues;
 	}
 	/**
@@ -119,7 +119,7 @@ public class IntrospectionFullType {
 	 * @param possibleTypes
 	 *            the possibleTypes to set
 	 */
-	public void setPossibleTypes(List<IntrospectionTypeRef> possibleTypes) {
+	public void setPossibleTypes(final List<IntrospectionTypeRef> possibleTypes) {
 		this.possibleTypes = possibleTypes;
 	}
 

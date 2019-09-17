@@ -41,7 +41,7 @@ public abstract class GQLCustomMethod1Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE> extends 
 	 * @param argName
 	 *            argument name
 	 */
-	public GQLCustomMethod1Arg(String methodName, boolean mutation, String argName) {
+	public GQLCustomMethod1Arg(final String methodName, final boolean mutation, final String argName) {
 		super(methodName, mutation, argName);
 	}
 

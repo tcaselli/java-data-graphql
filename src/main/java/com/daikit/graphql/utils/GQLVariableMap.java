@@ -21,7 +21,7 @@ public class GQLVariableMap extends HashMap<String, Object> {
 	 * @param args
 	 *            the method arguments
 	 */
-	public GQLVariableMap(IGQLAbstractCustomMethod<?> method, Object... args) {
+	public GQLVariableMap(final IGQLAbstractCustomMethod<?> method, final Object... args) {
 		for (int i = 0; i < method.getArgumentNames().size(); i++) {
 			final Object value = args[i];
 

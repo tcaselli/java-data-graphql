@@ -25,7 +25,7 @@ public class GQLAbstractMetaDataBuilder {
 	 * @param schemaConfig
 	 *            the {@link GQLSchemaConfig}
 	 */
-	public GQLAbstractMetaDataBuilder(GQLSchemaConfig schemaConfig) {
+	public GQLAbstractMetaDataBuilder(final GQLSchemaConfig schemaConfig) {
 		this.schemaConfig = schemaConfig;
 	}
 
@@ -33,12 +33,12 @@ public class GQLAbstractMetaDataBuilder {
 	// PROTECTED METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	protected boolean isEnum(Collection<GQLEnumMetaData> enumMetaDatas, Class<?> clazz) {
+	protected boolean isEnum(final Collection<GQLEnumMetaData> enumMetaDatas, final Class<?> clazz) {
 		return enumMetaDatas.stream().filter(metaData -> metaData.getEnumClass().isAssignableFrom(clazz)).findFirst()
 				.isPresent();
 	}
 
-	protected boolean isEntity(Collection<GQLEntityMetaData> entityMetaDatas, Class<?> clazz) {
+	protected boolean isEntity(final Collection<GQLEntityMetaData> entityMetaDatas, final Class<?> clazz) {
 		return entityMetaDatas.stream().filter(metaData -> metaData.getEntityClass().isAssignableFrom(clazz))
 				.findFirst().isPresent();
 	}

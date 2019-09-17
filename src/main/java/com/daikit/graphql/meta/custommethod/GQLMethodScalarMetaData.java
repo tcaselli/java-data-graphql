@@ -31,7 +31,7 @@ public class GQLMethodScalarMetaData extends GQLAbstractMethodMetaData {
 	 * @param scalarTypeCode
 	 *            the scalar type code for method return type
 	 */
-	public GQLMethodScalarMetaData(GQLAbstractCustomMethod<?> method, String scalarTypeCode) {
+	public GQLMethodScalarMetaData(final GQLAbstractCustomMethod<?> method, final String scalarTypeCode) {
 		super(method);
 		this.scalarTypeCode = scalarTypeCode;
 	}

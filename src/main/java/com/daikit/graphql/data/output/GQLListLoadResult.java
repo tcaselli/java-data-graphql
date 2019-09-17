@@ -39,7 +39,7 @@ public class GQLListLoadResult {
 	 *            the total length
 	 * @return this instance for chaining
 	 */
-	public GQLListLoadResult setPaging(final int limit, final int offset, int totalLength) {
+	public GQLListLoadResult setPaging(final int limit, final int offset, final int totalLength) {
 		paging = new GQLPaging(offset, limit, totalLength);
 		return this;
 	}

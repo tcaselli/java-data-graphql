@@ -31,7 +31,7 @@ public class GQLEnumMetaData {
 	 * @param enumClass
 	 *            the enumeration class
 	 */
-	public GQLEnumMetaData(String name, Class<? extends Enum<?>> enumClass) {
+	public GQLEnumMetaData(final String name, final Class<? extends Enum<?>> enumClass) {
 		this.name = name;
 		this.enumClass = enumClass;
 	}

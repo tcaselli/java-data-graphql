@@ -18,7 +18,7 @@ public class Message {
 	 *            the arguments
 	 * @return the formatted message with injected arguments
 	 */
-	public static String format(String message, Object... args) {
+	public static String format(final String message, final Object... args) {
 		return MessageFormatter.arrayFormat(message, args).getMessage();
 	}
 

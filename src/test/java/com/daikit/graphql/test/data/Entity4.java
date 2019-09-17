@@ -27,7 +27,7 @@ public class Entity4 extends AbstractEntity {
 	 * @param entity1s
 	 *            the entity1s to set
 	 */
-	public void setEntity1s(List<Entity1> entity1s) {
+	public void setEntity1s(final List<Entity1> entity1s) {
 		this.entity1s = entity1s;
 	}
 }

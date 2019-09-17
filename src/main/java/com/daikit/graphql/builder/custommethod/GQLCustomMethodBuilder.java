@@ -76,7 +76,7 @@ public class GQLCustomMethodBuilder extends GQLAbstractSchemaSubBuilder {
 	// PRIVATE UTILS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	private void checkDuplicates(List<GQLAbstractMethodMetaData> methods) {
+	private void checkDuplicates(final List<GQLAbstractMethodMetaData> methods) {
 		final Set<String> names = new HashSet<>();
 		methods.stream().forEach(method -> {
 			if (!names.add(method.getName())) {

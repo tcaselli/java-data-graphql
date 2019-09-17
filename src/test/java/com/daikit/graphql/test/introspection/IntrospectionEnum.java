@@ -21,7 +21,7 @@ public class IntrospectionEnum {
 	 * @param name
 	 *            the name to set
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 	/**
@@ -34,7 +34,7 @@ public class IntrospectionEnum {
 	 * @param description
 	 *            the description to set
 	 */
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 	/**
@@ -47,7 +47,7 @@ public class IntrospectionEnum {
 	 * @param isDeprecated
 	 *            the isDeprecated to set
 	 */
-	public void setDeprecated(boolean isDeprecated) {
+	public void setDeprecated(final boolean isDeprecated) {
 		this.isDeprecated = isDeprecated;
 	}
 	/**
@@ -60,7 +60,7 @@ public class IntrospectionEnum {
 	 * @param deprecationReason
 	 *            the deprecationReason to set
 	 */
-	public void setDeprecationReason(String deprecationReason) {
+	public void setDeprecationReason(final String deprecationReason) {
 		this.deprecationReason = deprecationReason;
 	}
 }

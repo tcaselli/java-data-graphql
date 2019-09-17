@@ -19,7 +19,7 @@ public class Entity5 extends AbstractEntity {
 	 * @param intAttr
 	 *            the intAttr to set
 	 */
-	public void setIntAttr(int intAttr) {
+	public void setIntAttr(final int intAttr) {
 		this.intAttr = intAttr;
 	}
 	/**
@@ -32,7 +32,7 @@ public class Entity5 extends AbstractEntity {
 	 * @param stringAttr
 	 *            the stringAttr to set
 	 */
-	public void setStringAttr(String stringAttr) {
+	public void setStringAttr(final String stringAttr) {
 		this.stringAttr = stringAttr;
 	}
 

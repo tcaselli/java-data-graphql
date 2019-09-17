@@ -22,7 +22,7 @@ public class Entity6 extends AbstractEntity {
 	 * @param attr1
 	 *            the attr1 to set
 	 */
-	public void setAttr1(String attr1) {
+	public void setAttr1(final String attr1) {
 		this.attr1 = attr1;
 	}
 	/**
@@ -35,7 +35,7 @@ public class Entity6 extends AbstractEntity {
 	 * @param attr2
 	 *            the attr2 to set
 	 */
-	public void setAttr2(String attr2) {
+	public void setAttr2(final String attr2) {
 		this.attr2 = attr2;
 	}
 	/**
@@ -48,7 +48,7 @@ public class Entity6 extends AbstractEntity {
 	 * @param attr3
 	 *            the attr3 to set
 	 */
-	public void setAttr3(String attr3) {
+	public void setAttr3(final String attr3) {
 		this.attr3 = attr3;
 	}
 	/**
@@ -61,7 +61,7 @@ public class Entity6 extends AbstractEntity {
 	 * @param attr4
 	 *            the attr4 to set
 	 */
-	public void setAttr4(String attr4) {
+	public void setAttr4(final String attr4) {
 		this.attr4 = attr4;
 	}
 }

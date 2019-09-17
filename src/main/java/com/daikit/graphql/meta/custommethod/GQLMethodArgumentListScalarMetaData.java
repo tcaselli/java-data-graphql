@@ -34,7 +34,7 @@ public class GQLMethodArgumentListScalarMetaData extends GQLAbstractMethodArgume
 	 * @param scalarTypeCode
 	 *            the scalar type
 	 */
-	public GQLMethodArgumentListScalarMetaData(String name, String scalarTypeCode) {
+	public GQLMethodArgumentListScalarMetaData(final String name, final String scalarTypeCode) {
 		super(name);
 		this.scalarTypeCode = scalarTypeCode;
 	}
@@ -49,7 +49,7 @@ public class GQLMethodArgumentListScalarMetaData extends GQLAbstractMethodArgume
 	 * @param scalarType
 	 *            the scalar type {@link GQLScalarTypeEnum}
 	 */
-	public GQLMethodArgumentListScalarMetaData(String name, GQLScalarTypeEnum scalarType) {
+	public GQLMethodArgumentListScalarMetaData(final String name, final GQLScalarTypeEnum scalarType) {
 		super(name);
 		this.scalarTypeCode = scalarType.toString();
 	}

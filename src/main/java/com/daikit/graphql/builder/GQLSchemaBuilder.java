@@ -156,7 +156,7 @@ public class GQLSchemaBuilder {
 	}
 
 	private void setContext(final GQLSchemaConfig schemaConfig, final GQLMetaModel metaModel,
-			List<DataFetcher<?>> allDataFetchers) {
+			final List<DataFetcher<?>> allDataFetchers) {
 		allDataFetchers.forEach(dataFetcher -> {
 			if (dataFetcher instanceof GQLAbstractDataFetcher) {
 				((GQLAbstractDataFetcher<?>) dataFetcher).setMetaModel(metaModel);

@@ -59,8 +59,8 @@ public abstract class GQLCustomMethod5Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE, ARGUMENT
 	 * @param arg5Name
 	 *            fifth argument name
 	 */
-	public GQLCustomMethod5Arg(String methodName, boolean mutation, String arg1Name, String arg2Name, String arg3Name,
-			String arg4Name, String arg5Name) {
+	public GQLCustomMethod5Arg(final String methodName, final boolean mutation, final String arg1Name, final String arg2Name, final String arg3Name,
+			final String arg4Name, final String arg5Name) {
 		super(methodName, mutation, arg1Name, arg2Name, arg3Name, arg4Name, arg5Name);
 	}
 

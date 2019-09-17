@@ -47,7 +47,7 @@ public abstract class GQLCustomMethod2Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE, ARGUMENT
 	 * @param arg2Name
 	 *            second argument name
 	 */
-	public GQLCustomMethod2Arg(String methodName, boolean mutation, String arg1Name, String arg2Name) {
+	public GQLCustomMethod2Arg(final String methodName, final boolean mutation, final String arg1Name, final String arg2Name) {
 		super(methodName, mutation, arg1Name, arg2Name);
 	}
 

@@ -59,7 +59,7 @@ public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataF
 	 *            the entity class name
 	 * @return the entity class
 	 */
-	protected Class<?> getEntityClassByEntityName(String entityName) {
+	protected Class<?> getEntityClassByEntityName(final String entityName) {
 		return metaModel.getEntityClassByEntityName(entityName);
 	}
 
@@ -271,14 +271,14 @@ public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataF
 	 * @param metaModel
 	 *            the metaModel to set
 	 */
-	public void setMetaModel(GQLMetaModel metaModel) {
+	public void setMetaModel(final GQLMetaModel metaModel) {
 		this.metaModel = metaModel;
 	}
 	/**
 	 * @param schemaConfig
 	 *            the schemaConfig to set
 	 */
-	public void setSchemaConfig(GQLSchemaConfig schemaConfig) {
+	public void setSchemaConfig(final GQLSchemaConfig schemaConfig) {
 		this.schemaConfig = schemaConfig;
 	}
 

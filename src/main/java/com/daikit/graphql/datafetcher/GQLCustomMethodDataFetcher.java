@@ -47,7 +47,7 @@ public class GQLCustomMethodDataFetcher extends GQLAbstractDataFetcher<Object> {
 	 * @param customMethods
 	 *            a {@link List} of {@link IGQLAbstractCustomMethod}
 	 */
-	public void registerCustomMethods(List<? extends IGQLAbstractCustomMethod<?>> customMethods) {
+	public void registerCustomMethods(final List<? extends IGQLAbstractCustomMethod<?>> customMethods) {
 		customMethods.stream().forEach(customMethod -> {
 			final IGQLAbstractCustomMethod<?> existing = allMethods.get(customMethod.getMethodName());
 			if (existing != null && !existing.equals(customMethod)) {
@@ -60,7 +60,7 @@ public class GQLCustomMethodDataFetcher extends GQLAbstractDataFetcher<Object> {
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public Object get(DataFetchingEnvironment environment) throws Exception {
+	public Object get(final DataFetchingEnvironment environment) throws Exception {
 		final IGQLAbstractCustomMethod<?> method = allMethods.get(environment.getField().getName());
 		Object ret;
 		if (method instanceof IGQLCustomMethod0Arg) {
@@ -107,8 +107,8 @@ public class GQLCustomMethodDataFetcher extends GQLAbstractDataFetcher<Object> {
 	 * @return the argument value
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T> T getArgumentValue(DataFetchingEnvironment environment, IGQLAbstractCustomMethod<?> method,
-			int argumentPosition) {
+	protected <T> T getArgumentValue(final DataFetchingEnvironment environment, final IGQLAbstractCustomMethod<?> method,
+			final int argumentPosition) {
 		final Field queryField = environment.getField();
 		final String argumentName = method.getArgumentNames().get(argumentPosition);
 		final Object argumentGraphQLValue = getArgumentValue(queryField, argumentName, environment.getArguments());
@@ -133,8 +133,8 @@ public class GQLCustomMethodDataFetcher extends GQLAbstractDataFetcher<Object> {
 	 *            the argument position among method arguments
 	 * @return the converted value
 	 */
-	protected Object convertValue(Map<String, Object> argumentPropertyValues, Class<?> argumentType,
-			int argumentPosition) {
+	protected Object convertValue(final Map<String, Object> argumentPropertyValues, final Class<?> argumentType,
+			final int argumentPosition) {
 		return getObjectMapper().convertValue(argumentPropertyValues, argumentType);
 	}
 
@@ -153,7 +153,7 @@ public class GQLCustomMethodDataFetcher extends GQLAbstractDataFetcher<Object> {
 	 * @param objectMapper
 	 *            the objectMapper to set
 	 */
-	public void setObjectMapper(ObjectMapper objectMapper) {
+	public void setObjectMapper(final ObjectMapper objectMapper) {
 		this.objectMapper = objectMapper;
 	}
 }

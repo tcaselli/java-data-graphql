@@ -29,7 +29,7 @@ public class GQLDeleteResult {
 	 * @param typename
 	 *            the type name
 	 */
-	public GQLDeleteResult(String id, String typename) {
+	public GQLDeleteResult(final String id, final String typename) {
 		this.id = id;
 		this.typename = typename;
 	}

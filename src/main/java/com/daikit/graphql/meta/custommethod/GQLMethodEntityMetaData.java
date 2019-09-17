@@ -31,7 +31,7 @@ public class GQLMethodEntityMetaData extends GQLAbstractMethodMetaData {
 	 * @param entityClass
 	 *            the entity class for method return type
 	 */
-	public GQLMethodEntityMetaData(GQLAbstractCustomMethod<?> method, Class<?> entityClass) {
+	public GQLMethodEntityMetaData(final GQLAbstractCustomMethod<?> method, final Class<?> entityClass) {
 		super(method);
 		this.entityClass = entityClass;
 	}

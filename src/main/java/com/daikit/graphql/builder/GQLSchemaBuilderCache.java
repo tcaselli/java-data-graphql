@@ -62,7 +62,7 @@ public class GQLSchemaBuilderCache {
 	 * @param schemaConfig
 	 *            the {@link GQLSchemaConfig}
 	 */
-	public GQLSchemaBuilderCache(GQLSchemaConfig schemaConfig) {
+	public GQLSchemaBuilderCache(final GQLSchemaConfig schemaConfig) {
 		this.schemaConfig = schemaConfig;
 	}
 
@@ -315,7 +315,7 @@ public class GQLSchemaBuilderCache {
 	 * @param codeRegistryBuilder
 	 *            the codeRegistryBuilder to set
 	 */
-	public void setCodeRegistryBuilder(GraphQLCodeRegistry.Builder codeRegistryBuilder) {
+	public void setCodeRegistryBuilder(final GraphQLCodeRegistry.Builder codeRegistryBuilder) {
 		this.codeRegistryBuilder = codeRegistryBuilder;
 	}
 
@@ -330,7 +330,7 @@ public class GQLSchemaBuilderCache {
 	 * @param deleteResultOutputObjectType
 	 *            the deleteResultOutputObjectType to set
 	 */
-	public void setDeleteResultOutputObjectType(GraphQLOutputType deleteResultOutputObjectType) {
+	public void setDeleteResultOutputObjectType(final GraphQLOutputType deleteResultOutputObjectType) {
 		this.deleteResultOutputObjectType = deleteResultOutputObjectType;
 	}
 
@@ -338,7 +338,7 @@ public class GQLSchemaBuilderCache {
 	 * @param orderByOutputObjectType
 	 *            the orderByOutputObjectType to set
 	 */
-	public void setOrderByOutputObjectType(GraphQLOutputType orderByOutputObjectType) {
+	public void setOrderByOutputObjectType(final GraphQLOutputType orderByOutputObjectType) {
 		this.orderByOutputObjectType = orderByOutputObjectType;
 	}
 

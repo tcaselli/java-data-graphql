@@ -58,7 +58,7 @@ public class GQLExecutor {
 	 *            custom {@link GQLPropertyDataFetcher} list
 	 */
 	public GQLExecutor(final GQLSchemaConfig schemaConfig, final GQLMetaModel metaModel,
-			IGQLErrorProcessor errorProcessor, final DataFetcher<?> getByIdDataFetcher,
+			final IGQLErrorProcessor errorProcessor, final DataFetcher<?> getByIdDataFetcher,
 			final DataFetcher<GQLListLoadResult> listDataFetcher, final DataFetcher<?> saveDataFetcher,
 			final DataFetcher<GQLDeleteResult> deleteDataFetcher, final DataFetcher<?> customMethodDataFetcher,
 			final List<GQLPropertyDataFetcher<?>> propertyDataFetchers) {
@@ -92,7 +92,7 @@ public class GQLExecutor {
 	 *            custom {@link GQLPropertyDataFetcher} list
 	 */
 	public GQLExecutor(final GQLSchemaConfig schemaConfig, final GQLMetaModel metaModel,
-			IGQLErrorProcessor errorProcessor, IGQLExecutorCallback callback, final DataFetcher<?> getByIdDataFetcher,
+			final IGQLErrorProcessor errorProcessor, final IGQLExecutorCallback callback, final DataFetcher<?> getByIdDataFetcher,
 			final DataFetcher<GQLListLoadResult> listDataFetcher, final DataFetcher<?> saveDataFetcher,
 			final DataFetcher<GQLDeleteResult> deleteDataFetcher, final DataFetcher<?> customMethodDataFetcher,
 			final List<GQLPropertyDataFetcher<?>> propertyDataFetchers) {
@@ -145,7 +145,7 @@ public class GQLExecutor {
 	 *            the {@link ExecutionInput}
 	 * @return the {@link GQLExecutionResult}
 	 */
-	public GQLExecutionResult execute(ExecutionInput executionInput) {
+	public GQLExecutionResult execute(final ExecutionInput executionInput) {
 		if (callback != null) {
 			callback.onBeforeExecute(executionInput);
 		}

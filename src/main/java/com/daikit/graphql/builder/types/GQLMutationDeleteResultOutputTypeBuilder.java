@@ -23,7 +23,7 @@ public class GQLMutationDeleteResultOutputTypeBuilder extends GQLAbstractTypesBu
 	 * @param cache
 	 *            the {@link GQLSchemaBuilderCache}
 	 */
-	public GQLMutationDeleteResultOutputTypeBuilder(GQLSchemaBuilderCache cache) {
+	public GQLMutationDeleteResultOutputTypeBuilder(final GQLSchemaBuilderCache cache) {
 		super(cache);
 	}
 
