@@ -33,7 +33,8 @@ public class GQLMethodListEnumMetaData extends GQLAbstractMethodMetaData {
 	 * @param enumClass
 	 *            the enumeration class for method return type
 	 */
-	public GQLMethodListEnumMetaData(final GQLAbstractCustomMethod<?> method, final Class<? extends Enum<?>> enumClass) {
+	public GQLMethodListEnumMetaData(final GQLAbstractCustomMethod<?> method,
+			final Class<? extends Enum<?>> enumClass) {
 		super(method);
 		this.enumClass = enumClass;
 	}

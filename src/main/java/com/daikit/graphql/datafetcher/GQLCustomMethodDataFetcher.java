@@ -107,8 +107,8 @@ public class GQLCustomMethodDataFetcher extends GQLAbstractDataFetcher<Object> {
 	 * @return the argument value
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T> T getArgumentValue(final DataFetchingEnvironment environment, final IGQLAbstractCustomMethod<?> method,
-			final int argumentPosition) {
+	protected <T> T getArgumentValue(final DataFetchingEnvironment environment,
+			final IGQLAbstractCustomMethod<?> method, final int argumentPosition) {
 		final Field queryField = environment.getField();
 		final String argumentName = method.getArgumentNames().get(argumentPosition);
 		final Object argumentGraphQLValue = getArgumentValue(queryField, argumentName, environment.getArguments());

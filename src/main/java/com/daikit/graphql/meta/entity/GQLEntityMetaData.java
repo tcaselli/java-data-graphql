@@ -110,7 +110,8 @@ public class GQLEntityMetaData extends GQLAbstractMetaData {
 	 *            abstract class (<code>false</code>). Default is
 	 *            <code>true</code>.
 	 */
-	public GQLEntityMetaData(final String name, final Class<?> entityClass, final Class<?> superEntityClass, final boolean concrete) {
+	public GQLEntityMetaData(final String name, final Class<?> entityClass, final Class<?> superEntityClass,
+			final boolean concrete) {
 		this.name = name;
 		this.entityClass = entityClass;
 		this.superEntityClass = superEntityClass;

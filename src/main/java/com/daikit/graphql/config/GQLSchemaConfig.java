@@ -554,7 +554,8 @@ public class GQLSchemaConfig {
 	 * @param queryGetListFilterAttributeOrderByFieldName
 	 *            the queryGetListFilterAttributeOrderByFieldName to set
 	 */
-	public void setQueryGetListFilterAttributeOrderByFieldName(final String queryGetListFilterAttributeOrderByFieldName) {
+	public void setQueryGetListFilterAttributeOrderByFieldName(
+			final String queryGetListFilterAttributeOrderByFieldName) {
 		this.queryGetListFilterAttributeOrderByFieldName = queryGetListFilterAttributeOrderByFieldName;
 	}
 
@@ -645,7 +646,8 @@ public class GQLSchemaConfig {
 	 * @param queryGetListPagingAttributeLimitDefaultValue
 	 *            the queryGetListPagingAttributeLimitDefaultValue to set
 	 */
-	public void setQueryGetListPagingAttributeLimitDefaultValue(final int queryGetListPagingAttributeLimitDefaultValue) {
+	public void setQueryGetListPagingAttributeLimitDefaultValue(
+			final int queryGetListPagingAttributeLimitDefaultValue) {
 		this.queryGetListPagingAttributeLimitDefaultValue = queryGetListPagingAttributeLimitDefaultValue;
 	}
 

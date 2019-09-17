@@ -92,10 +92,10 @@ public class GQLExecutor {
 	 *            custom {@link GQLPropertyDataFetcher} list
 	 */
 	public GQLExecutor(final GQLSchemaConfig schemaConfig, final GQLMetaModel metaModel,
-			final IGQLErrorProcessor errorProcessor, final IGQLExecutorCallback callback, final DataFetcher<?> getByIdDataFetcher,
-			final DataFetcher<GQLListLoadResult> listDataFetcher, final DataFetcher<?> saveDataFetcher,
-			final DataFetcher<GQLDeleteResult> deleteDataFetcher, final DataFetcher<?> customMethodDataFetcher,
-			final List<GQLPropertyDataFetcher<?>> propertyDataFetchers) {
+			final IGQLErrorProcessor errorProcessor, final IGQLExecutorCallback callback,
+			final DataFetcher<?> getByIdDataFetcher, final DataFetcher<GQLListLoadResult> listDataFetcher,
+			final DataFetcher<?> saveDataFetcher, final DataFetcher<GQLDeleteResult> deleteDataFetcher,
+			final DataFetcher<?> customMethodDataFetcher, final List<GQLPropertyDataFetcher<?>> propertyDataFetchers) {
 		this.metaModel = metaModel;
 		this.errorProcessor = errorProcessor;
 		this.callback = callback;

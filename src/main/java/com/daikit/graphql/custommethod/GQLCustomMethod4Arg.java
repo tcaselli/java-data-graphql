@@ -55,8 +55,8 @@ public abstract class GQLCustomMethod4Arg<OUTPUT_TYPE, ARGUMENT_1_TYPE, ARGUMENT
 	 * @param arg4Name
 	 *            fourth argument name
 	 */
-	public GQLCustomMethod4Arg(final String methodName, final boolean mutation, final String arg1Name, final String arg2Name, final String arg3Name,
-			final String arg4Name) {
+	public GQLCustomMethod4Arg(final String methodName, final boolean mutation, final String arg1Name,
+			final String arg2Name, final String arg3Name, final String arg4Name) {
 		super(methodName, mutation, arg1Name, arg2Name, arg3Name, arg4Name);
 	}
 

@@ -71,7 +71,8 @@ public class GQLAbstractTypesBuilder extends GQLAbstractSchemaSubBuilder {
 	}
 
 	protected void registerIdDataFetcher(final GraphQLFieldsContainer fieldsContainer,
-			final GraphQLFieldDefinition idFieldDefinition, final List<GQLPropertyDataFetcher<?>> propertiesDataFetchers) {
+			final GraphQLFieldDefinition idFieldDefinition,
+			final List<GQLPropertyDataFetcher<?>> propertiesDataFetchers) {
 		if (idFieldDefinition != null) {
 			final Optional<GQLPropertyDataFetcher<?>> dataFetcher = propertiesDataFetchers.stream()
 					.filter(df -> getConfig().getAttributeIdName().equals(df.getGraphQLPropertyName())).findFirst();

@@ -40,7 +40,8 @@ public class GQLExecutionResult implements ExecutionResult {
 	 * @param errorDetails
 	 *            the {@link GQLExecutionErrorDetails}
 	 */
-	public GQLExecutionResult(final ExecutionResult wrappedExecutionResult, final GQLExecutionErrorDetails errorDetails) {
+	public GQLExecutionResult(final ExecutionResult wrappedExecutionResult,
+			final GQLExecutionErrorDetails errorDetails) {
 		this.wrappedExecutionResult = wrappedExecutionResult;
 		this.errorDetails = errorDetails;
 	}

@@ -52,8 +52,8 @@ public abstract class GQLAbstractSaveDataFetcher<SUPER_ENTITY_TYPE> extends GQLA
 	// METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	protected SUPER_ENTITY_TYPE save(final Class<?> entityClass, final GQLDynamicAttributeRegistry dynamicAttributeRegistry,
-			final Map<String, Object> fieldValueMap) {
+	protected SUPER_ENTITY_TYPE save(final Class<?> entityClass,
+			final GQLDynamicAttributeRegistry dynamicAttributeRegistry, final Map<String, Object> fieldValueMap) {
 		final SUPER_ENTITY_TYPE model = getOrCreateAndSetProperties(entityClass, dynamicAttributeRegistry,
 				fieldValueMap);
 		// Run save
