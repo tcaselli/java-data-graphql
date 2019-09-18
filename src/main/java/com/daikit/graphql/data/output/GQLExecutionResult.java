@@ -59,7 +59,8 @@ public class GQLExecutionResult implements ExecutionResult {
 
 	@Override
 	public List<GraphQLError> getErrors() {
-		return wrappedExecutionResult == null ? null : wrappedExecutionResult.getErrors();
+		return wrappedExecutionResult == null || wrappedExecutionResult.getErrors() == null
+				|| wrappedExecutionResult.getErrors().isEmpty() ? null : wrappedExecutionResult.getErrors();
 	}
 
 	@Override
@@ -74,7 +75,8 @@ public class GQLExecutionResult implements ExecutionResult {
 
 	@Override
 	public Map<Object, Object> getExtensions() {
-		return wrappedExecutionResult == null ? Collections.emptyMap() : wrappedExecutionResult.getExtensions();
+		return wrappedExecutionResult == null || wrappedExecutionResult.getExtensions() == null
+				|| wrappedExecutionResult.getExtensions().isEmpty() ? null : wrappedExecutionResult.getExtensions();
 	}
 
 	@Override

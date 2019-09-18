@@ -22,13 +22,15 @@ public class GQLErrorProcessor implements IGQLErrorProcessor {
 	@Override
 	public GQLExecutionErrorDetails handleError(final List<GraphQLError> errors) {
 		GQLExecutionErrorDetails error = null;
-		if (errors.size() == 1 && errors.get(0) instanceof ExceptionWhileDataFetching) {
-			error = handleError(((ExceptionWhileDataFetching) errors.get(0)).getException());
-		} else if (!errors.isEmpty()) {
-			error = createError();
-			error.setType("GQLClientError");
-			error.setMessage((errors.size() <= 1 ? "An error" : "Multiple errors")
-					+ " happened while processing client request");
+		if (errors != null) {
+			if (errors.size() == 1 && errors.get(0) instanceof ExceptionWhileDataFetching) {
+				error = handleError(((ExceptionWhileDataFetching) errors.get(0)).getException());
+			} else if (!errors.isEmpty()) {
+				error = createError();
+				error.setType("GQLClientError");
+				error.setMessage((errors.size() <= 1 ? "An error" : "Multiple errors")
+						+ " happened while processing client request");
+			}
 		}
 		return error;
 	}
