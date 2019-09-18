@@ -76,7 +76,9 @@ public class GQLExecutionResult implements ExecutionResult {
 	@Override
 	public Map<Object, Object> getExtensions() {
 		return wrappedExecutionResult == null || wrappedExecutionResult.getExtensions() == null
-				|| wrappedExecutionResult.getExtensions().isEmpty() ? null : wrappedExecutionResult.getExtensions();
+				|| wrappedExecutionResult.getExtensions().isEmpty()
+						? null
+						: wrappedExecutionResult.getExtensions();
 	}
 
 	@Override
