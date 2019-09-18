@@ -1,5 +1,7 @@
 package com.daikit.graphql.dynamicattribute;
 
+import java.lang.reflect.Type;
+
 import com.daikit.generics.utils.GenericsUtils;
 
 /**
@@ -30,8 +32,8 @@ public interface IGQLDynamicAttributeSetter<ENTITY_TYPE, SETTER_ATTRIBUTE_TYPE>
 	 * @return the setter type of this dynamic attribute. By default it is taken
 	 *         from class generics.
 	 */
-	default Class<?> getSetterAttributeType() {
-		return GenericsUtils.getTypeArgumentsAsClasses(getClass(), IGQLDynamicAttributeSetter.class).get(1);
+	default Type getSetterAttributeType() {
+		return GenericsUtils.getTypeArguments(getClass(), IGQLDynamicAttributeSetter.class).get(1);
 	}
 
 }
