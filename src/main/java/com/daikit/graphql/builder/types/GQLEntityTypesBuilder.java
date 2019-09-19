@@ -10,7 +10,7 @@ import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.datafetcher.GQLConcreteSubEntityPropertyDataFetcher;
 import com.daikit.graphql.datafetcher.GQLPropertyDataFetcher;
-import com.daikit.graphql.meta.GQLMetaModel;
+import com.daikit.graphql.meta.GQLInternalMetaModel;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
 import com.daikit.graphql.meta.internal.GQLAbstractEntityMetaDataInfos;
 import com.daikit.graphql.meta.internal.GQLConcreteEntityMetaDataInfos;
@@ -50,15 +50,15 @@ public class GQLEntityTypesBuilder extends GQLAbstractTypesBuilder {
 
 	/**
 	 * Build entities {@link GraphQLObjectType} types from given
-	 * {@link GQLMetaModel}
+	 * {@link GQLInternalMetaModel}
 	 *
 	 * @param metaModel
-	 *            the {@link GQLMetaModel}
+	 *            the {@link GQLInternalMetaModel}
 	 * @param propertiesDataFetchers
 	 *            the list of all {@link GQLPropertyDataFetcher} for all
 	 *            entities
 	 */
-	public void buildEntityTypes(final GQLMetaModel metaModel,
+	public void buildEntityTypes(final GQLInternalMetaModel metaModel,
 			final List<GQLPropertyDataFetcher<?>> propertiesDataFetchers) {
 		logger.debug("START building entity types...");
 		// Build entities for concrete and concrete embedded entities types

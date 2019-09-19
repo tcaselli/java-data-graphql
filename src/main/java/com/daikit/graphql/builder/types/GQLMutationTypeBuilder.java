@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.builder.custommethod.GQLCustomMethodBuilder;
 import com.daikit.graphql.data.output.GQLDeleteResult;
-import com.daikit.graphql.meta.GQLMetaModel;
+import com.daikit.graphql.meta.GQLInternalMetaModel;
 import com.daikit.graphql.meta.custommethod.GQLAbstractMethodMetaData;
 import com.daikit.graphql.meta.internal.GQLAbstractEntityMetaDataInfos;
 import com.daikit.graphql.utils.Message;
@@ -48,7 +48,7 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 	 * Build mutation type
 	 *
 	 * @param metaModel
-	 *            the {@link GQLMetaModel}
+	 *            the {@link GQLInternalMetaModel}
 	 * @param saveDataFetcher
 	 *            the {@link DataFetcher} for create/update
 	 * @param deleteDataFetcher
@@ -57,8 +57,9 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 	 *            the {@link DataFetcher} for custom methods
 	 * @return the created {@link GraphQLObjectType}
 	 */
-	public GraphQLObjectType buildMutationType(final GQLMetaModel metaModel, final DataFetcher<?> saveDataFetcher,
-			final DataFetcher<GQLDeleteResult> deleteDataFetcher, final DataFetcher<?> customMethodsDataFetcher) {
+	public GraphQLObjectType buildMutationType(final GQLInternalMetaModel metaModel,
+			final DataFetcher<?> saveDataFetcher, final DataFetcher<GQLDeleteResult> deleteDataFetcher,
+			final DataFetcher<?> customMethodsDataFetcher) {
 		logger.debug("START building mutation types...");
 
 		final GraphQLObjectType.Builder builder = GraphQLObjectType.newObject();

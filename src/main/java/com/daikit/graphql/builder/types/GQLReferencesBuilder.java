@@ -2,7 +2,7 @@ package com.daikit.graphql.builder.types;
 
 import com.daikit.graphql.builder.GQLAbstractSchemaSubBuilder;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
-import com.daikit.graphql.meta.GQLMetaModel;
+import com.daikit.graphql.meta.GQLInternalMetaModel;
 
 /**
  * Entity and Interface reference map builder
@@ -33,9 +33,9 @@ public class GQLReferencesBuilder extends GQLAbstractSchemaSubBuilder {
 	 * Build type references map
 	 *
 	 * @param metaModel
-	 *            the {@link GQLMetaModel}
+	 *            the {@link GQLInternalMetaModel}
 	 */
-	public void buildTypeReferences(final GQLMetaModel metaModel) {
+	public void buildTypeReferences(final GQLInternalMetaModel metaModel) {
 		logger.debug("START building reference types...");
 		metaModel.getAllEntities().forEach(infos -> getCache().getTypeReferences()
 				.put(infos.getEntity().getEntityClass(), infos.getEntity().getName()));

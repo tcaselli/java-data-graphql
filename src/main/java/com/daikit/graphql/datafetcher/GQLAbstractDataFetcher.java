@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.daikit.graphql.config.GQLSchemaConfig;
-import com.daikit.graphql.meta.GQLMetaModel;
+import com.daikit.graphql.meta.GQLInternalMetaModel;
 import com.daikit.graphql.utils.Message;
 
 import graphql.language.Argument;
@@ -36,7 +36,7 @@ import graphql.schema.DataFetcher;
  */
 public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataFetcher<FETCHED_DATA_TYPE> {
 
-	private GQLMetaModel metaModel;
+	private GQLInternalMetaModel metaModel;
 	private GQLSchemaConfig schemaConfig;
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -224,7 +224,7 @@ public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataF
 	/**
 	 * @return the metaModel
 	 */
-	protected GQLMetaModel getMetaModel() {
+	protected GQLInternalMetaModel getMetaModel() {
 		return metaModel;
 	}
 
@@ -271,7 +271,7 @@ public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataF
 	 * @param metaModel
 	 *            the metaModel to set
 	 */
-	public void setMetaModel(final GQLMetaModel metaModel) {
+	public void setMetaModel(final GQLInternalMetaModel metaModel) {
 		this.metaModel = metaModel;
 	}
 	/**

@@ -33,6 +33,7 @@ import com.daikit.graphql.datafetcher.GQLAbstractSaveDataFetcher;
 import com.daikit.graphql.datafetcher.GQLCustomMethodDataFetcher;
 import com.daikit.graphql.datafetcher.GQLDynamicAttributeRegistry;
 import com.daikit.graphql.datafetcher.GQLPropertyDataFetcher;
+import com.daikit.graphql.meta.GQLInternalMetaModel;
 import com.daikit.graphql.meta.GQLMetaModel;
 
 import graphql.schema.DataFetcher;
@@ -59,7 +60,7 @@ public class GQLSchemaBuilder {
 	 * @param schemaConfig
 	 *            the schema configuration {@link GQLSchemaConfig}
 	 * @param metaModel
-	 *            the meta model
+	 *            the {@link GQLInternalMetaModel} meta model
 	 * @param getByIdDataFetcher
 	 *            the {@link DataFetcher} for 'getById' methods
 	 * @param listDataFetcher
@@ -83,6 +84,7 @@ public class GQLSchemaBuilder {
 		logger.debug("START building schema...");
 		final GQLSchemaBuilderCache cache = new GQLSchemaBuilderCache(schemaConfig);
 		final GraphQLSchema.Builder builder = GraphQLSchema.newSchema();
+		final GQLInternalMetaModel internalMetaModel = new GQLInternalMetaModel(schemaConfig, metaModel);
 
 		cache.setCodeRegistryBuilder(GraphQLCodeRegistry.newCodeRegistry());
 
@@ -93,9 +95,10 @@ public class GQLSchemaBuilder {
 		final List<DataFetcher<?>> allDataFetchers = Stream.concat(Stream.of(getByIdDataFetcher, listDataFetcher,
 				saveDataFetcher, deleteDataFetcher, customMethodDataFetcher), propertyDataFetchers.stream())
 				.collect(Collectors.toList());
-		setContext(schemaConfig, metaModel, allDataFetchers);
 
-		final GQLDynamicAttributeRegistry dynAttrRegistry = new GQLDynamicAttributeRegistry(metaModel);
+		setContext(schemaConfig, internalMetaModel, allDataFetchers);
+
+		final GQLDynamicAttributeRegistry dynAttrRegistry = new GQLDynamicAttributeRegistry(internalMetaModel);
 
 		if (listDataFetcher instanceof GQLAbstractGetListDataFetcher) {
 			((GQLAbstractGetListDataFetcher) listDataFetcher).setDynamicAttributeRegistry(dynAttrRegistry);
@@ -106,15 +109,15 @@ public class GQLSchemaBuilder {
 
 		if (customMethodDataFetcher instanceof GQLCustomMethodDataFetcher) {
 			logger.debug("START registering custom methods...");
-			((GQLCustomMethodDataFetcher) customMethodDataFetcher).registerCustomMethods(metaModel.getCustomMethods()
-					.stream().map(method -> method.getMethod()).collect(Collectors.toList()));
+			((GQLCustomMethodDataFetcher) customMethodDataFetcher).registerCustomMethods(internalMetaModel
+					.getCustomMethods().stream().map(method -> method.getMethod()).collect(Collectors.toList()));
 			logger.debug("END registering custom methods");
 		}
 		logger.debug("START building output reference types...");
-		new GQLReferencesBuilder(cache).buildTypeReferences(metaModel);
-		new GQLEnumTypesBuilder(cache).buildEnumTypes(metaModel);
-		new GQLInterfaceTypesBuilder(cache).buildInterfaceTypes(metaModel, nullSafePropertyDataFetchers);
-		new GQLEntityTypesBuilder(cache).buildEntityTypes(metaModel, nullSafePropertyDataFetchers);
+		new GQLReferencesBuilder(cache).buildTypeReferences(internalMetaModel);
+		new GQLEnumTypesBuilder(cache).buildEnumTypes(internalMetaModel);
+		new GQLInterfaceTypesBuilder(cache).buildInterfaceTypes(internalMetaModel, nullSafePropertyDataFetchers);
+		new GQLEntityTypesBuilder(cache).buildEntityTypes(internalMetaModel, nullSafePropertyDataFetchers);
 		logger.debug("END building output reference types");
 
 		logger.debug("END building mutations utility types...");
@@ -127,20 +130,20 @@ public class GQLSchemaBuilder {
 		new GQLQueryOrderByDirectionTypeBuilder(cache).buildOrderByDirectionType();
 		new GQLQueryOrderByInputTypeBuilder(cache).buildOrderByInputType();
 		new GQLQueryOrderByOutputTypeBuilder(cache).buildOrderByOutputType();
-		new GQLQueryFilterOperatorsInputTypeBuilder(cache).buildFilterOperatorsInputTypes(metaModel);
+		new GQLQueryFilterOperatorsInputTypeBuilder(cache).buildFilterOperatorsInputTypes(internalMetaModel);
 		logger.debug("END building queries utility types");
 
 		logger.debug("START building mutation entities input types...");
-		new GQLInputEntityTypesBuilder(cache).buildInputEntities(metaModel);
+		new GQLInputEntityTypesBuilder(cache).buildInputEntities(internalMetaModel);
 		logger.debug("END building mutation entities input types");
 
 		logger.debug("START building queries...");
-		builder.query(new GQLQueryTypeBuilder(cache).buildQueryType(metaModel, getByIdDataFetcher, listDataFetcher,
+		builder.query(new GQLQueryTypeBuilder(cache).buildQueryType(internalMetaModel, getByIdDataFetcher, listDataFetcher,
 				customMethodDataFetcher));
 		logger.debug("END building queries");
 
 		logger.debug("START building mutations...");
-		builder.mutation(new GQLMutationTypeBuilder(cache).buildMutationType(metaModel, saveDataFetcher,
+		builder.mutation(new GQLMutationTypeBuilder(cache).buildMutationType(internalMetaModel, saveDataFetcher,
 				deleteDataFetcher, customMethodDataFetcher));
 		logger.debug("END building mutations");
 
@@ -155,7 +158,7 @@ public class GQLSchemaBuilder {
 
 	}
 
-	private void setContext(final GQLSchemaConfig schemaConfig, final GQLMetaModel metaModel,
+	private void setContext(final GQLSchemaConfig schemaConfig, final GQLInternalMetaModel metaModel,
 			final List<DataFetcher<?>> allDataFetchers) {
 		allDataFetchers.forEach(dataFetcher -> {
 			if (dataFetcher instanceof GQLAbstractDataFetcher) {
@@ -163,7 +166,6 @@ public class GQLSchemaBuilder {
 				((GQLAbstractDataFetcher<?>) dataFetcher).setSchemaConfig(schemaConfig);
 			}
 		});
-		metaModel.initialize(schemaConfig);
 	}
 
 	private Set<GraphQLType> getDictionnaryTypes(final GQLSchemaBuilderCache cache) {

@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.datafetcher.GQLPropertyDataFetcher;
-import com.daikit.graphql.meta.GQLMetaModel;
+import com.daikit.graphql.meta.GQLInternalMetaModel;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
 import com.daikit.graphql.meta.internal.GQLAbstractEntityMetaDataInfos;
 import com.daikit.graphql.meta.internal.GQLInterfaceEntityMetaDataInfos;
@@ -47,14 +47,14 @@ public class GQLInterfaceTypesBuilder extends GQLAbstractTypesBuilder {
 
 	/**
 	 * Build abstract entities {@link GraphQLInterfaceType} types from given
-	 * {@link GQLMetaModel}
+	 * {@link GQLInternalMetaModel}
 	 *
 	 * @param metaModel
-	 *            the {@link GQLMetaModel}
+	 *            the {@link GQLInternalMetaModel}
 	 * @param propertiesDataFetchers
 	 *            the list of {@link GQLPropertyDataFetcher}
 	 */
-	public void buildInterfaceTypes(final GQLMetaModel metaModel,
+	public void buildInterfaceTypes(final GQLInternalMetaModel metaModel,
 			final List<GQLPropertyDataFetcher<?>> propertiesDataFetchers) {
 		logger.debug("START building interface types...");
 		// Create abstract entities types

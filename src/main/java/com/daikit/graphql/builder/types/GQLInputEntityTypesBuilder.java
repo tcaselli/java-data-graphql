@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
-import com.daikit.graphql.meta.GQLMetaModel;
+import com.daikit.graphql.meta.GQLInternalMetaModel;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEnumMetaData;
@@ -59,12 +59,12 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Build {@link GraphQLObjectType} from given {@link GQLMetaModel}
+	 * Build {@link GraphQLObjectType} from given {@link GQLInternalMetaModel}
 	 *
 	 * @param metaModel
-	 *            the {@link GQLMetaModel}
+	 *            the {@link GQLInternalMetaModel}
 	 */
-	public void buildInputEntities(final GQLMetaModel metaModel) {
+	public void buildInputEntities(final GQLInternalMetaModel metaModel) {
 		logger.debug("START building input entity types...");
 		new BuilderImpl().build(metaModel);
 		logger.debug("END building input entity types");
@@ -83,7 +83,7 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 		// phase
 		private final Map<GQLAbstractEntityMetaDataInfos, Set<Class<?>>> lazyEntities = new HashMap<>();
 
-		public void build(final GQLMetaModel metaModel) {
+		public void build(final GQLInternalMetaModel metaModel) {
 			allInfos.addAll(metaModel.getEmbeddedConcretes());
 			allInfos.addAll(metaModel.getEmbeddedInterfaces());
 			allInfos.addAll(metaModel.getAllNonEmbeddedEntities());

@@ -24,7 +24,6 @@ import graphql.schema.GraphQLSchema;
  */
 public class GQLExecutor {
 
-	private final GQLMetaModel metaModel;
 	private final GraphQLSchema schema;
 	private final GraphQL graphql;
 	private final IGQLErrorProcessor errorProcessor;
@@ -37,7 +36,7 @@ public class GQLExecutor {
 	/**
 	 * Initialize GraphQL executor from given {@link GQLMetaModel} with no
 	 * callback
-	 * 
+	 *
 	 * @param schemaConfig
 	 *            the schema configuration {@link GQLSchemaConfig}
 	 * @param metaModel
@@ -96,7 +95,6 @@ public class GQLExecutor {
 			final DataFetcher<?> getByIdDataFetcher, final DataFetcher<GQLListLoadResult> listDataFetcher,
 			final DataFetcher<?> saveDataFetcher, final DataFetcher<GQLDeleteResult> deleteDataFetcher,
 			final DataFetcher<?> customMethodDataFetcher, final List<GQLPropertyDataFetcher<?>> propertyDataFetchers) {
-		this.metaModel = metaModel;
 		this.errorProcessor = errorProcessor;
 		this.callback = callback;
 		this.schema = new GQLSchemaBuilder().build(schemaConfig, metaModel, getByIdDataFetcher, listDataFetcher,
@@ -170,13 +168,6 @@ public class GQLExecutor {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// GETTERS / SETTERS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-
-	/**
-	 * @return the metaModel
-	 */
-	public GQLMetaModel getMetaModel() {
-		return metaModel;
-	}
 
 	/**
 	 * @return the schema

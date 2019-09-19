@@ -8,7 +8,7 @@ import java.util.Optional;
 import com.daikit.graphql.dynamicattribute.IGQLAbstractDynamicAttribute;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeGetter;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
-import com.daikit.graphql.meta.GQLMetaModel;
+import com.daikit.graphql.meta.GQLInternalMetaModel;
 import com.daikit.graphql.utils.Message;
 
 import graphql.GraphQLException;
@@ -33,9 +33,9 @@ public class GQLDynamicAttributeRegistry {
 	 * Constructor
 	 *
 	 * @param metaModel
-	 *            the {@link GQLMetaModel}
+	 *            the {@link GQLInternalMetaModel}
 	 */
-	public GQLDynamicAttributeRegistry(final GQLMetaModel metaModel) {
+	public GQLDynamicAttributeRegistry(final GQLInternalMetaModel metaModel) {
 		this.register(metaModel, metaModel.getDynamicAttributeSetters(), dynamicAttributeSetters);
 		this.register(metaModel, metaModel.getDynamicAttributeGetters(), dynamicAttributeGetters);
 	}
@@ -44,7 +44,7 @@ public class GQLDynamicAttributeRegistry {
 	// PRIVATE METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	private <T extends IGQLAbstractDynamicAttribute<?>> void register(final GQLMetaModel metaModel,
+	private <T extends IGQLAbstractDynamicAttribute<?>> void register(final GQLInternalMetaModel metaModel,
 			final Collection<T> dynamicAttributes, final Map<Class<?>, Map<String, T>> map) {
 		dynamicAttributes.stream().forEach(dynAttr -> {
 			final Map<String, T> attrMap = map.computeIfAbsent(dynAttr.getEntityType(), x -> new HashMap<>());

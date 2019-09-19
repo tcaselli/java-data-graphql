@@ -10,7 +10,7 @@ import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.builder.custommethod.GQLCustomMethodBuilder;
 import com.daikit.graphql.data.output.GQLListLoadResult;
-import com.daikit.graphql.meta.GQLMetaModel;
+import com.daikit.graphql.meta.GQLInternalMetaModel;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEnumMetaData;
@@ -62,7 +62,7 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 	 * Build query type
 	 *
 	 * @param metaModel
-	 *            the {@link GQLMetaModel}
+	 *            the {@link GQLInternalMetaModel}
 	 * @param getByIdDataFetcher
 	 *            the {@link DataFetcher} for getById methods
 	 * @param listDataFetcher
@@ -71,8 +71,9 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 	 *            the {@link DataFetcher} for custom methods
 	 * @return the created {@link GraphQLObjectType}
 	 */
-	public GraphQLObjectType buildQueryType(final GQLMetaModel metaModel, final DataFetcher<?> getByIdDataFetcher,
-			final DataFetcher<GQLListLoadResult> listDataFetcher, final DataFetcher<?> customMethodsDataFetcher) {
+	public GraphQLObjectType buildQueryType(final GQLInternalMetaModel metaModel,
+			final DataFetcher<?> getByIdDataFetcher, final DataFetcher<GQLListLoadResult> listDataFetcher,
+			final DataFetcher<?> customMethodsDataFetcher) {
 		logger.debug("START building query types...");
 
 		final GraphQLObjectType.Builder builder = GraphQLObjectType.newObject();

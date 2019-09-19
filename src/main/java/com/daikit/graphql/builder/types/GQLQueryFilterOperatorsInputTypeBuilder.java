@@ -10,7 +10,7 @@ import org.apache.commons.text.WordUtils;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.enums.GQLFilterOperatorEnum;
 import com.daikit.graphql.enums.GQLScalarTypeEnum;
-import com.daikit.graphql.meta.GQLMetaModel;
+import com.daikit.graphql.meta.GQLInternalMetaModel;
 import com.daikit.graphql.meta.entity.GQLEnumMetaData;
 
 import graphql.schema.GraphQLEnumType;
@@ -46,12 +46,12 @@ public class GQLQueryFilterOperatorsInputTypeBuilder extends GQLAbstractTypesBui
 
 	/**
 	 * Build query filter input type and cache it from given
-	 * {@link GQLMetaModel}
+	 * {@link GQLInternalMetaModel}
 	 *
 	 * @param metaModel
-	 *            the {@link GQLMetaModel}
+	 *            the {@link GQLInternalMetaModel}
 	 */
-	public void buildFilterOperatorsInputTypes(final GQLMetaModel metaModel) {
+	public void buildFilterOperatorsInputTypes(final GQLInternalMetaModel metaModel) {
 		logger.debug("Build filter operators types");
 		getCache().getInputScalarFilterOperators().putAll(buildScalarFilterOperatorsInputObjectTypes());
 		metaModel.getEnums().forEach(enumMeta -> getCache().getInputEnumFilterOperators().put(enumMeta.getEnumClass(),
