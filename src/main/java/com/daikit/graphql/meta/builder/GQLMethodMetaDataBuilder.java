@@ -92,6 +92,10 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 			methodMetaData = new GQLMethodScalarMetaData();
 			((GQLMethodScalarMetaData) methodMetaData)
 					.setScalarType(getConfig().getScalarTypeCodeFromClass(outputRawClass).get());
+		} else if (isByteArray(outputRawClass)) {
+			methodMetaData = new GQLMethodScalarMetaData();
+			((GQLMethodScalarMetaData) methodMetaData)
+					.setScalarType(getConfig().getScalarTypeCodeFromClass(outputRawClass.getComponentType()).get());
 		} else if (isEnum(enumMetaDatas, outputRawClass)) {
 			methodMetaData = new GQLMethodEnumMetaData();
 			((GQLMethodEnumMetaData) methodMetaData).setEnumClass((Class<? extends Enum<?>>) outputRawClass);
@@ -132,13 +136,15 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 			final Collection<GQLEntityMetaData> entityMetaDatas, final IGQLAbstractCustomMethod<?> customMethod,
 			final String argumentName, final Type argumentType) {
 		final GQLAbstractMethodArgumentMetaData argumentMetaData;
-
 		final Class<?> argumentRawClass = GenericsUtils.getTypeClass(argumentType);
-
 		if (getConfig().isScalarType(argumentRawClass)) {
 			argumentMetaData = new GQLMethodArgumentScalarMetaData();
 			((GQLMethodArgumentScalarMetaData) argumentMetaData)
 					.setScalarType(getConfig().getScalarTypeCodeFromClass(argumentRawClass).get());
+		} else if (isByteArray(argumentRawClass)) {
+			argumentMetaData = new GQLMethodArgumentScalarMetaData();
+			((GQLMethodArgumentScalarMetaData) argumentMetaData)
+					.setScalarType(getConfig().getScalarTypeCodeFromClass(argumentRawClass.getComponentType()).get());
 		} else if (isEnum(enumMetaDatas, argumentRawClass)) {
 			argumentMetaData = new GQLMethodArgumentEnumMetaData();
 			((GQLMethodArgumentEnumMetaData) argumentMetaData)

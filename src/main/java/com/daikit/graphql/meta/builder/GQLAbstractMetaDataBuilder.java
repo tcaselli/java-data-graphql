@@ -3,6 +3,7 @@ package com.daikit.graphql.meta.builder;
 import java.util.Collection;
 
 import com.daikit.graphql.config.GQLSchemaConfig;
+import com.daikit.graphql.enums.GQLScalarTypeEnum;
 import com.daikit.graphql.meta.entity.GQLEntityMetaData;
 import com.daikit.graphql.meta.entity.GQLEnumMetaData;
 
@@ -41,6 +42,11 @@ public class GQLAbstractMetaDataBuilder {
 	protected boolean isEntity(final Collection<GQLEntityMetaData> entityMetaDatas, final Class<?> clazz) {
 		return entityMetaDatas.stream().filter(metaData -> metaData.getEntityClass().isAssignableFrom(clazz))
 				.findFirst().isPresent();
+	}
+
+	protected boolean isByteArray(final Class<?> type) {
+		return type.isArray() && getConfig().isScalarType(type.getComponentType()) && GQLScalarTypeEnum.BYTE.toString()
+				.equals(getConfig().getScalarTypeCodeFromClass(type.getComponentType()).get());
 	}
 
 	/**

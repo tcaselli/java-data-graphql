@@ -11,6 +11,7 @@ import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
 import com.daikit.graphql.dynamicattribute.IGQLAbstractDynamicAttribute;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeGetter;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
+import com.daikit.graphql.enums.GQLScalarTypeEnum;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEnumMetaData;
@@ -95,7 +96,9 @@ public class GQLDynamicAttributeMetaDataBuilder extends GQLAbstractMetaDataBuild
 
 		final GQLAbstractAttributeMetaData attributeMetaData;
 		// Create attribute
-		if (getConfig().isScalarType(attributeRawClass)) {
+		if (getConfig().isScalarType(attributeRawClass) || attributeRawClass.isArray()
+				&& getConfig().isScalarType(attributeRawClass.getComponentType()) && GQLScalarTypeEnum.BYTE.toString()
+						.equals(getConfig().getScalarTypeCodeFromClass(attributeRawClass.getComponentType()).get())) {
 			attributeMetaData = new GQLAttributeScalarMetaData();
 			((GQLAttributeScalarMetaData) attributeMetaData)
 					.setScalarType(getConfig().getScalarTypeCodeFromClass(attributeRawClass).get());
@@ -114,7 +117,8 @@ public class GQLDynamicAttributeMetaDataBuilder extends GQLAbstractMetaDataBuild
 						.setScalarType(getConfig().getScalarTypeCodeFromClass(foreignClass).get());
 			} else if (isEnum(enumMetaDatas, foreignClass)) {
 				attributeMetaData = new GQLAttributeListEnumMetaData();
-				((GQLAttributeListEnumMetaData) attributeMetaData).setEnumClass(foreignClass);
+				((GQLAttributeListEnumMetaData) attributeMetaData)
+						.setEnumClass((Class<? extends Enum<?>>) foreignClass);
 			} else if (isEntity(entityMetaDatas, foreignClass)) {
 				attributeMetaData = new GQLAttributeListEntityMetaData();
 				((GQLAttributeListEntityMetaData) attributeMetaData).setForeignClass(foreignClass);
