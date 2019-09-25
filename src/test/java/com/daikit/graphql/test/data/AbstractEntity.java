@@ -5,7 +5,7 @@ package com.daikit.graphql.test.data;
  *
  * @author Thibaut Caselli
  */
-public class AbstractEntity {
+public abstract class AbstractEntity {
 
 	private String id;
 

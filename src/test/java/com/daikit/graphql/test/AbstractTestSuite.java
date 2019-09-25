@@ -60,8 +60,9 @@ public abstract class AbstractTestSuite {
 
 	protected DataModel dataModel;
 	protected GQLSchemaConfig schemaConfig;
+	protected GQLExecutor executorManualMetaModel;
+	protected GQLExecutor executorAutomaticMetaModel;
 
-	protected static GQLExecutor EXECUTOR;
 	protected static ObjectMapper MAPPER;
 	protected static ObjectWriter WRITER_PRETTY;
 
@@ -84,10 +85,15 @@ public abstract class AbstractTestSuite {
 	public void createExecutor() {
 		logger.info("Initialize test graphQL schema & data entity");
 		schemaConfig = createSchemaConfig();
-		EXECUTOR = new GQLExecutor(schemaConfig, createMetaModel(), new GQLErrorProcessor(), createGetByIdDataFetcher(),
+		executorManualMetaModel = createExecutor(createMetaModel(false));
+		executorAutomaticMetaModel = createExecutor(createMetaModel(true));
+		resetDataModel();
+	}
+
+	private GQLExecutor createExecutor(GQLMetaModel metaModel) {
+		return new GQLExecutor(schemaConfig, metaModel, new GQLErrorProcessor(), createGetByIdDataFetcher(),
 				createListDataFetcher(), createSaveDataFetcher(), createDeleteDataFetcher(),
 				createCustomMethodDataFetcher(), createPropertyDataFetchers());
-		resetDataModel();
 	}
 
 	protected String readGraphql(final String fileName) {
@@ -123,9 +129,9 @@ public abstract class AbstractTestSuite {
 		}
 	}
 
-	protected GQLExecutionResult getSchemaIntrospection() {
+	protected GQLExecutionResult getSchemaIntrospection(boolean automaticMetaModel) {
 		if (schemaIntrospection == null) {
-			schemaIntrospection = GQLIntrospection.getAllTypes(query -> EXECUTOR.execute(query));
+			schemaIntrospection = GQLIntrospection.getAllTypes(query -> getExecutor(automaticMetaModel).execute(query));
 		}
 		return schemaIntrospection;
 	}
@@ -135,7 +141,8 @@ public abstract class AbstractTestSuite {
 		return MAPPER.convertValue(object, Map.class);
 	}
 
-	protected <T> T toObject(final ExecutionResult executionResult, final Class<T> expectedType, final String property) {
+	protected <T> T toObject(final ExecutionResult executionResult, final Class<T> expectedType,
+			final String property) {
 		return toObject(executionResult.<Map<String, Object>>getData().get(property), expectedType);
 	}
 
@@ -161,12 +168,16 @@ public abstract class AbstractTestSuite {
 	// PRIVATE METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
+	private GQLExecutor getExecutor(boolean automaticMetaModel) {
+		return automaticMetaModel ? executorAutomaticMetaModel : executorManualMetaModel;
+	}
+
 	private GQLSchemaConfig createSchemaConfig() {
 		return new GQLSchemaConfig();
 	}
 
-	private GQLMetaModel createMetaModel() {
-		return new GQLMetaModelBuilder().build();
+	private GQLMetaModel createMetaModel(boolean automatic) {
+		return new GQLMetaModelBuilder().build(automatic);
 	}
 
 	private DataFetcher<?> createGetByIdDataFetcher() {
@@ -207,7 +218,8 @@ public abstract class AbstractTestSuite {
 			@SuppressWarnings("unchecked")
 			@Override
 			protected Object getOrCreateAndSetProperties(final Class<?> entityClass,
-					final GQLDynamicAttributeRegistry dynamicAttributeRegistry, final Map<String, Object> fieldValueMap) {
+					final GQLDynamicAttributeRegistry dynamicAttributeRegistry,
+					final Map<String, Object> fieldValueMap) {
 				// Find or create entity
 				final String id = (String) fieldValueMap.get(getConfig().getAttributeIdName());
 				final Optional<?> existing = StringUtils.isEmpty(id)

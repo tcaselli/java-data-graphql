@@ -29,7 +29,7 @@ public class QueryExecutionTest extends AbstractTestSuite {
 	@Test
 	public void testGetEntity1() {
 		final String query = readGraphql("testGetEntity1.graphql");
-		final ExecutionResult result = handleErrors(EXECUTOR.execute(ExecutionInput.newExecutionInput().query(query)
+		final ExecutionResult result = handleErrors(executorManualMetaModel.execute(ExecutionInput.newExecutionInput().query(query)
 				.variables(Collections.singletonMap("id", "3")).build()));
 		final Entity1 resultData = toObject(result, Entity1.class);
 		Assert.assertEquals(3, resultData.getIntAttr());
@@ -39,7 +39,7 @@ public class QueryExecutionTest extends AbstractTestSuite {
 	public void testEntity1ById() {
 		final String query = readGraphql("testGetAllEntity1.graphql");
 		final ExecutionResult result = handleErrors(
-				EXECUTOR.execute(ExecutionInput.newExecutionInput().query(query).build()));
+				executorManualMetaModel.execute(ExecutionInput.newExecutionInput().query(query).build()));
 		final Entity1ListLoadResult resultData = toObject(result, Entity1ListLoadResult.class);
 		Assert.assertEquals(5, resultData.getData().size());
 		for (int i = 0; i < resultData.getData().size(); i++) {
@@ -51,7 +51,7 @@ public class QueryExecutionTest extends AbstractTestSuite {
 	@Test
 	public void testCustomMethodQuery1() {
 		final String query = readGraphql("testCustomMethodQuery1.graphql");
-		final ExecutionResult result = handleErrors(EXECUTOR.execute(ExecutionInput.newExecutionInput().query(query)
+		final ExecutionResult result = handleErrors(executorManualMetaModel.execute(ExecutionInput.newExecutionInput().query(query)
 				.variables(Collections.singletonMap("arg1", "testString")).build()));
 		final Entity1 resultData = toObject(result, Entity1.class);
 		Assert.assertEquals("testString", resultData.getStringAttr());
@@ -64,7 +64,7 @@ public class QueryExecutionTest extends AbstractTestSuite {
 		final EmbeddedData1 arg1 = new EmbeddedData1();
 		arg1.setIntAttr(2);
 		arg1.setStringAttr("testString");
-		final ExecutionResult result = handleErrors(EXECUTOR
+		final ExecutionResult result = handleErrors(executorManualMetaModel
 				.execute(ExecutionInput.newExecutionInput().query(query).variables(new HashMap<String, Object>() {
 					private static final long serialVersionUID = 1L;
 					{
@@ -90,7 +90,7 @@ public class QueryExecutionTest extends AbstractTestSuite {
 		final EmbeddedData1 data2 = new EmbeddedData1();
 		data2.setStringAttr("data2");
 		final List<EmbeddedData1> dataList = Arrays.asList(data1, data2);
-		final ExecutionResult result = handleErrors(EXECUTOR
+		final ExecutionResult result = handleErrors(executorManualMetaModel
 				.execute(ExecutionInput.newExecutionInput().query(query).variables(new HashMap<String, Object>() {
 					private static final long serialVersionUID = 1L;
 					{
@@ -118,7 +118,7 @@ public class QueryExecutionTest extends AbstractTestSuite {
 	public void testGetDynamicAttribute() {
 		final String id = "3";
 		final String query = readGraphql("testGetDynamicAttribute.graphql");
-		final GQLExecutionResult result = handleErrors(EXECUTOR
+		final GQLExecutionResult result = handleErrors(executorManualMetaModel
 				.execute(ExecutionInput.newExecutionInput().query(query).variables(new HashMap<String, Object>() {
 					private static final long serialVersionUID = 1L;
 					{

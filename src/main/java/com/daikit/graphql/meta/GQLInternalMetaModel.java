@@ -15,6 +15,8 @@ import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
 import com.daikit.graphql.exception.GQLException;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
 import com.daikit.graphql.meta.builder.GQLDynamicAttributeMetaDataBuilder;
+import com.daikit.graphql.meta.builder.GQLEntityMetaDataBuilder;
+import com.daikit.graphql.meta.builder.GQLEnumMetaDataBuilder;
 import com.daikit.graphql.meta.builder.GQLMethodMetaDataBuilder;
 import com.daikit.graphql.meta.custommethod.GQLAbstractMethodMetaData;
 import com.daikit.graphql.meta.entity.GQLEntityMetaData;
@@ -55,6 +57,23 @@ public class GQLInternalMetaModel {
 
 		this.enumMetaDatas.addAll(inputMetaModel.getEnumMetaDatas());
 		this.entityMetaDatas.addAll(inputMetaModel.getEntityMetaDatas());
+
+		if (!inputMetaModel.getEntityClasses().isEmpty()) {
+			final GQLEnumsAndEmbeddedEntities collected = new GQLEnumsAndEmbeddedEntitiesCollector(schemaConfig)
+					.collect(inputMetaModel.getEntityClasses(), inputMetaModel.getAvailableEmbeddedEntityClasses(),
+							inputMetaModel.getDynamicAttributes(), inputMetaModel.getMethods());
+
+			final GQLEnumMetaDataBuilder enumMetaDataBuilder = new GQLEnumMetaDataBuilder(schemaConfig);
+			this.enumMetaDatas.addAll(collected.getEnums().stream()
+					.map(enumClass -> enumMetaDataBuilder.build(enumClass)).collect(Collectors.toList()));
+
+			final GQLEntityMetaDataBuilder entityMetaDataBuilder = new GQLEntityMetaDataBuilder(schemaConfig,
+					inputMetaModel.getEntityClasses(), collected.getEntities(), collected.getEnums());
+			this.entityMetaDatas.addAll(inputMetaModel.getEntityClasses().stream()
+					.map(entityClass -> entityMetaDataBuilder.build(entityClass, false)).collect(Collectors.toList()));
+			this.entityMetaDatas.addAll(collected.getEntities().stream()
+					.map(entityClass -> entityMetaDataBuilder.build(entityClass, true)).collect(Collectors.toList()));
+		}
 
 		final GQLDynamicAttributeMetaDataBuilder dynamicAttributeMetaDataBuilder = new GQLDynamicAttributeMetaDataBuilder(
 				schemaConfig);

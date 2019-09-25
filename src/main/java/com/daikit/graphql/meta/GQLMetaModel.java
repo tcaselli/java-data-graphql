@@ -11,12 +11,14 @@ import com.daikit.graphql.meta.entity.GQLEntityMetaData;
 import com.daikit.graphql.meta.entity.GQLEnumMetaData;
 
 /**
- * Class holding meta data model
+ * Class holding meta data model.
  *
  * @author Thibaut Caselli
  */
 public class GQLMetaModel {
 
+	private Collection<Class<?>> entityClasses = new ArrayList<>();
+	private Collection<Class<?>> availableEmbeddedEntityClasses = new ArrayList<>();
 	private Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes = new ArrayList<>();
 	private Collection<IGQLAbstractCustomMethod<?>> methods = new ArrayList<>();
 	private Collection<GQLEnumMetaData> enumMetaDatas = new ArrayList<>();
@@ -28,14 +30,45 @@ public class GQLMetaModel {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Default constructor.
+	 * With this method, all meta datas will be automatically generated and
+	 * registered from given entity classes, attributes and methods. Entities,
+	 * enums, dynamic attributes and custom method meta data will be
+	 * automatically generated and registered.<br>
+	 * You can also provide entities and enums as meta datas with dynamic
+	 * attributes already registered and custom methods meta data already
+	 * created. For this use the other constructor.
+	 *
+	 * @param entityClasses
+	 *            the collection of entity classes
+	 * @param availableEmbeddedEntityClasses
+	 *            the collection of all available embedded entity classes. If
+	 *            empty then all encountered data classes can be added to GQL
+	 *            schema. It is the only way to provide allowed extending
+	 *            classes for embedded entities. You can leave this null or
+	 *            empty if you don't need this advanced behavior.
+	 * @param dynamicAttributes
+	 *            the collection of {@link IGQLAbstractDynamicAttribute} to be
+	 *            automatically registered (meta data will be created
+	 *            automatically)
+	 * @param customMethods
+	 *            the collection of {@link GQLAbstractCustomMethod} to be
+	 *            automatically registered (meta data will be created
+	 *            automatically)
+	 * @return this instance for chaining
 	 */
-	public GQLMetaModel() {
-		// Nothing done
+	public GQLMetaModel buildFromEntityClasses(final Collection<Class<?>> entityClasses,
+			final Collection<Class<?>> availableEmbeddedEntityClasses,
+			final Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes,
+			final Collection<IGQLAbstractCustomMethod<?>> customMethods) {
+		this.entityClasses = entityClasses;
+		this.availableEmbeddedEntityClasses = availableEmbeddedEntityClasses;
+		this.dynamicAttributes = dynamicAttributes;
+		this.methods = customMethods;
+		return this;
 	}
 
 	/**
-	 * Constructor. Dynamic attributes and custom method meta data will be
+	 * With this method, dynamic attributes and custom method meta data will be
 	 * automatically generated and registered.<br>
 	 * You can also provide entities with dynamic attributes already registered
 	 * and custom methods meta data already created. For this use the other
@@ -53,8 +86,9 @@ public class GQLMetaModel {
 	 *            the collection of {@link GQLAbstractCustomMethod} to be
 	 *            automatically registered (meta data will be created
 	 *            automatically)
+	 * @return this instance for chaining
 	 */
-	public GQLMetaModel(final Collection<GQLEnumMetaData> enumMetaDatas,
+	public GQLMetaModel buildFromMetaDatas(final Collection<GQLEnumMetaData> enumMetaDatas,
 			final Collection<GQLEntityMetaData> entityMetaDatas,
 			final Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes,
 			final Collection<IGQLAbstractCustomMethod<?>> customMethods) {
@@ -62,13 +96,14 @@ public class GQLMetaModel {
 		this.entityMetaDatas = entityMetaDatas;
 		this.dynamicAttributes = dynamicAttributes;
 		this.methods = customMethods;
+		return this;
 	}
 
 	/**
-	 * Constructor. With this constructor dynamic attributes should already be
-	 * registered in entities and custom methods should already have their
-	 * MetaData created. For an automatic registration of dynamic attributes and
-	 * custom method use the other constructor.
+	 * With this method dynamic attributes should already be registered in
+	 * entities and custom methods should already have their MetaData
+	 * automatically generated and registered. For an automatic registration of
+	 * dynamic attributes and custom method use the other constructor.
 	 *
 	 * @param enumMetaDatas
 	 *            the collection of all registered {@link GQLEnumMetaData}
@@ -77,13 +112,15 @@ public class GQLMetaModel {
 	 * @param methodMetaDatas
 	 *            the collection of all registered
 	 *            {@link GQLAbstractMethodMetaData}
+	 * @return this instance for chaining
 	 */
-	public GQLMetaModel(final Collection<GQLEnumMetaData> enumMetaDatas,
+	public GQLMetaModel buildFromMetaDatas(final Collection<GQLEnumMetaData> enumMetaDatas,
 			final Collection<GQLEntityMetaData> entityMetaDatas,
 			final Collection<GQLAbstractMethodMetaData> methodMetaDatas) {
 		this.enumMetaDatas = enumMetaDatas;
 		this.entityMetaDatas = entityMetaDatas;
 		this.methodMetaDatas = methodMetaDatas;
+		return this;
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -91,18 +128,24 @@ public class GQLMetaModel {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
+	 * @return the entityClasses
+	 */
+	public Collection<Class<?>> getEntityClasses() {
+		return entityClasses;
+	}
+
+	/**
+	 * @return the availableEmbeddedEntityClasses
+	 */
+	public Collection<Class<?>> getAvailableEmbeddedEntityClasses() {
+		return availableEmbeddedEntityClasses;
+	}
+
+	/**
 	 * @return the dynamicAttributes
 	 */
 	public Collection<IGQLAbstractDynamicAttribute<?>> getDynamicAttributes() {
 		return dynamicAttributes;
-	}
-
-	/**
-	 * @param dynamicAttributes
-	 *            the dynamicAttributes to set
-	 */
-	public void setDynamicAttributes(Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes) {
-		this.dynamicAttributes = dynamicAttributes;
 	}
 
 	/**
@@ -113,26 +156,10 @@ public class GQLMetaModel {
 	}
 
 	/**
-	 * @param methods
-	 *            the methods to set
-	 */
-	public void setMethods(Collection<IGQLAbstractCustomMethod<?>> methods) {
-		this.methods = methods;
-	}
-
-	/**
 	 * @return the enumMetaDatas
 	 */
 	public Collection<GQLEnumMetaData> getEnumMetaDatas() {
 		return enumMetaDatas;
-	}
-
-	/**
-	 * @param enumMetaDatas
-	 *            the enumMetaDatas to set
-	 */
-	public void setEnumMetaDatas(Collection<GQLEnumMetaData> enumMetaDatas) {
-		this.enumMetaDatas = enumMetaDatas;
 	}
 
 	/**
@@ -143,26 +170,10 @@ public class GQLMetaModel {
 	}
 
 	/**
-	 * @param entityMetaDatas
-	 *            the entityMetaDatas to set
-	 */
-	public void setEntityMetaDatas(Collection<GQLEntityMetaData> entityMetaDatas) {
-		this.entityMetaDatas = entityMetaDatas;
-	}
-
-	/**
 	 * @return the methodMetaDatas
 	 */
 	public Collection<GQLAbstractMethodMetaData> getMethodMetaDatas() {
 		return methodMetaDatas;
-	}
-
-	/**
-	 * @param methodMetaDatas
-	 *            the methodMetaDatas to set
-	 */
-	public void setMethodMetaDatas(Collection<GQLAbstractMethodMetaData> methodMetaDatas) {
-		this.methodMetaDatas = methodMetaDatas;
 	}
 
 }

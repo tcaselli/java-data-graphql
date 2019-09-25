@@ -11,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.daikit.graphql.config.GQLJavaScalars;
+import com.daikit.graphql.data.output.GQLExecutionResult;
 import com.daikit.graphql.enums.GQLOrderByDirectionEnum;
 import com.daikit.graphql.test.data.EmbeddedData1;
 import com.daikit.graphql.test.data.EmbeddedData2;
@@ -31,6 +32,7 @@ import com.daikit.graphql.test.introspection.IntrospectionResult;
 import com.daikit.graphql.test.introspection.IntrospectionTypeField;
 import com.daikit.graphql.test.introspection.IntrospectionTypeKindEnum;
 import com.daikit.graphql.utils.Message;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import graphql.Scalars;
 
@@ -483,6 +485,21 @@ public class SchemaBuildTest extends AbstractTestSuite {
 				attr4IinputField.isPresent());
 	}
 
+	/**
+	 * Test automatic schema generation is same than manual one
+	 *
+	 * @throws JsonProcessingException
+	 *             when an error occurred while converting schema introspection
+	 *             to string
+	 */
+	@Test
+	public void testAutomaticSchemaGeneration() throws JsonProcessingException {
+		final GQLExecutionResult schemaIntrospectionManual = getSchemaIntrospection(false);
+		final String jsonManual = WRITER_PRETTY.writeValueAsString(schemaIntrospectionManual.toSpecification());
+		final GQLExecutionResult schemaIntrospectionAutomatic = getSchemaIntrospection(true);
+		final String jsonAutomatic = WRITER_PRETTY.writeValueAsString(schemaIntrospectionAutomatic.toSpecification());
+		Assert.assertEquals(jsonManual, jsonAutomatic);
+	}
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// PRIVATE METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -518,7 +535,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	}
 
 	private IntrospectionResult getIntrospection() {
-		return MAPPER.convertValue(getSchemaIntrospection().toSpecification(), IntrospectionResult.class);
+		return MAPPER.convertValue(getSchemaIntrospection(false).toSpecification(), IntrospectionResult.class);
 	}
 
 	// FullTypes

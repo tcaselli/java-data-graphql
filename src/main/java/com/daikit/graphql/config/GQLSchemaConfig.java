@@ -109,15 +109,24 @@ public class GQLSchemaConfig {
 		scalars.put(GQLScalarTypeEnum.LOCAL_DATE_TIME.toString(), GQLJavaScalars.GraphQLLocalDateTime);
 
 		scalarTypeMappings.put(IdType.class, GQLScalarTypeEnum.ID.toString());
+		scalarTypeMappings.put(int.class, GQLScalarTypeEnum.INT.toString());
 		scalarTypeMappings.put(Integer.class, GQLScalarTypeEnum.INT.toString());
+		scalarTypeMappings.put(long.class, GQLScalarTypeEnum.LONG.toString());
 		scalarTypeMappings.put(Long.class, GQLScalarTypeEnum.LONG.toString());
+		scalarTypeMappings.put(double.class, GQLScalarTypeEnum.FLOAT.toString());
 		scalarTypeMappings.put(Double.class, GQLScalarTypeEnum.FLOAT.toString());
+		scalarTypeMappings.put(float.class, GQLScalarTypeEnum.FLOAT.toString());
+		scalarTypeMappings.put(Float.class, GQLScalarTypeEnum.FLOAT.toString());
 		scalarTypeMappings.put(String.class, GQLScalarTypeEnum.STRING.toString());
+		scalarTypeMappings.put(boolean.class, GQLScalarTypeEnum.BOOLEAN.toString());
 		scalarTypeMappings.put(Boolean.class, GQLScalarTypeEnum.BOOLEAN.toString());
 		scalarTypeMappings.put(BigInteger.class, GQLScalarTypeEnum.BIG_INTEGER.toString());
 		scalarTypeMappings.put(BigDecimal.class, GQLScalarTypeEnum.BIG_DECIMAL.toString());
+		scalarTypeMappings.put(byte.class, GQLScalarTypeEnum.BYTE.toString());
 		scalarTypeMappings.put(Byte.class, GQLScalarTypeEnum.BYTE.toString());
+		scalarTypeMappings.put(short.class, GQLScalarTypeEnum.SHORT.toString());
 		scalarTypeMappings.put(Short.class, GQLScalarTypeEnum.SHORT.toString());
+		scalarTypeMappings.put(char.class, GQLScalarTypeEnum.CHAR.toString());
 		scalarTypeMappings.put(Character.class, GQLScalarTypeEnum.CHAR.toString());
 		scalarTypeMappings.put(Date.class, GQLScalarTypeEnum.DATE.toString());
 		scalarTypeMappings.put(File.class, GQLScalarTypeEnum.FILE.toString());
@@ -189,6 +198,18 @@ public class GQLSchemaConfig {
 	 */
 	public Optional<GraphQLScalarType> getScalarType(final String scalarTypeCode) {
 		return Optional.ofNullable(scalars.get(scalarTypeCode));
+	}
+
+	/**
+	 * Get {@link GraphQLScalarType} from given scalar class
+	 *
+	 * @param scalarClass
+	 *            the scalar class
+	 * @return the {@link Optional} found {@link GraphQLScalarType}
+	 */
+	public Optional<GraphQLScalarType> getScalarTypeFromClass(final Class<?> scalarClass) {
+		final Optional<String> scalarTypeCode = getScalarTypeCodeFromClass(scalarClass);
+		return scalarTypeCode.isPresent() ? getScalarType(scalarTypeCode.get()) : Optional.empty();
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-

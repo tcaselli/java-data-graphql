@@ -34,7 +34,7 @@ public class GQLExecutor {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Initialize GraphQL executor from given {@link GQLMetaModel} with no
+	 * Initialize GraphQL executorManualMetaModel from given {@link GQLMetaModel} with no
 	 * callback
 	 *
 	 * @param schemaConfig
@@ -66,7 +66,7 @@ public class GQLExecutor {
 	}
 
 	/**
-	 * Initialize GraphQL executor from given {@link GQLMetaModel} with a
+	 * Initialize GraphQL executorManualMetaModel from given {@link GQLMetaModel} with a
 	 * callback {@link IGQLExecutorCallback}
 	 *
 	 * @param schemaConfig

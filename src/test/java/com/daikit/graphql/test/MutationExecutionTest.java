@@ -27,7 +27,7 @@ public class MutationExecutionTest extends AbstractTestSuite {
 		final Entity1 entity1 = getEntity(id);
 		Assert.assertNotNull(entity1);
 		final String mutation = readGraphql("testDeleteEntity.graphql");
-		final ExecutionResult result = handleErrors(EXECUTOR.execute(ExecutionInput.newExecutionInput().query(mutation)
+		final ExecutionResult result = handleErrors(executorManualMetaModel.execute(ExecutionInput.newExecutionInput().query(mutation)
 				.variables(Collections.singletonMap("id", "3")).build()));
 		final GQLDeleteResult deletResult = toObject(result, GQLDeleteResult.class);
 		Assert.assertEquals("3", deletResult.getId());
@@ -44,7 +44,7 @@ public class MutationExecutionTest extends AbstractTestSuite {
 		Assert.assertNotNull(entity1);
 		Assert.assertEquals(3, entity1.getIntAttr());
 		final String mutation = readGraphql("testSaveEntity.graphql");
-		final ExecutionResult result = handleErrors(EXECUTOR
+		final ExecutionResult result = handleErrors(executorManualMetaModel
 				.execute(ExecutionInput.newExecutionInput().query(mutation).variables(new HashMap<String, Object>() {
 					private static final long serialVersionUID = 1L;
 					{
@@ -64,7 +64,7 @@ public class MutationExecutionTest extends AbstractTestSuite {
 	@Test
 	public void testCustomMethodMutation1() {
 		final String mutation = readGraphql("testCustomMethodMutation1.graphql");
-		final ExecutionResult result = handleErrors(EXECUTOR.execute(ExecutionInput.newExecutionInput().query(mutation)
+		final ExecutionResult result = handleErrors(executorManualMetaModel.execute(ExecutionInput.newExecutionInput().query(mutation)
 				.variables(Collections.singletonMap("arg1", "testString")).build()));
 		final Entity1 resultData = toObject(result, Entity1.class);
 		Assert.assertEquals("testString", resultData.getStringAttr());
@@ -74,7 +74,7 @@ public class MutationExecutionTest extends AbstractTestSuite {
 	public void testSaveDynamicAttribute() {
 		final String id = "3";
 		final String mutation = readGraphql("testSaveDynamicAttribute.graphql");
-		final ExecutionResult result = handleErrors(EXECUTOR
+		final ExecutionResult result = handleErrors(executorManualMetaModel
 				.execute(ExecutionInput.newExecutionInput().query(mutation).variables(new HashMap<String, Object>() {
 					private static final long serialVersionUID = 1L;
 					{
@@ -90,7 +90,7 @@ public class MutationExecutionTest extends AbstractTestSuite {
 
 	private Entity1 getEntity(final String id) {
 		final String query = readGraphql("testGetEntity1.graphql");
-		final ExecutionResult result = handleErrors(EXECUTOR.execute(
+		final ExecutionResult result = handleErrors(executorManualMetaModel.execute(
 				ExecutionInput.newExecutionInput().query(query).variables(Collections.singletonMap("id", id)).build()));
 		return toObject(result, Entity1.class);
 	}

@@ -46,16 +46,31 @@ import com.daikit.graphql.test.data.Enum1;
 public class GQLMetaModelBuilder {
 
 	/**
-	 * Build the test GraphQL data meta entity
+	 * Build the test GraphQL data model
 	 *
+	 * @param automatic
+	 *            whether to build the test GraphQL meta model automatically
+	 *            from classes
 	 * @return the built {@link GQLMetaModelBuilder}
 	 */
-	public GQLMetaModel build() {
-		final Collection<GQLEntityMetaData> entityMetaDatas = Arrays.asList(buildEntity1(), buildEntity2(),
-				buildEntity3(), buildEntity4(), buildEntity5(), buildEntity6(), buildEntity7(), buildEntity8(),
-				buildEntity9(), buildEmbeddedData1(), buildEmbeddedData2(), buildEmbeddedData3());
-		final Collection<GQLEnumMetaData> enumMetaDatas = Arrays.asList(buildEnumMetaData());
-		return new GQLMetaModel(enumMetaDatas, entityMetaDatas, buildDynamicAttributes(), buildCustomMethods());
+	public GQLMetaModel build(boolean automatic) {
+		final GQLMetaModel metaModel = new GQLMetaModel();
+		if (automatic) {
+			final Collection<Class<?>> entityClasses = Arrays.asList(Entity1.class, Entity2.class, Entity3.class,
+					Entity4.class, Entity5.class, Entity6.class, Entity7.class, Entity8.class, Entity9.class);
+			final Collection<Class<?>> availableEmbeddedEntityClasses = Arrays.asList(EmbeddedData1.class,
+					EmbeddedData2.class, EmbeddedData3.class);
+			metaModel.buildFromEntityClasses(entityClasses, availableEmbeddedEntityClasses, buildDynamicAttributes(),
+					buildCustomMethods());
+		} else {
+			final Collection<GQLEntityMetaData> entityMetaDatas = Arrays.asList(buildEntity1(), buildEntity2(),
+					buildEntity3(), buildEntity4(), buildEntity5(), buildEntity6(), buildEntity7(), buildEntity8(),
+					buildEntity9(), buildEmbeddedData1(), buildEmbeddedData2(), buildEmbeddedData3());
+			final Collection<GQLEnumMetaData> enumMetaDatas = Arrays.asList(buildEnumMetaData());
+			metaModel.buildFromMetaDatas(enumMetaDatas, entityMetaDatas, buildDynamicAttributes(),
+					buildCustomMethods());
+		}
+		return metaModel;
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
