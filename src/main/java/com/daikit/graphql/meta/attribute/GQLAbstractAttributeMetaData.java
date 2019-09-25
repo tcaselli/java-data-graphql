@@ -12,6 +12,7 @@ import com.daikit.graphql.meta.GQLAbstractMetaData;
 public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 
 	private String name;
+	private String description;
 	private boolean readable = true;
 	private boolean saveable = true;
 	private boolean nullable = true;
@@ -86,6 +87,31 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// GETTERS / SETTERS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+	/**
+	 * Get the description for the attribute. This description will be used for
+	 * building descriptions in GraphQL schema every time this attribute is used
+	 * in queries, mutations etc.
+	 *
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Set the description for the attribute. This description will be used for
+	 * building descriptions in GraphQL schema every time this attribute is used
+	 * in queries, mutations etc.
+	 *
+	 * @param description
+	 *            the description to set
+	 * @return this instance
+	 */
+	public GQLAbstractAttributeMetaData setDescription(String description) {
+		this.description = description;
+		return this;
+	}
 
 	/**
 	 * Get the name for the attribute. This name will be used for building

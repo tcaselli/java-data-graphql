@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.daikit.graphql.builder.GQLAbstractSchemaSubBuilder;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
@@ -142,7 +144,8 @@ public class GQLAbstractTypesBuilder extends GQLAbstractSchemaSubBuilder {
 			final GraphQLOutputType type) {
 		final GraphQLFieldDefinition.Builder builder = GraphQLFieldDefinition.newFieldDefinition();
 		builder.name(attribute.getName());
-		builder.description("Field definition [" + attribute.getName() + "]");
+		builder.description("Field [" + attribute.getName() + "]"
+				+ (StringUtils.isNotEmpty(attribute.getDescription()) ? " : " + attribute.getDescription() : ""));
 		builder.type(type);
 		logger.debug(Message.format("Field definition created for [{}] with type [{}]", attribute.getName(),
 				GQLSchemaBuilderUtils.typeToString(type)));

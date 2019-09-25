@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.datafetcher.GQLConcreteSubEntityPropertyDataFetcher;
@@ -86,7 +88,10 @@ public class GQLEntityTypesBuilder extends GQLAbstractTypesBuilder {
 		logger.debug(Message.format("Build entity type [{}]", infos.getEntity().getName()));
 		final GraphQLObjectType.Builder builder = GraphQLObjectType.newObject();
 		builder.name(infos.getEntity().getName());
-		builder.description("Object type for entity [" + infos.getEntity().getName() + "]");
+		builder.description("Entity [" + infos.getEntity().getName() + "]"
+				+ (StringUtils.isNotEmpty(infos.getEntity().getDescription())
+						? " : " + infos.getEntity().getDescription()
+						: ""));
 
 		final List<GraphQLFieldDefinition> fieldDefinitions = new ArrayList<>();
 
@@ -134,7 +139,10 @@ public class GQLEntityTypesBuilder extends GQLAbstractTypesBuilder {
 		logger.debug(Message.format("Build embedded abstract entity type [{}]", infos.getEntity().getName()));
 		final GraphQLObjectType.Builder builder = GraphQLObjectType.newObject();
 		builder.name(infos.getEntity().getName());
-		builder.description("Object type for embedded abstract entity [" + infos.getEntity().getName() + "]");
+		builder.description("Embedded abstract entity [" + infos.getEntity().getName() + "]"
+				+ (StringUtils.isNotEmpty(infos.getEntity().getDescription())
+						? " : " + infos.getEntity().getDescription()
+						: ""));
 		// Create one field by concrete extending types
 		final Map<GQLConcreteEntityMetaDataInfos, GraphQLFieldDefinition> fieldDefinitions = infos
 				.getConcreteSubEntities().stream().collect(LinkedHashMap::new, (map, concreteSubEntityType) -> map

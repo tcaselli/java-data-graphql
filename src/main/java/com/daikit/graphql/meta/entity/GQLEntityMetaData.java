@@ -22,6 +22,7 @@ public class GQLEntityMetaData extends GQLAbstractMetaData {
 	private boolean concrete = true;
 
 	private String name;
+	private String description;
 	private Class<?> superEntityClass;
 	private Class<?> entityClass;
 	private List<GQLAbstractAttributeMetaData> attributes = new ArrayList<>();
@@ -146,6 +147,31 @@ public class GQLEntityMetaData extends GQLAbstractMetaData {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// GETTERS / SETTERS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+	/**
+	 * Get the description for the entity. This description will be used for
+	 * building descriptions in GraphQL schema every time this entity is used in
+	 * queries, mutations etc.
+	 *
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Set the description for the entity. This description will be used for
+	 * building descriptions in GraphQL schema every time this entity is used in
+	 * queries, mutations etc.
+	 *
+	 * @param description
+	 *            the description to set
+	 * @return this instance
+	 */
+	public GQLEntityMetaData setDescription(String description) {
+		this.description = description;
+		return this;
+	}
 
 	/**
 	 * Get whether the entity is a concrete class (<code>true</code>) or

@@ -1,5 +1,7 @@
 package com.daikit.graphql.builder.types;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.daikit.graphql.builder.GQLAbstractSchemaSubBuilder;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.enums.GQLScalarTypeEnum;
@@ -59,7 +61,8 @@ public class GQLAbstractInputOutputTypesBuilder extends GQLAbstractSchemaSubBuil
 	protected GraphQLArgument buildArgumentNonNull(final GQLAbstractAttributeMetaData attribute) {
 		final GraphQLArgument.Builder builder = GraphQLArgument.newArgument();
 		builder.name(attribute.getName());
-		builder.description("Argument [" + attribute.getName() + "]");
+		builder.description("Argument [" + attribute.getName() + "]"
+				+ (StringUtils.isNotEmpty(attribute.getDescription()) ? " : " + attribute.getDescription() : ""));
 		builder.type(new GraphQLNonNull(
 				getConfig().getScalarType(((GQLAttributeScalarMetaData) attribute).getScalarType()).get()));
 		return builder.build();
