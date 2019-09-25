@@ -7,7 +7,7 @@ package com.daikit.graphql.meta.attribute;
  */
 public class GQLAttributeListEnumMetaData extends GQLAbstractAttributeMetaData {
 
-	private Class<?> enumClass;
+	private Class<? extends Enum<?>> enumClass;
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -55,7 +55,7 @@ public class GQLAttributeListEnumMetaData extends GQLAbstractAttributeMetaData {
 	 *
 	 * @return the enumClass
 	 */
-	public Class<?> getEnumClass() {
+	public Class<? extends Enum<?>> getEnumClass() {
 		return enumClass;
 	}
 
@@ -66,7 +66,7 @@ public class GQLAttributeListEnumMetaData extends GQLAbstractAttributeMetaData {
 	 *            the enumClass to set
 	 * @return this instance
 	 */
-	public GQLAttributeListEnumMetaData setEnumClass(final Class<?> enumClass) {
+	public GQLAttributeListEnumMetaData setEnumClass(final Class<? extends Enum<?>> enumClass) {
 		this.enumClass = enumClass;
 		return this;
 	}
