@@ -92,7 +92,7 @@ Supported types :
 ```java
 // Scalar types
 int, long, double, short, char, boolean, Integer, Long, Double, Short, Character, Boolean, String, 
-BigInteger, BigDecimal, byte[], File, Date, LocalDate, LocalDateTime
+BigInteger, BigDecimal, byte[], File, Date, LocalDate, LocalDateTime, Instant
 // List of scalar. You can have other types of collection (like Set) in your entities, 
 // but GraphQL will serialize them as JSON array anyway, if you want to handle specific
 // collections deserialization you can do it in your data fetchers.

@@ -107,6 +107,7 @@ public class GQLSchemaConfig {
 		scalars.put(GQLScalarTypeEnum.FILE.toString(), GQLJavaScalars.GraphQLFile);
 		scalars.put(GQLScalarTypeEnum.LOCAL_DATE.toString(), GQLJavaScalars.GraphQLLocalDate);
 		scalars.put(GQLScalarTypeEnum.LOCAL_DATE_TIME.toString(), GQLJavaScalars.GraphQLLocalDateTime);
+		scalars.put(GQLScalarTypeEnum.INSTANT.toString(), GQLJavaScalars.GraphQLInstant);
 
 		scalarTypeMappings.put(IdType.class, GQLScalarTypeEnum.ID.toString());
 		scalarTypeMappings.put(int.class, GQLScalarTypeEnum.INT.toString());

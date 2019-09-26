@@ -101,6 +101,7 @@ public class GQLMetaModelBuilder {
 		entity.addAttribute(new GQLAttributeScalarMetaData("fileAttr", GQLScalarTypeEnum.FILE));
 		entity.addAttribute(new GQLAttributeScalarMetaData("localDateAttr", GQLScalarTypeEnum.LOCAL_DATE));
 		entity.addAttribute(new GQLAttributeScalarMetaData("localDateTimeAttr", GQLScalarTypeEnum.LOCAL_DATE_TIME));
+		entity.addAttribute(new GQLAttributeScalarMetaData("instantAttr", GQLScalarTypeEnum.INSTANT));
 		entity.addAttribute(new GQLAttributeListScalarMetaData("stringList", GQLScalarTypeEnum.STRING));
 		entity.addAttribute(new GQLAttributeListScalarMetaData("stringSet", GQLScalarTypeEnum.STRING));
 		entity.addAttribute(new GQLAttributeEnumMetaData("enumAttr", Enum1.class));
@@ -205,6 +206,7 @@ public class GQLMetaModelBuilder {
 		entity.addAttribute(new GQLAttributeScalarMetaData("fileAttr", GQLScalarTypeEnum.FILE));
 		entity.addAttribute(new GQLAttributeScalarMetaData("localDateAttr", GQLScalarTypeEnum.LOCAL_DATE));
 		entity.addAttribute(new GQLAttributeScalarMetaData("localDateTimeAttr", GQLScalarTypeEnum.LOCAL_DATE_TIME));
+		entity.addAttribute(new GQLAttributeScalarMetaData("instantAttr", GQLScalarTypeEnum.INSTANT));
 		entity.addAttribute(new GQLAttributeListScalarMetaData("stringList", GQLScalarTypeEnum.STRING));
 		entity.addAttribute(new GQLAttributeListScalarMetaData("stringSet", GQLScalarTypeEnum.STRING));
 		entity.addAttribute(new GQLAttributeEnumMetaData("enumAttr", Enum1.class));

@@ -93,6 +93,7 @@ public class GQLQueryFilterOperatorsInputTypeBuilder extends GQLAbstractTypesBui
 		scalarOperators.put(GQLScalarTypeEnum.DATE, dateOperatorEnumType);
 		scalarOperators.put(GQLScalarTypeEnum.LOCAL_DATE, dateOperatorEnumType);
 		scalarOperators.put(GQLScalarTypeEnum.LOCAL_DATE_TIME, dateOperatorEnumType);
+		scalarOperators.put(GQLScalarTypeEnum.INSTANT, dateOperatorEnumType);
 		scalarOperators.put(GQLScalarTypeEnum.CHAR, stringOperatorEnumType);
 		scalarOperators.put(GQLScalarTypeEnum.STRING, stringOperatorEnumType);
 		// scalarOperators.put(GQLScalarTypeEnum.BYTE, numberOperatorEnumType);

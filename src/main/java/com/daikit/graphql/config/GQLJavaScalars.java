@@ -28,8 +28,63 @@ public class GQLJavaScalars {
 	/**
 	 * GraphQL type for {@link LocalDateTime}
 	 */
+	public static GraphQLScalarType GraphQLInstant = GraphQLScalarType.newScalar().name("Instant")
+			.description("Instant type").coercing(new Coercing<Object, Object>() {
+				@Override
+				public Object serialize(final Object input) {
+					if (input == null) {
+						return null;
+					} else if (input instanceof String) {
+						return parseStringToInstant((String) input);
+					} else if (input instanceof Instant) {
+						return input;
+					} else if (input instanceof Long) {
+						return parseLongToInstant((Long) input);
+					} else if (input instanceof Integer) {
+						return parseLongToInstant((Integer) input);
+					} else {
+						throw new IllegalArgumentException(
+								Message.format("Input cannot be serialized from Instant [{}]", input));
+					}
+				}
+
+				@Override
+				public Object parseValue(final Object input) {
+					return serialize(input);
+				}
+
+				@Override
+				public Object parseLiteral(final Object input) {
+					if (input instanceof StringValue) {
+						return parseStringToInstant(((StringValue) input).getValue());
+					} else if (input instanceof IntValue) {
+						final BigInteger value = ((IntValue) input).getValue();
+						return parseLongToInstant(value.longValue());
+					} else {
+						throw new IllegalArgumentException(
+								Message.format("Input cannot be parsed to Instant [{}]", input));
+					}
+				}
+
+				private Instant parseLongToInstant(final long input) {
+					return Instant.ofEpochSecond(input);
+				}
+
+				private Instant parseStringToInstant(final String input) {
+					try {
+						return Instant.parse(input);
+					} catch (final DateTimeParseException e) {
+						throw new IllegalArgumentException(
+								Message.format("Input cannot be parsed to Instant [{}]", input), e);
+					}
+				}
+			}).build();
+
+	/**
+	 * GraphQL type for {@link LocalDateTime}
+	 */
 	public static GraphQLScalarType GraphQLLocalDateTime = GraphQLScalarType.newScalar().name("LocalDateTime")
-			.description("Date type").coercing(new Coercing<Object, Object>() {
+			.description("Local Date Time type").coercing(new Coercing<Object, Object>() {
 				@Override
 				public Object serialize(final Object input) {
 					if (input == null) {
@@ -84,7 +139,7 @@ public class GQLJavaScalars {
 	 * GraphQL type for {@link LocalDate}
 	 */
 	public static GraphQLScalarType GraphQLLocalDate = GraphQLScalarType.newScalar().name("LocalDate")
-			.description("Date type").coercing(new Coercing<Object, Object>() {
+			.description("Local Date type").coercing(new Coercing<Object, Object>() {
 				@Override
 				public Object serialize(final Object input) {
 					if (input instanceof String) {

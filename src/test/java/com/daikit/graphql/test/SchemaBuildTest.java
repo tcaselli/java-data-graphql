@@ -52,7 +52,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		logger.info("Run testEntity1");
 		final IntrospectionResult introspection = getIntrospection();
 		final IntrospectionFullType fullType = getFullType(introspection, Entity1.class);
-		Assert.assertEquals(26, fullType.getFields().size());
+		Assert.assertEquals(27, fullType.getFields().size());
 
 		assertField(fullType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
 		assertField(fullType, "intAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLInt.getName());
@@ -71,6 +71,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 				GQLJavaScalars.GraphQLLocalDate.getName());
 		assertField(fullType, "localDateTimeAttr", IntrospectionTypeKindEnum.SCALAR,
 				GQLJavaScalars.GraphQLLocalDateTime.getName());
+		assertField(fullType, "instantAttr", IntrospectionTypeKindEnum.SCALAR, GQLJavaScalars.GraphQLInstant.getName());
 
 		assertField(fullType, "stringList", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.SCALAR,
 				Scalars.GraphQLString.getName());
@@ -126,7 +127,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		logger.info("Run testEmbeddedData1");
 		final IntrospectionResult introspection = getIntrospection();
 		final IntrospectionFullType fullType = getFullType(introspection, EmbeddedData1.class);
-		Assert.assertEquals(21, fullType.getFields().size());
+		Assert.assertEquals(22, fullType.getFields().size());
 
 		assertField(fullType, "intAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLInt.getName());
 		assertField(fullType, "longAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLLong.getName());
@@ -144,6 +145,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 				GQLJavaScalars.GraphQLLocalDate.getName());
 		assertField(fullType, "localDateTimeAttr", IntrospectionTypeKindEnum.SCALAR,
 				GQLJavaScalars.GraphQLLocalDateTime.getName());
+		assertField(fullType, "instantAttr", IntrospectionTypeKindEnum.SCALAR, GQLJavaScalars.GraphQLInstant.getName());
 
 		assertField(fullType, "stringList", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.SCALAR,
 				Scalars.GraphQLString.getName());
@@ -215,7 +217,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		// Entity1InputType
 		final IntrospectionFullType entity1InputType = getFullType(introspection,
 				Entity1.class.getSimpleName() + schemaConfig.getInputTypeNameSuffix());
-		Assert.assertEquals(26, entity1InputType.getInputFields().size());
+		Assert.assertEquals(27, entity1InputType.getInputFields().size());
 
 		assertInputField(entity1InputType, "id", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLID.getName());
 		assertInputField(entity1InputType, "intAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLInt.getName());
@@ -243,6 +245,8 @@ public class SchemaBuildTest extends AbstractTestSuite {
 				GQLJavaScalars.GraphQLLocalDate.getName());
 		assertInputField(entity1InputType, "localDateTimeAttr", IntrospectionTypeKindEnum.SCALAR,
 				GQLJavaScalars.GraphQLLocalDateTime.getName());
+		assertInputField(entity1InputType, "instantAttr", IntrospectionTypeKindEnum.SCALAR,
+				GQLJavaScalars.GraphQLInstant.getName());
 
 		assertInputField(entity1InputType, "stringList", IntrospectionTypeKindEnum.LIST,
 				IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
