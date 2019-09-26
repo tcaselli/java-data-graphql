@@ -3,6 +3,7 @@ package com.daikit.graphql.config;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -133,6 +134,7 @@ public class GQLSchemaConfig {
 		scalarTypeMappings.put(File.class, GQLScalarTypeEnum.FILE.toString());
 		scalarTypeMappings.put(LocalDate.class, GQLScalarTypeEnum.LOCAL_DATE.toString());
 		scalarTypeMappings.put(LocalDateTime.class, GQLScalarTypeEnum.LOCAL_DATE_TIME.toString());
+		scalarTypeMappings.put(Instant.class, GQLScalarTypeEnum.INSTANT.toString());
 
 	}
 
