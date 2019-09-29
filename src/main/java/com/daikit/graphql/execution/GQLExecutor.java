@@ -9,6 +9,7 @@ import com.daikit.graphql.data.output.GQLDeleteResult;
 import com.daikit.graphql.data.output.GQLExecutionResult;
 import com.daikit.graphql.data.output.GQLListLoadResult;
 import com.daikit.graphql.datafetcher.GQLPropertyDataFetcher;
+import com.daikit.graphql.meta.GQLInternalMetaModel;
 import com.daikit.graphql.meta.GQLMetaModel;
 
 import graphql.ExecutionInput;
@@ -24,6 +25,7 @@ import graphql.schema.GraphQLSchema;
  */
 public class GQLExecutor {
 
+	private final GQLInternalMetaModel metaModel;
 	private final GraphQLSchema schema;
 	private final GraphQL graphql;
 	private final IGQLErrorProcessor errorProcessor;
@@ -34,8 +36,8 @@ public class GQLExecutor {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Initialize GraphQL executorManualMetaModel from given {@link GQLMetaModel} with no
-	 * callback
+	 * Initialize GraphQL executorManualMetaModel from given
+	 * {@link GQLMetaModel} with no callback
 	 *
 	 * @param schemaConfig
 	 *            the schema configuration {@link GQLSchemaConfig}
@@ -66,8 +68,8 @@ public class GQLExecutor {
 	}
 
 	/**
-	 * Initialize GraphQL executorManualMetaModel from given {@link GQLMetaModel} with a
-	 * callback {@link IGQLExecutorCallback}
+	 * Initialize GraphQL executorManualMetaModel from given
+	 * {@link GQLMetaModel} with a callback {@link IGQLExecutorCallback}
 	 *
 	 * @param schemaConfig
 	 *            the schema configuration {@link GQLSchemaConfig}
@@ -97,7 +99,8 @@ public class GQLExecutor {
 			final DataFetcher<?> customMethodDataFetcher, final List<GQLPropertyDataFetcher<?>> propertyDataFetchers) {
 		this.errorProcessor = errorProcessor;
 		this.callback = callback;
-		this.schema = new GQLSchemaBuilder().build(schemaConfig, metaModel, getByIdDataFetcher, listDataFetcher,
+		this.metaModel = new GQLInternalMetaModel(schemaConfig, metaModel);
+		this.schema = new GQLSchemaBuilder().build(schemaConfig, this.metaModel, getByIdDataFetcher, listDataFetcher,
 				saveDataFetcher, deleteDataFetcher, customMethodDataFetcher, propertyDataFetchers);
 		this.graphql = GraphQL.newGraphQL(schema).build();
 	}
@@ -188,6 +191,13 @@ public class GQLExecutor {
 	 */
 	public IGQLErrorProcessor getErrorProcessor() {
 		return errorProcessor;
+	}
+
+	/**
+	 * @return the metaModel
+	 */
+	public GQLInternalMetaModel getMetaModel() {
+		return metaModel;
 	}
 
 }

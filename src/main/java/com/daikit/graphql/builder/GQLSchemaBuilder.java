@@ -59,7 +59,7 @@ public class GQLSchemaBuilder {
 	 *
 	 * @param schemaConfig
 	 *            the schema configuration {@link GQLSchemaConfig}
-	 * @param metaModel
+	 * @param internalMetaModel
 	 *            the {@link GQLInternalMetaModel} meta model
 	 * @param getByIdDataFetcher
 	 *            the {@link DataFetcher} for 'getById' methods
@@ -76,7 +76,7 @@ public class GQLSchemaBuilder {
 	 *
 	 * @return the generated {@link GraphQLSchema}
 	 */
-	public GraphQLSchema build(final GQLSchemaConfig schemaConfig, final GQLMetaModel metaModel,
+	public GraphQLSchema build(final GQLSchemaConfig schemaConfig, final GQLInternalMetaModel internalMetaModel,
 			final DataFetcher<?> getByIdDataFetcher, final DataFetcher<GQLListLoadResult> listDataFetcher,
 			final DataFetcher<?> saveDataFetcher, final DataFetcher<GQLDeleteResult> deleteDataFetcher,
 			final DataFetcher<?> customMethodDataFetcher, final List<GQLPropertyDataFetcher<?>> propertyDataFetchers) {
@@ -84,7 +84,6 @@ public class GQLSchemaBuilder {
 		logger.debug("START building schema...");
 		final GQLSchemaBuilderCache cache = new GQLSchemaBuilderCache(schemaConfig);
 		final GraphQLSchema.Builder builder = GraphQLSchema.newSchema();
-		final GQLInternalMetaModel internalMetaModel = new GQLInternalMetaModel(schemaConfig, metaModel);
 
 		cache.setCodeRegistryBuilder(GraphQLCodeRegistry.newCodeRegistry());
 
@@ -138,8 +137,8 @@ public class GQLSchemaBuilder {
 		logger.debug("END building mutation entities input types");
 
 		logger.debug("START building queries...");
-		builder.query(new GQLQueryTypeBuilder(cache).buildQueryType(internalMetaModel, getByIdDataFetcher, listDataFetcher,
-				customMethodDataFetcher));
+		builder.query(new GQLQueryTypeBuilder(cache).buildQueryType(internalMetaModel, getByIdDataFetcher,
+				listDataFetcher, customMethodDataFetcher));
 		logger.debug("END building queries");
 
 		logger.debug("START building mutations...");
