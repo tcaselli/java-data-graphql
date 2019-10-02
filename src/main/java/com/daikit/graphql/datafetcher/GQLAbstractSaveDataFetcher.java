@@ -3,9 +3,12 @@ package com.daikit.graphql.datafetcher;
 import java.util.Map;
 
 import com.daikit.graphql.builder.GQLSchemaBuilder;
+import com.daikit.graphql.exception.GQLException;
+import com.daikit.graphql.utils.Message;
 
 import graphql.language.Field;
 import graphql.language.ObjectValue;
+import graphql.language.VariableReference;
 import graphql.schema.DataFetchingEnvironment;
 
 /**
@@ -65,12 +68,19 @@ public abstract class GQLAbstractSaveDataFetcher<SUPER_ENTITY_TYPE> extends GQLA
 	public SUPER_ENTITY_TYPE get(final DataFetchingEnvironment environment) {
 		final Field mutationField = environment.getField();
 		final String entityName = getEntityName(getConfig().getMutationSavePrefix(), mutationField.getName());
-		final ObjectValue objectValue = (ObjectValue) mutationField.getArguments().stream()
+		final Object dataValue = mutationField.getArguments().stream()
 				.filter(argument -> getConfig().getMutationAttributeInputDataName().equals(argument.getName()))
 				.findFirst().get().getValue();
 		final Map<String, Object> arguments = getArgumentsForContext(environment.getArguments(),
 				getConfig().getMutationAttributeInputDataName());
-		final Map<String, Object> fieldValueMap = convertObjectValue(objectValue, arguments);
+		Map<String, Object> fieldValueMap;
+		if (dataValue instanceof ObjectValue) {
+			fieldValueMap = convertObjectValue((ObjectValue) dataValue, arguments);
+		} else if (dataValue instanceof VariableReference) {
+			fieldValueMap = arguments;
+		} else {
+			throw new GQLException(Message.format("Unsupported save data type : [{}]", dataValue.getClass().getName()));
+		}
 		return save(getEntityClassByEntityName(entityName), dynamicAttributeRegistry, fieldValueMap);
 	}
 
