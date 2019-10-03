@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * @author tcaselli
  * @version $Revision$ Last modifier: $Author$ Last commit: $Date$
  */
-@Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
+@Target({ElementType.TYPE})
 @Retention(RUNTIME)
 public @interface GQLEntity {
 
@@ -36,7 +36,7 @@ public @interface GQLEntity {
 	/**
 	 * Get whether this entity is excluded from transport to client (if true it
 	 * is equivalent to read==false AND save==false AND delete==false AND
-	 * filter==false)
+	 * filter==false).
 	 *
 	 * @return a boolean (false by default)
 	 */
@@ -44,14 +44,14 @@ public @interface GQLEntity {
 
 	/**
 	 * Get whether this entity is read only (if true it is equivalent to
-	 * read==true AND save==false AND delete==false)
+	 * read==true AND save==false AND delete==false).
 	 *
 	 * @return a boolean (false by default)
 	 */
 	boolean readOnly() default false;
 
 	/**
-	 * Get whether this entity can be read by client
+	 * Get whether this entity can be read by client.
 	 *
 	 * @return a boolean (true by default)
 	 */

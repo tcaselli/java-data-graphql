@@ -1,6 +1,7 @@
 package com.daikit.graphql.test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.daikit.graphql.data.output.GQLExecutionResult;
 import com.daikit.graphql.utils.Message;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
  * Test suite for schema building
@@ -31,10 +33,16 @@ public class SchemaIntrospectionOutputerTest extends AbstractTestSuite {
 	@Test
 	public void testIntrospection() throws IOException {
 		logger.info("Test introspection");
-		final GQLExecutionResult schemaIntrospection = getSchemaIntrospection(false);
+		generateIntrospectionFile(true);
+		generateIntrospectionFile(false);
+	}
+
+	private void generateIntrospectionFile(final boolean automatic)
+			throws JsonProcessingException, IOException, FileNotFoundException {
+		final GQLExecutionResult schemaIntrospection = getSchemaIntrospection(automatic);
 		final String json = WRITER_PRETTY.writeValueAsString(schemaIntrospection.toSpecification());
 		new File("src/test/output").mkdirs();
-		final File output = new File("src/test/output/introspection.json");
+		final File output = new File("src/test/output/introspection" + (automatic ? "_auto" : "") + ".json");
 		IOUtils.write(json, new FileOutputStream(output), Charset.forName("UTF-8"));
 		logger.debug(Message.format("Output file written to [{}]", output.getAbsolutePath()));
 	}

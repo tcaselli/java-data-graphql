@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * @author tcaselli
  * @version $Revision$ Last modifier: $Author$ Last commit: $Date$
  */
-@Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
+@Target({ElementType.FIELD})
 @Retention(RUNTIME)
 public @interface GQLAttribute {
 
@@ -35,7 +35,7 @@ public @interface GQLAttribute {
 
 	/**
 	 * Get whether this attribute is excluded from transport to client (if true
-	 * it is equivalent to read==false AND save==false)
+	 * it is equivalent to read==false AND save==false).
 	 *
 	 * @return a boolean (false by default)
 	 */
@@ -43,14 +43,14 @@ public @interface GQLAttribute {
 
 	/**
 	 * Get whether this attribute is read only (if true it is equivalent to
-	 * read==true AND save==false)
+	 * read==true AND save==false).
 	 *
 	 * @return a boolean (false by default)
 	 */
 	boolean readOnly() default false;
 
 	/**
-	 * Get whether this attribute is readable by client
+	 * Get whether this attribute is readable by client.
 	 *
 	 * @return a boolean (true by default)
 	 */
@@ -73,10 +73,29 @@ public @interface GQLAttribute {
 
 	/**
 	 * Get whether this attribute can be nullified when parent entity is
-	 * created/updated
+	 * created/updated. If you need more granularity consider using
+	 * {@link #nullableForCreation()} or {@link #nullableForUpdate()} instead.
 	 *
 	 * @return a boolean (true by default)
 	 */
 	boolean nullable() default true;
+
+	/**
+	 * Get whether this attribute can be nullified when parent entity is
+	 * created. Setting this property has precedence over setting
+	 * {@link #nullable()} property.
+	 *
+	 * @return a boolean (true by default)
+	 */
+	boolean nullableForCreation() default true;
+
+	/**
+	 * Get whether this attribute can be nullified when parent entity is
+	 * updated. Setting this property has precedence over setting
+	 * {@link #nullable()} property.
+	 *
+	 * @return a boolean (true by default)
+	 */
+	boolean nullableForUpdate() default true;
 
 }

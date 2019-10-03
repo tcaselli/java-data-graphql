@@ -168,38 +168,41 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 			logger.debug(Message.format("Build input save entity field for attribute [{}]", attribute.getName()));
 			final List<GraphQLInputObjectField> inputFields = new ArrayList<>();
 			final String name = attribute.getName();
-			final String description = "Input field [" + attribute.getName() + "]"
-					+ getDescriptionNullableSuffix(attribute);
+			final String nullableSuffix = getDescriptionNullableSuffix(attribute);
 			// Set attribute type
 			if (attribute instanceof GQLAttributeScalarMetaData) {
-				inputFields.add(buildInputField(name, description,
+				inputFields.add(buildInputField(name,
+						"Input field [Scalar] [" + attribute.getName() + "]" + nullableSuffix,
 						getConfig().getScalarType(((GQLAttributeScalarMetaData) attribute).getScalarType()).get()));
 			} else if (attribute instanceof GQLAttributeEnumMetaData) {
-				inputFields.add(buildInputField(name, description,
-						getCache().getEnumType(((GQLAttributeEnumMetaData) attribute).getEnumClass())));
+				inputFields
+						.add(buildInputField(name, "Input field [Enum] [" + attribute.getName() + "]" + nullableSuffix,
+								getCache().getEnumType(((GQLAttributeEnumMetaData) attribute).getEnumClass())));
 			} else if (attribute instanceof GQLAttributeEntityMetaData) {
 				if (((GQLAttributeEntityMetaData) attribute).isEmbedded()) {
 					final GraphQLInputObjectType existingInputEntityType = getOrBuildAndRegisterInputEntity(
 							((GQLAttributeEntityMetaData) attribute).getEntityClass());
-					inputFields.add(buildInputField(name, "Input field [object-embedded] [" + attribute.getName() + "]"
-							+ getDescriptionNullableSuffix(attribute), existingInputEntityType));
+					inputFields.add(buildInputField(name,
+							"Input field [Object embedded] [" + attribute.getName() + "]" + nullableSuffix,
+							existingInputEntityType));
 				} else {
-					inputFields.add(buildInputField(name + getConfig().getAttributeIdSuffix(), "Input field [id] of ["
-							+ attribute.getName() + "]" + getDescriptionNullableSuffix(attribute), Scalars.GraphQLID));
+					inputFields.add(buildInputField(name + getConfig().getAttributeIdSuffix(),
+							"Input field [id] of [" + attribute.getName() + "]" + nullableSuffix, Scalars.GraphQLID));
 				}
 			} else if (attribute instanceof GQLAttributeListEnumMetaData) {
-				inputFields.add(buildInputField(name, description, new GraphQLList(
-						getCache().getEnumType(((GQLAttributeListEnumMetaData) attribute).getEnumClass()))));
+				inputFields.add(buildInputField(name,
+						"Input field [List enum] [" + attribute.getName() + "]" + nullableSuffix, new GraphQLList(
+								getCache().getEnumType(((GQLAttributeListEnumMetaData) attribute).getEnumClass()))));
 			} else if (attribute instanceof GQLAttributeListEntityMetaData) {
 				if (((GQLAttributeListEntityMetaData) attribute).isEmbedded()) {
 					final GraphQLInputObjectType existingInputEntityType = getOrBuildAndRegisterInputEntity(
 							((GQLAttributeListEntityMetaData) attribute).getForeignClass());
 					inputFields.add(buildInputField(name,
-							"Input field [object-embedded] [" + attribute.getName() + "]"
-									+ getDescriptionNullableSuffix(attribute),
+							"Input field [List object embedded] [" + attribute.getName() + "]" + nullableSuffix,
 							new GraphQLList(existingInputEntityType)));
 				} else {
-					// If the attribute accepts cascade create/update
+					// If the attribute accepts cascade create/update then add
+					// possibility to input children
 					if (((GQLAttributeListEntityMetaData) attribute).isCascadeSave()) {
 						final GraphQLInputType foreignInputType = getCache().getInputEntityTypes()
 								.get(((GQLAttributeListEntityMetaData) attribute).getForeignClass());
@@ -218,6 +221,7 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 									new GraphQLList(foreignInputType)));
 						}
 					}
+					// Anyway add possibility to reference children by IDs
 					inputFields.add(buildInputField(
 							(name.endsWith(getConfig().getAttributePluralSuffix())
 									? name.substring(0, name.length() - 1)
@@ -227,8 +231,10 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 							new GraphQLList(Scalars.GraphQLID)));
 				}
 			} else if (attribute instanceof GQLAttributeListScalarMetaData) {
-				inputFields.add(buildInputField(name, description, new GraphQLList(
-						getCache().getScalarType(((GQLAttributeListScalarMetaData) attribute).getScalarType()))));
+				inputFields.add(buildInputField(name,
+						"Input field [List scalar] [" + attribute.getName() + "]" + nullableSuffix,
+						new GraphQLList(getCache()
+								.getScalarType(((GQLAttributeListScalarMetaData) attribute).getScalarType()))));
 			} else {
 				throw new IllegalArgumentException(
 						Message.format("Attribute could not be mapped to GraphQL [{}]", attribute));
@@ -310,7 +316,17 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 		// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 		private String getDescriptionNullableSuffix(final GQLAbstractAttributeMetaData attribute) {
-			return attribute.isNullable() ? "" : " [field is mandatory for creation]";
+			String description = "";
+			if (!attribute.isNullableForCreate()) {
+				if (!attribute.isNullableForUpdate()) {
+					description = " [field is mandatory]";
+				} else {
+					description = " [field is mandatory for creation]";
+				}
+			} else if (!attribute.isNullableForUpdate()) {
+				description = " [field is mandatory for update]";
+			}
+			return description;
 		}
 
 		private GraphQLInputObjectField buildIdInputField() {

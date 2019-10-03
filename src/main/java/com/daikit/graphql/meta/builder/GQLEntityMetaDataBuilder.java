@@ -107,8 +107,7 @@ public class GQLEntityMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 
 	private GQLAbstractAttributeMetaData buildAttribute(Class<?> entityClass, final Field field) {
 		GQLAbstractAttributeMetaData attribute = null;
-		// TODO check for other ways to filter out properties
-		if (!Modifier.isTransient(field.getModifiers())) {
+		if (!Modifier.isTransient(field.getModifiers()) && !Modifier.isStatic(field.getModifiers())) {
 			final GQLAttribute annotation = field.getAnnotation(GQLAttribute.class);
 			if (annotation == null || !annotation.exclude()) {
 				if (getConfig().isScalarType(field.getType())) {
@@ -146,6 +145,7 @@ public class GQLEntityMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 		populateAttributeMetaData(field, attribute);
 		if (getConfig().getAttributeIdName().equals(field.getName())) {
 			attribute.setScalarType(GQLScalarTypeEnum.ID.toString());
+			attribute.setNullableForUpdate(false);
 		} else {
 			attribute.setScalarType(getConfig().getScalarTypeCodeFromClass(field.getType()).get());
 		}
@@ -195,6 +195,7 @@ public class GQLEntityMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 		final GQLAttributeListEntityMetaData attribute = new GQLAttributeListEntityMetaData();
 		populateAttributeMetaData(field, attribute);
 		attribute.setForeignClass(foreignClass);
+		attribute.setEmbedded(embedded);
 		return attribute;
 	}
 
@@ -203,7 +204,10 @@ public class GQLEntityMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 		attribute.setName(
 				annotation == null || StringUtils.isEmpty(annotation.name()) ? field.getName() : annotation.name());
 		attribute.setDescription(annotation == null ? null : annotation.description());
-		attribute.setNullable(!field.getType().isPrimitive() && (annotation == null || annotation.nullable()));
+		if (annotation != null) {
+			attribute.setNullableForCreate(annotation.nullableForCreation() && annotation.nullable());
+			attribute.setNullableForUpdate(annotation.nullableForUpdate() && annotation.nullable());
+		}
 		attribute.setReadable(annotation == null || annotation.readOnly() || annotation.read());
 		attribute.setSaveable(annotation == null || !annotation.readOnly() && annotation.save());
 		attribute.setFilterable(annotation == null || annotation.filter());

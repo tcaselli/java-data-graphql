@@ -15,7 +15,8 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	private String description;
 	private boolean readable = true;
 	private boolean saveable = true;
-	private boolean nullable = true;
+	private boolean nullableForCreate = true;
+	private boolean nullableForUpdate = true;
 	private boolean filterable = true;
 
 	private IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter;
@@ -50,9 +51,39 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 
 	@Override
 	protected void appendToString(final StringBuilder stringBuilder) {
-		stringBuilder.append(name).append(nullable ? "[N]" : "").append(readable ? "[R]" : "")
-				.append(saveable ? "[S]" : "").append(filterable ? "[F]" : "").append(isDynamic() ? "[DYN]" : "");
+		stringBuilder.append(name).append(!isNullableForCreate() && !isNullableForUpdate() ? "[!NULL]" : "")
+				.append(!isNullableForCreate() ? "[!NULL-C]" : "").append(!isNullableForUpdate() ? "[!NULL-U]" : "")
+				.append(readable ? "[R]" : "").append(saveable ? "[S]" : "").append(filterable ? "[F]" : "")
+				.append(isDynamic() ? "[DYN]" : "");
 	}
+
+	/**
+	 * Get whether this attribute can be null. This is a shortcut to
+	 * ({@link #isNullableForCreate()} AND {@link #isNullableForUpdate()})
+	 *
+	 * @return the nullable
+	 */
+	public boolean isNullable() {
+		return isNullableForCreate() && isNullableForUpdate();
+	}
+
+	/**
+	 * Set whether this attribute can be null. This will set
+	 * {@link #nullableForCreate} AND {@link #nullableForUpdate} to TRUE
+	 *
+	 * @param nullable
+	 *            the nullable to set
+	 * @return this instance
+	 */
+	public GQLAbstractAttributeMetaData setNullable(final boolean nullable) {
+		this.setNullableForCreate(nullable);
+		this.setNullableForUpdate(nullable);
+		return this;
+	}
+
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+	// GETTERS / SETTERS
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
 	 * Get whether this attribute is dynamic, which means that either a
@@ -137,27 +168,6 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	}
 
 	/**
-	 * Get whether this attribute can be null. Default is <code>true</code>.
-	 *
-	 * @return the nullable
-	 */
-	public boolean isNullable() {
-		return nullable;
-	}
-
-	/**
-	 * Set whether this attribute can be null. Default is <code>true</code>.
-	 *
-	 * @param nullable
-	 *            the nullable to set
-	 * @return this instance
-	 */
-	public GQLAbstractAttributeMetaData setNullable(final boolean nullable) {
-		this.nullable = nullable;
-		return this;
-	}
-
-	/**
 	 * Get whether this attribute will be available in schema queries for
 	 * retrieving this attribute parent entity. Default is <code>true</code>.
 	 *
@@ -200,6 +210,52 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	 */
 	public GQLAbstractAttributeMetaData setSaveable(final boolean saveable) {
 		this.saveable = saveable;
+		return this;
+	}
+
+	/**
+	 * Get whether this attribute can be null at parent entity creation time.
+	 * Default is <code>true</code>.
+	 *
+	 * @return the nullableForCreate
+	 */
+	public boolean isNullableForCreate() {
+		return nullableForCreate;
+	}
+
+	/**
+	 * Set whether this attribute can be null at parent entity creation time.
+	 * Default is <code>true</code>.
+	 *
+	 * @param nullableForCreate
+	 *            the nullableForCreate to set
+	 * @return this instance
+	 */
+	public GQLAbstractAttributeMetaData setNullableForCreate(boolean nullableForCreate) {
+		this.nullableForCreate = nullableForCreate;
+		return this;
+	}
+
+	/**
+	 * Get whether this attribute can be null at parent entity creation time.
+	 * Default is <code>true</code>.
+	 *
+	 * @return the nullableForUpdate
+	 */
+	public boolean isNullableForUpdate() {
+		return nullableForUpdate;
+	}
+
+	/**
+	 * Set whether this attribute can be null at parent entity creation time.
+	 * Default is <code>true</code>.
+	 *
+	 * @param nullableForUpdate
+	 *            the nullableForUpdate to set
+	 * @return this instance
+	 */
+	public GQLAbstractAttributeMetaData setNullableForUpdate(boolean nullableForUpdate) {
+		this.nullableForUpdate = nullableForUpdate;
 		return this;
 	}
 

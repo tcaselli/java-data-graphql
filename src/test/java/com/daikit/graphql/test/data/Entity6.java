@@ -1,5 +1,7 @@
 package com.daikit.graphql.test.data;
 
+import com.daikit.graphql.meta.GQLAttribute;
+
 /**
  * Entity class 5
  *
@@ -7,10 +9,18 @@ package com.daikit.graphql.test.data;
  */
 public class Entity6 extends AbstractEntity {
 
+	@GQLAttribute(read = false)
 	private String attr1;
+	@GQLAttribute(save = false)
 	private String attr2;
+	@GQLAttribute(nullable = false)
 	private String attr3;
+	@GQLAttribute(nullableForUpdate = false)
 	private String attr4;
+	@GQLAttribute(nullableForCreation = false)
+	private String attr5;
+	@GQLAttribute(filter = false)
+	private String attr6;
 
 	/**
 	 * @return the attr1
@@ -63,5 +73,31 @@ public class Entity6 extends AbstractEntity {
 	 */
 	public void setAttr4(final String attr4) {
 		this.attr4 = attr4;
+	}
+	/**
+	 * @return the attr5
+	 */
+	public String getAttr5() {
+		return attr5;
+	}
+	/**
+	 * @param attr5
+	 *            the attr5 to set
+	 */
+	public void setAttr5(String attr5) {
+		this.attr5 = attr5;
+	}
+	/**
+	 * @return the attr6
+	 */
+	public String getAttr6() {
+		return attr6;
+	}
+	/**
+	 * @param attr6
+	 *            the attr6 to set
+	 */
+	public void setAttr6(String attr6) {
+		this.attr6 = attr6;
 	}
 }

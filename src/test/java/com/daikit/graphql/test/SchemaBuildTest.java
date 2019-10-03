@@ -475,15 +475,17 @@ public class SchemaBuildTest extends AbstractTestSuite {
 				Message.format("There shouldn't be a not saveable field [{}] in [{}].", "attr2", entityInputTypeName),
 				attr2InputField.isPresent());
 		// Check field attr3 is not nullable
-		// It is not set as not null in schema since it is mandatory for
-		// creation but not necessarily for update
 		assertInputField(entityInputType, "attr3", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
+		// Check field attr4 is not nullableForCreation
+		assertInputField(entityInputType, "attr4", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
+		// Check field attr5 is not nullableForUpdate
+		assertInputField(entityInputType, "attr5", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
 		// Check field attr4 is not filterable
 		final String entityFilterTypeName = Entity6.class.getSimpleName()
 				+ schemaConfig.getQueryGetListFilterEntityTypeNameSuffix();
 		final IntrospectionFullType entityFilterInputType = getFullType(introspection, entityFilterTypeName);
 		final Optional<IntrospectionInputValue> attr4IinputField = getOptionalInputField(entityFilterInputType,
-				"attr4");
+				"attr6");
 		Assert.assertFalse(
 				Message.format("There shouldn't be a filterable field [{}] in [{}].", "attr4", entityFilterTypeName),
 				attr4IinputField.isPresent());

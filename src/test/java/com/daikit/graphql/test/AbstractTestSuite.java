@@ -56,8 +56,6 @@ public abstract class AbstractTestSuite {
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private GQLExecutionResult schemaIntrospection;
-
 	protected DataModel dataModel;
 	protected GQLSchemaConfig schemaConfig;
 	protected GQLExecutor executorManualMetaModel;
@@ -130,10 +128,7 @@ public abstract class AbstractTestSuite {
 	}
 
 	protected GQLExecutionResult getSchemaIntrospection(boolean automaticMetaModel) {
-		if (schemaIntrospection == null) {
-			schemaIntrospection = GQLIntrospection.getAllTypes(query -> getExecutor(automaticMetaModel).execute(query));
-		}
-		return schemaIntrospection;
+		return GQLIntrospection.getAllTypes(query -> getExecutor(automaticMetaModel).execute(query));
 	}
 
 	@SuppressWarnings("unchecked")

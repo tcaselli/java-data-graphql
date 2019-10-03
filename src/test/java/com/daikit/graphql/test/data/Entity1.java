@@ -3,6 +3,7 @@ package com.daikit.graphql.test.data;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class Entity1 extends AbstractEntity {
 	private File fileAttr;
 	private LocalDate localDateAttr;
 	private LocalDateTime localDateTimeAttr;
+	private Instant instantAttr;
 
 	// Scalar collections
 	private List<String> stringList = new ArrayList<>();
@@ -60,6 +62,12 @@ public class Entity1 extends AbstractEntity {
 	private EmbeddedData1 embeddedData1;
 	// List of datas
 	private List<EmbeddedData1> embeddedData1s = new ArrayList<>();
+
+	private transient String transientStringAttr;
+	/**
+	 * Static String attribute
+	 */
+	public static String STATIC_STRING_ATTR = "staticStringAttr";
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// GETTERS / SETTERS
@@ -376,5 +384,31 @@ public class Entity1 extends AbstractEntity {
 	 */
 	public void setEnumSet(final Set<Enum1> enumSet) {
 		this.enumSet = enumSet;
+	}
+	/**
+	 * @return the transientStringAttr
+	 */
+	public String getTransientStringAttr() {
+		return transientStringAttr;
+	}
+	/**
+	 * @param transientStringAttr
+	 *            the transientStringAttr to set
+	 */
+	public void setTransientStringAttr(String transientStringAttr) {
+		this.transientStringAttr = transientStringAttr;
+	}
+	/**
+	 * @return the instantAttr
+	 */
+	public Instant getInstantAttr() {
+		return instantAttr;
+	}
+	/**
+	 * @param instantAttr
+	 *            the instantAttr to set
+	 */
+	public void setInstantAttr(Instant instantAttr) {
+		this.instantAttr = instantAttr;
 	}
 }
