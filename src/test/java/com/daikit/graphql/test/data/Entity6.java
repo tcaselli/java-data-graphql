@@ -17,7 +17,7 @@ public class Entity6 extends AbstractEntity {
 	private String attr3;
 	@GQLAttribute(nullableForUpdate = false)
 	private String attr4;
-	@GQLAttribute(nullableForCreation = false)
+	@GQLAttribute(nullableForCreate = false)
 	private String attr5;
 	@GQLAttribute(filter = false)
 	private String attr6;

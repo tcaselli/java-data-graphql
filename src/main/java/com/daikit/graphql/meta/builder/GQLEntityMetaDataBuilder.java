@@ -146,6 +146,7 @@ public class GQLEntityMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 		if (getConfig().getAttributeIdName().equals(field.getName())) {
 			attribute.setScalarType(GQLScalarTypeEnum.ID.toString());
 			attribute.setNullableForUpdate(false);
+			attribute.setMandatoryForUpdate(true);
 		} else {
 			attribute.setScalarType(getConfig().getScalarTypeCodeFromClass(field.getType()).get());
 		}
@@ -205,7 +206,7 @@ public class GQLEntityMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 				annotation == null || StringUtils.isEmpty(annotation.name()) ? field.getName() : annotation.name());
 		attribute.setDescription(annotation == null ? null : annotation.description());
 		if (annotation != null) {
-			attribute.setNullableForCreate(annotation.nullableForCreation() && annotation.nullable());
+			attribute.setNullableForCreate(annotation.nullableForCreate() && annotation.nullable());
 			attribute.setNullableForUpdate(annotation.nullableForUpdate() && annotation.nullable());
 		}
 		attribute.setReadable(annotation == null || annotation.readOnly() || annotation.read());

@@ -74,7 +74,7 @@ public @interface GQLAttribute {
 	/**
 	 * Get whether this attribute can be nullified when parent entity is
 	 * created/updated. If you need more granularity consider using
-	 * {@link #nullableForCreation()} or {@link #nullableForUpdate()} instead.
+	 * {@link #nullableForCreate()} or {@link #nullableForUpdate()} instead.
 	 *
 	 * @return a boolean (true by default)
 	 */
@@ -87,7 +87,7 @@ public @interface GQLAttribute {
 	 *
 	 * @return a boolean (true by default)
 	 */
-	boolean nullableForCreation() default true;
+	boolean nullableForCreate() default true;
 
 	/**
 	 * Get whether this attribute can be nullified when parent entity is
@@ -97,5 +97,32 @@ public @interface GQLAttribute {
 	 * @return a boolean (true by default)
 	 */
 	boolean nullableForUpdate() default true;
+
+	/**
+	 * Get whether this attribute is mandatory when parent entity is
+	 * created/updated. If you need more granularity consider using
+	 * {@link #mandatoryForCreate()} or {@link #mandatoryForUpdate()} instead.
+	 *
+	 * @return a boolean (false by default)
+	 */
+	boolean mandatory() default true;
+
+	/**
+	 * Get whether this attribute is mandatory when parent entity is created.
+	 * Setting this property has precedence over setting {@link #mandatory()}
+	 * property.
+	 *
+	 * @return a boolean (false by default)
+	 */
+	boolean mandatoryForCreate() default true;
+
+	/**
+	 * Get whether this attribute is mandatory when parent entity is updated.
+	 * Setting this property has precedence over setting {@link #mandatory()}
+	 * property.
+	 *
+	 * @return a boolean (false by default)
+	 */
+	boolean mandatoryForUpdate() default true;
 
 }

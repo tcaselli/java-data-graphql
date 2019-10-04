@@ -476,7 +476,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 				attr2InputField.isPresent());
 		// Check field attr3 is not nullable
 		assertInputField(entityInputType, "attr3", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
-		// Check field attr4 is not nullableForCreation
+		// Check field attr4 is not nullableForCreate
 		assertInputField(entityInputType, "attr4", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
 		// Check field attr5 is not nullableForUpdate
 		assertInputField(entityInputType, "attr5", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());

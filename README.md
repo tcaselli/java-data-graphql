@@ -402,12 +402,24 @@ attribute.setReadable(false);
 // This will prevent generation of this attribute in schema input type 
 // for this entity save method
 attribute.setSaveable(false);
+// This will make this attribute "Not nullable" during any save operation.
+// This configuration is ignored if this attribute is not saveable.
+attribute.setNullable(false);
 // This will make this attribute "Not nullable" during a creation save operation.
 // This configuration is ignored if this attribute is not saveable.
 attribute.setNullableForCreate(false);
 // This will make this attribute "Not nullable" during an update save operation.
 // This configuration is ignored if this attribute is not saveable.
 attribute.setNullableForUpdate(false);
+// This will make this attribute mandatory during any save operation.
+// This configuration is ignored if this attribute is not saveable.
+attribute.setMandatory(true);
+// This will make this attribute mandatory during a creation save operation.
+// This configuration is ignored if this attribute is not saveable.
+attribute.setMandatoryForCreate(true);
+// This will make this attribute mandatory during an update save operation.
+// This configuration is ignored if this attribute is not saveable.
+attribute.setMandatoryForUpdate(true);
 // This will disable filtering feature on this attribute in "getAll" method
 attribute.setFilterable(false);
 ```

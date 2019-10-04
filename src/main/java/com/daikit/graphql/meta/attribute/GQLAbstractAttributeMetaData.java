@@ -17,6 +17,8 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	private boolean saveable = true;
 	private boolean nullableForCreate = true;
 	private boolean nullableForUpdate = true;
+	private boolean mandatoryForCreate = false;
+	private boolean mandatoryForUpdate = false;
 	private boolean filterable = true;
 
 	private IGQLDynamicAttributeGetter<?, ?> dynamicAttributeGetter;
@@ -53,7 +55,9 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	protected void appendToString(final StringBuilder stringBuilder) {
 		stringBuilder.append(name).append(!isNullableForCreate() && !isNullableForUpdate() ? "[!NULL]" : "")
 				.append(!isNullableForCreate() ? "[!NULL-C]" : "").append(!isNullableForUpdate() ? "[!NULL-U]" : "")
-				.append(readable ? "[R]" : "").append(saveable ? "[S]" : "").append(filterable ? "[F]" : "")
+				.append(isMandatoryForCreate() && isMandatoryForUpdate() ? "[MAND]" : "")
+				.append(isMandatoryForCreate() ? "[MAND-C]" : "").append(isMandatoryForUpdate() ? "[MAND-U]" : "")
+				.append(readable ? "[R]" : "").append(saveable ? "[S]" : "").append(filterable ? "[FILT]" : "")
 				.append(isDynamic() ? "[DYN]" : "");
 	}
 
@@ -69,7 +73,8 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 
 	/**
 	 * Set whether this attribute can be null. This will set
-	 * {@link #nullableForCreate} AND {@link #nullableForUpdate} to TRUE
+	 * {@link #nullableForCreate} AND {@link #nullableForUpdate} to the same
+	 * given value
 	 *
 	 * @param nullable
 	 *            the nullable to set
@@ -78,6 +83,32 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	public GQLAbstractAttributeMetaData setNullable(final boolean nullable) {
 		this.setNullableForCreate(nullable);
 		this.setNullableForUpdate(nullable);
+		return this;
+	}
+
+	/**
+	 * Get whether this attribute must be provided during save. This is a
+	 * shortcut to ({@link #isMandatoryForCreate()} AND
+	 * {@link #isMandatoryForUpdate()})
+	 *
+	 * @return the mandatory
+	 */
+	public boolean isMandatory() {
+		return isMandatoryForCreate() && isMandatoryForUpdate();
+	}
+
+	/**
+	 * Set whether this attribute can be null. This will set
+	 * {@link #mandatoryForCreate} AND {@link #mandatoryForUpdate} to the same
+	 * given value
+	 *
+	 * @param mandatory
+	 *            the mandatory to set
+	 * @return this instance
+	 */
+	public GQLAbstractAttributeMetaData setMandatory(final boolean mandatory) {
+		this.setMandatoryForCreate(mandatory);
+		this.setMandatoryForUpdate(mandatory);
 		return this;
 	}
 
@@ -256,6 +287,60 @@ public abstract class GQLAbstractAttributeMetaData extends GQLAbstractMetaData {
 	 */
 	public GQLAbstractAttributeMetaData setNullableForUpdate(boolean nullableForUpdate) {
 		this.nullableForUpdate = nullableForUpdate;
+		return this;
+	}
+
+	/**
+	 * Get whether this attribute must be provided during parent entity
+	 * creation. This does not mean it cannot be null, this is given by
+	 * {@link #isNullable()} or {@link #isNullableForCreate()} methods. Default
+	 * is <code>false</code>.
+	 *
+	 * @return the mandatoryForCreate
+	 */
+	public boolean isMandatoryForCreate() {
+		return mandatoryForCreate;
+	}
+
+	/**
+	 * Set whether this attribute must be provided during parent entity
+	 * creation. This does not mean it cannot be null, this is configurable with
+	 * {@link #setNullable(boolean)} or {@link #setNullableForCreate(boolean)}
+	 * methods. Default is <code>false</code>.
+	 *
+	 * @param mandatoryForCreate
+	 *            the mandatoryForCreate to set
+	 * @return this instance
+	 */
+	public GQLAbstractAttributeMetaData setMandatoryForCreate(boolean mandatoryForCreate) {
+		this.mandatoryForCreate = mandatoryForCreate;
+		return this;
+	}
+
+	/**
+	 * Get whether this attribute must be provided during parent entity update.
+	 * This does not mean it cannot be null, this is given by
+	 * {@link #isNullable()} or {@link #isNullableForUpdate()} methods. Default
+	 * is <code>false</code>.
+	 *
+	 * @return the mandatoryForUpdate
+	 */
+	public boolean isMandatoryForUpdate() {
+		return mandatoryForUpdate;
+	}
+
+	/**
+	 * Set whether this attribute must be provided during parent entity update.
+	 * This does not mean it cannot be null, this is configurable with
+	 * {@link #setNullable(boolean)} or {@link #setNullableForUpdate(boolean)}
+	 * methods. Default is <code>false</code>.
+	 *
+	 * @param mandatoryForUpdate
+	 *            the mandatoryForUpdate to set
+	 * @return this instance
+	 */
+	public GQLAbstractAttributeMetaData setMandatoryForUpdate(boolean mandatoryForUpdate) {
+		this.mandatoryForUpdate = mandatoryForUpdate;
 		return this;
 	}
 
