@@ -60,26 +60,96 @@ The schema configuration allows to choose prefixes, suffixes, attribute names,
 
 ### The meta model
 
-The meta model ```com.daikit.graphql.meta.GQLMetaModel``` is the base of the schema generation. It is in this meta model that you will define all your entities (top level or embedded, abstract or concrete), enumerations, dynamic attributes and custom methods.  
-The meta model can be written by hand in java or parsed from a json/yaml definition file or generated out of your domain layer code (for example using JPA meta model and spring components as a basis).  
+The meta model ```com.daikit.graphql.meta.GQLMetaModel``` **is the base of the schema generation**. It is in this meta model that you will define all your **entities** (top level or embedded, abstract or concrete), **enumerations**, **dynamic attributes** and **custom methods**.  
+The meta model can be written by hand in java or automatically parsed from java domain model objects (for example from JPA entities).  
+
+--> See next sections for details on how to define these meta datas, dynamic attributes and custom methods.  
 
 ### Creation of the meta model
 
-The constructor of the meta model is as follow :
+You have **3 ways** of creating the meta model :
+
+#### The automatic way
 
 ```java
-GQLMetaModel(
-    final Collection<GQLEnumMetaData> enumMetaDatas,
-    final Collection<GQLEntityMetaData> entityMetaDatas,
-    final Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes,
-    final Collection<GQLAbstractCustomMethod<?>> customMethods){
-        ...
-    }
+/**
+ * With this method, all meta datas will be
+ * automatically generated and registered from given entity classes,
+ * attributes and methods. Entities, enums, dynamic attributes and custom
+ * method meta data will be automatically generated and registered.
+ *
+ * @param entityClasses
+ *            the collection of entity classes
+ * @param availableEmbeddedEntityClasses
+ *            the collection of all available embedded entity classes. 
+ *            It is the only way to provide allowed extending classes 
+ *            for embedded entities. You can leave this null or
+ *            empty if you don't need this advanced behavior.
+ * @param dynamicAttributes
+ *            the collection of IGQLAbstractDynamicAttribute to be
+ *            automatically registered
+ * @param customMethods
+ *            the collection of GQLAbstractCustomMethod to be
+ *            automatically registered
+ * @return the created instance
+ */
+public static GQLMetaModel createFromEntityClasses(
+    Collection<Class<?>> entityClasses,
+    Collection<Class<?>> availableEmbeddedEntityClasses,
+    Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes,
+    Collection<IGQLAbstractCustomMethod<?>> customMethods) {...}
 ```
 
-So you will need to create all Enum and Entity meta datas and then create the meta model.   
-For dynamic attributes and custom methods , meta datas will be automatically generated from given Collections of ```IGQLAbstractDynamicAttribute``` and ```GQLAbstractCustomMethod```.  
---> See next sections for details on how to define these meta datas, dynamic attributes and custom methods.  
+#### The semi-automatic way (manual generation of entities but automatic generation of dynamic attributes and custom methods)
+
+```java
+/**
+ * With this method, entities and enums MetaData have been created manually
+ * but dynamic attributes and custom method meta data will 
+ * be automatically generated and registered.
+ *
+ * @param enumMetaDatas
+ *            the collection of all registered GQLEnumMetaData
+ * @param entityMetaDatas
+ *            the collection of all registered GQLEntityMetaData
+ * @param dynamicAttributes
+ *            the collection of IGQLAbstractDynamicAttribute to be
+ *            automatically registered (meta data will be created
+ *            automatically)
+ * @param customMethods
+ *            the collection of GQLAbstractCustomMethod to be
+ *            automatically registered (meta data will be created
+ *            automatically)
+ * @return the created instance
+ */
+public static GQLMetaModel createFromMetaDatas(
+    Collection<GQLEnumMetaData> enumMetaDatas,
+    Collection<GQLEntityMetaData> entityMetaDatas,
+    Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes,
+    Collection<IGQLAbstractCustomMethod<?>> customMethods) {...}
+```
+
+#### The manual way (manual generation of entities but automatic generation of dynamic attributes and custom methods)
+
+```java
+/**
+ * With this method, dynamic attributes should  already be registered in entities
+ * and custom methods should already have their MetaData automatically generated 
+ * and registered.
+ *
+ * @param enumMetaDatas
+ *            the collection of all registered  GQLEnumMetaData
+ * @param entityMetaDatas
+ *            the collection of all registered GQLEntityMetaData
+ * @param methodMetaDatas
+ *            the collection of all registered GQLAbstractMethodMetaData
+ * @return the created instance
+ */
+public static GQLMetaModel createFromMetaDatas(
+    Collection<GQLEnumMetaData> enumMetaDatas,
+    Collection<GQLEntityMetaData> entityMetaDatas,
+    Collection<GQLAbstractMethodMetaData> methodMetaDatas) {...}
+```
 
 **Be careful, all entities and enums referenced in dynamic attributes or custom methods arguments and returned types must have a corresponding registered meta data.**
 
@@ -108,7 +178,7 @@ OtherEntity, List<OtherEntity>
 EmbeddedEntity, List<EmbeddedEntity>
 ```
 
-### Defining entities in meta model
+### Manual definition of entities in meta model
 
 In order to define an entity you have to register a ```com.daikit.graphql.meta.entity.GQLEntityMetaData```  in the meta model.
 
@@ -149,11 +219,11 @@ metaData.addAttribute(new GQLAttributeEmbeddedEntityMetaData("embeddedEntity1", 
 metaData.addAttribute(new GQLAttributeListEmbeddedEntityMetaData("embeddedEntity1s", embeddedEntity1.class));
 ```
 
-### Defining embedded entities in meta model
+### Manual definition of embedded entities in meta model
 
 In order to define an entity you have to register a ```com.daikit.graphql.meta.entity.GQLEmbeddedEntityMetaData```  in the meta model. You would then do exactly the same than when you register an entity (see previous chapter) excepted that in an embedded entity you cannot register an attribute with a relation to a non embedded entity.
 
-### Defining custom methods in meta model
+### Manual definition of custom methods in meta model
 
 This library will generate CRUD method on entities and make them available in the schema. If you need to have other methods available in the schema you can define custom methods. A custom method can either be a query or a mutation.  
 For each of these custom methods you will need to create a custom method object. This object will be of a different type depending on the number of arguments of your method.
@@ -223,7 +293,7 @@ metaData.addArgument(new GQLMethodArgumentEmbeddedEntityMetaData(
 
 -> Etc... You can register methods with up to 5 arguments.
 
-### Defining dynamic attributes in meta model
+### Manual definition of dynamic attributes in meta model
 
 A dynamic attribute is an entity virtual property available in the schema but not in the entity itself. This attribute can be read and/or written thanks to methods you have to implement.
 
@@ -264,6 +334,51 @@ IGQLDynamicAttributeSetter<Entity1, EmbeddedEntity1> dynamicAttributeSetter =
 As stated before, this library is generating a schema with methods giving the possibility to execute CRUD operations on entities (getById, getAll, save, delete).  
 By default all registered entities will have these 4 methods generated, but you can customize these methods generation in the meta model.
 
+#### Customizing accessibility with automatic meta model generation
+
+With automatic generation, meta data are created using reflection on entities classes.
+You can configure this generation thanks to annotations.
+
+Accessibility on entities using ```com.daikit.graphql.meta.GQLEntity``` annotation :
+
+```java
+// no save method will be generated in schema for this entity
+@GQLEntity(save=false)
+public class Entity1 {}
+
+// no getById/getAll method will be generated in schema for this entity
+@GQLEntity(read=false)
+public class Entity1 {}
+
+// no delete method will be generated in schema for this entity
+@GQLEntity(delete=false)
+public class Entity1 {}
+
+// see GQLEntity annotation documentation for further details
+// on possible configurations
+[...]
+```
+
+Accessibility on attributes using ```com.daikit.graphql.meta.GQLAttribute``` annotation :
+
+```java
+public class Entity1 {
+    // this attribute will not be redable, saveable and filterable
+    @GQLAttribute(read = false, save=false, filter=false)
+    private int intAttr;
+
+    // see GQLAttribute annotation documentation for further details
+    // on possible configurations
+    [...]
+
+    // Keep in mind that transient and static fields will be ignored
+}
+```
+
+#### Customizing accessibility with manual meta model generation
+
+Accessibility on entities :
+
 ```java
 GQLEntityMetaData metaData = new GQLEntityMetaData("Entity1", Entity1.class, AbstractEntity.class);
 // This will prevent "delete method" generation for this entity
@@ -273,6 +388,8 @@ metaData.setReadable(false);
 // This will prevent "save method" generation for this entity
 metaData.setSaveable(false);
 ```
+
+Accessibility on attributes :
 
 You can also configure the possibility to read, write, nullify and filter on entity attributes. By default all entity attributes are readable, writeable, nullable, and filterable.
 
@@ -285,12 +402,16 @@ attribute.setReadable(false);
 // This will prevent generation of this attribute in schema input type 
 // for this entity save method
 attribute.setSaveable(false);
-// This will make this attribute "Not nullable" during save operation.
+// This will make this attribute "Not nullable" during a creation save operation.
 // This configuration is ignored if this attribute is not saveable.
-attribute.setNullable(false);
+attribute.setNullableForCreate(false);
+// This will make this attribute "Not nullable" during an update save operation.
+// This configuration is ignored if this attribute is not saveable.
+attribute.setNullableForUpdate(false);
 // This will disable filtering feature on this attribute in "getAll" method
 attribute.setFilterable(false);
 ```
+
 ### Data fetchers
 
 Data fetchers ```graphql.schema.DataFetcher<?>``` are objects that will make the glue between graphQL and your persistence layer. You will have to provide a data fetcher for :
