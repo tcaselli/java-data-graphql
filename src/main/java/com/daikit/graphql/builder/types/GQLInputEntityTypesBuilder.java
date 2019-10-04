@@ -319,21 +319,21 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 			String description = "";
 			if (!attribute.isNullableForCreate()) {
 				if (!attribute.isNullableForUpdate()) {
-					description = " [field is not nullable]";
+					description += " [field is not nullable]";
 				} else {
-					description = " [field is not nullable for creation]";
+					description += " [field is not nullable for creation]";
 				}
 			} else if (!attribute.isNullableForUpdate()) {
-				description = " [field is not nullable for update]";
+				description += " [field is not nullable for update]";
 			}
 			if (attribute.isMandatoryForCreate()) {
 				if (attribute.isMandatoryForUpdate()) {
-					description = " [field is mandatory]";
+					description += " [field is mandatory]";
 				} else {
-					description = " [field is mandatory for creation]";
+					description += " [field is mandatory for creation]";
 				}
 			} else if (attribute.isMandatoryForUpdate()) {
-				description = " [field is mandatory for update]";
+				description += " [field is mandatory for update]";
 			}
 			return description;
 		}
