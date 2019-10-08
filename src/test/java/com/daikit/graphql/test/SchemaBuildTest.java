@@ -127,7 +127,7 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		logger.info("Run testEmbeddedData1");
 		final IntrospectionResult introspection = getIntrospection();
 		final IntrospectionFullType fullType = getFullType(introspection, EmbeddedData1.class);
-		Assert.assertEquals(22, fullType.getFields().size());
+		Assert.assertEquals(24, fullType.getFields().size());
 
 		assertField(fullType, "intAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLInt.getName());
 		assertField(fullType, "longAttr", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLLong.getName());
@@ -160,6 +160,9 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		assertField(fullType, "data2", IntrospectionTypeKindEnum.OBJECT, EmbeddedData2.class);
 		assertField(fullType, "data3s", IntrospectionTypeKindEnum.LIST, IntrospectionTypeKindEnum.OBJECT,
 				EmbeddedData3.class);
+
+		assertField(fullType, "dynamicAttribute1", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
+		assertField(fullType, "dynamicAttribute2", IntrospectionTypeKindEnum.OBJECT, Entity2.class);
 	}
 
 	/**

@@ -29,8 +29,8 @@ public class QueryExecutionTest extends AbstractTestSuite {
 	@Test
 	public void testGetEntity1() {
 		final String query = readGraphql("testGetEntity1.graphql");
-		final ExecutionResult result = handleErrors(executorManualMetaModel.execute(ExecutionInput.newExecutionInput().query(query)
-				.variables(Collections.singletonMap("id", "3")).build()));
+		final ExecutionResult result = handleErrors(executorManualMetaModel.execute(ExecutionInput.newExecutionInput()
+				.query(query).variables(Collections.singletonMap("id", "3")).build()));
 		final Entity1 resultData = toObject(result, Entity1.class);
 		Assert.assertEquals(3, resultData.getIntAttr());
 	}
@@ -51,8 +51,8 @@ public class QueryExecutionTest extends AbstractTestSuite {
 	@Test
 	public void testCustomMethodQuery1() {
 		final String query = readGraphql("testCustomMethodQuery1.graphql");
-		final ExecutionResult result = handleErrors(executorManualMetaModel.execute(ExecutionInput.newExecutionInput().query(query)
-				.variables(Collections.singletonMap("arg1", "testString")).build()));
+		final ExecutionResult result = handleErrors(executorManualMetaModel.execute(ExecutionInput.newExecutionInput()
+				.query(query).variables(Collections.singletonMap("arg1", "testString")).build()));
 		final Entity1 resultData = toObject(result, Entity1.class);
 		Assert.assertEquals("testString", resultData.getStringAttr());
 		Assert.assertEquals("testString", resultData.getEmbeddedData1().getStringAttr());
@@ -126,6 +126,10 @@ public class QueryExecutionTest extends AbstractTestSuite {
 					}
 				}).build()));
 		Assert.assertEquals("dynamicValue" + id, getResultDataProperty(result, "dynamicAttribute1"));
+		Assert.assertEquals("dynamicValue" + getResultDataProperty(result, "embeddedData1.stringAttr"),
+				getResultDataProperty(result, "embeddedData1.dynamicAttribute1"));
+		Assert.assertNotNull(getResultDataProperty(result, "embeddedData1.dynamicAttribute2"));
+		Assert.assertEquals("1000", getResultDataProperty(result, "embeddedData1.dynamicAttribute2.id"));
 	}
 
 }

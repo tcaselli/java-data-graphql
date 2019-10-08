@@ -267,6 +267,18 @@ public class GQLMetaModelBuilder {
 			public void setValue(final Entity1 source, final String valueToSet) {
 				source.setStringAttr(valueToSet);
 			}
+		}, new GQLDynamicAttributeGetter<EmbeddedData1, String>("dynamicAttribute1") {
+			@Override
+			public String getValue(final EmbeddedData1 source) {
+				return "dynamicValue" + source.getStringAttr();
+			}
+		}, new GQLDynamicAttributeGetter<EmbeddedData1, Entity2>("dynamicAttribute2") {
+			@Override
+			public Entity2 getValue(final EmbeddedData1 source) {
+				final Entity2 entity = new Entity2();
+				entity.setId("1000");
+				return entity;
+			}
 		}).collect(Collectors.toList());
 	}
 
