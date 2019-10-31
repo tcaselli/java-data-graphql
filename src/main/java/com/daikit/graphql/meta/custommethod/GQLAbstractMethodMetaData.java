@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.daikit.generics.utils.GenericsUtils;
-import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
-import com.daikit.graphql.custommethod.IGQLAbstractCustomMethod;
+import com.daikit.graphql.custommethod.GQLCustomMethod;
 import com.daikit.graphql.meta.GQLAbstractMetaData;
 
 /**
@@ -16,7 +15,7 @@ import com.daikit.graphql.meta.GQLAbstractMetaData;
  */
 public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 
-	private IGQLAbstractCustomMethod<?> method;
+	private GQLCustomMethod method;
 	private List<GQLAbstractMethodArgumentMetaData> arguments = new ArrayList<>();
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -35,9 +34,9 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 	 * method
 	 *
 	 * @param method
-	 *            the {@link GQLAbstractCustomMethod}
+	 *            the {@link GQLCustomMethod}
 	 */
-	public GQLAbstractMethodMetaData(final GQLAbstractCustomMethod<?> method) {
+	public GQLAbstractMethodMetaData(final GQLCustomMethod method) {
 		this.method = method;
 	}
 
@@ -57,7 +56,7 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 	 * @return the name
 	 */
 	public String getName() {
-		return getMethod() == null ? null : getMethod().getMethodName();
+		return getMethod() == null ? null : getMethod().getName();
 	}
 
 	/**
@@ -94,11 +93,11 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Get the method {@link IGQLAbstractCustomMethod}
+	 * Get the method {@link GQLCustomMethod}
 	 *
 	 * @return the method
 	 */
-	public IGQLAbstractCustomMethod<?> getMethod() {
+	public GQLCustomMethod getMethod() {
 		return method;
 	}
 
@@ -107,7 +106,7 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 	 *            the method to set
 	 * @return this instance
 	 */
-	public GQLAbstractMethodMetaData setMethod(final IGQLAbstractCustomMethod<?> method) {
+	public GQLAbstractMethodMetaData setMethod(final GQLCustomMethod method) {
 		this.method = method;
 		return this;
 	}

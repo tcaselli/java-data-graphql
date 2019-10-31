@@ -1,6 +1,6 @@
 package com.daikit.graphql.meta.custommethod;
 
-import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
+import com.daikit.graphql.custommethod.GQLCustomMethod;
 
 /**
  * GraphQL dynamic method returning an embedded entity meta data
@@ -27,11 +27,11 @@ public class GQLMethodEntityMetaData extends GQLAbstractMethodMetaData {
 	 * and return type
 	 *
 	 * @param method
-	 *            the {@link GQLAbstractCustomMethod}
+	 *            the {@link GQLCustomMethod}
 	 * @param entityClass
 	 *            the entity class for method return type
 	 */
-	public GQLMethodEntityMetaData(final GQLAbstractCustomMethod<?> method, final Class<?> entityClass) {
+	public GQLMethodEntityMetaData(final GQLCustomMethod method, final Class<?> entityClass) {
 		super(method);
 		this.entityClass = entityClass;
 	}

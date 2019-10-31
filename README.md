@@ -67,10 +67,9 @@ The meta model can be written by hand in java or automatically parsed from java 
 
 ### Creation of the meta model
 
-You have **3 ways** of creating the meta model :
+You have **3 ways** of creating the meta model. An automatic, a semi-automatic and a manual. These 3 ways are provided by 3 static methods in GQLMetaModel.  
 
-#### The automatic way
-
+Here is the automatic way:  
 ```java
 /**
  * With this method, all meta datas will be
@@ -100,60 +99,7 @@ public static GQLMetaModel createFromEntityClasses(
     Collection<IGQLAbstractCustomMethod<?>> customMethods) {...}
 ```
 
-#### The semi-automatic way (manual generation of entities but automatic generation of dynamic attributes and custom methods)
-
-```java
-/**
- * With this method, entities and enums MetaData have been created manually
- * but dynamic attributes and custom method meta data will 
- * be automatically generated and registered.
- *
- * @param enumMetaDatas
- *            the collection of all registered GQLEnumMetaData
- * @param entityMetaDatas
- *            the collection of all registered GQLEntityMetaData
- * @param dynamicAttributes
- *            the collection of IGQLAbstractDynamicAttribute to be
- *            automatically registered (meta data will be created
- *            automatically)
- * @param customMethods
- *            the collection of GQLAbstractCustomMethod to be
- *            automatically registered (meta data will be created
- *            automatically)
- * @return the created instance
- */
-public static GQLMetaModel createFromMetaDatas(
-    Collection<GQLEnumMetaData> enumMetaDatas,
-    Collection<GQLEntityMetaData> entityMetaDatas,
-    Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes,
-    Collection<IGQLAbstractCustomMethod<?>> customMethods) {...}
-```
-
-#### The manual way (manual generation of entities but automatic generation of dynamic attributes and custom methods)
-
-```java
-/**
- * With this method, dynamic attributes should  already be registered in entities
- * and custom methods should already have their MetaData automatically generated 
- * and registered.
- *
- * @param enumMetaDatas
- *            the collection of all registered  GQLEnumMetaData
- * @param entityMetaDatas
- *            the collection of all registered GQLEntityMetaData
- * @param methodMetaDatas
- *            the collection of all registered GQLAbstractMethodMetaData
- * @return the created instance
- */
-public static GQLMetaModel createFromMetaDatas(
-    Collection<GQLEnumMetaData> enumMetaDatas,
-    Collection<GQLEntityMetaData> entityMetaDatas,
-    Collection<GQLAbstractMethodMetaData> methodMetaDatas) {...}
-```
-
-**Be careful, all entities and enums referenced in dynamic attributes or custom methods arguments and returned types must have a corresponding registered meta data.**
-
-### Serializable property types for building meta model
+### Serializable property types
 
 Your entities have properties. You can make them available in your schema if they are typed with one of the supported types (if you have other types of properties you can add custom scalar types or custom code in data fetcher to wrap these types to any of the supported types).
 
@@ -178,122 +124,7 @@ OtherEntity, List<OtherEntity>
 EmbeddedEntity, List<EmbeddedEntity>
 ```
 
-### Manual definition of entities in meta model
-
-In order to define an entity you have to register a ```com.daikit.graphql.meta.entity.GQLEntityMetaData```  in the meta model.
-
-```java
-// Your domain entities
-public class AbstractEntity { private String id; }
-public class Entity1 extends AbstractEntity {
-    // Scalars
-    private int intAttr;
-    private String stringAttr;
-    // ...
-    // Scalar collections (here with String but works with all scalar type)
-    private List<String> stringList = new ArrayList<>();
-    // Enumerations
-    private Enum1 enumAttr;
-    // Enumeration collections
-    private List<Enum1> enumList = new ArrayList<>();
-    // Relation to another entity (1to 1 or many to 1)
-    private Entity2 entity2;
-    // Relation to another entity (1 to many or many to many)
-    private List<Entity3> entity3s = new ArrayList<>();
-    // Embedded entity (persisted as part of Entity1)
-    private EmbeddedEntity embeddedEntity1;
-    // List of embedded entities (persisted as part of Entity1)
-    private List<EmbeddedEntity> embeddedEntity1s = new ArrayList<>();
-}
-// Create meta data to be registered in meta model for schema generation
-GQLEntityMetaData metaData = new GQLEntityMetaData("Entity1", Entity1.class, AbstractEntity.class);
-metaData.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID));
-metaData.addAttribute(new GQLAttributeScalarMetaData("stringAttr", GQLScalarTypeEnum.STRING));
-// ...
-metaData.addAttribute(new GQLAttributeListScalarMetaData("stringList", GQLScalarTypeEnum.STRING));
-metaData.addAttribute(new GQLAttributeEnumMetaData("enumAttr", Enum1.class));
-metaData.addAttribute(new GQLAttributeListEnumMetaData("enumList", Enum1.class));
-metaData.addAttribute(new GQLAttributeEntityMetaData("entity2", Entity2.class));
-metaData.addAttribute(new GQLAttributeListEntityMetaData("entity3s", Entity3.class));
-metaData.addAttribute(new GQLAttributeEmbeddedEntityMetaData("embeddedEntity1", embeddedEntity1.class));
-metaData.addAttribute(new GQLAttributeListEmbeddedEntityMetaData("embeddedEntity1s", embeddedEntity1.class));
-```
-
-### Manual definition of embedded entities in meta model
-
-In order to define an entity you have to register a ```com.daikit.graphql.meta.entity.GQLEmbeddedEntityMetaData```  in the meta model. You would then do exactly the same than when you register an entity (see previous chapter) excepted that in an embedded entity you cannot register an attribute with a relation to a non embedded entity.
-
-### Manual definition of custom methods in meta model
-
-This library will generate CRUD method on entities and make them available in the schema. If you need to have other methods available in the schema you can define custom methods. A custom method can either be a query or a mutation.  
-For each of these custom methods you will need to create a custom method object. This object will be of a different type depending on the number of arguments of your method.
-
--> For 0 argument methods, implement IGQLCustomMethod0Arg or extend default implementation GQLCustomMethod0Arg
-```java
-// Example of query method returning an Entity
-GQLCustomMethod1Arg<Entity1, String> method = new GQLCustomMethod1Arg<Entity1, String>(
-    "customMethodQuery", false) { 
-    // "customMethodQuery" = method name
-    // false = "this is a query not a mutation"
-    @Override
-    public Entity1 apply() {
-        // Do something and return an Entity1
-        return result;
-    }
-};
-// The method meta data to be registered in meta model for schema generation
-GQLAbstractMethodMetaData metaData = new GQLMethodEntityMetaData(method, Entity1.class);
-```
-
--> For 1 argument methods, implement IGQLCustomMethod1Arg or extend default implementation GQLCustomMethod1Arg
-```java
-// Example of mutation method returning an Integer and taking 1 argument
-GQLCustomMethod1Arg<Integer, String> method = new GQLCustomMethod1Arg<Integer, String>(
-    "customMethodMutation", true, "arg1") { 
-    // "customMethodMutation" = method name
-    // true = "this is mutation"
-    // "arg1" = argument name within the generated schema
-    @Override
-    public Integer apply(String arg1) {
-        // Do something and return an Integer
-        return result;
-    }
-};
-// The method meta data to be registered in meta model for schema generation
-GQLAbstractMethodMetaData metaData = new GQLMethodScalarMetaData(
-    method, Entity1.class, GQLScalarTypeEnum.INT);
-metaData.addArgument(new GQLMethodArgumentScalarMetaData(
-    method.getArgName(0), GQLScalarTypeEnum.STRING));
-```
-
--> For 2 argument methods, implement IGQLCustomMethod2Arg or extend default implementation GQLCustomMethod2Arg
-```java
-// Example of mutation method returning a Date and taking 2 arguments
-GQLCustomMethod2Arg<Date, String, EmbeddedEntity1> method = 
-    new GQLCustomMethod2Arg<Date, String, EmbeddedEntity1>(
-    "customMethodMutation", true, "arg1", "arg2") { 
-    // "customMethodMutation" = method name
-    // true = "this is mutation"
-    // "arg1" = argument 1 name within the generated schema
-    // "arg2" = argument 2 name within the generated schema
-    @Override
-    public Date apply(String arg1, EmbeddedEntity1 arg2) {
-        // Do something and return a Date
-        return result;
-    }
-};
-// The method meta data to be registered in meta model for schema generation
-GQLAbstractMethodMetaData metaData = new GQLMethodScalarMetaData(
-    method, Entity1.class, GQLScalarTypeEnum.DATE);
-metaData.addArgument(new GQLMethodArgumentScalarMetaData(
-    method.getArgName(0), GQLScalarTypeEnum.STRING));
-metaData.addArgument(new GQLMethodArgumentEmbeddedEntityMetaData(
-    method.getArgName(1), EmbeddedEntity1.class));
-```
-
--> Etc... You can register methods with up to 5 arguments.
-
-### Manual definition of dynamic attributes in meta model
+### Dynamic attributes
 
 A dynamic attribute is an entity virtual property available in the schema but not in the entity itself. This attribute can be read and/or written thanks to methods you have to implement.
 
@@ -373,55 +204,6 @@ public class Entity1 {
 
     // Keep in mind that transient and static fields will be ignored
 }
-```
-
-#### Customizing accessibility with manual meta model generation
-
-Accessibility on entities :
-
-```java
-GQLEntityMetaData metaData = new GQLEntityMetaData("Entity1", Entity1.class, AbstractEntity.class);
-// This will prevent "delete method" generation for this entity
-metaData.setDeletable(false);
-// This will prevent "getById method" and "getAll method" generation for this entity
-metaData.setReadable(false);
-// This will prevent "save method" generation for this entity
-metaData.setSaveable(false);
-```
-
-Accessibility on attributes :
-
-You can also configure the possibility to read, write, nullify and filter on entity attributes. By default all entity attributes are readable, writeable, nullable, and filterable.
-
-```java
-// Example with a scalar attribute
-GQLAttributeScalarMetaData attribute = new GQLAttributeScalarMetaData(
-    "attributeName", GQLScalarTypeEnum.STRING);
-// This will prevent generation of this attribute in schema type for this entity
-attribute.setReadable(false);
-// This will prevent generation of this attribute in schema input type 
-// for this entity save method
-attribute.setSaveable(false);
-// This will make this attribute "Not nullable" during any save operation.
-// This configuration is ignored if this attribute is not saveable.
-attribute.setNullable(false);
-// This will make this attribute "Not nullable" during a creation save operation.
-// This configuration is ignored if this attribute is not saveable.
-attribute.setNullableForCreate(false);
-// This will make this attribute "Not nullable" during an update save operation.
-// This configuration is ignored if this attribute is not saveable.
-attribute.setNullableForUpdate(false);
-// This will make this attribute mandatory during any save operation.
-// This configuration is ignored if this attribute is not saveable.
-attribute.setMandatory(true);
-// This will make this attribute mandatory during a creation save operation.
-// This configuration is ignored if this attribute is not saveable.
-attribute.setMandatoryForCreate(true);
-// This will make this attribute mandatory during an update save operation.
-// This configuration is ignored if this attribute is not saveable.
-attribute.setMandatoryForUpdate(true);
-// This will disable filtering feature on this attribute in "getAll" method
-attribute.setFilterable(false);
 ```
 
 ### Data fetchers

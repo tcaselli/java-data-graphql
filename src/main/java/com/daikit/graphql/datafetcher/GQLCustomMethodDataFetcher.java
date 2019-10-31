@@ -1,19 +1,14 @@
 package com.daikit.graphql.datafetcher;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.daikit.generics.utils.GenericsUtils;
 import com.daikit.graphql.builder.GQLSchemaBuilder;
-import com.daikit.graphql.custommethod.IGQLAbstractCustomMethod;
-import com.daikit.graphql.custommethod.IGQLCustomMethod0Arg;
-import com.daikit.graphql.custommethod.IGQLCustomMethod1Arg;
-import com.daikit.graphql.custommethod.IGQLCustomMethod2Arg;
-import com.daikit.graphql.custommethod.IGQLCustomMethod3Arg;
-import com.daikit.graphql.custommethod.IGQLCustomMethod4Arg;
-import com.daikit.graphql.custommethod.IGQLCustomMethod5Arg;
+import com.daikit.graphql.custommethod.GQLCustomMethod;
+import com.daikit.graphql.custommethod.GQLCustomMethodArg;
 import com.daikit.graphql.utils.Message;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -33,7 +28,7 @@ import graphql.schema.DataFetchingEnvironment;
 public class GQLCustomMethodDataFetcher extends GQLAbstractDataFetcher<Object> {
 
 	// All registered custom methods mapped by name
-	private final Map<String, IGQLAbstractCustomMethod<?>> allMethods = new HashMap<>();
+	private final Map<String, GQLCustomMethod> allMethods = new HashMap<>();
 	private ObjectMapper objectMapper = new ObjectMapper();
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -47,45 +42,23 @@ public class GQLCustomMethodDataFetcher extends GQLAbstractDataFetcher<Object> {
 	 * @param customMethods
 	 *            a {@link List} of {@link IGQLAbstractCustomMethod}
 	 */
-	public void registerCustomMethods(final List<? extends IGQLAbstractCustomMethod<?>> customMethods) {
+	public void registerCustomMethods(final List<? extends GQLCustomMethod> customMethods) {
 		customMethods.stream().forEach(customMethod -> {
-			final IGQLAbstractCustomMethod<?> existing = allMethods.get(customMethod.getMethodName());
+			final GQLCustomMethod existing = allMethods.get(customMethod.getName());
 			if (existing != null && !existing.equals(customMethod)) {
-				throw new GraphQLException(Message.format("Duplicate custom methods registered with name {}.",
-						customMethod.getMethodName()));
+				throw new GraphQLException(
+						Message.format("Duplicate custom methods registered with name {}.", customMethod.getName()));
 			}
-			allMethods.put(customMethod.getMethodName(), customMethod);
+			allMethods.put(customMethod.getName(), customMethod);
 		});
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public Object get(final DataFetchingEnvironment environment) throws Exception {
-		final IGQLAbstractCustomMethod<?> method = allMethods.get(environment.getField().getName());
-		Object ret;
-		if (method instanceof IGQLCustomMethod0Arg) {
-			ret = ((IGQLCustomMethod0Arg) method).apply();
-		} else if (method instanceof IGQLCustomMethod1Arg) {
-			ret = ((IGQLCustomMethod1Arg) method).apply(getArgumentValue(environment, method, 0));
-		} else if (method instanceof IGQLCustomMethod2Arg) {
-			ret = ((IGQLCustomMethod2Arg) method).apply(getArgumentValue(environment, method, 0),
-					getArgumentValue(environment, method, 1));
-		} else if (method instanceof IGQLCustomMethod3Arg) {
-			ret = ((IGQLCustomMethod3Arg) method).apply(getArgumentValue(environment, method, 0),
-					getArgumentValue(environment, method, 1), getArgumentValue(environment, method, 2));
-		} else if (method instanceof IGQLCustomMethod4Arg) {
-			ret = ((IGQLCustomMethod4Arg) method).apply(getArgumentValue(environment, method, 0),
-					getArgumentValue(environment, method, 1), getArgumentValue(environment, method, 2),
-					getArgumentValue(environment, method, 3));
-		} else if (method instanceof IGQLCustomMethod5Arg) {
-			ret = ((IGQLCustomMethod5Arg) method).apply(getArgumentValue(environment, method, 0),
-					getArgumentValue(environment, method, 1), getArgumentValue(environment, method, 2),
-					getArgumentValue(environment, method, 3), getArgumentValue(environment, method, 4));
-		} else {
-			throw new GraphQLException(
-					Message.format("Unsupported custom method type [{}]", method.getClass().getName()));
-		}
-		return ret;
+		final GQLCustomMethod method = allMethods.get(environment.getField().getName());
+		final List<Object> arguments = method.getArgs().stream().map(arg -> getArgumentValue(environment, arg))
+				.collect(Collectors.toList());
+		return method.getMethod().invoke(method.getController(), arguments.toArray());
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -97,26 +70,20 @@ public class GQLCustomMethodDataFetcher extends GQLAbstractDataFetcher<Object> {
 	 *
 	 * @param environment
 	 *            the {@link DataFetchingEnvironment}
-	 * @param method
-	 *            the {@link IGQLAbstractCustomMethod}
-	 * @param argumentPosition
-	 *            the argument position (0 if first argument of the method, 1
-	 *            the second, etc)
+	 * @param argument
+	 *            the {@link GQLCustomMethodArg}
 	 * @param <T>
 	 *            the argument type
 	 * @return the argument value
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T> T getArgumentValue(final DataFetchingEnvironment environment,
-			final IGQLAbstractCustomMethod<?> method, final int argumentPosition) {
+	protected <T> T getArgumentValue(final DataFetchingEnvironment environment, final GQLCustomMethodArg argument) {
 		final Field queryField = environment.getField();
-		final String argumentName = method.getArgumentNames().get(argumentPosition);
-		final Object argumentGraphQLValue = getArgumentValue(queryField, argumentName, environment.getArguments());
-		final Type expectedType = method.getArgumentTypes().get(argumentPosition);
+		final Object argumentGraphQLValue = getArgumentValue(queryField, argument.getName(),
+				environment.getArguments());
 		Object mappedValue = argumentGraphQLValue;
 		if (mappedValue != null && mappedValue instanceof Map) {
-			final Class<?> expectedClass = GenericsUtils.getTypeClass(expectedType);
-			mappedValue = convertValue((Map<String, Object>) mappedValue, expectedClass, argumentPosition);
+			mappedValue = convertValue((Map<String, Object>) mappedValue, argument);
 		}
 		return (T) mappedValue;
 	}
@@ -127,15 +94,12 @@ public class GQLCustomMethodDataFetcher extends GQLAbstractDataFetcher<Object> {
 	 *
 	 * @param argumentPropertyValues
 	 *            a {@link Map} of property values to set in argument object
-	 * @param argumentType
-	 *            the type of the argument to be created
-	 * @param argumentPosition
-	 *            the argument position among method arguments
+	 * @param argument
+	 *            the {@link GQLCustomMethodArg}
 	 * @return the converted value
 	 */
-	protected Object convertValue(final Map<String, Object> argumentPropertyValues, final Class<?> argumentType,
-			final int argumentPosition) {
-		return getObjectMapper().convertValue(argumentPropertyValues, argumentType);
+	protected Object convertValue(final Map<String, Object> argumentPropertyValues, final GQLCustomMethodArg argument) {
+		return getObjectMapper().convertValue(argumentPropertyValues, GenericsUtils.getTypeClass(argument.getType()));
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-

@@ -2,7 +2,7 @@ package com.daikit.graphql.meta.custommethod;
 
 import java.util.List;
 
-import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
+import com.daikit.graphql.custommethod.GQLCustomMethod;
 
 /**
  * GraphQL dynamic method returning a {@link List} of entities meta data
@@ -29,11 +29,11 @@ public class GQLMethodListScalarMetaData extends GQLAbstractMethodMetaData {
 	 * and return type
 	 *
 	 * @param method
-	 *            the {@link GQLAbstractCustomMethod}
+	 *            the {@link GQLCustomMethod}
 	 * @param scalarTypeCode
 	 *            the scalar type code for method return type
 	 */
-	public GQLMethodListScalarMetaData(final GQLAbstractCustomMethod<?> method, final String scalarTypeCode) {
+	public GQLMethodListScalarMetaData(final GQLCustomMethod method, final String scalarTypeCode) {
 		super(method);
 		this.scalarTypeCode = scalarTypeCode;
 	}

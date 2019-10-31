@@ -1,6 +1,6 @@
 package com.daikit.graphql.meta.custommethod;
 
-import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
+import com.daikit.graphql.custommethod.GQLCustomMethod;
 
 /**
  * GraphQL dynamic method returning a scalar meta data
@@ -27,11 +27,11 @@ public class GQLMethodScalarMetaData extends GQLAbstractMethodMetaData {
 	 * and return type
 	 *
 	 * @param method
-	 *            the {@link GQLAbstractCustomMethod}
+	 *            the {@link GQLCustomMethod}
 	 * @param scalarTypeCode
 	 *            the scalar type code for method return type
 	 */
-	public GQLMethodScalarMetaData(final GQLAbstractCustomMethod<?> method, final String scalarTypeCode) {
+	public GQLMethodScalarMetaData(final GQLCustomMethod method, final String scalarTypeCode) {
 		super(method);
 		this.scalarTypeCode = scalarTypeCode;
 	}

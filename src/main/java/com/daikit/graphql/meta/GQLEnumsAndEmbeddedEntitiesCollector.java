@@ -10,8 +10,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 
 import com.daikit.generics.utils.GenericsUtils;
 import com.daikit.graphql.config.GQLSchemaConfig;
-import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
-import com.daikit.graphql.custommethod.IGQLAbstractCustomMethod;
+import com.daikit.graphql.custommethod.GQLCustomMethod;
 import com.daikit.graphql.dynamicattribute.IGQLAbstractDynamicAttribute;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeGetter;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
@@ -55,15 +54,15 @@ public class GQLEnumsAndEmbeddedEntitiesCollector {
 	 *            the collection of embedded entity classes
 	 * @param dynamicAttributes
 	 *            the collection of {@link IGQLAbstractDynamicAttribute}
-	 * @param customMethods
-	 *            the collection of {@link GQLAbstractCustomMethod}(meta data
-	 *            will be created automatically)
+	 * @param methods
+	 *            the collection of {@link GQLCustomMethod} (meta data will be
+	 *            created automatically)
 	 * @return a {@link GQLEnumsAndEmbeddedEntities}
 	 */
 	public GQLEnumsAndEmbeddedEntities collect(final Collection<Class<?>> entityClasses,
 			final Collection<Class<?>> availableEmbeddedEntityClasses,
 			final Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes,
-			final Collection<IGQLAbstractCustomMethod<?>> customMethods) {
+			final Collection<GQLCustomMethod> methods) {
 		final GQLEnumsAndEmbeddedEntities collected = new GQLEnumsAndEmbeddedEntities();
 
 		dynamicAttributes.stream().filter(dynamicAttribute -> dynamicAttribute instanceof IGQLDynamicAttributeGetter)
@@ -74,10 +73,10 @@ public class GQLEnumsAndEmbeddedEntitiesCollector {
 				.forEach(dynamicAttribute -> collect(entityClasses, availableEmbeddedEntityClasses,
 						((IGQLDynamicAttributeSetter<?, ?>) dynamicAttribute).getSetterAttributeType(), collected));
 
-		customMethods.forEach(method -> {
+		methods.forEach(method -> {
 			collect(entityClasses, availableEmbeddedEntityClasses, method.getOutputType(), collected);
-			method.getArgumentTypes().forEach(
-					argumentType -> collect(entityClasses, availableEmbeddedEntityClasses, argumentType, collected));
+			method.getArgs()
+					.forEach(arg -> collect(entityClasses, availableEmbeddedEntityClasses, arg.getType(), collected));
 		});
 
 		entityClasses.forEach(entityClass -> {

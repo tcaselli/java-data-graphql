@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.daikit.generics.utils.GenericsUtils;
 import com.daikit.graphql.config.GQLSchemaConfig;
-import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
+import com.daikit.graphql.custommethod.GQLCustomMethod;
 import com.daikit.graphql.dynamicattribute.IGQLAbstractDynamicAttribute;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeGetter;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
@@ -51,8 +51,8 @@ public class GQLDynamicAttributeMetaDataBuilder extends GQLAbstractMetaDataBuild
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Build dynamic attribute meta data from its
-	 * {@link GQLAbstractCustomMethod} definition
+	 * Build dynamic attribute meta data from its {@link GQLCustomMethod}
+	 * definition
 	 *
 	 * @param enumMetaDatas
 	 *            the collection of all registered {@link GQLEnumMetaData} for

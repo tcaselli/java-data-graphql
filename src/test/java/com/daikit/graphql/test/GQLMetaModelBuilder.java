@@ -6,15 +6,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.daikit.graphql.custommethod.GQLCustomMethod1Arg;
-import com.daikit.graphql.custommethod.GQLCustomMethod2Arg;
-import com.daikit.graphql.custommethod.GQLCustomMethod5Arg;
-import com.daikit.graphql.custommethod.IGQLAbstractCustomMethod;
 import com.daikit.graphql.dynamicattribute.GQLDynamicAttributeGetter;
 import com.daikit.graphql.dynamicattribute.GQLDynamicAttributeSetter;
 import com.daikit.graphql.dynamicattribute.IGQLAbstractDynamicAttribute;
+import com.daikit.graphql.enums.GQLMethodType;
 import com.daikit.graphql.enums.GQLScalarTypeEnum;
 import com.daikit.graphql.meta.GQLMetaModel;
+import com.daikit.graphql.meta.GQLMethod;
+import com.daikit.graphql.meta.GQLParam;
 import com.daikit.graphql.meta.attribute.GQLAttributeEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeEnumMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeListEntityMetaData;
@@ -61,14 +60,14 @@ public class GQLMetaModelBuilder {
 			final Collection<Class<?>> availableEmbeddedEntityClasses = Arrays.asList(EmbeddedData1.class,
 					EmbeddedData2.class, EmbeddedData3.class);
 			metaModel = GQLMetaModel.createFromEntityClasses(entityClasses, availableEmbeddedEntityClasses,
-					buildDynamicAttributes(), buildCustomMethods());
+					buildDynamicAttributes(), Arrays.asList(new GQLTestController()));
 		} else {
 			final Collection<GQLEntityMetaData> entityMetaDatas = Arrays.asList(buildEntity1(), buildEntity2(),
 					buildEntity3(), buildEntity4(), buildEntity5(), buildEntity6(), buildEntity7(), buildEntity8(),
 					buildEntity9(), buildEmbeddedData1(), buildEmbeddedData2(), buildEmbeddedData3());
 			final Collection<GQLEnumMetaData> enumMetaDatas = Arrays.asList(buildEnumMetaData());
 			metaModel = GQLMetaModel.createFromMetaDatas(enumMetaDatas, entityMetaDatas, buildDynamicAttributes(),
-					buildCustomMethods());
+					Arrays.asList(new GQLTestController()));
 		}
 		return metaModel;
 	}
@@ -282,48 +281,90 @@ public class GQLMetaModelBuilder {
 		}).collect(Collectors.toList());
 	}
 
-	private List<IGQLAbstractCustomMethod<?>> buildCustomMethods() {
-		return Stream.of(new GQLCustomMethod1Arg<Entity1, String>("customMethodQuery1", false, "arg1") {
-			@Override
-			public Entity1 apply(final String arg1) {
-				final Entity1 result = new Entity1();
-				result.setStringAttr(arg1);
-				final EmbeddedData1 embeddedData1 = new EmbeddedData1();
-				embeddedData1.setStringAttr(arg1);
-				result.setEmbeddedData1(embeddedData1);
-				return result;
+	/**
+	 * Test controller for custom methods
+	 *
+	 * @author Thibaut Caselli
+	 */
+	public class GQLTestController {
+
+		/**
+		 * Custom method query
+		 *
+		 * @param arg1
+		 *            first argument with type String
+		 * @return and {@link Entity1}
+		 */
+		@GQLMethod(type = GQLMethodType.QUERY)
+		public Entity1 customMethodQuery1(@GQLParam("arg1") String arg1) {
+			final Entity1 result = new Entity1();
+			result.setStringAttr(arg1);
+			final EmbeddedData1 embeddedData1 = new EmbeddedData1();
+			embeddedData1.setStringAttr(arg1);
+			result.setEmbeddedData1(embeddedData1);
+			return result;
+		}
+
+		/**
+		 * Custom method query 2
+		 *
+		 * @param arg1
+		 *            first argument with type String
+		 * @param arg2
+		 *            second argument with type EmbeddedData1
+		 * @return an {@link Entity1}
+		 */
+		@GQLMethod(type = GQLMethodType.QUERY)
+		public Entity1 customMethodQuery2(@GQLParam("arg1") String arg1, @GQLParam("arg2") EmbeddedData1 arg2) {
+			final Entity1 result = new Entity1();
+			result.setIntAttr(5);
+			result.setStringAttr(arg1);
+			result.setEmbeddedData1(arg2);
+			return result;
+		}
+
+		/**
+		 * Custom method query 3
+		 *
+		 * @param arg1
+		 *            first argument with type String
+		 * @param arg2
+		 *            second argument with type List of String
+		 * @param arg3
+		 *            third argument with type List of Enum1
+		 * @param arg4
+		 *            fourth argument with type List of EmbeddedData1
+		 * @param arg5
+		 *            fifth argument with type String
+		 * @return an {@link Entity1}
+		 */
+		@GQLMethod(type = GQLMethodType.QUERY)
+		public Entity1 customMethodQuery3(@GQLParam("arg1") Enum1 arg1, @GQLParam("arg2") List<String> arg2,
+				@GQLParam("arg3") List<Enum1> arg3, @GQLParam("arg4") List<EmbeddedData1> arg4,
+				@GQLParam("arg5") String arg5) {
+			final Entity1 result = new Entity1();
+			result.setEnumAttr(arg1);
+			result.setStringList(arg2);
+			result.setEnumList(arg3);
+			result.setEmbeddedData1s(arg4);
+			if (arg5 == null) {
+				result.setStringAttr("NULLVALUE");
 			}
-		}, new GQLCustomMethod2Arg<Entity1, String, EmbeddedData1>("customMethodQuery2", false, "arg1", "arg2") {
-			@Override
-			public Entity1 apply(final String arg1, final EmbeddedData1 arg2) {
-				final Entity1 result = new Entity1();
-				result.setIntAttr(5);
-				result.setStringAttr(arg1);
-				result.setEmbeddedData1(arg2);
-				return result;
-			}
-		}, new GQLCustomMethod5Arg<Entity1, Enum1, List<String>, List<Enum1>, List<EmbeddedData1>, String>(
-				"customMethodQuery3", false, "arg1", "arg2", "arg3", "arg4", "arg5") {
-			@Override
-			public Entity1 apply(final Enum1 arg1, final List<String> arg2, final List<Enum1> arg3,
-					final List<EmbeddedData1> arg4, final String arg5) {
-				final Entity1 result = new Entity1();
-				result.setEnumAttr(arg1);
-				result.setStringList(arg2);
-				result.setEnumList(arg3);
-				result.setEmbeddedData1s(arg4);
-				if (arg5 == null) {
-					result.setStringAttr("NULLVALUE");
-				}
-				return result;
-			}
-		}, new GQLCustomMethod1Arg<Entity1, String>("customMethodMutation1", true, "arg1") {
-			@Override
-			public Entity1 apply(final String arg1) {
-				final Entity1 result = new Entity1();
-				result.setStringAttr(arg1);
-				return result;
-			}
-		}).collect(Collectors.toList());
+			return result;
+		}
+
+		/**
+		 * Custom method mutation 1
+		 *
+		 * @param arg1
+		 *            first argument of type String
+		 * @return an {@link Entity1}
+		 */
+		@GQLMethod(type = GQLMethodType.MUTATION)
+		public Entity1 customMethodMutation1(@GQLParam("arg1") String arg1) {
+			final Entity1 result = new Entity1();
+			result.setStringAttr(arg1);
+			return result;
+		}
 	}
 }

@@ -7,8 +7,8 @@ import java.util.List;
 
 import com.daikit.generics.utils.GenericsUtils;
 import com.daikit.graphql.config.GQLSchemaConfig;
-import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
-import com.daikit.graphql.custommethod.IGQLAbstractCustomMethod;
+import com.daikit.graphql.custommethod.GQLCustomMethod;
+import com.daikit.graphql.custommethod.GQLCustomMethodArg;
 import com.daikit.graphql.meta.custommethod.GQLAbstractMethodArgumentMetaData;
 import com.daikit.graphql.meta.custommethod.GQLAbstractMethodMetaData;
 import com.daikit.graphql.meta.custommethod.GQLMethodArgumentEntityMetaData;
@@ -28,7 +28,7 @@ import com.daikit.graphql.meta.entity.GQLEnumMetaData;
 import com.daikit.graphql.utils.Message;
 
 /**
- * Builder for custom method meta data from {@link IGQLAbstractCustomMethod}
+ * Builder for custom method meta data from {@link GQLCustomMethod}
  *
  * @author Thibaut Caselli
  */
@@ -53,8 +53,7 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Build custom method meta data from its {@link GQLAbstractCustomMethod}
-	 * definition
+	 * Build custom method meta data from its {@link GQLCustomMethod} definition
 	 *
 	 * @param enumMetaDatas
 	 *            the collection of all registered {@link GQLEnumMetaData} for
@@ -65,15 +64,15 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 	 *            being able to look for type references (for method return type
 	 *            or argument types)
 	 * @param customMethod
-	 *            the {@link GQLAbstractCustomMethod} to create meta data from
+	 *            the {@link GQLCustomMethod} to create meta data from
 	 * @return the created {@link GQLAbstractMethodMetaData}
 	 */
 	public GQLAbstractMethodMetaData build(final Collection<GQLEnumMetaData> enumMetaDatas,
-			final Collection<GQLEntityMetaData> entityMetaDatas, final IGQLAbstractCustomMethod<?> customMethod) {
+			final Collection<GQLEntityMetaData> entityMetaDatas, final GQLCustomMethod customMethod) {
 		final List<GQLAbstractMethodArgumentMetaData> arguments = new ArrayList<>();
-		for (int i = 0; i < customMethod.getArgumentTypes().size(); i++) {
-			arguments.add(createMethodArgument(enumMetaDatas, entityMetaDatas, customMethod,
-					customMethod.getArgumentNames().get(i), customMethod.getArgumentTypes().get(i)));
+		for (final GQLCustomMethodArg arg : customMethod.getArgs()) {
+			arguments.add(
+					createMethodArgument(enumMetaDatas, entityMetaDatas, customMethod, arg.getName(), arg.getType()));
 		}
 		return createMethod(enumMetaDatas, entityMetaDatas, customMethod, arguments);
 	}
@@ -84,10 +83,10 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 
 	@SuppressWarnings("unchecked")
 	private GQLAbstractMethodMetaData createMethod(final Collection<GQLEnumMetaData> enumMetaDatas,
-			final Collection<GQLEntityMetaData> entityMetaDatas, final IGQLAbstractCustomMethod<?> customMethod,
+			final Collection<GQLEntityMetaData> entityMetaDatas, final GQLCustomMethod method,
 			final List<GQLAbstractMethodArgumentMetaData> arguments) {
 		final GQLAbstractMethodMetaData methodMetaData;
-		final Class<?> outputRawClass = GenericsUtils.getTypeClass(customMethod.getOutputType());
+		final Class<?> outputRawClass = GenericsUtils.getTypeClass(method.getOutputType());
 		if (getConfig().isScalarType(outputRawClass)) {
 			methodMetaData = new GQLMethodScalarMetaData();
 			((GQLMethodScalarMetaData) methodMetaData)
@@ -104,7 +103,7 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 			((GQLMethodEntityMetaData) methodMetaData).setEntityClass(outputRawClass);
 		} else if (Collection.class.isAssignableFrom(outputRawClass)) {
 			final Class<?> foreignClass = GenericsUtils
-					.getTypeArgumentsAsClasses(customMethod.getOutputType(), Collection.class).get(0);
+					.getTypeArgumentsAsClasses(method.getOutputType(), Collection.class).get(0);
 			if (getConfig().isScalarType(foreignClass)) {
 				methodMetaData = new GQLMethodListScalarMetaData();
 				((GQLMethodListScalarMetaData) methodMetaData)
@@ -117,23 +116,23 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 				((GQLMethodListEntityMetaData) methodMetaData).setForeignClass(foreignClass);
 			} else {
 				throw new IllegalArgumentException(
-						Message.format("Not handled method [{}] output collection type [{}].",
-								customMethod.getMethodName(), outputRawClass.getName()));
+						Message.format("Not handled method [{}] output collection type [{}].", method.getName(),
+								outputRawClass.getName()));
 			}
 		} else {
 			throw new IllegalArgumentException(Message.format("Not handled method [{}] output type [{}].",
-					customMethod.getMethodName(), outputRawClass.getSimpleName()));
+					method.getName(), outputRawClass.getSimpleName()));
 		}
 
 		methodMetaData.getArguments().addAll(arguments);
-		methodMetaData.setMethod(customMethod);
+		methodMetaData.setMethod(method);
 
 		return methodMetaData;
 	}
 
 	@SuppressWarnings("unchecked")
 	private GQLAbstractMethodArgumentMetaData createMethodArgument(final Collection<GQLEnumMetaData> enumMetaDatas,
-			final Collection<GQLEntityMetaData> entityMetaDatas, final IGQLAbstractCustomMethod<?> customMethod,
+			final Collection<GQLEntityMetaData> entityMetaDatas, final GQLCustomMethod customMethod,
 			final String argumentName, final Type argumentType) {
 		final GQLAbstractMethodArgumentMetaData argumentMetaData;
 		final Class<?> argumentRawClass = GenericsUtils.getTypeClass(argumentType);
@@ -168,11 +167,11 @@ public class GQLMethodMetaDataBuilder extends GQLAbstractMetaDataBuilder {
 			} else {
 				throw new IllegalArgumentException(
 						Message.format("Not handled method [{}] argument [{}] collection type [{}].",
-								customMethod.getMethodName(), argumentName, foreignClass.getName()));
+								customMethod.getName(), argumentName, foreignClass.getName()));
 			}
 		} else {
 			throw new IllegalArgumentException(Message.format("Not handled method [{}] argument [{}] type [{}].",
-					customMethod.getMethodName(), argumentName, argumentRawClass.getName()));
+					customMethod.getName(), argumentName, argumentRawClass.getName()));
 		}
 
 		argumentMetaData.setName(argumentName);

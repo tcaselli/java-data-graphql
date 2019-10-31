@@ -10,10 +10,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.daikit.graphql.config.GQLSchemaConfig;
+import com.daikit.graphql.custommethod.GQLCustomMethod;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeGetter;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
 import com.daikit.graphql.exception.GQLException;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
+import com.daikit.graphql.meta.builder.GQLControllerMethodCollector;
 import com.daikit.graphql.meta.builder.GQLDynamicAttributeMetaDataBuilder;
 import com.daikit.graphql.meta.builder.GQLEntityMetaDataBuilder;
 import com.daikit.graphql.meta.builder.GQLEnumMetaDataBuilder;
@@ -58,10 +60,13 @@ public class GQLInternalMetaModel {
 		this.enumMetaDatas.addAll(inputMetaModel.getEnumMetaDatas());
 		this.entityMetaDatas.addAll(inputMetaModel.getEntityMetaDatas());
 
+		final List<GQLCustomMethod> customMethods = new GQLControllerMethodCollector()
+				.collect(inputMetaModel.getControllers());
+
 		if (!inputMetaModel.getEntityClasses().isEmpty()) {
 			final GQLEnumsAndEmbeddedEntities collected = new GQLEnumsAndEmbeddedEntitiesCollector(schemaConfig)
 					.collect(inputMetaModel.getEntityClasses(), inputMetaModel.getAvailableEmbeddedEntityClasses(),
-							inputMetaModel.getDynamicAttributes(), inputMetaModel.getMethods());
+							inputMetaModel.getDynamicAttributes(), customMethods);
 
 			final GQLEnumMetaDataBuilder enumMetaDataBuilder = new GQLEnumMetaDataBuilder(schemaConfig);
 			this.enumMetaDatas.addAll(collected.getEnums().stream()
@@ -82,7 +87,7 @@ public class GQLInternalMetaModel {
 				.stream()
 				.map(attribute -> dynamicAttributeMetaDataBuilder.build(enumMetaDatas, entityMetaDatas, attribute))
 				.collect(Collectors.toList());
-		final Collection<GQLAbstractMethodMetaData> methodMetaDatas = inputMetaModel.getMethods().stream()
+		final Collection<GQLAbstractMethodMetaData> methodMetaDatas = customMethods.stream()
 				.map(customMethod -> methodMetaDataBuilder.build(enumMetaDatas, entityMetaDatas, customMethod))
 				.collect(Collectors.toList());
 

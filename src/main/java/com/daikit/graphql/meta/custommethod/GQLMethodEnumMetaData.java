@@ -1,6 +1,6 @@
 package com.daikit.graphql.meta.custommethod;
 
-import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
+import com.daikit.graphql.custommethod.GQLCustomMethod;
 
 /**
  * GraphQL dynamic method returning an entity meta data
@@ -27,11 +27,11 @@ public class GQLMethodEnumMetaData extends GQLAbstractMethodMetaData {
 	 * and return type
 	 *
 	 * @param method
-	 *            the {@link GQLAbstractCustomMethod}
+	 *            the {@link GQLCustomMethod}
 	 * @param enumClass
 	 *            the enumeration class for method return type
 	 */
-	public GQLMethodEnumMetaData(final GQLAbstractCustomMethod<?> method, final Class<? extends Enum<?>> enumClass) {
+	public GQLMethodEnumMetaData(final GQLCustomMethod method, final Class<? extends Enum<?>> enumClass) {
 		super(method);
 		this.enumClass = enumClass;
 	}

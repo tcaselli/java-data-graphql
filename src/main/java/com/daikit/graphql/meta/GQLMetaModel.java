@@ -3,8 +3,6 @@ package com.daikit.graphql.meta;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.daikit.graphql.custommethod.GQLAbstractCustomMethod;
-import com.daikit.graphql.custommethod.IGQLAbstractCustomMethod;
 import com.daikit.graphql.dynamicattribute.IGQLAbstractDynamicAttribute;
 import com.daikit.graphql.meta.custommethod.GQLAbstractMethodMetaData;
 import com.daikit.graphql.meta.entity.GQLEntityMetaData;
@@ -20,7 +18,9 @@ public class GQLMetaModel {
 	private Collection<Class<?>> entityClasses = new ArrayList<>();
 	private Collection<Class<?>> availableEmbeddedEntityClasses = new ArrayList<>();
 	private Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes = new ArrayList<>();
-	private Collection<IGQLAbstractCustomMethod<?>> methods = new ArrayList<>();
+	// private Collection<IGQLAbstractCustomMethod<?>> methods = new
+	// ArrayList<>();
+	private Collection<Object> controllers = new ArrayList<>();
 	private Collection<GQLEnumMetaData> enumMetaDatas = new ArrayList<>();
 	private Collection<GQLEntityMetaData> entityMetaDatas = new ArrayList<>();
 	private Collection<GQLAbstractMethodMetaData> methodMetaDatas = new ArrayList<>();
@@ -59,20 +59,19 @@ public class GQLMetaModel {
 	 * @param dynamicAttributes
 	 *            the collection of {@link IGQLAbstractDynamicAttribute} to be
 	 *            automatically registered
-	 * @param customMethods
-	 *            the collection of {@link GQLAbstractCustomMethod} to be
-	 *            automatically registered
+	 * @param controllers
+	 *            the collection of controllers holding custom methods to be
+	 *            added to schema
 	 * @return the created instance
 	 */
 	public static GQLMetaModel createFromEntityClasses(final Collection<Class<?>> entityClasses,
 			final Collection<Class<?>> availableEmbeddedEntityClasses,
-			final Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes,
-			final Collection<IGQLAbstractCustomMethod<?>> customMethods) {
+			final Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes, final Collection<Object> controllers) {
 		final GQLMetaModel metaModel = new GQLMetaModel();
 		metaModel.entityClasses = entityClasses;
 		metaModel.availableEmbeddedEntityClasses = availableEmbeddedEntityClasses;
 		metaModel.dynamicAttributes = dynamicAttributes;
-		metaModel.methods = customMethods;
+		metaModel.controllers = controllers;
 		return metaModel;
 	}
 
@@ -92,21 +91,19 @@ public class GQLMetaModel {
 	 *            the collection of {@link IGQLAbstractDynamicAttribute} to be
 	 *            automatically registered (meta data will be created
 	 *            automatically)
-	 * @param customMethods
-	 *            the collection of {@link GQLAbstractCustomMethod} to be
-	 *            automatically registered (meta data will be created
-	 *            automatically)
+	 * @param controllers
+	 *            the collection of controllers holding custom methods to be
+	 *            added to schema
 	 * @return the created instance
 	 */
 	public static GQLMetaModel createFromMetaDatas(final Collection<GQLEnumMetaData> enumMetaDatas,
 			final Collection<GQLEntityMetaData> entityMetaDatas,
-			final Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes,
-			final Collection<IGQLAbstractCustomMethod<?>> customMethods) {
+			final Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes, final Collection<Object> controllers) {
 		final GQLMetaModel metaModel = new GQLMetaModel();
 		metaModel.enumMetaDatas = enumMetaDatas;
 		metaModel.entityMetaDatas = entityMetaDatas;
 		metaModel.dynamicAttributes = dynamicAttributes;
-		metaModel.methods = customMethods;
+		metaModel.controllers = controllers;
 		return metaModel;
 	}
 
@@ -162,10 +159,10 @@ public class GQLMetaModel {
 	}
 
 	/**
-	 * @return the methods
+	 * @return the controllers
 	 */
-	public Collection<IGQLAbstractCustomMethod<?>> getMethods() {
-		return methods;
+	public Collection<Object> getControllers() {
+		return controllers;
 	}
 
 	/**
