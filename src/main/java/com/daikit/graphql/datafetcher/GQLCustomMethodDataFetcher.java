@@ -40,7 +40,7 @@ public class GQLCustomMethodDataFetcher extends GQLAbstractDataFetcher<Object> {
 	 * automatically during schema building process.
 	 *
 	 * @param customMethods
-	 *            a {@link List} of {@link IGQLAbstractCustomMethod}
+	 *            a {@link List} of {@link GQLCustomMethod}
 	 */
 	public void registerCustomMethods(final List<? extends GQLCustomMethod> customMethods) {
 		customMethods.stream().forEach(customMethod -> {
