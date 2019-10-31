@@ -32,9 +32,7 @@ public class GQLControllerMethodCollector {
 	public List<GQLCustomMethod> collect(Collection<Object> controllers) {
 		final List<GQLCustomMethod> customMethods = new ArrayList<>();
 		for (final Object controller : controllers) {
-			final Method[] methods = controller.getClass().isInterface()
-					? controller.getClass().getMethods()
-					: controller.getClass().getDeclaredMethods();
+			final Method[] methods = controller.getClass().getMethods();
 			for (final Method method : methods) {
 				if (Modifier.isPublic(method.getModifiers())) {
 					customMethods.add(collectMethod(controller, method));
