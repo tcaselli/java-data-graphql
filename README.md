@@ -125,7 +125,7 @@ EmbeddedEntity, List<EmbeddedEntity>
 ```
 ### Custom methods
 
-In order to provide custom methods to be added to the schema , just provide a collection of controller objects with public methods to the meta model builder method. These public methods will automatically be added to the GraphQL schema. You can customize method name and type (mutation or query) and arguments names thanks to annotations.
+In order to provide custom methods to be added to the schema , just provide a collection of controller objects with public methods to the meta model builder method. These public methods (declared ones which have not necessarily @GQLMethod annotation + those from super classes which have @GQLMethod annotation) will automatically be added to the GraphQL schema. You can customize method name and type (mutation or query) and arguments names thanks to annotations.
 
 ```java
 public class GQLCustomMethodsController {
