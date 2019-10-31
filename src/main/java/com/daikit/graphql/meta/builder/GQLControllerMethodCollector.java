@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,8 +34,10 @@ public class GQLControllerMethodCollector {
 		final List<GQLCustomMethod> customMethods = new ArrayList<>();
 		for (final Object controller : controllers) {
 			final Method[] methods = controller.getClass().getMethods();
+			final Collection<Method> declaredMethods = Arrays.asList(controller.getClass().getDeclaredMethods());
 			for (final Method method : methods) {
-				if (Modifier.isPublic(method.getModifiers())) {
+				if (Modifier.isPublic(method.getModifiers())
+						&& (declaredMethods.contains(method) || method.isAnnotationPresent(GQLMethod.class))) {
 					customMethods.add(collectMethod(controller, method));
 				}
 			}
