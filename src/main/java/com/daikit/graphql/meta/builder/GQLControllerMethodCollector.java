@@ -1,6 +1,7 @@
 package com.daikit.graphql.meta.builder;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,7 +36,9 @@ public class GQLControllerMethodCollector {
 					? controller.getClass().getMethods()
 					: controller.getClass().getDeclaredMethods();
 			for (final Method method : methods) {
-				customMethods.add(collectMethod(controller, method));
+				if (Modifier.isPublic(method.getModifiers())) {
+					customMethods.add(collectMethod(controller, method));
+				}
 			}
 		}
 		return customMethods;

@@ -87,16 +87,16 @@ Here is the automatic way:
  * @param dynamicAttributes
  *            the collection of IGQLAbstractDynamicAttribute to be
  *            automatically registered
- * @param customMethods
- *            the collection of GQLAbstractCustomMethod to be
- *            automatically registered
+ * @param controllers
+ *            the collection of controller objects holding custom methods
+ *            to be automatically registered
  * @return the created instance
  */
 public static GQLMetaModel createFromEntityClasses(
     Collection<Class<?>> entityClasses,
     Collection<Class<?>> availableEmbeddedEntityClasses,
     Collection<IGQLAbstractDynamicAttribute<?>> dynamicAttributes,
-    Collection<IGQLAbstractCustomMethod<?>> customMethods) {...}
+    Collection<Object> controllers) {...}
 ```
 
 ### Serializable property types
@@ -122,6 +122,33 @@ OtherEntity, List<OtherEntity>
 // types of attributes including relations to other embedded entities but 
 // no relation to entities)
 EmbeddedEntity, List<EmbeddedEntity>
+```
+### Custom methods
+
+In order to provide custom methods to be added to the schema , just provide a collection of controller objects with public methods to the meta model builder method. These public methods will automatically be added to the GraphQL schema. You can customize method name and type (mutation or query) and arguments names thanks to annotations.
+
+```java
+public class GQLCustomMethodsController {
+    @GQLMethod(type = GQLMethodType.QUERY)
+    public Entity1 customQuery(@GQLParam("arg1") Enum1 arg1, @GQLParam("arg2") List<String> arg2,
+            @GQLParam("arg3") List<Enum1> arg3, @GQLParam("arg4") List<EmbeddedData1> arg4,
+            @GQLParam("arg5") String arg5) {
+        final Entity1 result = new Entity1();
+        result.setEnumAttr(arg1);
+        result.setStringList(arg2);
+        result.setEnumList(arg3);
+        result.setEmbeddedData1s(arg4);
+        result.setStringAttr(arg5);
+        return result;
+    }
+
+    @GQLMethod(type = GQLMethodType.MUTATION)
+    public Entity1 customMutation(@GQLParam("arg1") String arg1) {
+        final Entity1 result = new Entity1();
+        result.setStringAttr(arg1);
+        return result;
+    }
+}
 ```
 
 ### Dynamic attributes
