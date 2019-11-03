@@ -16,6 +16,7 @@ import com.daikit.graphql.meta.GQLController;
 public class GQLCustomMethod {
 
 	private String name;
+	private String description;
 	private GQLMethodType type;
 	private List<GQLCustomMethodArg> args = new ArrayList<>();
 	private Type outputType;
@@ -60,10 +61,25 @@ public class GQLCustomMethod {
 	}
 
 	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description
+	 *            the description to set
+	 */
+	public void setDescription(final String description) {
+		this.description = description;
+	}
+
+	/**
 	 * @param type
 	 *            the type to set
 	 */
-	public void setType(GQLMethodType type) {
+	public void setType(final GQLMethodType type) {
 		this.type = type;
 	}
 
@@ -71,7 +87,7 @@ public class GQLCustomMethod {
 	 * @param name
 	 *            the name to set
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 	/**
@@ -84,7 +100,7 @@ public class GQLCustomMethod {
 	 * @param args
 	 *            the args to set
 	 */
-	public void setArgs(List<GQLCustomMethodArg> args) {
+	public void setArgs(final List<GQLCustomMethodArg> args) {
 		this.args = args;
 	}
 	/**
@@ -97,7 +113,7 @@ public class GQLCustomMethod {
 	 * @param outputType
 	 *            the outputType to set
 	 */
-	public void setOutputType(Type outputType) {
+	public void setOutputType(final Type outputType) {
 		this.outputType = outputType;
 	}
 
@@ -112,7 +128,7 @@ public class GQLCustomMethod {
 	 * @param controller
 	 *            the controller to set
 	 */
-	public void setController(Object controller) {
+	public void setController(final Object controller) {
 		this.controller = controller;
 	}
 
@@ -127,7 +143,7 @@ public class GQLCustomMethod {
 	 * @param method
 	 *            the method to set
 	 */
-	public void setMethod(Method method) {
+	public void setMethod(final Method method) {
 		this.method = method;
 	}
 }

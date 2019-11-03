@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.daikit.graphql.builder.GQLAbstractSchemaSubBuilder;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.meta.custommethod.GQLAbstractMethodArgumentMetaData;
@@ -90,7 +92,10 @@ public class GQLCustomMethodBuilder extends GQLAbstractSchemaSubBuilder {
 		logger.debug(Message.format("Build query custom method [{}]", method.getName()));
 		final GraphQLFieldDefinition.Builder builder = GraphQLFieldDefinition.newFieldDefinition();
 		builder.name(method.getName());
-		builder.description("Query custom method [" + method.getName() + "]");
+		builder.description(StringUtils.isEmpty(method.getDescription())
+				? "Custom " + (method.getMethod().isMutation() ? "mutation" : "query") + " method [" + method.getName()
+						+ "]"
+				: method.getDescription());
 		method.getArguments().forEach(argument -> builder.argument(buildQueryArgument(argument)));
 		builder.type(getOutputType(method));
 		return builder.build();

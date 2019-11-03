@@ -60,6 +60,17 @@ public class GQLAbstractMethodMetaData extends GQLAbstractMetaData {
 	}
 
 	/**
+	 * Get the description for the method. This name will be used for building
+	 * GraphQL schema query or mutation for this method. If empty then a generic
+	 * description will be computed.
+	 *
+	 * @return the description
+	 */
+	public String getDescription() {
+		return getMethod() == null ? null : getMethod().getDescription();
+	}
+
+	/**
 	 * Get whether this is a mutation (<code>true</code>) or a query
 	 * (<code>false</code>)
 	 *

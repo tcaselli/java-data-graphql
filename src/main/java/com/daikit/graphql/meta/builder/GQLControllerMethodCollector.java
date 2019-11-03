@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.daikit.graphql.custommethod.GQLCustomMethod;
 import com.daikit.graphql.custommethod.GQLCustomMethodArg;
-import com.daikit.graphql.enums.GQLMethodType;
 import com.daikit.graphql.meta.GQLMethod;
 import com.daikit.graphql.meta.GQLParam;
 
@@ -30,14 +28,12 @@ public class GQLControllerMethodCollector {
 	 *            the {@link Collection} of controllers
 	 * @return a {@link List} of {@link GQLCustomMethod}
 	 */
-	public List<GQLCustomMethod> collect(Collection<Object> controllers) {
+	public List<GQLCustomMethod> collect(final Collection<Object> controllers) {
 		final List<GQLCustomMethod> customMethods = new ArrayList<>();
 		for (final Object controller : controllers) {
 			final Method[] methods = controller.getClass().getMethods();
-			final Collection<Method> declaredMethods = Arrays.asList(controller.getClass().getDeclaredMethods());
 			for (final Method method : methods) {
-				if (Modifier.isPublic(method.getModifiers())
-						&& (declaredMethods.contains(method) || method.isAnnotationPresent(GQLMethod.class))) {
+				if (Modifier.isPublic(method.getModifiers()) && method.isAnnotationPresent(GQLMethod.class)) {
 					customMethods.add(collectMethod(controller, method));
 				}
 			}
@@ -45,14 +41,14 @@ public class GQLControllerMethodCollector {
 		return customMethods;
 	}
 
-	private GQLCustomMethod collectMethod(Object controller, Method method) {
+	private GQLCustomMethod collectMethod(final Object controller, final Method method) {
 		final GQLCustomMethod customMethod = new GQLCustomMethod();
 		final GQLMethod methodAnnotation = method.getAnnotation(GQLMethod.class);
-		customMethod.setName(methodAnnotation != null && StringUtils.isNotEmpty(methodAnnotation.value())
-				? methodAnnotation.value()
-				: method.getName());
-		customMethod.setType(methodAnnotation != null ? methodAnnotation.type() : GQLMethodType.MUTATION);
-		customMethod.setOutputType(method.getReturnType());
+		customMethod
+				.setName(StringUtils.isEmpty(methodAnnotation.value()) ? method.getName() : methodAnnotation.value());
+		customMethod.setDescription(methodAnnotation.description());
+		customMethod.setType(methodAnnotation.type());
+		customMethod.setOutputType(method.getGenericReturnType());
 		customMethod.setController(controller);
 		customMethod.setMethod(method);
 		for (final Parameter parameter : method.getParameters()) {

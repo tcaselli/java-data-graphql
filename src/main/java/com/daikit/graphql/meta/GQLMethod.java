@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 import com.daikit.graphql.enums.GQLMethodType;
 
 /**
- * Annotation for a GraphQL method within a {@link GQLController}
+ * Annotation for a GraphQL custom method
  *
  * @author Thibaut Caselli
  */
@@ -18,12 +18,20 @@ import com.daikit.graphql.enums.GQLMethodType;
 public @interface GQLMethod {
 
 	/**
-	 * Name of the method. Byt default it is an empty String so the method name
+	 * Name of the method. By default it is an empty String so the method name
 	 * is the actual name of the annotated method.
 	 *
 	 * @return a String
 	 */
 	String value() default "";
+
+	/**
+	 * Description of the method to be written in the schema. By default it is
+	 * empty and a generic description will be created.
+	 * 
+	 * @return a String
+	 */
+	String description() default "";
 
 	/**
 	 * Type of the method. By default type is {@link GQLMethodType#MUTATION}
