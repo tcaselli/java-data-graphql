@@ -63,7 +63,7 @@ The schema configuration allows to choose prefixes, suffixes, attribute names,
 The meta model ```com.daikit.graphql.meta.GQLMetaModel``` **is the base of the schema generation**. It is in this meta model that you will define all your **entities** (top level or embedded, abstract or concrete), **enumerations**, **dynamic attributes** and **custom methods**.  
 The meta model can be written by hand in java or automatically parsed from java domain model objects (for example from JPA entities).  
 
---> See next sections for details on how to define these meta datas, dynamic attributes and custom methods.  
+--> See next sections for details on how to define these meta datas, dynamic attributes and custom methods, and then register them in meta model for schema generation.  
 
 ### Creation of the meta model
 
@@ -101,9 +101,9 @@ public static GQLMetaModel createFromEntityClasses(
 
 ### Serializable property types
 
-Your entities have properties. You can make them available in your schema if they are typed with one of the supported types (if you have other types of properties you can add custom scalar types or custom code in data fetcher to wrap these types to any of the supported types).
+Your entities have properties, your custom methods and dynamic attributes have parameters and return types. All of them can be available in your schema if they are typed with one of the following supported types. If you have other types of properties you can add custom scalar types or custom code in data fetcher to wrap these types to any of the supported types.
 
-Supported types :
+Default supported types :
 
 ```java
 // Scalar types
@@ -125,11 +125,11 @@ EmbeddedEntity, List<EmbeddedEntity>
 ```
 ### Custom methods
 
-In order to provide custom methods to be added to the schema, just provide a collection of controller objects with public methods annotated with @GQLMethod to the meta model builder method. These methods (declared ones + those from super classes) will automatically be added to the GraphQL schema. You can customize method name and type (mutation or query) and arguments names thanks to annotations.
+In order to provide custom methods to be added to the schema, just provide a collection of controller objects with public methods annotated with @GQLMethod to the meta model builder method. These methods (declared ones + those from super classes) will automatically be added to the GraphQL schema. You can customize method name, description and type (mutation or query) and arguments names thanks to annotations.
 
 ```java
 public class GQLCustomMethodsController {
-    @GQLMethod(type = GQLMethodType.QUERY)
+    @GQLMethod(type = GQLMethodType.QUERY, description = "This is a custom query")
     public Entity1 customQuery(@GQLParam("arg1") Enum1 arg1, @GQLParam("arg2") List<String> arg2,
             @GQLParam("arg3") List<Enum1> arg3, @GQLParam("arg4") List<EmbeddedData1> arg4,
             @GQLParam("arg5") String arg5) {
@@ -142,7 +142,7 @@ public class GQLCustomMethodsController {
         return result;
     }
 
-    @GQLMethod(type = GQLMethodType.MUTATION)
+    @GQLMethod(type = GQLMethodType.MUTATION, description = "This is a custom mutation")
     public Entity1 customMutation(@GQLParam("arg1") String arg1) {
         final Entity1 result = new Entity1();
         result.setStringAttr(arg1);
@@ -167,7 +167,7 @@ IGQLDynamicAttributeGetter<Entity1, String> dynamicAttributeGetter =
         return result;
     }
 };
-// Then provide this attribute getter to the MetaModel constructor (see below)
+// Then provide this attribute getter to the MetaModel builder method
 ```
 
 -> For a **writable** dynamic attribute, implement IGQLDynamicAttributeSetter or extend default implementation GQLDynamicAttributeSetter
@@ -180,7 +180,7 @@ IGQLDynamicAttributeSetter<Entity1, EmbeddedEntity1> dynamicAttributeSetter =
         source.setStringAttr(valueToSet);
     }
 };
-// Then provide this attribute getter to the MetaModel constructor (see below)
+// Then provide this attribute getter to the MetaModel builder method
 ```
 
 -> For a **readable** AND **writable** dynamic attribute, implement both IGQLDynamicAttributeGetter and IGQLDynamicAttributeSetter or extend default implementation GQLDynamicAttributeGetterSetter
