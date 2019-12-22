@@ -1,5 +1,6 @@
 package com.daikit.graphql.datafetcher;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +59,11 @@ public class GQLCustomMethodDataFetcher extends GQLAbstractDataFetcher<Object> {
 		final GQLCustomMethod method = allMethods.get(environment.getField().getName());
 		final List<Object> arguments = method.getArgs().stream().map(arg -> getArgumentValue(environment, arg))
 				.collect(Collectors.toList());
-		return method.getMethod().invoke(method.getController(), arguments.toArray());
+		try {
+			return method.getMethod().invoke(method.getController(), arguments.toArray());
+		} catch (final InvocationTargetException e) {
+			throw e.getCause() instanceof Exception ? (Exception) e.getCause() : e;
+		}
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
