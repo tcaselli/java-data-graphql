@@ -153,7 +153,7 @@ public class GQLInternalMetaModel {
 					? dynamicAttribute.getDynamicAttributeGetter().getEntityType()
 					: dynamicAttribute.getDynamicAttributeSetter().getEntityType();
 			final Optional<GQLEntityMetaData> entityMetaData = entityMetaDatas.stream()
-					.filter(metaData -> metaData.getEntityClass().isAssignableFrom(entityType)).findFirst();
+					.filter(metaData -> metaData.getEntityClass().equals(entityType)).findFirst();
 			if (!entityMetaData.isPresent()) {
 				throw new GQLException(
 						Message.format("No entity meta data registered for dynamic attribute [{}] entity class [{}]",
