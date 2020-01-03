@@ -2,7 +2,7 @@
 
 	<groupId>com.daikit</groupId>
 	<artifactId>java-data-graphql</artifactId>
-	<version>1.18-SNAPSHOT</version>
+	<version>1.18</version>
 
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>jar</packaging>
@@ -32,7 +32,7 @@
 		<connection>scm:git:https://github.com/tcaselli/java-data-graphql.git</connection>
 		<developerConnection>scm:git:https://github.com/tcaselli/java-data-graphql.git</developerConnection>
 		<url>https://github.com/tcaselli/java-data-graphql</url>
-		<tag>HEAD</tag>
+		<tag>java-data-graphql-1.18</tag>
 	</scm>
 
 	<distributionManagement>
