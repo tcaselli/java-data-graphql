@@ -124,6 +124,11 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 		customMethodFieldDefinitions.entrySet().forEach(entry -> getCache().getCodeRegistryBuilder()
 				.dataFetcher(queryType, entry.getValue(), customMethodsDataFetcher));
 
+		if (getCache().getConfig().isGenerateDataModelQuery()) {
+			logger.debug("Build query type for data model");
+
+		}
+
 		logger.debug("END building query types");
 		return queryType;
 	}

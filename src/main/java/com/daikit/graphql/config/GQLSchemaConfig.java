@@ -45,7 +45,7 @@ public class GQLSchemaConfig {
 		 * @param id
 		 *            the id to set
 		 */
-		public void setId(String id) {
+		public void setId(final String id) {
 			this.id = id;
 		}
 	}
@@ -93,10 +93,30 @@ public class GQLSchemaConfig {
 
 	private String concreteEmbeddedExtendingTypeNamePrefix = "type";
 
+	private String dataModelQueryName = "getDataModel";
+	private final String dataModelQueryType = "DataModel";
+	private final String dataModelQueryEntities = "entities";
+	private final String dataModelQueryEntityRights = "rights";
+	private final String dataModelQueryEntityRightsAttributeRead = "read";
+	private final String dataModelQueryEntityRightsAttributeSave = "save";
+	private final String dataModelQueryEntityRightsAttributeDelete = "delete";
+	private final String dataModelQueryEntityRightsAttributeRoles = "roles";
+	private final String dataModelQueryEntityAttributeConcrete = "concrete";
+	private final String dataModelQueryEntityAttributeEmbedded = "embedded";
+	private final String dataModelQueryEntityAttributeSuperClass = "superClass";
+	private final String dataModelQueryEntityAttributeName = "name";
+	private final String dataModelQueryEntityAttributeDescription = "description";
+	private final String dataModelQueryEntityAttributeAttributes = "attributes";
+
+	private final String dataModelQueryEntityAttributeAttributeName = "name";
+	private final String dataModelQueryEntityAttributeAttributeDescription = "description";
+
 	private String attributeIdName = "id";
 
 	private final Map<String, GraphQLScalarType> scalars = new HashMap<>();
 	private final Map<Class<?>, String> scalarTypeMappings = new HashMap<>();
+
+	private boolean generateDataModelQuery = true;
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -731,6 +751,36 @@ public class GQLSchemaConfig {
 	 */
 	public void setAttributeIdName(final String attributeIdName) {
 		this.attributeIdName = attributeIdName;
+	}
+
+	/**
+	 * @return the generateDataModelQuery
+	 */
+	public boolean isGenerateDataModelQuery() {
+		return generateDataModelQuery;
+	}
+
+	/**
+	 * @param generateDataModelQuery
+	 *            the generateDataModelQuery to set
+	 */
+	public void setGenerateDataModelQuery(final boolean generateDataModelQuery) {
+		this.generateDataModelQuery = generateDataModelQuery;
+	}
+
+	/**
+	 * @return the dataModelQueryName
+	 */
+	public String getDataModelQueryName() {
+		return dataModelQueryName;
+	}
+
+	/**
+	 * @param dataModelQueryName
+	 *            the dataModelQueryName to set
+	 */
+	public void setDataModelQueryName(final String dataModelQueryName) {
+		this.dataModelQueryName = dataModelQueryName;
 	}
 
 }
