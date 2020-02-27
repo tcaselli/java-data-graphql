@@ -57,6 +57,8 @@ public class GQLSchemaBuilder {
 	/**
 	 * Initialize GraphQL schema from given {@link GQLMetaModel}
 	 *
+	 * @param executionContext
+	 *            the {@link GQLExecutionContext}
 	 * @param schemaConfig
 	 *            the schema configuration {@link GQLSchemaConfig}
 	 * @param internalMetaModel
@@ -76,10 +78,11 @@ public class GQLSchemaBuilder {
 	 *
 	 * @return the generated {@link GraphQLSchema}
 	 */
-	public GraphQLSchema build(final GQLSchemaConfig schemaConfig, final GQLInternalMetaModel internalMetaModel,
-			final DataFetcher<?> getByIdDataFetcher, final DataFetcher<GQLListLoadResult> listDataFetcher,
-			final DataFetcher<?> saveDataFetcher, final DataFetcher<GQLDeleteResult> deleteDataFetcher,
-			final DataFetcher<?> customMethodDataFetcher, final List<GQLPropertyDataFetcher<?>> propertyDataFetchers) {
+	public GraphQLSchema build(GQLExecutionContext executionContext, final GQLSchemaConfig schemaConfig,
+			final GQLInternalMetaModel internalMetaModel, final DataFetcher<?> getByIdDataFetcher,
+			final DataFetcher<GQLListLoadResult> listDataFetcher, final DataFetcher<?> saveDataFetcher,
+			final DataFetcher<GQLDeleteResult> deleteDataFetcher, final DataFetcher<?> customMethodDataFetcher,
+			final List<GQLPropertyDataFetcher<?>> propertyDataFetchers) {
 
 		logger.debug("START building schema...");
 		final GQLSchemaBuilderCache cache = new GQLSchemaBuilderCache(schemaConfig);
@@ -115,8 +118,10 @@ public class GQLSchemaBuilder {
 		logger.debug("START building output reference types...");
 		new GQLReferencesBuilder(cache).buildTypeReferences(internalMetaModel);
 		new GQLEnumTypesBuilder(cache).buildEnumTypes(internalMetaModel);
-		new GQLInterfaceTypesBuilder(cache).buildInterfaceTypes(internalMetaModel, nullSafePropertyDataFetchers);
-		new GQLEntityTypesBuilder(cache).buildEntityTypes(internalMetaModel, nullSafePropertyDataFetchers);
+		new GQLInterfaceTypesBuilder(cache).buildInterfaceTypes(executionContext, internalMetaModel,
+				nullSafePropertyDataFetchers);
+		new GQLEntityTypesBuilder(cache).buildEntityTypes(executionContext, internalMetaModel,
+				nullSafePropertyDataFetchers);
 		logger.debug("END building output reference types");
 
 		logger.debug("END building mutations utility types...");
@@ -133,17 +138,17 @@ public class GQLSchemaBuilder {
 		logger.debug("END building queries utility types");
 
 		logger.debug("START building mutation entities input types...");
-		new GQLInputEntityTypesBuilder(cache).buildInputEntities(internalMetaModel);
+		new GQLInputEntityTypesBuilder(cache).buildInputEntities(executionContext, internalMetaModel);
 		logger.debug("END building mutation entities input types");
 
 		logger.debug("START building queries...");
-		builder.query(new GQLQueryTypeBuilder(cache).buildQueryType(internalMetaModel, getByIdDataFetcher,
-				listDataFetcher, customMethodDataFetcher));
+		builder.query(new GQLQueryTypeBuilder(cache).buildQueryType(executionContext, internalMetaModel,
+				getByIdDataFetcher, listDataFetcher, customMethodDataFetcher));
 		logger.debug("END building queries");
 
 		logger.debug("START building mutations...");
-		builder.mutation(new GQLMutationTypeBuilder(cache).buildMutationType(internalMetaModel, saveDataFetcher,
-				deleteDataFetcher, customMethodDataFetcher));
+		builder.mutation(new GQLMutationTypeBuilder(cache).buildMutationType(executionContext, internalMetaModel,
+				saveDataFetcher, deleteDataFetcher, customMethodDataFetcher));
 		logger.debug("END building mutations");
 
 		// Dictionary needed for "only-referred" types.

@@ -1,6 +1,7 @@
 package com.daikit.graphql.test.data;
 
 import com.daikit.graphql.meta.GQLAttribute;
+import com.daikit.graphql.meta.GQLAttributeRights;
 
 /**
  * Entity class 5
@@ -9,15 +10,15 @@ import com.daikit.graphql.meta.GQLAttribute;
  */
 public class Entity6 extends AbstractEntity {
 
-	@GQLAttribute(read = false)
+	@GQLAttribute(rights = @GQLAttributeRights(read = false))
 	private String attr1;
-	@GQLAttribute(save = false)
+	@GQLAttribute(rights = @GQLAttributeRights(save = false))
 	private String attr2;
-	@GQLAttribute(nullable = false)
+	@GQLAttribute(rights = @GQLAttributeRights(nullable = false))
 	private String attr3;
-	@GQLAttribute(nullableForUpdate = false)
+	@GQLAttribute(rights = @GQLAttributeRights(nullableForUpdate = false))
 	private String attr4;
-	@GQLAttribute(nullableForCreate = false)
+	@GQLAttribute(rights = @GQLAttributeRights(nullableForCreate = false))
 	private String attr5;
 	@GQLAttribute(filter = false)
 	private String attr6;

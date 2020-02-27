@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.daikit.graphql.builder.GQLExecutionContext;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.datafetcher.GQLPropertyDataFetcher;
@@ -48,13 +49,15 @@ public class GQLInterfaceTypesBuilder extends GQLAbstractTypesBuilder {
 	/**
 	 * Build abstract entities {@link GraphQLInterfaceType} types from given
 	 * {@link GQLInternalMetaModel}
-	 *
+	 * 
+	 * @param executionContext
+	 *            the {@link GQLExecutionContext}
 	 * @param metaModel
 	 *            the {@link GQLInternalMetaModel}
 	 * @param propertiesDataFetchers
 	 *            the list of {@link GQLPropertyDataFetcher}
 	 */
-	public void buildInterfaceTypes(final GQLInternalMetaModel metaModel,
+	public void buildInterfaceTypes(GQLExecutionContext executionContext, final GQLInternalMetaModel metaModel,
 			final List<GQLPropertyDataFetcher<?>> propertiesDataFetchers) {
 		logger.debug("START building interface types...");
 		// Create abstract entities types
@@ -65,7 +68,7 @@ public class GQLInterfaceTypesBuilder extends GQLAbstractTypesBuilder {
 							.isAssignableFrom(infos.getEntity().getEntityClass()))
 					.collect(Collectors.toList());
 			getCache().getInterfaceTypes().put(infos.getEntity().getEntityClass(),
-					buildInterface(infos, propertyDataFetchers));
+					buildInterface(executionContext, infos, propertyDataFetchers));
 		}
 		logger.debug("END building interface types");
 	}
@@ -74,7 +77,8 @@ public class GQLInterfaceTypesBuilder extends GQLAbstractTypesBuilder {
 	// PRIVATE UTILS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	private GraphQLInterfaceType buildInterface(final GQLInterfaceEntityMetaDataInfos infos,
+	private GraphQLInterfaceType buildInterface(GQLExecutionContext executionContext,
+			final GQLInterfaceEntityMetaDataInfos infos,
 			final List<GQLPropertyDataFetcher<?>> interfacePropertiesDataFetchers) {
 		logger.debug(Message.format("Build interface type [{}]", infos.getEntity().getName()));
 		final GraphQLInterfaceType.Builder builder = GraphQLInterfaceType.newInterface();
@@ -92,7 +96,7 @@ public class GQLInterfaceTypesBuilder extends GQLAbstractTypesBuilder {
 
 		// Add other fields
 		final Map<GQLAbstractAttributeMetaData, GraphQLFieldDefinition> entityFieldDefinitions = buildEntityFieldDefinitions(
-				infos.getEntity());
+				executionContext, infos.getEntity());
 		GQLSchemaBuilderUtils.addOrReplaceFieldDefinitions(fieldDefinitions, entityFieldDefinitions.values());
 
 		// Effectively add fields

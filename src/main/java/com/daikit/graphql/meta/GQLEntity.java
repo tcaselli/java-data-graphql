@@ -43,32 +43,10 @@ public @interface GQLEntity {
 	boolean exclude() default false;
 
 	/**
-	 * Get whether this entity is read only (if true it is equivalent to
-	 * read==true AND save==false AND delete==false).
+	 * Rights for annotated entity
 	 *
-	 * @return a boolean (false by default)
+	 * @return an array of {@link GQLEntityRights}
 	 */
-	boolean readOnly() default false;
-
-	/**
-	 * Get whether this entity can be read by client.
-	 *
-	 * @return a boolean (true by default)
-	 */
-	boolean read() default true;
-
-	/**
-	 * Get whether this entity can be saved by client.
-	 *
-	 * @return a boolean (true by default)
-	 */
-	boolean save() default true;
-
-	/**
-	 * Get whether this entity can be deleted by client.
-	 *
-	 * @return a boolean (true by default)
-	 */
-	boolean delete() default true;
+	GQLEntityRights[] rights() default {};
 
 }

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -86,7 +87,7 @@ public class GQLInternalMetaModel {
 		final Collection<GQLAbstractAttributeMetaData> dynamicAttributeMetaDatas = inputMetaModel.getDynamicAttributes()
 				.stream()
 				.map(attribute -> dynamicAttributeMetaDataBuilder.build(enumMetaDatas, entityMetaDatas, attribute))
-				.collect(Collectors.toList());
+				.filter(Objects::nonNull).collect(Collectors.toList());
 		final Collection<GQLAbstractMethodMetaData> methodMetaDatas = customMethods.stream()
 				.map(customMethod -> methodMetaDataBuilder.build(enumMetaDatas, entityMetaDatas, customMethod))
 				.collect(Collectors.toList());

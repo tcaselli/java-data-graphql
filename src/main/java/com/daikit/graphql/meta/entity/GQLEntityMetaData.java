@@ -2,7 +2,13 @@ package com.daikit.graphql.meta.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
+import com.daikit.graphql.builder.GQLExecutionContext;
+import com.daikit.graphql.builder.GQLExecutionContext.GQLRolesJunctionEnum;
+import com.daikit.graphql.exception.GQLException;
 import com.daikit.graphql.meta.GQLAbstractMetaData;
 import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
 
@@ -14,18 +20,18 @@ import com.daikit.graphql.meta.attribute.GQLAbstractAttributeMetaData;
  */
 public class GQLEntityMetaData extends GQLAbstractMetaData {
 
-	private boolean readable = true;
-	private boolean saveable = true;
-	private boolean deletable = true;
-
 	private boolean embedded = false;
 	private boolean concrete = true;
+
+	private List<GQLEntityRightsMetaData> rights = new ArrayList<>();
 
 	private String name;
 	private String description;
 	private Class<?> superEntityClass;
 	private Class<?> entityClass;
 	private List<GQLAbstractAttributeMetaData> attributes = new ArrayList<>();
+
+	private final GQLEntityRightsMetaData DEFAULT_RIGHTS = new GQLEntityRightsMetaData();
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTORS
@@ -120,7 +126,7 @@ public class GQLEntityMetaData extends GQLAbstractMetaData {
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-	// METHODS
+	// PUBLIC METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	@Override
@@ -144,9 +150,93 @@ public class GQLEntityMetaData extends GQLAbstractMetaData {
 		}
 	}
 
+	/**
+	 * Get whether this entity is saveable in given context
+	 *
+	 * @param executionContext
+	 *            the {@link GQLExecutionContext}
+	 * @return a boolean
+	 */
+	public boolean isSaveable(GQLExecutionContext executionContext) {
+		return checkRights(executionContext, rights -> rights.isSaveable());
+	}
+
+	/**
+	 * Get whether this entity is readable in given context
+	 *
+	 * @param executionContext
+	 *            the {@link GQLExecutionContext}
+	 * @return a boolean
+	 */
+	public boolean isReadable(GQLExecutionContext executionContext) {
+		return checkRights(executionContext, rights -> rights.isReadable());
+	}
+
+	/**
+	 * Get whether this entity is deleteable in given context
+	 *
+	 * @param executionContext
+	 *            the {@link GQLExecutionContext}
+	 * @return a boolean
+	 */
+	public boolean isDeletable(GQLExecutionContext executionContext) {
+		return checkRights(executionContext, rights -> rights.isDeletable());
+	}
+
+	/**
+	 * Add given rights
+	 *
+	 * @param rights
+	 *            the GQLEntityRightsMetaData
+	 * @return this
+	 */
+	public GQLEntityMetaData addRights(GQLEntityRightsMetaData rights) {
+		getRights().stream().filter(r -> Objects.equals(r.getRole(), rights.getRole())).findFirst().ifPresent(r -> {
+			throw new GQLException(
+					"Several rights configured for same role [" + r.getRole() + "] within entity [" + this + "]");
+		});
+		if (rights.getRole() == null) {
+			getRights().add(0, rights);
+		} else {
+			getRights().add(rights);
+		}
+		return this;
+	}
+
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+	// PRIVATE METHODS
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+	private Stream<GQLEntityRightsMetaData> getRights(List<?> roles) {
+		return getRights().stream().filter(rights -> rights.getRole() == null || roles.contains(rights.getRole()));
+	}
+
+	private boolean checkRights(GQLExecutionContext executionContext, Predicate<GQLEntityRightsMetaData> predicate) {
+		return getRights().isEmpty()
+				? predicate.test(DEFAULT_RIGHTS)
+				: GQLRolesJunctionEnum.AND.equals(executionContext.getRolesJunction())
+						? getRights(executionContext.getRoles()).allMatch(predicate)
+						: getRights(executionContext.getRoles()).anyMatch(predicate);
+	}
+
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// GETTERS / SETTERS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+	/**
+	 * @return the rights
+	 */
+	public List<GQLEntityRightsMetaData> getRights() {
+		return rights;
+	}
+
+	/**
+	 * @param rights
+	 *            the rights to set
+	 */
+	public void setRights(List<GQLEntityRightsMetaData> rights) {
+		this.rights = rights;
+	}
 
 	/**
 	 * Get the description for the entity. This description will be used for
@@ -284,57 +374,6 @@ public class GQLEntityMetaData extends GQLAbstractMetaData {
 	}
 
 	/**
-	 * @return the readable
-	 */
-	public boolean isReadable() {
-		return readable;
-	}
-
-	/**
-	 * @param readable
-	 *            the readable to set
-	 * @return this instance
-	 */
-	public GQLEntityMetaData setReadable(final boolean readable) {
-		this.readable = readable;
-		return this;
-	}
-
-	/**
-	 * @return the deletable
-	 */
-	public boolean isDeletable() {
-		return deletable;
-	}
-
-	/**
-	 * @param deletable
-	 *            the deletable to set
-	 * @return this instance
-	 */
-	public GQLEntityMetaData setDeletable(final boolean deletable) {
-		this.deletable = deletable;
-		return this;
-	}
-
-	/**
-	 * @return the saveable
-	 */
-	public boolean isSaveable() {
-		return saveable;
-	}
-
-	/**
-	 * @param saveable
-	 *            the saveable to set
-	 * @return this instance
-	 */
-	public GQLEntityMetaData setSaveable(final boolean saveable) {
-		this.saveable = saveable;
-		return this;
-	}
-
-	/**
 	 * @return the embedded
 	 */
 	public boolean isEmbedded() {
@@ -350,4 +389,5 @@ public class GQLEntityMetaData extends GQLAbstractMetaData {
 		this.embedded = embedded;
 		return this;
 	}
+
 }

@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 
 import com.daikit.graphql.builder.GQLAbstractSchemaSubBuilder;
+import com.daikit.graphql.builder.GQLExecutionContext;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.datafetcher.GQLDynamicAttributeDataFetcher;
@@ -56,10 +57,10 @@ public class GQLAbstractTypesBuilder extends GQLAbstractSchemaSubBuilder {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	protected Map<GQLAbstractAttributeMetaData, GraphQLFieldDefinition> buildEntityFieldDefinitions(
-			final GQLEntityMetaData entity) {
+			GQLExecutionContext executionContext, final GQLEntityMetaData entity) {
 		logger.debug(Message.format("Build field definitions for entity/interface [{}]", entity.getName()));
 		final Map<GQLAbstractAttributeMetaData, GraphQLFieldDefinition> fieldDefinitions = entity.getAttributes()
-				.stream().filter(attribute -> attribute.isReadable()).collect(LinkedHashMap::new,
+				.stream().filter(attribute -> attribute.isReadable(executionContext)).collect(LinkedHashMap::new,
 						(map, attribute) -> map.put(attribute, buildEntityFieldDefinition(attribute)), Map::putAll);
 		return fieldDefinitions;
 	}

@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.daikit.graphql.builder.GQLExecutionContext;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.meta.GQLInternalMetaModel;
@@ -60,13 +61,15 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 
 	/**
 	 * Build {@link GraphQLObjectType} from given {@link GQLInternalMetaModel}
-	 *
+	 * 
+	 * @param executionContext
+	 *            the {@link GQLExecutionContext}
 	 * @param metaModel
 	 *            the {@link GQLInternalMetaModel}
 	 */
-	public void buildInputEntities(final GQLInternalMetaModel metaModel) {
+	public void buildInputEntities(GQLExecutionContext executionContext, final GQLInternalMetaModel metaModel) {
 		logger.debug("START building input entity types...");
-		new BuilderImpl().build(metaModel);
+		new BuilderImpl().build(executionContext, metaModel);
 		logger.debug("END building input entity types");
 	}
 
@@ -83,27 +86,29 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 		// phase
 		private final Map<GQLAbstractEntityMetaDataInfos, Set<Class<?>>> lazyEntities = new HashMap<>();
 
-		public void build(final GQLInternalMetaModel metaModel) {
+		public void build(GQLExecutionContext executionContext, final GQLInternalMetaModel metaModel) {
 			allInfos.addAll(metaModel.getEmbeddedConcretes());
 			allInfos.addAll(metaModel.getEmbeddedInterfaces());
 			allInfos.addAll(metaModel.getAllNonEmbeddedEntities());
-			allInfos.forEach(infos -> getOrBuildAndRegisterInputEntity(infos));
-			generateLazyEntities();
+			allInfos.forEach(infos -> getOrBuildAndRegisterInputEntity(executionContext, infos));
+			generateLazyEntities(executionContext);
 		}
 
-		private GraphQLInputObjectType getOrBuildAndRegisterInputEntity(final Class<?> entityClass) {
+		private GraphQLInputObjectType getOrBuildAndRegisterInputEntity(GQLExecutionContext executionContext,
+				final Class<?> entityClass) {
 			GraphQLInputObjectType existingInputEntityType = getCache().getInputEntityTypes().get(entityClass);
 			if (existingInputEntityType == null) {
 				final GQLAbstractEntityMetaDataInfos infos = allInfos.stream()
 						.filter(current -> entityClass.equals(current.getEntity().getEntityClass())).findFirst()
 						.orElseThrow(() -> new IllegalArgumentException(
 								Message.format("No meta data infos defined for entity class [{}]", entityClass)));
-				existingInputEntityType = getOrBuildAndRegisterInputEntity(infos);
+				existingInputEntityType = getOrBuildAndRegisterInputEntity(executionContext, infos);
 			}
 			return existingInputEntityType;
 		}
 
-		private GraphQLInputObjectType getOrBuildAndRegisterInputEntity(final GQLAbstractEntityMetaDataInfos infos) {
+		private GraphQLInputObjectType getOrBuildAndRegisterInputEntity(GQLExecutionContext executionContext,
+				final GQLAbstractEntityMetaDataInfos infos) {
 			// TODO: circular dependencies between embedded entities will result
 			// in infinite loop
 			GraphQLInputObjectType inputObjectType = getCache().getInputEntityTypes()
@@ -111,7 +116,7 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 			if (inputObjectType == null) {
 				if (!infos.getEntity().isEmbedded() || infos.getEntity().isEmbedded() && infos.isConcrete()) {
 					// Build for concrete embedded or for non embedded
-					inputObjectType = buildInputEntity(infos);
+					inputObjectType = buildInputEntity(executionContext, infos);
 				} else {
 					// Build for abstract embedded
 					inputObjectType = buildEmbeddedAbstractInputEntity((GQLInterfaceEntityMetaDataInfos) infos);
@@ -125,9 +130,10 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 			return inputObjectType;
 		}
 
-		private GraphQLInputObjectType buildInputEntity(final GQLAbstractEntityMetaDataInfos infos) {
+		private GraphQLInputObjectType buildInputEntity(GQLExecutionContext executionContext,
+				final GQLAbstractEntityMetaDataInfos infos) {
 			logger.debug(Message.format("Build input save entity type [{}]", infos.getEntity().getName()));
-			final List<GraphQLInputObjectField> buildFields = buildInputEntityFields(infos);
+			final List<GraphQLInputObjectField> buildFields = buildInputEntityFields(executionContext, infos);
 			GraphQLInputObjectType ret = null;
 			if (lazyEntities.containsKey(infos)) {
 				logger.debug(Message.format("Build input save entity [{}] deferred because of lazy field loading.",
@@ -154,21 +160,22 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 			return ret;
 		}
 
-		private List<GraphQLInputObjectField> buildInputEntityFields(final GQLAbstractEntityMetaDataInfos infos) {
+		private List<GraphQLInputObjectField> buildInputEntityFields(GQLExecutionContext executionContext,
+				final GQLAbstractEntityMetaDataInfos infos) {
 			logger.debug(Message.format("Build input save entity fields for entity [{}]", infos.getEntity().getName()));
 			final List<GraphQLInputObjectField> inputFields = infos.getEntity().getAttributes().stream()
-					.filter(attribute -> attribute.isSaveable())
-					.map(attribute -> buildInputEntityField(infos, attribute)).flatMap(list -> list.stream())
-					.filter(Objects::nonNull).collect(Collectors.toList());
+					.filter(attribute -> attribute.isSaveable(executionContext))
+					.map(attribute -> buildInputEntityField(executionContext, infos, attribute))
+					.flatMap(list -> list.stream()).filter(Objects::nonNull).collect(Collectors.toList());
 			return inputFields;
 		}
 
-		private List<GraphQLInputObjectField> buildInputEntityField(final GQLAbstractEntityMetaDataInfos infos,
-				final GQLAbstractAttributeMetaData attribute) {
+		private List<GraphQLInputObjectField> buildInputEntityField(GQLExecutionContext executionContext,
+				final GQLAbstractEntityMetaDataInfos infos, final GQLAbstractAttributeMetaData attribute) {
 			logger.debug(Message.format("Build input save entity field for attribute [{}]", attribute.getName()));
 			final List<GraphQLInputObjectField> inputFields = new ArrayList<>();
 			final String name = attribute.getName();
-			final String nullableSuffix = getDescriptionNullableSuffix(attribute);
+			final String nullableSuffix = getDescriptionNullableSuffix(executionContext, attribute);
 			// Set attribute type
 			if (attribute instanceof GQLAttributeScalarMetaData) {
 				inputFields.add(buildInputField(name,
@@ -181,7 +188,7 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 			} else if (attribute instanceof GQLAttributeEntityMetaData) {
 				if (((GQLAttributeEntityMetaData) attribute).isEmbedded()) {
 					final GraphQLInputObjectType existingInputEntityType = getOrBuildAndRegisterInputEntity(
-							((GQLAttributeEntityMetaData) attribute).getEntityClass());
+							executionContext, ((GQLAttributeEntityMetaData) attribute).getEntityClass());
 					inputFields.add(buildInputField(name,
 							"Input field [Object embedded] [" + attribute.getName() + "]" + nullableSuffix,
 							existingInputEntityType));
@@ -196,7 +203,7 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 			} else if (attribute instanceof GQLAttributeListEntityMetaData) {
 				if (((GQLAttributeListEntityMetaData) attribute).isEmbedded()) {
 					final GraphQLInputObjectType existingInputEntityType = getOrBuildAndRegisterInputEntity(
-							((GQLAttributeListEntityMetaData) attribute).getForeignClass());
+							executionContext, ((GQLAttributeListEntityMetaData) attribute).getForeignClass());
 					inputFields.add(buildInputField(name,
 							"Input field [List object embedded] [" + attribute.getName() + "]" + nullableSuffix,
 							new GraphQLList(existingInputEntityType)));
@@ -217,7 +224,7 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 											? name
 											: name + getConfig().getAttributePluralSuffix(),
 									"Input field [Array] of [" + attribute.getName() + "]"
-											+ getDescriptionNullableSuffix(attribute),
+											+ getDescriptionNullableSuffix(executionContext, attribute),
 									new GraphQLList(foreignInputType)));
 						}
 					}
@@ -227,7 +234,7 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 									? name.substring(0, name.length() - 1)
 									: name) + getConfig().getAttributeIdPluralSuffix(),
 							"Input field [Array] of [id] of [" + attribute.getName() + "]"
-									+ getDescriptionNullableSuffix(attribute),
+									+ getDescriptionNullableSuffix(executionContext, attribute),
 							new GraphQLList(Scalars.GraphQLID)));
 				}
 			} else if (attribute instanceof GQLAttributeListScalarMetaData) {
@@ -276,13 +283,13 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 			return ret;
 		}
 
-		private void generateLazyEntities() {
+		private void generateLazyEntities(GQLExecutionContext executionContext) {
 			logger.debug("START building lazy entities...");
-			generateLazyEntitiesWrapped();
+			generateLazyEntitiesWrapped(executionContext);
 			logger.debug("END building lazy entities");
 		}
 
-		private void generateLazyEntitiesWrapped() {
+		private void generateLazyEntitiesWrapped(GQLExecutionContext executionContext) {
 			if (!lazyEntities.isEmpty()) {
 				boolean atLeastOneBuilt = false;
 				final Iterator<Entry<GQLAbstractEntityMetaDataInfos, Set<Class<?>>>> iterator = lazyEntities.entrySet()
@@ -293,11 +300,11 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 							.allMatch(foreignClass -> getCache().getInputEntityTypes().get(foreignClass) != null)) {
 						iterator.remove();
 						atLeastOneBuilt = true;
-						getOrBuildAndRegisterInputEntity(entry.getKey());
+						getOrBuildAndRegisterInputEntity(executionContext, entry.getKey());
 					}
 				}
 				if (atLeastOneBuilt) {
-					generateLazyEntitiesWrapped();
+					generateLazyEntitiesWrapped(executionContext);
 				} else {
 					throw new IllegalArgumentException(
 							Message.format("Impossible to generate input types for [{}]. Maybe because of a loop ?",
@@ -315,24 +322,25 @@ public class GQLInputEntityTypesBuilder extends GQLAbstractInputOutputTypesBuild
 		// PRIVATE UTILS
 		// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-		private String getDescriptionNullableSuffix(final GQLAbstractAttributeMetaData attribute) {
+		private String getDescriptionNullableSuffix(GQLExecutionContext executionContext,
+				final GQLAbstractAttributeMetaData attribute) {
 			String description = "";
-			if (!attribute.isNullableForCreate()) {
-				if (!attribute.isNullableForUpdate()) {
+			if (!attribute.isNullableForCreate(executionContext)) {
+				if (!attribute.isNullableForUpdate(executionContext)) {
 					description += " [field is not nullable]";
 				} else {
 					description += " [field is not nullable for creation]";
 				}
-			} else if (!attribute.isNullableForUpdate()) {
+			} else if (!attribute.isNullableForUpdate(executionContext)) {
 				description += " [field is not nullable for update]";
 			}
-			if (attribute.isMandatoryForCreate()) {
-				if (attribute.isMandatoryForUpdate()) {
+			if (attribute.isMandatoryForCreate(executionContext)) {
+				if (attribute.isMandatoryForUpdate(executionContext)) {
 					description += " [field is mandatory]";
 				} else {
 					description += " [field is mandatory for creation]";
 				}
-			} else if (attribute.isMandatoryForUpdate()) {
+			} else if (attribute.isMandatoryForUpdate(executionContext)) {
 				description += " [field is mandatory for update]";
 			}
 			return description;

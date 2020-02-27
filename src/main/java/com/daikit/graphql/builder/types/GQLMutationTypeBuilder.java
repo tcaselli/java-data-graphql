@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.daikit.graphql.builder.GQLExecutionContext;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.builder.custommethod.GQLCustomMethodBuilder;
 import com.daikit.graphql.data.output.GQLDeleteResult;
@@ -46,7 +47,9 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 
 	/**
 	 * Build mutation type
-	 *
+	 * 
+	 * @param executionContext
+	 *            the {@link GQLExecutionContext}
 	 * @param metaModel
 	 *            the {@link GQLInternalMetaModel}
 	 * @param saveDataFetcher
@@ -57,9 +60,9 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 	 *            the {@link DataFetcher} for custom methods
 	 * @return the created {@link GraphQLObjectType}
 	 */
-	public GraphQLObjectType buildMutationType(final GQLInternalMetaModel metaModel,
-			final DataFetcher<?> saveDataFetcher, final DataFetcher<GQLDeleteResult> deleteDataFetcher,
-			final DataFetcher<?> customMethodsDataFetcher) {
+	public GraphQLObjectType buildMutationType(GQLExecutionContext executionContext,
+			final GQLInternalMetaModel metaModel, final DataFetcher<?> saveDataFetcher,
+			final DataFetcher<GQLDeleteResult> deleteDataFetcher, final DataFetcher<?> customMethodsDataFetcher) {
 		logger.debug("START building mutation types...");
 
 		final GraphQLObjectType.Builder builder = GraphQLObjectType.newObject();
@@ -68,11 +71,11 @@ public class GQLMutationTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 
 		logger.debug("Build mutation types for entities...");
 		final List<GraphQLFieldDefinition> saveFieldDefinitions = metaModel.getNonEmbeddedConcretes().stream()
-				.filter(infos -> infos.getEntity().isSaveable()).map(infos -> buildSaveMutationFieldDefinition(infos))
-				.collect(Collectors.toList());
+				.filter(infos -> infos.getEntity().isSaveable(executionContext))
+				.map(infos -> buildSaveMutationFieldDefinition(infos)).collect(Collectors.toList());
 		builder.fields(saveFieldDefinitions);
 		final List<GraphQLFieldDefinition> deleteFieldDefinitions = metaModel.getNonEmbeddedConcretes().stream()
-				.filter(infos -> infos.getEntity().isDeletable())
+				.filter(infos -> infos.getEntity().isDeletable(executionContext))
 				.map(infos -> buildDeleteMutationFieldDefinition(infos)).collect(Collectors.toList());
 		builder.fields(deleteFieldDefinitions);
 

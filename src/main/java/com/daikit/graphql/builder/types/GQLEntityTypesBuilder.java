@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.daikit.graphql.builder.GQLExecutionContext;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.datafetcher.GQLConcreteSubEntityPropertyDataFetcher;
@@ -53,14 +54,16 @@ public class GQLEntityTypesBuilder extends GQLAbstractTypesBuilder {
 	/**
 	 * Build entities {@link GraphQLObjectType} types from given
 	 * {@link GQLInternalMetaModel}
-	 *
+	 * 
+	 * @param executionContext
+	 *            the {@link GQLExecutionContext}
 	 * @param metaModel
 	 *            the {@link GQLInternalMetaModel}
 	 * @param propertiesDataFetchers
 	 *            the list of all {@link GQLPropertyDataFetcher} for all
 	 *            entities
 	 */
-	public void buildEntityTypes(final GQLInternalMetaModel metaModel,
+	public void buildEntityTypes(GQLExecutionContext executionContext, final GQLInternalMetaModel metaModel,
 			final List<GQLPropertyDataFetcher<?>> propertiesDataFetchers) {
 		logger.debug("START building entity types...");
 		// Build entities for concrete and concrete embedded entities types
@@ -70,7 +73,8 @@ public class GQLEntityTypesBuilder extends GQLAbstractTypesBuilder {
 					.filter(propertyDataFetcher -> propertyDataFetcher.getEntityClass()
 							.isAssignableFrom(infos.getEntity().getEntityClass()))
 					.collect(Collectors.toList());
-			getCache().getObjectTypes().put(infos.getEntity().getEntityClass(), buildEntity(infos, dataFetchers));
+			getCache().getObjectTypes().put(infos.getEntity().getEntityClass(),
+					buildEntity(executionContext, infos, dataFetchers));
 		}
 		// Build entities for abstract embedded entities types
 		for (final GQLInterfaceEntityMetaDataInfos infos : metaModel.getEmbeddedInterfaces()) {
@@ -83,7 +87,8 @@ public class GQLEntityTypesBuilder extends GQLAbstractTypesBuilder {
 	// PRIVATE UTILS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
-	private GraphQLObjectType buildEntity(final GQLAbstractEntityMetaDataInfos infos,
+	private GraphQLObjectType buildEntity(GQLExecutionContext executionContext,
+			final GQLAbstractEntityMetaDataInfos infos,
 			final List<GQLPropertyDataFetcher<?>> entityPropertiesDataFetchers) {
 		logger.debug(Message.format("Build entity type [{}]", infos.getEntity().getName()));
 		final GraphQLObjectType.Builder builder = GraphQLObjectType.newObject();
@@ -116,7 +121,7 @@ public class GQLEntityTypesBuilder extends GQLAbstractTypesBuilder {
 
 		// Add other fields
 		final Map<GQLAbstractAttributeMetaData, GraphQLFieldDefinition> entityFieldDefinitions = buildEntityFieldDefinitions(
-				infos.getEntity());
+				executionContext, infos.getEntity());
 		GQLSchemaBuilderUtils.addOrReplaceFieldDefinitions(fieldDefinitions, entityFieldDefinitions.values());
 
 		// Effectively add fields

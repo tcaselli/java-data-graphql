@@ -91,7 +91,7 @@ public abstract class AbstractTestSuite {
 	private GQLExecutor createExecutor(GQLMetaModel metaModel) {
 		return new GQLExecutor(schemaConfig, metaModel, new GQLErrorProcessor(), createGetByIdDataFetcher(),
 				createListDataFetcher(), createSaveDataFetcher(), createDeleteDataFetcher(),
-				createCustomMethodDataFetcher(), createPropertyDataFetchers());
+				createCustomMethodDataFetcher(), createPropertyDataFetchers(), Collections.emptyList());
 	}
 
 	protected String readGraphql(final String fileName) {

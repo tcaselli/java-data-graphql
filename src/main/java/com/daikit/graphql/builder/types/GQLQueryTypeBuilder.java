@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.daikit.graphql.builder.GQLExecutionContext;
 import com.daikit.graphql.builder.GQLSchemaBuilderCache;
 import com.daikit.graphql.builder.GQLSchemaBuilderUtils;
 import com.daikit.graphql.builder.custommethod.GQLCustomMethodBuilder;
@@ -60,7 +61,9 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 
 	/**
 	 * Build query type
-	 *
+	 * 
+	 * @param executionContext
+	 *            the {@link GQLExecutionContext}
 	 * @param metaModel
 	 *            the {@link GQLInternalMetaModel}
 	 * @param getByIdDataFetcher
@@ -71,7 +74,7 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 	 *            the {@link DataFetcher} for custom methods
 	 * @return the created {@link GraphQLObjectType}
 	 */
-	public GraphQLObjectType buildQueryType(final GQLInternalMetaModel metaModel,
+	public GraphQLObjectType buildQueryType(GQLExecutionContext executionContext, final GQLInternalMetaModel metaModel,
 			final DataFetcher<?> getByIdDataFetcher, final DataFetcher<GQLListLoadResult> listDataFetcher,
 			final DataFetcher<?> customMethodsDataFetcher) {
 		logger.debug("START building query types...");
@@ -84,16 +87,18 @@ public class GQLQueryTypeBuilder extends GQLAbstractInputOutputTypesBuilder {
 		final List<GraphQLFieldDefinition> getAllFieldDefinitions = new ArrayList<>();
 
 		logger.debug("Build query types for interfaces...");
-		metaModel.getNonEmbeddedInterfaces().stream().filter(infos -> infos.getEntity().isReadable()).forEach(infos -> {
-			getByIdFieldDefinitions.add(buildGetSingleQueryFieldDefinitions(infos, true));
-			getAllFieldDefinitions.add(buildGetAllQueryFieldDefinitions(infos, true));
-		});
+		metaModel.getNonEmbeddedInterfaces().stream().filter(infos -> infos.getEntity().isReadable(executionContext))
+				.forEach(infos -> {
+					getByIdFieldDefinitions.add(buildGetSingleQueryFieldDefinitions(infos, true));
+					getAllFieldDefinitions.add(buildGetAllQueryFieldDefinitions(infos, true));
+				});
 
 		logger.debug("Build query types for entities...");
-		metaModel.getNonEmbeddedConcretes().stream().filter(infos -> infos.getEntity().isReadable()).forEach(infos -> {
-			getByIdFieldDefinitions.add(buildGetSingleQueryFieldDefinitions(infos, false));
-			getAllFieldDefinitions.add(buildGetAllQueryFieldDefinitions(infos, false));
-		});
+		metaModel.getNonEmbeddedConcretes().stream().filter(infos -> infos.getEntity().isReadable(executionContext))
+				.forEach(infos -> {
+					getByIdFieldDefinitions.add(buildGetSingleQueryFieldDefinitions(infos, false));
+					getAllFieldDefinitions.add(buildGetAllQueryFieldDefinitions(infos, false));
+				});
 
 		builder.fields(getByIdFieldDefinitions);
 		builder.fields(getAllFieldDefinitions);

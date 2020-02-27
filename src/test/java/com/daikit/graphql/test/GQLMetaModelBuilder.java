@@ -19,8 +19,10 @@ import com.daikit.graphql.meta.attribute.GQLAttributeEnumMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeListEntityMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeListEnumMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeListScalarMetaData;
+import com.daikit.graphql.meta.attribute.GQLAttributeRightsMetaData;
 import com.daikit.graphql.meta.attribute.GQLAttributeScalarMetaData;
 import com.daikit.graphql.meta.entity.GQLEntityMetaData;
+import com.daikit.graphql.meta.entity.GQLEntityRightsMetaData;
 import com.daikit.graphql.meta.entity.GQLEnumMetaData;
 import com.daikit.graphql.test.data.AbstractEntity;
 import com.daikit.graphql.test.data.EmbeddedData1;
@@ -107,8 +109,8 @@ public class GQLMetaModelBuilder {
 		entity.addAttribute(
 				new GQLAttributeListEntityMetaData("embeddedData1s", EmbeddedData1.class).setEmbedded(true));
 		// Fields from super class
-		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullableForUpdate(false)
-				.setMandatoryForUpdate(true));
+		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID)
+				.addRights(new GQLAttributeRightsMetaData().setNullableForUpdate(false).setMandatoryForUpdate(true)));
 		return entity;
 	}
 
@@ -118,8 +120,8 @@ public class GQLMetaModelBuilder {
 		// Fields from class
 		entity.addAttribute(new GQLAttributeListEntityMetaData("entity1s", Entity1.class));
 		// Fields from super class
-		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullableForUpdate(false)
-				.setMandatoryForUpdate(true));
+		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID)
+				.addRights(new GQLAttributeRightsMetaData().setNullableForUpdate(false).setMandatoryForUpdate(true)));
 		return entity;
 	}
 
@@ -129,8 +131,8 @@ public class GQLMetaModelBuilder {
 		// Fields from class
 		entity.addAttribute(new GQLAttributeEntityMetaData("entity1", Entity1.class));
 		// Fields from super class
-		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullableForUpdate(false)
-				.setMandatoryForUpdate(true));
+		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID)
+				.addRights(new GQLAttributeRightsMetaData().setNullableForUpdate(false).setMandatoryForUpdate(true)));
 		return entity;
 	}
 
@@ -140,8 +142,8 @@ public class GQLMetaModelBuilder {
 		// Fields from class
 		entity.addAttribute(new GQLAttributeListEntityMetaData("entity1s", Entity1.class));
 		// Fields from super class
-		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullableForUpdate(false)
-				.setMandatoryForUpdate(true));
+		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID)
+				.addRights(new GQLAttributeRightsMetaData().setNullableForUpdate(false).setMandatoryForUpdate(true)));
 		return entity;
 	}
 
@@ -152,8 +154,8 @@ public class GQLMetaModelBuilder {
 		entity.addAttribute(new GQLAttributeScalarMetaData("intAttr", GQLScalarTypeEnum.INT));
 		entity.addAttribute(new GQLAttributeScalarMetaData("stringAttr", GQLScalarTypeEnum.STRING));
 		// Fields from super class
-		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullableForUpdate(false)
-				.setMandatoryForUpdate(true));
+		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID)
+				.addRights(new GQLAttributeRightsMetaData().setNullableForUpdate(false).setMandatoryForUpdate(true)));
 		return entity;
 	}
 
@@ -161,47 +163,50 @@ public class GQLMetaModelBuilder {
 		final GQLEntityMetaData entity = new GQLEntityMetaData(Entity6.class.getSimpleName(), Entity6.class,
 				AbstractEntity.class);
 		// Fields from class
-		entity.addAttribute(new GQLAttributeScalarMetaData("attr1", GQLScalarTypeEnum.STRING).setReadable(false));
-		entity.addAttribute(new GQLAttributeScalarMetaData("attr2", GQLScalarTypeEnum.STRING).setSaveable(false));
-		entity.addAttribute(new GQLAttributeScalarMetaData("attr3", GQLScalarTypeEnum.STRING).setNullable(false));
-		entity.addAttribute(
-				new GQLAttributeScalarMetaData("attr4", GQLScalarTypeEnum.STRING).setNullableForUpdate(false));
-		entity.addAttribute(
-				new GQLAttributeScalarMetaData("attr5", GQLScalarTypeEnum.STRING).setNullableForCreate(false));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr1", GQLScalarTypeEnum.STRING)
+				.addRights(new GQLAttributeRightsMetaData().setReadable(false)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr2", GQLScalarTypeEnum.STRING)
+				.addRights(new GQLAttributeRightsMetaData().setSaveable(false)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr3", GQLScalarTypeEnum.STRING)
+				.addRights(new GQLAttributeRightsMetaData().setNullable(false)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr4", GQLScalarTypeEnum.STRING)
+				.addRights(new GQLAttributeRightsMetaData().setNullableForUpdate(false)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr5", GQLScalarTypeEnum.STRING)
+				.addRights(new GQLAttributeRightsMetaData().setNullableForCreate(false)));
 		entity.addAttribute(new GQLAttributeScalarMetaData("attr6", GQLScalarTypeEnum.STRING).setFilterable(false));
 		// Fields from super class
-		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullableForUpdate(false)
-				.setMandatoryForUpdate(true));
+		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID)
+				.addRights(new GQLAttributeRightsMetaData().setNullableForUpdate(false).setMandatoryForUpdate(true)));
 		return entity;
 	}
 
 	private GQLEntityMetaData buildEntity7() {
 		final GQLEntityMetaData entity = new GQLEntityMetaData(Entity7.class.getSimpleName(), Entity7.class,
-				AbstractEntity.class).setSaveable(false);
+				AbstractEntity.class).addRights(new GQLEntityRightsMetaData().setSaveable(false));
 		// Fields from class
 		// Fields from super class
-		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullableForUpdate(false)
-				.setMandatoryForUpdate(true));
+		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID)
+				.addRights(new GQLAttributeRightsMetaData().setNullableForUpdate(false).setMandatoryForUpdate(true)));
 		return entity;
 	}
 
 	private GQLEntityMetaData buildEntity8() {
 		final GQLEntityMetaData entity = new GQLEntityMetaData(Entity8.class.getSimpleName(), Entity8.class,
-				AbstractEntity.class).setDeletable(false);
+				AbstractEntity.class).addRights(new GQLEntityRightsMetaData().setDeletable(false));
 		// Fields from class
 		// Fields from super class
-		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullableForUpdate(false)
-				.setMandatoryForUpdate(true));
+		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID)
+				.addRights(new GQLAttributeRightsMetaData().setNullableForUpdate(false).setMandatoryForUpdate(true)));
 		return entity;
 	}
 
 	private GQLEntityMetaData buildEntity9() {
 		final GQLEntityMetaData entity = new GQLEntityMetaData(Entity9.class.getSimpleName(), Entity9.class,
-				AbstractEntity.class).setReadable(false);
+				AbstractEntity.class).addRights(new GQLEntityRightsMetaData().setReadable(false));
 		// Fields from class
 		// Fields from super class
-		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID).setNullableForUpdate(false)
-				.setMandatoryForUpdate(true));
+		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID)
+				.addRights(new GQLAttributeRightsMetaData().setNullableForUpdate(false).setMandatoryForUpdate(true)));
 		return entity;
 	}
 
