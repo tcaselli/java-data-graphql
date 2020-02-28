@@ -186,20 +186,22 @@ public class GQLEntityMetaData extends GQLAbstractMetaData {
 	/**
 	 * Add given rights
 	 *
-	 * @param rights
-	 *            the GQLEntityRightsMetaData
+	 * @param rightsArray
+	 *            the array of GQLEntityRightsMetaData to be added
 	 * @return this
 	 */
-	public GQLEntityMetaData addRights(GQLEntityRightsMetaData rights) {
-		getRights().stream().filter(r -> Objects.equals(r.getRole(), rights.getRole())).findFirst().ifPresent(r -> {
-			throw new GQLException(
-					"Several rights configured for same role [" + r.getRole() + "] within entity [" + this + "]");
+	public GQLEntityMetaData addRights(GQLEntityRightsMetaData... rightsArray) {
+		Stream.of(rightsArray).forEach(rights -> {
+			getRights().stream().filter(r -> Objects.equals(r.getRole(), rights.getRole())).findFirst().ifPresent(r -> {
+				throw new GQLException(
+						"Several rights configured for same role [" + r.getRole() + "] within entity [" + this + "]");
+			});
+			if (rights.getRole() == null) {
+				getRights().add(0, rights);
+			} else {
+				getRights().add(rights);
+			}
 		});
-		if (rights.getRole() == null) {
-			getRights().add(0, rights);
-		} else {
-			getRights().add(rights);
-		}
 		return this;
 	}
 

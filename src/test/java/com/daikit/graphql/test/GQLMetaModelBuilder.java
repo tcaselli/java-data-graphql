@@ -38,6 +38,7 @@ import com.daikit.graphql.test.data.Entity7;
 import com.daikit.graphql.test.data.Entity8;
 import com.daikit.graphql.test.data.Entity9;
 import com.daikit.graphql.test.data.Enum1;
+import com.daikit.graphql.test.data.Roles;
 
 /**
  * Meta data for building test schema
@@ -174,6 +175,46 @@ public class GQLMetaModelBuilder {
 		entity.addAttribute(new GQLAttributeScalarMetaData("attr5", GQLScalarTypeEnum.STRING)
 				.addRights(new GQLAttributeRightsMetaData().setNullableForCreate(false)));
 		entity.addAttribute(new GQLAttributeScalarMetaData("attr6", GQLScalarTypeEnum.STRING).setFilterable(false));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr7", GQLScalarTypeEnum.STRING)
+				.addRights(new GQLAttributeRightsMetaData().setMandatory(true)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr8", GQLScalarTypeEnum.STRING)
+				.addRights(new GQLAttributeRightsMetaData().setMandatoryForUpdate(true)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr9", GQLScalarTypeEnum.STRING)
+				.addRights(new GQLAttributeRightsMetaData().setMandatoryForCreate(true)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr10", GQLScalarTypeEnum.STRING)
+				.addRights(new GQLAttributeRightsMetaData().setRole(Roles.ROLE1).setReadable(false)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr11", GQLScalarTypeEnum.STRING)
+				.addRights(new GQLAttributeRightsMetaData().setRole(Roles.ROLE1).setSaveable(false)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr12", GQLScalarTypeEnum.STRING)
+				.addRights(new GQLAttributeRightsMetaData().setRole(Roles.ROLE1).setNullable(false)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr13", GQLScalarTypeEnum.STRING)
+				.addRights(new GQLAttributeRightsMetaData().setRole(Roles.ROLE1).setNullableForUpdate(false)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr14", GQLScalarTypeEnum.STRING)
+				.addRights(new GQLAttributeRightsMetaData().setRole(Roles.ROLE1).setNullableForCreate(false)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr15", GQLScalarTypeEnum.STRING)
+				.addRights(new GQLAttributeRightsMetaData().setRole(Roles.ROLE1).setMandatory(true)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr16", GQLScalarTypeEnum.STRING)
+				.addRights(new GQLAttributeRightsMetaData().setRole(Roles.ROLE1).setMandatoryForUpdate(true)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr17", GQLScalarTypeEnum.STRING)
+				.addRights(new GQLAttributeRightsMetaData().setRole(Roles.ROLE1).setMandatoryForCreate(true)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr18", GQLScalarTypeEnum.STRING).addRights(
+				new GQLAttributeRightsMetaData().setRole(Roles.ROLE1).setReadable(false),
+				new GQLAttributeRightsMetaData().setRole(Roles.ROLE2).setReadable(false)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr19", GQLScalarTypeEnum.STRING).addRights(
+				new GQLAttributeRightsMetaData().setRole(Roles.ROLE1).setReadable(false),
+				new GQLAttributeRightsMetaData().setRole(Roles.ROLE2).setReadable(false)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr20", GQLScalarTypeEnum.STRING).addRights(
+				new GQLAttributeRightsMetaData().setRole(Roles.ROLE1).setReadable(false),
+				new GQLAttributeRightsMetaData().setRole(Roles.ROLE2).setSaveable(false)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr21", GQLScalarTypeEnum.STRING).addRights(
+				new GQLAttributeRightsMetaData().setRole(Roles.ROLE1).setReadable(false).setNullable(false),
+				new GQLAttributeRightsMetaData().setRole(Roles.ROLE2).setReadable(false).setNullable(false),
+				new GQLAttributeRightsMetaData().setRole(Roles.ROLE3).setSaveable(false).setMandatory(true),
+				new GQLAttributeRightsMetaData().setRole(Roles.ROLE4).setSaveable(false).setMandatory(true)));
+		entity.addAttribute(new GQLAttributeScalarMetaData("attr22", GQLScalarTypeEnum.STRING).addRights(
+				new GQLAttributeRightsMetaData().setReadable(false),
+				new GQLAttributeRightsMetaData().setRole(Roles.ROLE1).setReadable(true)));
+
 		// Fields from super class
 		entity.addAttribute(new GQLAttributeScalarMetaData("id", GQLScalarTypeEnum.ID)
 				.addRights(new GQLAttributeRightsMetaData().setNullableForUpdate(false).setMandatoryForUpdate(true)));

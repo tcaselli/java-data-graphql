@@ -483,15 +483,51 @@ public class SchemaBuildTest extends AbstractTestSuite {
 		assertInputField(entityInputType, "attr4", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
 		// Check field attr5 is not nullableForUpdate
 		assertInputField(entityInputType, "attr5", IntrospectionTypeKindEnum.SCALAR, Scalars.GraphQLString.getName());
-		// Check field attr4 is not filterable
+		// Check field attr6 is not filterable
 		final String entityFilterTypeName = Entity6.class.getSimpleName()
 				+ schemaConfig.getQueryGetListFilterEntityTypeNameSuffix();
 		final IntrospectionFullType entityFilterInputType = getFullType(introspection, entityFilterTypeName);
 		final Optional<IntrospectionInputValue> attr4IinputField = getOptionalInputField(entityFilterInputType,
 				"attr6");
 		Assert.assertFalse(
-				Message.format("There shouldn't be a filterable field [{}] in [{}].", "attr4", entityFilterTypeName),
+				Message.format("There shouldn't be a filterable field [{}] in [{}].", "attr6", entityFilterTypeName),
 				attr4IinputField.isPresent());
+		// Check field attr7 is mandatory
+		// Check field attr8 is mandatory for update
+		// Check field attr9 is mandatory for create
+
+		// Check field attr10 is not readable for ROLE1
+		// Check field attr10 is not readable for ROLE1
+
+		// Check field attr11 is not saveable for ROLE1
+
+		// Check field attr12 is not nullable for ROLE1
+
+		// Check field attr13 is not nullable for update for ROLE1
+
+		// Check field attr14 is not nullable for create for ROLE1
+
+		// Check field attr15 is mandatory for ROLE1
+
+		// Check field attr16 is mandatory for update for ROLE1
+
+		// Check field attr17 is mandatory for create for ROLE1
+
+		// Check field attr18 is not readable for ROLE1 and ROLE2
+
+		// Check field attr19 is not readable for ROLE1 and ROLE2
+
+		// Check field attr20 is not readable for ROLE1 and not saveable ROLE2
+
+		// Check field attr21 is not readable and not nullable for ROLE1 and
+		// ROLE2
+
+		// Check field attr21 is readable and nullable for other roles than ROLE
+		// 1 and ROLE2
+
+		// Check field attr22 is readable for ROLE1
+
+		// Check field attr22 is not readable for everybody except ROLE1
 	}
 
 	/**

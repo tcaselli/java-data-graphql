@@ -134,9 +134,11 @@ public class GQLAttributeRightsMetaData extends GQLAbstractMetaData {
 	 *
 	 * @param role
 	 *            the role to set
+	 * @return this instance
 	 */
-	public void setRole(Object role) {
+	public GQLAttributeRightsMetaData setRole(Object role) {
 		this.role = role;
+		return this;
 	}
 
 	/**
