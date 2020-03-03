@@ -80,7 +80,7 @@ public @interface GQLAttributeRights {
 	 *
 	 * @return a boolean (false by default)
 	 */
-	boolean mandatory() default true;
+	boolean mandatory() default false;
 
 	/**
 	 * Get whether this attribute is mandatory when parent entity is created.
@@ -89,7 +89,7 @@ public @interface GQLAttributeRights {
 	 *
 	 * @return a boolean (false by default)
 	 */
-	boolean mandatoryForCreate() default true;
+	boolean mandatoryForCreate() default false;
 
 	/**
 	 * Get whether this attribute is mandatory when parent entity is updated.
@@ -98,5 +98,5 @@ public @interface GQLAttributeRights {
 	 *
 	 * @return a boolean (false by default)
 	 */
-	boolean mandatoryForUpdate() default true;
+	boolean mandatoryForUpdate() default false;
 }

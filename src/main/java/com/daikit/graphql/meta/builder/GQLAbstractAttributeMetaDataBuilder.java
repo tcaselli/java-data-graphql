@@ -66,6 +66,8 @@ public class GQLAbstractAttributeMetaDataBuilder extends GQLAbstractMetaDataBuil
 		rights.setReadable(!ann.exclude() && ann.readOnly() || ann.read());
 		rights.setNullableForCreate(ann.nullableForCreate() && ann.nullable());
 		rights.setNullableForUpdate(ann.nullableForUpdate() && ann.nullable());
+		rights.setMandatoryForCreate(ann.mandatoryForCreate() || ann.mandatory());
+		rights.setMandatoryForUpdate(ann.mandatoryForUpdate() || ann.mandatory());
 		attributeMetaData.addRights(rights);
 	}
 
