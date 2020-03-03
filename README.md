@@ -201,15 +201,23 @@ Accessibility on entities using ```com.daikit.graphql.meta.GQLEntity``` annotati
 
 ```java
 // no save method will be generated in schema for this entity
-@GQLEntity(save=false)
+@GQLEntity(rights = @GQLEntityRights(save = false))
 public class Entity1 {}
 
 // no getById/getAll method will be generated in schema for this entity
-@GQLEntity(read=false)
+@GQLEntity(rights = @GQLEntityRights(read = false))
 public class Entity1 {}
 
 // no delete method will be generated in schema for this entity
-@GQLEntity(delete=false)
+@GQLEntity(rights = @GQLEntityRights(delete = false))
+public class Entity1 {}
+
+// no save method will be generated in schema for this entity for a user with roles ["ROLE1", "ROLE2"]
+@GQLEntity(rights = @GQLEntityRights(roles= {"ROLE1", "ROLE2"}, save = false))
+public class Entity1 {}
+
+// no save method will be generated in schema for this entity for a user with any role (or no role) excepted for roles ["ROLE1", "ROLE2"]
+@GQLEntity(rights = {@GQLEntityRights(save = false), @GQLEntityRights(roles= {"ROLE1", "ROLE2"}, save = true)})
 public class Entity1 {}
 
 // see GQLEntity annotation documentation for further details
@@ -222,7 +230,11 @@ Accessibility on attributes using ```com.daikit.graphql.meta.GQLAttribute``` ann
 ```java
 public class Entity1 {
     // this attribute will not be redable, saveable and filterable
-    @GQLAttribute(read = false, save=false, filter=false)
+    @GQLAttribute(rights = @GQLEntityRights(read = false, save=false, filter=false))
+    private int intAttr;
+
+    // this attribute will not be redable, saveable and filterable for a user with any role (or no role) excepted for roles ["ROLE1", "ROLE2"]
+    @GQLAttribute(rights = {@GQLEntityRights(read = false, save=false, filter=false), @GQLEntityRights(roles= {"ROLE1", "ROLE2"}, read = true, save=true, filter=true)})
     private int intAttr;
 
     // see GQLAttribute annotation documentation for further details
