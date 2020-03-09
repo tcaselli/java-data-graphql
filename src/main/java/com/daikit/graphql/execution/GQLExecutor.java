@@ -113,9 +113,8 @@ public class GQLExecutor {
 		this.callback = callback;
 		this.metaModel = new GQLInternalMetaModel(schemaConfig, metaModel);
 		final List<GQLExecutionContext> executionContexts = new ArrayList<>();
-		if (allPossibleExecutionContexts == null || allPossibleExecutionContexts.isEmpty()) {
-			executionContexts.add(GQLExecutionContext.DEFAULT);
-		} else {
+		executionContexts.add(GQLExecutionContext.DEFAULT);
+		if (allPossibleExecutionContexts != null) {
 			executionContexts.addAll(allPossibleExecutionContexts);
 		}
 		executionContexts.forEach(context -> {
@@ -132,49 +131,6 @@ public class GQLExecutor {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Wrapper for execution with default execution context (which means this
-	 * execution is not depending on context).
-	 *
-	 * @param requestString
-	 *            the request content as string
-	 * @return the {@link GQLExecutionResult}
-	 */
-	public GQLExecutionResult execute(final String requestString) {
-		return execute(GQLExecutionContext.DEFAULT, requestString);
-	}
-
-	/**
-	 * Wrapper for execution with default execution context (which means this
-	 * execution is not depending on context).
-	 *
-	 * @param requestString
-	 *            the request content as string
-	 * @param operationName
-	 *            the operation name
-	 * @param rootContext
-	 *            the execution root context object
-	 * @param arguments
-	 *            the arguments {@link Map}
-	 * @return the {@link GQLExecutionResult}
-	 */
-	public GQLExecutionResult execute(final String requestString, final String operationName, final Object rootContext,
-			final Map<String, Object> arguments) {
-		return execute(GQLExecutionContext.DEFAULT, requestString, operationName, rootContext, arguments);
-	}
-
-	/**
-	 * Execute given {@link ExecutionInput} with default execution context
-	 * (which means this execution is not depending on context).
-	 *
-	 * @param executionInput
-	 *            the {@link ExecutionInput}
-	 * @return the {@link GQLExecutionResult}
-	 */
-	public GQLExecutionResult execute(final ExecutionInput executionInput) {
-		return execute(GQLExecutionContext.DEFAULT, executionInput);
-	}
-
-	/**
 	 * Wrapper for execution
 	 *
 	 * @param executionContext
@@ -184,7 +140,7 @@ public class GQLExecutor {
 	 * @return the {@link GQLExecutionResult}
 	 */
 	public GQLExecutionResult execute(final GQLExecutionContext executionContext, final String requestString) {
-		return execute(ExecutionInput.newExecutionInput().query(requestString).build());
+		return execute(executionContext, ExecutionInput.newExecutionInput().query(requestString).build());
 	}
 
 	/**
@@ -204,8 +160,8 @@ public class GQLExecutor {
 	 */
 	public GQLExecutionResult execute(final GQLExecutionContext executionContext, final String requestString,
 			final String operationName, final Object rootContext, final Map<String, Object> arguments) {
-		return execute(ExecutionInput.newExecutionInput().query(requestString).operationName(operationName)
-				.context(rootContext).root(rootContext).variables(arguments).build());
+		return execute(executionContext, ExecutionInput.newExecutionInput().query(requestString)
+				.operationName(operationName).context(rootContext).root(rootContext).variables(arguments).build());
 	}
 
 	/**

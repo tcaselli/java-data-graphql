@@ -39,7 +39,7 @@ public class SchemaIntrospectionOutputerTest extends AbstractTestSuite {
 
 	private void generateIntrospectionFile(final boolean automatic)
 			throws JsonProcessingException, IOException, FileNotFoundException {
-		final GQLExecutionResult schemaIntrospection = getSchemaIntrospection(automatic);
+		final GQLExecutionResult schemaIntrospection = getSchemaIntrospection(getDefaultExecutionContext(), automatic);
 		final String json = WRITER_PRETTY.writeValueAsString(schemaIntrospection.toSpecification());
 		new File("src/test/output").mkdirs();
 		final File output = new File("src/test/output/introspection" + (automatic ? "_auto" : "") + ".json");

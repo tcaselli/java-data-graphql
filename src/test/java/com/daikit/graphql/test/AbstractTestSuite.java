@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.daikit.graphql.builder.GQLExecutionContext;
 import com.daikit.graphql.config.GQLSchemaConfig;
 import com.daikit.graphql.data.input.GQLListLoadConfig;
 import com.daikit.graphql.data.output.GQLDeleteResult;
@@ -127,8 +128,13 @@ public abstract class AbstractTestSuite {
 		}
 	}
 
-	protected GQLExecutionResult getSchemaIntrospection(boolean automaticMetaModel) {
-		return GQLIntrospection.getAllTypes(query -> getExecutor(automaticMetaModel).execute(query));
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+	// PROTECTED METHODS
+	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+	protected GQLExecutionResult getSchemaIntrospection(GQLExecutionContext executionContext,
+			boolean automaticMetaModel) {
+		return GQLIntrospection.getAllTypes(query -> getExecutor(automaticMetaModel).execute(executionContext, query));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -157,6 +163,10 @@ public abstract class AbstractTestSuite {
 			value = ((Map<String, Object>) value).get(pathFragment);
 		}
 		return (T) value;
+	}
+
+	protected GQLExecutionContext getDefaultExecutionContext() {
+		return GQLExecutionContext.DEFAULT;
 	}
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-

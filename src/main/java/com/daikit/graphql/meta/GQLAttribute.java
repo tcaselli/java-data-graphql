@@ -44,7 +44,7 @@ public @interface GQLAttribute {
 	boolean exclude() default false;
 
 	/**
-	 * Get whether this attribute can used as a filter property by client.
+	 * Get whether this attribute can be used as a filter property by client.
 	 *
 	 * @return a boolean (true by default)
 	 */

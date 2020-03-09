@@ -539,12 +539,15 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	 */
 	@Test
 	public void testAutomaticSchemaGeneration() throws JsonProcessingException {
-		final GQLExecutionResult schemaIntrospectionManual = getSchemaIntrospection(false);
+		final GQLExecutionResult schemaIntrospectionManual = getSchemaIntrospection(getDefaultExecutionContext(),
+				false);
 		final String jsonManual = WRITER_PRETTY.writeValueAsString(schemaIntrospectionManual.toSpecification());
-		final GQLExecutionResult schemaIntrospectionAutomatic = getSchemaIntrospection(true);
+		final GQLExecutionResult schemaIntrospectionAutomatic = getSchemaIntrospection(getDefaultExecutionContext(),
+				true);
 		final String jsonAutomatic = WRITER_PRETTY.writeValueAsString(schemaIntrospectionAutomatic.toSpecification());
 		Assert.assertEquals(jsonManual, jsonAutomatic);
 	}
+
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// PRIVATE METHODS
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
@@ -580,7 +583,8 @@ public class SchemaBuildTest extends AbstractTestSuite {
 	}
 
 	private IntrospectionResult getIntrospection() {
-		return MAPPER.convertValue(getSchemaIntrospection(false).toSpecification(), IntrospectionResult.class);
+		return MAPPER.convertValue(getSchemaIntrospection(getDefaultExecutionContext(), false).toSpecification(),
+				IntrospectionResult.class);
 	}
 
 	// FullTypes
