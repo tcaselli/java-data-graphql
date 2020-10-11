@@ -1,10 +1,11 @@
 package com.daikit.graphql.execution;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import com.daikit.graphql.builder.GQLExecutionContext;
 import com.daikit.graphql.builder.GQLSchemaBuilder;
@@ -31,6 +32,7 @@ import graphql.schema.GraphQLSchema;
 public class GQLExecutor {
 
 	private final GQLInternalMetaModel metaModel;
+	private final Set<GQLExecutionContext> allExecutionContexts = new LinkedHashSet<>();
 	private final Map<GQLExecutionContext, GraphQLSchema> schemaMap = new HashMap<>();
 	private final Map<GQLExecutionContext, GraphQL> graphqlMap = new HashMap<>();
 	private final IGQLErrorProcessor errorProcessor;
@@ -41,86 +43,56 @@ public class GQLExecutor {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * Initialize GraphQL executorManualMetaModel from given
-	 * {@link GQLMetaModel} with no callback
+	 * Initialize GraphQL executorManualMetaModel from given {@link GQLMetaModel} with no callback
 	 *
-	 * @param schemaConfig
-	 *            the schema configuration {@link GQLSchemaConfig}
-	 * @param metaModel
-	 *            the meta model
-	 * @param errorProcessor
-	 *            the {@link IGQLErrorProcessor}
-	 * @param getByIdDataFetcher
-	 *            the {@link DataFetcher} for 'getById' methods
-	 * @param listDataFetcher
-	 *            the {@link DataFetcher} for 'getAll' methods
-	 * @param saveDataFetcher
-	 *            the {@link DataFetcher} for 'save' methods
-	 * @param deleteDataFetcher
-	 *            the {@link DataFetcher} for 'delete' methods
-	 * @param customMethodDataFetcher
-	 *            the {@link DataFetcher} for custom methods
-	 * @param propertyDataFetchers
-	 *            custom {@link GQLPropertyDataFetcher} list
-	 * @param allPossibleExecutionContexts
-	 *            a list of all possible {@link GQLExecutionContext}. Leave it
-	 *            empty or null if you
+	 * @param schemaConfig                 the schema configuration {@link GQLSchemaConfig}
+	 * @param metaModel                    the meta model
+	 * @param errorProcessor               the {@link IGQLErrorProcessor}
+	 * @param getByIdDataFetcher           the {@link DataFetcher} for 'getById' methods
+	 * @param listDataFetcher              the {@link DataFetcher} for 'getAll' methods
+	 * @param saveDataFetcher              the {@link DataFetcher} for 'save' methods
+	 * @param deleteDataFetcher            the {@link DataFetcher} for 'delete' methods
+	 * @param customMethodDataFetcher      the {@link DataFetcher} for custom methods
+	 * @param propertyDataFetchers         custom {@link GQLPropertyDataFetcher} list
+	 * @param allPossibleExecutionContexts a list of all possible {@link GQLExecutionContext}. Leave it empty or null if you
 	 */
-	public GQLExecutor(final GQLSchemaConfig schemaConfig, final GQLMetaModel metaModel,
-			final IGQLErrorProcessor errorProcessor, final DataFetcher<?> getByIdDataFetcher,
-			final DataFetcher<GQLListLoadResult> listDataFetcher, final DataFetcher<?> saveDataFetcher,
+	public GQLExecutor(final GQLSchemaConfig schemaConfig, final GQLMetaModel metaModel, final IGQLErrorProcessor errorProcessor,
+			final DataFetcher<?> getByIdDataFetcher, final DataFetcher<GQLListLoadResult> listDataFetcher, final DataFetcher<?> saveDataFetcher,
 			final DataFetcher<GQLDeleteResult> deleteDataFetcher, final DataFetcher<?> customMethodDataFetcher,
-			final List<GQLPropertyDataFetcher<?>> propertyDataFetchers,
-			final List<GQLExecutionContext> allPossibleExecutionContexts) {
-		this(schemaConfig, metaModel, errorProcessor, null, getByIdDataFetcher, listDataFetcher, saveDataFetcher,
-				deleteDataFetcher, customMethodDataFetcher, propertyDataFetchers, allPossibleExecutionContexts);
+			final List<GQLPropertyDataFetcher<?>> propertyDataFetchers, final List<GQLExecutionContext> allPossibleExecutionContexts) {
+		this(schemaConfig, metaModel, errorProcessor, null, getByIdDataFetcher, listDataFetcher, saveDataFetcher, deleteDataFetcher, customMethodDataFetcher,
+				propertyDataFetchers, allPossibleExecutionContexts);
 	}
 
 	/**
-	 * Initialize GraphQL executorManualMetaModel from given
-	 * {@link GQLMetaModel} with a callback {@link IGQLExecutorCallback}
+	 * Initialize GraphQL executorManualMetaModel from given {@link GQLMetaModel} with a callback {@link IGQLExecutorCallback}
 	 *
-	 * @param schemaConfig
-	 *            the schema configuration {@link GQLSchemaConfig}
-	 * @param metaModel
-	 *            the meta model
-	 * @param errorProcessor
-	 *            the {@link IGQLErrorProcessor}
-	 * @param callback
-	 *            the {@link IGQLExecutorCallback}
-	 * @param getByIdDataFetcher
-	 *            the {@link DataFetcher} for 'getById' methods
-	 * @param listDataFetcher
-	 *            the {@link DataFetcher} for 'getAll' methods
-	 * @param saveDataFetcher
-	 *            the {@link DataFetcher} for 'save' methods
-	 * @param deleteDataFetcher
-	 *            the {@link DataFetcher} for 'delete' methods
-	 * @param customMethodDataFetcher
-	 *            the {@link DataFetcher} for custom methods
-	 * @param propertyDataFetchers
-	 *            custom {@link GQLPropertyDataFetcher} list
-	 * @param allPossibleExecutionContexts
-	 *            a list of all possible {@link GQLExecutionContext}
+	 * @param schemaConfig                 the schema configuration {@link GQLSchemaConfig}
+	 * @param metaModel                    the meta model
+	 * @param errorProcessor               the {@link IGQLErrorProcessor}
+	 * @param callback                     the {@link IGQLExecutorCallback}
+	 * @param getByIdDataFetcher           the {@link DataFetcher} for 'getById' methods
+	 * @param listDataFetcher              the {@link DataFetcher} for 'getAll' methods
+	 * @param saveDataFetcher              the {@link DataFetcher} for 'save' methods
+	 * @param deleteDataFetcher            the {@link DataFetcher} for 'delete' methods
+	 * @param customMethodDataFetcher      the {@link DataFetcher} for custom methods
+	 * @param propertyDataFetchers         custom {@link GQLPropertyDataFetcher} list
+	 * @param allPossibleExecutionContexts a list of all possible {@link GQLExecutionContext}
 	 */
-	public GQLExecutor(final GQLSchemaConfig schemaConfig, final GQLMetaModel metaModel,
-			final IGQLErrorProcessor errorProcessor, final IGQLExecutorCallback callback,
-			final DataFetcher<?> getByIdDataFetcher, final DataFetcher<GQLListLoadResult> listDataFetcher,
-			final DataFetcher<?> saveDataFetcher, final DataFetcher<GQLDeleteResult> deleteDataFetcher,
-			final DataFetcher<?> customMethodDataFetcher, final List<GQLPropertyDataFetcher<?>> propertyDataFetchers,
-			final List<GQLExecutionContext> allPossibleExecutionContexts) {
+	public GQLExecutor(final GQLSchemaConfig schemaConfig, final GQLMetaModel metaModel, final IGQLErrorProcessor errorProcessor,
+			final IGQLExecutorCallback callback, final DataFetcher<?> getByIdDataFetcher, final DataFetcher<GQLListLoadResult> listDataFetcher,
+			final DataFetcher<?> saveDataFetcher, final DataFetcher<GQLDeleteResult> deleteDataFetcher, final DataFetcher<?> customMethodDataFetcher,
+			final List<GQLPropertyDataFetcher<?>> propertyDataFetchers, final List<GQLExecutionContext> allPossibleExecutionContexts) {
 		this.errorProcessor = errorProcessor;
 		this.callback = callback;
 		this.metaModel = new GQLInternalMetaModel(schemaConfig, metaModel);
-		final List<GQLExecutionContext> executionContexts = new ArrayList<>();
-		executionContexts.add(GQLExecutionContext.DEFAULT);
+		allExecutionContexts.add(GQLExecutionContext.DEFAULT);
 		if (allPossibleExecutionContexts != null) {
-			executionContexts.addAll(allPossibleExecutionContexts);
+			allExecutionContexts.addAll(allPossibleExecutionContexts);
 		}
-		executionContexts.forEach(context -> {
-			final GraphQLSchema schema = new GQLSchemaBuilder().build(context, schemaConfig, this.metaModel,
-					getByIdDataFetcher, listDataFetcher, saveDataFetcher, deleteDataFetcher, customMethodDataFetcher,
-					propertyDataFetchers);
+		allExecutionContexts.forEach(context -> {
+			final GraphQLSchema schema = new GQLSchemaBuilder().build(context, schemaConfig, this.metaModel, getByIdDataFetcher, listDataFetcher,
+					saveDataFetcher, deleteDataFetcher, customMethodDataFetcher, propertyDataFetchers);
 			schemaMap.put(context, schema);
 			graphqlMap.put(context, GraphQL.newGraphQL(schema).build());
 		});
@@ -133,10 +105,8 @@ public class GQLExecutor {
 	/**
 	 * Wrapper for execution
 	 *
-	 * @param executionContext
-	 *            the {@link GQLExecutionContext}
-	 * @param requestString
-	 *            the request content as string
+	 * @param executionContext the {@link GQLExecutionContext}
+	 * @param requestString    the request content as string
 	 * @return the {@link GQLExecutionResult}
 	 */
 	public GQLExecutionResult execute(final GQLExecutionContext executionContext, final String requestString) {
@@ -146,41 +116,33 @@ public class GQLExecutor {
 	/**
 	 * Wrapper for execution
 	 *
-	 * @param executionContext
-	 *            the {@link GQLExecutionContext}
-	 * @param requestString
-	 *            the request content as string
-	 * @param operationName
-	 *            the operation name
-	 * @param rootContext
-	 *            the execution root context object
-	 * @param arguments
-	 *            the arguments {@link Map}
+	 * @param executionContext the {@link GQLExecutionContext}
+	 * @param requestString    the request content as string
+	 * @param operationName    the operation name
+	 * @param rootContext      the execution root context object
+	 * @param arguments        the arguments {@link Map}
 	 * @return the {@link GQLExecutionResult}
 	 */
-	public GQLExecutionResult execute(final GQLExecutionContext executionContext, final String requestString,
-			final String operationName, final Object rootContext, final Map<String, Object> arguments) {
-		return execute(executionContext, ExecutionInput.newExecutionInput().query(requestString)
-				.operationName(operationName).context(rootContext).root(rootContext).variables(arguments).build());
+	public GQLExecutionResult execute(final GQLExecutionContext executionContext, final String requestString, final String operationName,
+			final Object rootContext, final Map<String, Object> arguments) {
+		return execute(executionContext, ExecutionInput.newExecutionInput().query(requestString).operationName(operationName)
+				.context(new GQLRootContext(executionContext, rootContext)).root(rootContext).variables(arguments).build());
 	}
 
 	/**
 	 * Execute given {@link ExecutionInput}
 	 *
-	 * @param executionContext
-	 *            the {@link GQLExecutionContext}
-	 * @param executionInput
-	 *            the {@link ExecutionInput}
+	 * @param executionContext the {@link GQLExecutionContext}
+	 * @param executionInput   the {@link ExecutionInput}
 	 * @return the {@link GQLExecutionResult}
 	 */
 	public GQLExecutionResult execute(final GQLExecutionContext executionContext, final ExecutionInput executionInput) {
 		if (callback != null) {
 			callback.onBeforeExecute(executionContext, executionInput);
 		}
-		final GQLExecutionResult executionResult = wrapResult(getGraphql(executionContext)
-				.orElseThrow(() -> new GQLException("No schema registered for given context " + executionContext
-						+ ". Schemas should be precomputed for each possible context for better performances."))
-				.execute(executionInput));
+		final GQLExecutionResult executionResult = wrapResult(
+				getGraphql(executionContext).orElseThrow(() -> new GQLException("No schema registered for given context " + executionContext
+						+ ". Schemas should be precomputed for each possible context for better performances.")).execute(executionInput));
 		if (callback != null) {
 			callback.onAfterExecute(executionContext, executionInput, executionResult);
 		}
@@ -194,8 +156,7 @@ public class GQLExecutor {
 	/**
 	 * Wrap result. This method may be overridden to provide custom behavior.
 	 *
-	 * @param executionResult
-	 *            the {@link ExecutionResult}
+	 * @param executionResult the {@link ExecutionResult}
 	 * @return the {@link GQLExecutionResult}
 	 */
 	protected GQLExecutionResult wrapResult(final ExecutionResult executionResult) {
@@ -209,22 +170,20 @@ public class GQLExecutor {
 	/**
 	 * Get schema for given context
 	 *
-	 * @param executionContext
-	 *            the {@link GQLExecutionContext}
+	 * @param executionContext the {@link GQLExecutionContext}
 	 * @return the schema {@link GraphQLSchema}
 	 */
-	public Optional<GraphQLSchema> getSchema(GQLExecutionContext executionContext) {
+	public Optional<GraphQLSchema> getSchema(final GQLExecutionContext executionContext) {
 		return Optional.ofNullable(schemaMap.get(executionContext));
 	}
 
 	/**
 	 * Get graphQL executor for given context
 	 *
-	 * @param executionContext
-	 *            the {@link GQLExecutionContext}
+	 * @param executionContext the {@link GQLExecutionContext}
 	 * @return the graphql {@link GraphQL}
 	 */
-	public Optional<GraphQL> getGraphql(GQLExecutionContext executionContext) {
+	public Optional<GraphQL> getGraphql(final GQLExecutionContext executionContext) {
 		return Optional.ofNullable(graphqlMap.get(executionContext));
 	}
 
@@ -233,16 +192,14 @@ public class GQLExecutor {
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * @return the schema {@link GraphQLSchema} for default
-	 *         {@link GQLExecutionContext}
+	 * @return the schema {@link GraphQLSchema} for default {@link GQLExecutionContext}
 	 */
 	public GraphQLSchema getSchema() {
 		return getSchema(GQLExecutionContext.DEFAULT).get();
 	}
 
 	/**
-	 * @return the graphql {@link GraphQL} for default
-	 *         {@link GQLExecutionContext}
+	 * @return the graphql {@link GraphQL} for default {@link GQLExecutionContext}
 	 */
 	public GraphQL getGraphql() {
 		return getGraphql(GQLExecutionContext.DEFAULT).get();
@@ -260,6 +217,20 @@ public class GQLExecutor {
 	 */
 	public GQLInternalMetaModel getMetaModel() {
 		return metaModel;
+	}
+
+	/**
+	 * @return the allExecutionContexts
+	 */
+	public Set<GQLExecutionContext> getAllExecutionContexts() {
+		return allExecutionContexts;
+	}
+
+	/**
+	 * @return the default {@link GQLExecutionContext}
+	 */
+	public GQLExecutionContext getDefaultExecutionContext() {
+		return GQLExecutionContext.DEFAULT;
 	}
 
 }
