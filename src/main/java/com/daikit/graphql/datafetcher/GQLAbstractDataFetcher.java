@@ -1,5 +1,6 @@
 package com.daikit.graphql.datafetcher;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,6 +9,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.apache.commons.beanutils.PropertyUtils;
 
 import com.daikit.graphql.config.GQLSchemaConfig;
 import com.daikit.graphql.meta.GQLInternalMetaModel;
@@ -31,8 +34,7 @@ import graphql.schema.DataFetcher;
  * Abstract super class for all data fetchers
  *
  * @author Thibaut Caselli
- * @param <FETCHED_DATA_TYPE>
- *            the fetched data type
+ * @param <FETCHED_DATA_TYPE> the fetched data type
  */
 public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataFetcher<FETCHED_DATA_TYPE> {
 
@@ -55,8 +57,7 @@ public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataF
 	/**
 	 * Get entity class by its name
 	 *
-	 * @param entityName
-	 *            the entity class name
+	 * @param entityName the entity class name
 	 * @return the entity class
 	 */
 	protected Class<?> getEntityClassByEntityName(final String entityName) {
@@ -66,16 +67,13 @@ public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataF
 	/**
 	 * Get entity by name
 	 *
-	 * @param prefix
-	 *            the entity prefix
-	 * @param queryName
-	 *            the query name
+	 * @param prefix    the entity prefix
+	 * @param queryName the query name
 	 * @return the entity name
 	 */
 	protected String getEntityName(final String prefix, final String queryName) {
 		if (!queryName.startsWith(prefix)) {
-			throw new IllegalArgumentException(
-					Message.format("Query name [{}] should start with [{}] prefix.", queryName, prefix));
+			throw new IllegalArgumentException(Message.format("Query name [{}] should start with [{}] prefix.", queryName, prefix));
 		}
 		return queryName.substring(prefix.length());
 	}
@@ -83,47 +81,33 @@ public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataF
 	/**
 	 * Get arguments with given property name within parent's arguments map
 	 *
-	 * @param arguments
-	 *            the parent's arguments map
-	 * @param argumentContext
-	 *            the argument context name
+	 * @param arguments       the parent's arguments map
+	 * @param argumentContext the argument context name
 	 * @return a {@link Map} (may be empty)
 	 */
 	@SuppressWarnings("unchecked")
-	protected Map<String, Object> getArgumentsForContext(final Map<String, Object> arguments,
-			final String argumentContext) {
-		return arguments.containsKey(argumentContext)
-				? (Map<String, Object>) arguments.get(argumentContext)
-				: Collections.emptyMap();
+	protected Map<String, Object> getArgumentsForContext(final Map<String, Object> arguments, final String argumentContext) {
+		return arguments.containsKey(argumentContext) ? (Map<String, Object>) arguments.get(argumentContext) : Collections.emptyMap();
 	}
 
 	/**
-	 * Get arguments with given property name within parent's arguments map as a
-	 * {@link List}
+	 * Get arguments with given property name within parent's arguments map as a {@link List}
 	 *
-	 * @param arguments
-	 *            the parent's arguments map
-	 * @param argumentContext
-	 *            the argument context name
+	 * @param arguments       the parent's arguments map
+	 * @param argumentContext the argument context name
 	 * @return a {@link List} of {@link Map} (may be empty)
 	 */
 	@SuppressWarnings("unchecked")
-	protected List<Map<String, Object>> getArgumentsForContextAsList(final Map<String, Object> arguments,
-			final String argumentContext) {
-		return arguments.containsKey(argumentContext)
-				? (List<Map<String, Object>>) arguments.get(argumentContext)
-				: Collections.emptyList();
+	protected List<Map<String, Object>> getArgumentsForContextAsList(final Map<String, Object> arguments, final String argumentContext) {
+		return arguments.containsKey(argumentContext) ? (List<Map<String, Object>>) arguments.get(argumentContext) : Collections.emptyList();
 	}
 
 	/**
 	 * Map GQL object field value to an object
 	 *
-	 * @param field
-	 *            the GQL {@link ObjectField}
-	 * @param arguments
-	 *            the map of query arguments for potential replacements
-	 * @param <T>
-	 *            the mapped object type
+	 * @param field     the GQL {@link ObjectField}
+	 * @param arguments the map of query arguments for potential replacements
+	 * @param <T>       the mapped object type
 	 * @return a mapped object value
 	 */
 	protected <T> T mapValue(final ObjectField field, final Map<String, Object> arguments) {
@@ -133,12 +117,9 @@ public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataF
 	/**
 	 * Map GQL argument value to an object
 	 *
-	 * @param argument
-	 *            the GQL {@link Argument}
-	 * @param arguments
-	 *            the map of query arguments for potential replacements
-	 * @param <T>
-	 *            the mapped object type
+	 * @param argument  the GQL {@link Argument}
+	 * @param arguments the map of query arguments for potential replacements
+	 * @param <T>       the mapped object type
 	 * @return a mapped object value
 	 */
 	protected <T> T mapValue(final Argument argument, final Map<String, Object> arguments) {
@@ -148,29 +129,24 @@ public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataF
 	/**
 	 * Convert GQL object value to a {@link Map}
 	 *
-	 * @param objectValue
-	 *            the {@link ObjectValue}
-	 * @param arguments
-	 *            the {@link Map} of arguments
+	 * @param objectValue the {@link ObjectValue}
+	 * @param arguments   the {@link Map} of arguments
 	 * @return the converted map
 	 */
-	protected Map<String, Object> convertObjectValue(final ObjectValue objectValue,
-			final Map<String, Object> arguments) {
+	protected Map<String, Object> convertObjectValue(final ObjectValue objectValue, final Map<String, Object> arguments) {
 		final Map<String, Object> map = new HashMap<>();
 		// Build map of values
 		for (final ObjectField objectField : objectValue.getObjectFields()) {
 			if (objectField.getValue() instanceof ObjectValue) {
-				map.put(objectField.getName(), convertObjectValue((ObjectValue) objectField.getValue(),
-						getArgumentsForContext(arguments, objectField.getName())));
+				map.put(objectField.getName(),
+						convertObjectValue((ObjectValue) objectField.getValue(), getArgumentsForContext(arguments, objectField.getName())));
 			} else {
 				final Object value = mapValue(objectField, arguments);
 				if (value != null
 						// Variable reference is set but with null value
-						|| objectField.getValue() instanceof VariableReference
-								&& arguments.containsKey(objectField.getName())
+						|| objectField.getValue() instanceof VariableReference && arguments.containsKey(objectField.getName())
 						//
-						|| !(objectField.getValue() instanceof VariableReference)
-								&& !getRequestProvidedVariableNames().contains(objectField.getName())) {
+						|| !(objectField.getValue() instanceof VariableReference) && !getRequestProvidedVariableNames().contains(objectField.getName())) {
 					map.put(objectField.getName(), value);
 				}
 			}
@@ -179,8 +155,7 @@ public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataF
 		final Set<String> propNames = map.keySet().stream().collect(Collectors.toSet());
 		for (final String propName : propNames) {
 			if (propName.endsWith(getConfig().getAttributeIdPluralSuffix())) {
-				final String propNamePlural = propName.substring(0,
-						propName.length() - getConfig().getAttributeIdPluralSuffix().length())
+				final String propNamePlural = propName.substring(0, propName.length() - getConfig().getAttributeIdPluralSuffix().length())
 						+ getConfig().getAttributePluralSuffix();
 				if (map.containsKey(propNamePlural)) {
 					final Object propValuePlural = map.get(propNamePlural);
@@ -201,17 +176,13 @@ public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataF
 	/**
 	 * Get argument by name within given query field
 	 *
-	 * @param queryField
-	 *            the query {@link Field}
-	 * @param name
-	 *            then argument name
-	 * @param arguments
-	 *            the {@link Map} of arguments
+	 * @param queryField the query {@link Field}
+	 * @param name       then argument name
+	 * @param arguments  the {@link Map} of arguments
 	 * @return the argument value
 	 */
 	protected Object getArgumentValue(final Field queryField, final String name, final Map<String, Object> arguments) {
-		final Optional<Argument> argumentOpt = queryField.getArguments().stream()
-				.filter(argument -> name.equals(argument.getName())).findFirst();
+		final Optional<Argument> argumentOpt = queryField.getArguments().stream().filter(argument -> name.equals(argument.getName())).findFirst();
 		Object ret;
 		if (argumentOpt.isPresent()) {
 			ret = mapValue(argumentOpt.get(), arguments);
@@ -219,6 +190,27 @@ public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataF
 			throw new IllegalArgumentException(Message.format("Argument not found with name [{}]", name));
 		}
 		return ret;
+	}
+
+	protected <T> T createAndSetPropertyValues(final Map<String, Object> propertyValues, final Class<T> targetClass) {
+		try {
+			final T target = targetClass.newInstance();
+			setPropertyValues(propertyValues, target);
+			return target;
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new IllegalArgumentException(Message.format("Unable to create target class [{}]", targetClass), e);
+		}
+	}
+
+	protected void setPropertyValues(final Map<String, Object> propertyValues, final Object target) {
+		propertyValues.entrySet().forEach(entry -> {
+			try {
+				PropertyUtils.setSimpleProperty(target, entry.getKey(), entry.getValue());
+			} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+				throw new IllegalArgumentException(
+						Message.format("Unsupported property value [{}] for key [{}] on [{}]", entry.getValue(), entry.getKey(), target), e);
+			}
+		});
 	}
 
 	/**
@@ -268,15 +260,14 @@ public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataF
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 
 	/**
-	 * @param metaModel
-	 *            the metaModel to set
+	 * @param metaModel the metaModel to set
 	 */
 	public void setMetaModel(final GQLInternalMetaModel metaModel) {
 		this.metaModel = metaModel;
 	}
+
 	/**
-	 * @param schemaConfig
-	 *            the schemaConfig to set
+	 * @param schemaConfig the schemaConfig to set
 	 */
 	public void setSchemaConfig(final GQLSchemaConfig schemaConfig) {
 		this.schemaConfig = schemaConfig;

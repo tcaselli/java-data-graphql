@@ -1,6 +1,7 @@
 package com.daikit.graphql.meta.builder;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import com.daikit.graphql.config.GQLSchemaConfig;
 import com.daikit.graphql.enums.GQLScalarTypeEnum;
@@ -23,8 +24,7 @@ public class GQLAbstractMetaDataBuilder {
 	/**
 	 * Constructor
 	 *
-	 * @param schemaConfig
-	 *            the {@link GQLSchemaConfig}
+	 * @param schemaConfig the {@link GQLSchemaConfig}
 	 */
 	public GQLAbstractMetaDataBuilder(final GQLSchemaConfig schemaConfig) {
 		this.schemaConfig = schemaConfig;
@@ -40,8 +40,13 @@ public class GQLAbstractMetaDataBuilder {
 	}
 
 	protected boolean isEntity(final Collection<GQLEntityMetaData> entityMetaDatas, final Class<?> clazz) {
+		return getEntity(entityMetaDatas, clazz).isPresent();
+	}
+
+	protected Optional<GQLEntityMetaData> getEntity(final Collection<GQLEntityMetaData> entityMetaDatas,
+			final Class<?> clazz) {
 		return entityMetaDatas.stream().filter(metaData -> metaData.getEntityClass().isAssignableFrom(clazz))
-				.findFirst().isPresent();
+				.findFirst();
 	}
 
 	protected boolean isByteArray(final Class<?> type) {

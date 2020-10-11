@@ -43,7 +43,13 @@ public enum GQLFilterOperatorEnum {
 
 	IN("in", "Field is contained in list of possible values given in [value] property."),
 
-	NOT_IN("notIn", "Field is not contained in list of possible values given in [value] property.");
+	NOT_IN("notIn", "Field is not contained in list of possible values given in [value] property."),
+
+	INCLUDES("incl", "Field contains value given in [value] property."),
+
+	INCLUDES_ALL("incl", "Field contains all values given in [value] property."),
+
+	INCLUDES_ONE("incl", "Field at least one of the values given in [value] property.");
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// CONSTRUCTOR / METHODS
@@ -105,6 +111,9 @@ public enum GQLFilterOperatorEnum {
 	public static final List<GQLFilterOperatorEnum> __ENUM_OPERATORS = Arrays.asList(GQLFilterOperatorEnum.EQUAL,
 			GQLFilterOperatorEnum.NOT_EQUAL, GQLFilterOperatorEnum.IN, GQLFilterOperatorEnum.NOT_IN,
 			GQLFilterOperatorEnum.NULL, GQLFilterOperatorEnum.NOT_NULL);
+
+	public static final List<GQLFilterOperatorEnum> __COLLECTION_OPERATORS = Arrays.asList(
+			GQLFilterOperatorEnum.INCLUDES, GQLFilterOperatorEnum.INCLUDES_ALL, GQLFilterOperatorEnum.INCLUDES_ONE);
 
 	// *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
 	// GETTERS / SETTERS

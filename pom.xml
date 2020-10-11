@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<groupId>com.daikit</groupId>
 	<artifactId>java-data-graphql</artifactId>
@@ -109,6 +111,7 @@
 		<junit.version>4.12</junit.version>
 		<commons-io.version>2.6</commons-io.version>
 		<log4j-slf4j-impl.version>2.12.1</log4j-slf4j-impl.version>
+		<commons-beanutils.version>1.9.4</commons-beanutils.version>
 	</properties>
 
 	<dependencies>
@@ -136,6 +139,11 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-text</artifactId>
 			<version>${commons-text.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>${commons-beanutils.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>

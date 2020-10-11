@@ -160,7 +160,8 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 					value = optionalValueField.isPresent() ? mapValue(optionalValueField.get(), filterArguments) : null;
 				} else {
 					operator = GQLFilterOperatorEnum.EQUAL;
-					value = getById(entityClass, mapValue(filterField, contextArguments));
+					final String id = mapValue(filterField, contextArguments);
+					value = id == null ? null : getById(entityClass, id);
 				}
 
 				final Optional<IGQLDynamicAttributeGetter<Object, Object>> dynAttr = dynamicAttributeRegistry

@@ -46,6 +46,7 @@ public class GQLSchemaBuilderCache {
 	private GraphQLInputObjectType orderByInputObjectType;
 	private final Map<String, GraphQLInputObjectType> inputScalarFilterOperators = new HashMap<>();
 	private final Map<Class<?>, GraphQLInputObjectType> inputEnumFilterOperators = new HashMap<>();
+	private GraphQLInputObjectType inputEntityCollectionFilterOperator;
 	private GraphQLOutputType pagingOutputObjectType;
 	private GraphQLOutputType orderByOutputObjectType;
 
@@ -302,6 +303,22 @@ public class GQLSchemaBuilderCache {
 	 */
 	public Map<Class<?>, GraphQLInputObjectType> getInputEnumFilterOperators() {
 		return inputEnumFilterOperators;
+	}
+
+	/**
+	 * @return the inputEntityCollectionFilterOperator
+	 */
+	public GraphQLInputObjectType getInputEntityCollectionFilterOperator() {
+		return inputEntityCollectionFilterOperator;
+	}
+
+	/**
+	 * @param inputEntityCollectionFilterOperator
+	 *            the inputEntityCollectionFilterOperator to set
+	 */
+	public void setInputEntityCollectionFilterOperator(
+			final GraphQLInputObjectType inputEntityCollectionFilterOperator) {
+		this.inputEntityCollectionFilterOperator = inputEntityCollectionFilterOperator;
 	}
 
 	/**
