@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.beanutils.PropertyUtils;
 
 import com.daikit.graphql.config.GQLSchemaConfig;
+import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
 import com.daikit.graphql.meta.GQLInternalMetaModel;
 import com.daikit.graphql.utils.Message;
 
@@ -155,16 +156,23 @@ public abstract class GQLAbstractDataFetcher<FETCHED_DATA_TYPE> implements DataF
 		final Set<String> propNames = map.keySet().stream().collect(Collectors.toSet());
 		for (final String propName : propNames) {
 			if (propName.endsWith(getConfig().getAttributeIdPluralSuffix())) {
-				final String propNamePlural = propName.substring(0, propName.length() - getConfig().getAttributeIdPluralSuffix().length())
-						+ getConfig().getAttributePluralSuffix();
-				if (map.containsKey(propNamePlural)) {
-					final Object propValuePlural = map.get(propNamePlural);
-					if (propValuePlural instanceof Collection && !((Collection<?>) propValuePlural).isEmpty()) {
-						map.remove(propName);
-					} else {
-						final Object propValueIds = map.get(propName);
-						if (propValueIds instanceof Collection && !((Collection<?>) propValueIds).isEmpty()) {
-							map.remove(propNamePlural);
+				// Check if property corresponds to a dynamic attribute setter, in this case do not assume anything and do not change property name
+				final Optional<IGQLDynamicAttributeSetter<?, ?>> dynamicAttributeSetter = getMetaModel().getDynamicAttributeSetters().stream()
+						.filter(dynamicAttribute -> dynamicAttribute.getEntityType().isAssignableFrom(objectValue.getClass())
+								&& dynamicAttribute.getName().equals(propName))
+						.findFirst();
+				if (!dynamicAttributeSetter.isPresent()) {
+					final String propNamePlural = propName.substring(0, propName.length() - getConfig().getAttributeIdPluralSuffix().length())
+							+ getConfig().getAttributePluralSuffix();
+					if (map.containsKey(propNamePlural)) {
+						final Object propValuePlural = map.get(propNamePlural);
+						if (propValuePlural instanceof Collection && !((Collection<?>) propValuePlural).isEmpty()) {
+							map.remove(propName);
+						} else {
+							final Object propValueIds = map.get(propName);
+							if (propValueIds instanceof Collection && !((Collection<?>) propValueIds).isEmpty()) {
+								map.remove(propNamePlural);
+							}
 						}
 					}
 				}

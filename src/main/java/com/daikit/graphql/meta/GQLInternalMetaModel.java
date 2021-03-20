@@ -1,6 +1,7 @@
 package com.daikit.graphql.meta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,6 +13,7 @@ import java.util.stream.Stream;
 
 import com.daikit.graphql.config.GQLSchemaConfig;
 import com.daikit.graphql.custommethod.GQLCustomMethod;
+import com.daikit.graphql.dynamicattribute.IGQLAbstractDynamicAttribute;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeGetter;
 import com.daikit.graphql.dynamicattribute.IGQLDynamicAttributeSetter;
 import com.daikit.graphql.exception.GQLException;
@@ -218,6 +220,18 @@ public class GQLInternalMetaModel {
 		return concreteMetaDatas
 				.stream().flatMap(entityMetaData -> entityMetaData.getEntity().getAttributes().stream()
 						.filter(attribute -> attribute.isDynamicAttributeGetter()).map(attribute -> attribute.getDynamicAttributeGetter()))
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * Get all registered dynamic attributes {@link IGQLAbstractDynamicAttribute} in meta model
+	 * 
+	 * @return a {@link List} of {@link IGQLAbstractDynamicAttribute}
+	 */
+	public List<IGQLAbstractDynamicAttribute<?>> getDynamicAttributes() {
+		return concreteMetaDatas.stream().flatMap(entityMetaData -> entityMetaData.getEntity().getAttributes().stream()
+				.filter(attribute -> attribute.isDynamic()).flatMap(attribute -> Arrays
+						.asList(attribute.getDynamicAttributeGetter(), attribute.getDynamicAttributeSetter()).stream().filter(Objects::nonNull)))
 				.collect(Collectors.toList());
 	}
 
