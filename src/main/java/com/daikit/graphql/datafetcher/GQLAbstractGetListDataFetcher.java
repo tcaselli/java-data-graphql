@@ -156,7 +156,9 @@ public abstract class GQLAbstractGetListDataFetcher extends GQLAbstractDataFetch
 							filterField.getName());
 
 					// Operator always non null
-					operator = GQLFilterOperatorEnum.forCode(mapValue(operatorField.get(), filterArguments));
+					final Object operatorObject = mapValue(operatorField.get(), filterArguments);
+					operator = operatorObject instanceof GQLFilterOperatorEnum ? (GQLFilterOperatorEnum) operatorObject
+							: GQLFilterOperatorEnum.forCode(mapValue(operatorField.get(), filterArguments));
 					value = optionalValueField.isPresent() ? mapValue(optionalValueField.get(), filterArguments) : null;
 				} else {
 					operator = GQLFilterOperatorEnum.EQUAL;
