@@ -107,7 +107,7 @@
 		<commons-text.version>1.8</commons-text.version>
 		<jackson-databind.version>2.10.0</jackson-databind.version>
 		<junit.version>4.13.1</junit.version>
-		<commons-io.version>2.6</commons-io.version>
+		<commons-io.version>2.7</commons-io.version>
 		<log4j-slf4j-impl.version>2.12.1</log4j-slf4j-impl.version>
 		<commons-beanutils.version>1.9.4</commons-beanutils.version>
 	</properties>
