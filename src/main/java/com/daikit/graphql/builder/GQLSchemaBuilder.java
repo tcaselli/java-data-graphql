@@ -57,28 +57,19 @@ public class GQLSchemaBuilder {
 	/**
 	 * Initialize GraphQL schema from given {@link GQLMetaModel}
 	 *
-	 * @param executionContext
-	 *            the {@link GQLExecutionContext}
-	 * @param schemaConfig
-	 *            the schema configuration {@link GQLSchemaConfig}
-	 * @param internalMetaModel
-	 *            the {@link GQLInternalMetaModel} meta model
-	 * @param getByIdDataFetcher
-	 *            the {@link DataFetcher} for 'getById' methods
-	 * @param listDataFetcher
-	 *            the {@link DataFetcher} for 'getAll' methods
-	 * @param saveDataFetcher
-	 *            the {@link DataFetcher} for 'save' methods
-	 * @param deleteDataFetcher
-	 *            the {@link DataFetcher} for 'delete' methods
-	 * @param customMethodDataFetcher
-	 *            the {@link DataFetcher} for custom methods
-	 * @param propertyDataFetchers
-	 *            custom {@link GQLPropertyDataFetcher} list
+	 * @param executionContext        the {@link GQLExecutionContext}
+	 * @param schemaConfig            the schema configuration {@link GQLSchemaConfig}
+	 * @param internalMetaModel       the {@link GQLInternalMetaModel} meta model
+	 * @param getByIdDataFetcher      the {@link DataFetcher} for 'getById' methods
+	 * @param listDataFetcher         the {@link DataFetcher} for 'getAll' methods
+	 * @param saveDataFetcher         the {@link DataFetcher} for 'save' methods
+	 * @param deleteDataFetcher       the {@link DataFetcher} for 'delete' methods
+	 * @param customMethodDataFetcher the {@link DataFetcher} for custom methods
+	 * @param propertyDataFetchers    custom {@link GQLPropertyDataFetcher} list
 	 *
 	 * @return the generated {@link GraphQLSchema}
 	 */
-	public GraphQLSchema build(GQLExecutionContext executionContext, final GQLSchemaConfig schemaConfig,
+	public GraphQLSchema build(final GQLExecutionContext executionContext, final GQLSchemaConfig schemaConfig,
 			final GQLInternalMetaModel internalMetaModel, final DataFetcher<?> getByIdDataFetcher,
 			final DataFetcher<GQLListLoadResult> listDataFetcher, final DataFetcher<?> saveDataFetcher,
 			final DataFetcher<GQLDeleteResult> deleteDataFetcher, final DataFetcher<?> customMethodDataFetcher,
@@ -111,6 +102,7 @@ public class GQLSchemaBuilder {
 
 		if (customMethodDataFetcher instanceof GQLCustomMethodDataFetcher) {
 			logger.debug("START registering custom methods...");
+			((GQLCustomMethodDataFetcher) customMethodDataFetcher).setDynamicAttributeRegistry(dynAttrRegistry);
 			((GQLCustomMethodDataFetcher) customMethodDataFetcher).registerCustomMethods(internalMetaModel
 					.getCustomMethods().stream().map(method -> method.getMethod()).collect(Collectors.toList()));
 			logger.debug("END registering custom methods");
