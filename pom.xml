@@ -101,7 +101,7 @@
 		<javajdk.version>1.8</javajdk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<generics-utils.version>1.4</generics-utils.version>
-		<graphql-java.version>13.0</graphql-java.version>
+		<graphql-java.version>17.4</graphql-java.version>
 		<slf4j-api.version>1.7.28</slf4j-api.version>
 		<commons-lang3.version>3.9</commons-lang3.version>
 		<commons-text.version>1.8</commons-text.version>
